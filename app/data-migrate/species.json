@@ -1,0 +1,64 @@
+{
+    "Species": {
+        "IUCNStatus": [{
+            "status_code": "EX",
+            "status_name": "Extinct",
+            "status_description": "No known individuals remaining"
+        }, {
+            "status_code": "EW",
+            "status_name": "Extinct in Wild",
+            "status_description": "Known only to survive in captivity, or as a naturalised population outside its historic range"
+        }, {
+            "status_code": "CR",
+            "status_name": "Critically Endangered",
+            "status_description": "Extremely high risk of extinction in the wild"
+        }, {
+            "status_code": "EN",
+            "status_name": "Endangered",
+            "status_description": "High risk of extinction in the wild"
+        }, {
+            "status_code": "VU",
+            "status_name": "Vulnerable",
+            "status_description": "High risk of endangerment in the wild"
+        }, {
+            "status_code": "NT",
+            "status_name": "Near Threatened",
+            "status_description": "Likely to become endangered in the near future"
+        }, {
+            "status_code": "LC",
+            "status_name": "Least Concern",
+            "status_description": "Lowest risk. Does not qualify for a more at risk category. Widespread and abundant taxa are included in this category"
+        }, {
+            "status_code": "DD",
+            "status_name": "Data Deficient",
+            "status_description": "Not enough data to make an assessment of its risk of extinction"
+        }, {
+            "status_code": "NE",
+            "status_name": "Not Evaluated",
+            "status_description": "Has not yet been evaluated against the IUCN criteria"
+        }, {
+            "status_code": "LR/cd",
+            "status_name": "Lower Risk/Conservation Dependent",
+            "status_description": "At lower risk of extinction, but requiring conservation intervention to maintain the population. This is an older (1994) category, not used in recent assessments"
+        }, {
+            "status_code": "LR/nt",
+            "status_name": " Lower Risk/Near Threatened",
+            "status_description": "At lower risk of extinction, but considered to be near threatened. This is an older (1994) category, not used in recent assessments"
+        }, {
+            "status_code": "LR/lc",
+            "status_name": "Lower Risk/Least Concern",
+            "status_description": "At lower risk of extinction, considered to be widespread and abundant. This is an older (1994) category, not used in recent assessments."
+        }],
+        "ESAStatus": [{
+            "status_code": "EN",
+            "status_name": "Endangered"
+        }, {
+            "status_code": "TH",
+            "status_name": "Threatened"
+        }, {
+            "status_code": "NA",
+            "status_name": "Not classified"
+        }]
+    }
+
+}

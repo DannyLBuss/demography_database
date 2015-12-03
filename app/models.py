@@ -4,10 +4,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from markdown import markdown
 import bleach
+import json
 from flask import current_app, request, url_for
 from flask.ext.login import UserMixin, AnonymousUserMixin
 from app.exceptions import ValidationError
 from . import db, login_manager
+from sqlalchemy.inspection import inspect
 
 
 class Permission:
@@ -249,8 +251,33 @@ class IUCNStatus(db.Model):
 
     species = db.relationship("Species", backref="iucn_status")
 
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/species.json') as species_file:
+            data = json.load(species_file)
+            species = data["Species"]
+            iucn = species["IUCNStatus"]
+
+            for iu in iucn:
+                i = IUCNStatus.query.filter_by(status_code=iu['status_code']).first()
+                if i is None:
+                    i = IUCNStatus()
+
+                i.status_code = iu['status_code']
+                i.status_name = iu['status_name']
+                i.status_description = iu['status_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def inspects(self):
+        i = inspect(self)
+        class_name = i.class_.__name__
+        return class_name
+            
+
     def __repr__(self):
-        return '<IUCN Status %r>' % self.status_code
+        return '<IUCN Status %r>' % self.id
 
 class ESAStatus(db.Model):
     __tablename__ = 'esa_statuses'
@@ -260,6 +287,24 @@ class ESAStatus(db.Model):
     status_description = db.Column(db.Text())
 
     species = db.relationship("Species", backref="esa_status")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/species.json') as species_file:
+            data = json.load(species_file)
+            species = data["Species"]
+            esa = species["ESAStatus"]
+
+            for ea in esa:
+                i = ESAStatus.query.filter_by(status_code=ea['status_code']).first()
+                if i is None:
+                    i = ESAStatus()
+
+                i.status_code = ea['status_code']
+                i.status_name = ea['status_name']
+
+                db.session.add(i)
+                db.session.commit()
 
     def __repr__(self):
         return '<ESA Status %r>' % self.status_code
@@ -273,6 +318,24 @@ class TaxonomicStatus(db.Model):
     status_description = db.Column(db.Text())
 
     taxonomies = db.relationship("Taxonomy", backref="taxonomic_status")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/taxonomy.json') as taxonomy_file:
+            data = json.load(taxonomy_file)
+            species = data["Taxonomy"]
+            taxonomic_status = species["TaxonomicStatus"]
+
+            for tax in taxonomic_status:
+                i = TaxonomicStatus.query.filter_by(status_name=tax['status_name']).first()
+                if i is None:
+                    i = TaxonomicStatus()
+
+                i.status_name = tax['status_name']
+                i.status_description = tax['status_description']
+
+                db.session.add(i)
+                db.session.commit()
 
     def __repr__(self):
         return '<Taxonomic Status %r>' % self.id
@@ -499,7 +562,13 @@ class Species(db.Model):
     taxonomies = db.relationship("Taxonomy", backref="species")
     plant_traits = db.relationship("PlantTrait", backref="species")
     populations = db.relationship("Population", backref="species")
-    stages = db.relationship("Stage", backref="species")    
+    stages = db.relationship("Stage", backref="species")
+
+    @staticmethod
+    def migrate():
+        IUCNStatus.migrate()
+        ESAStatus.migrate()
+
 
     def __repr__(self):
         return '<Species %r>' % self.id
