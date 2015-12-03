@@ -66,7 +66,7 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
 
-    species = db.relationship("Species", backref="Species.user_created_id",primaryjoin="User.id==user_modified_id", lazy="dynamic")
+    species = db.relationship("Species", backref="Species.user_created_id",primaryjoin="User.id==Species.user_modified_id", lazy="dynamic")
 
     @staticmethod
     def generate_fake(count=100):
@@ -490,15 +490,12 @@ class Species(db.Model):
     iucn_status_id = db.Column(db.Integer, db.ForeignKey('iucn_status.id'))
     esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id'))
     invasive_status = db.Column(db.Boolean())
-    # user_created = db.Column(db.Integer, db.ForeignKey('users.id')) # user keys might be a problem.. or might not.. will implement and find out
-    # user_modified = db.Column(db.Integer, db.ForeignKey('users.id')) # http://stackoverflow.com/questions/7548033/how-to-define-two-relationships-to-the-same-table-in-sqlalchemy
-    user_created_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user_created = db.relationship('User', foreign_keys='Species.user_created_id') # user keys might be a problem.. or might not.. will implement and find out
-    user_modified_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_created_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user_modified = db.relationship('User', foreign_keys='Species.user_modified_id')
+    user_modified_id = db.Column(db.Integer, db.ForeignKey('users.id'))    
     timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
     timestamp_modified = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-
     taxonomies = db.relationship("Taxonomy", backref="species")
     plant_traits = db.relationship("PlantTrait", backref="species")
     populations = db.relationship("Population", backref="species")
