@@ -1,0 +1,17 @@
+{
+	"Taxonomy": {
+		"TaxonomicStatus": [{
+			"status_name": "NoMatch",
+			"status_description": "Species is a plant, but it does not match with the data repository of The Plant List"
+		}, {
+			"status_name": "Unresolved",
+			"status_description": "No match because species is not a plant (this is always the case with brown algae, Kingdom Chromalveolata)"
+		}, {
+			"status_name": "Accepted",
+			"status_description": "SpeciesAuthor is identical to SpeciesAccepted"
+		}, {
+			"status_name": "Synonym",
+			"status_description": "SpeciesAuthor is synonymous of SpeciesAccepted"
+		}]
+	}
+}
