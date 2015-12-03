@@ -289,8 +289,8 @@ class GrowthType(db.Model):
 
 class GrowthFormRaunkiaer(db.Model):
     __tablename__ = 'growth_forms_raunkiaer'
-    id = db.Column(db.Integer, primary_key=True)
-    form_name = db.Column(db.Text(), index=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    form_name = db.Column(db.Text())
 
     plant_traits = db.relationship("PlantTrait", backref="growth_form_raunkiaer")
 
@@ -299,8 +299,8 @@ class GrowthFormRaunkiaer(db.Model):
 
 class ReproductiveRepetition(db.Model):
     __tablename__ = 'reproductive_repetition'
-    id = db.Column(db.Integer, primary_key=True)
-    repetition_name = db.Column(db.Text(), index=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    repetition_name = db.Column(db.Text())
 
     plant_traits = db.relationship("PlantTrait", backref="reproductive_repetition")
 
@@ -429,7 +429,7 @@ class TransitionType(db.Model):
 class MatrixComposition(db.Model):
     __tablename__ = 'matrix_compositions'
     id = db.Column(db.Integer, primary_key=True)
-    comp_name = db.Column(db.String())
+    comp_name = db.Column(db.String(64))
 
     matrices = db.relationship("Matrix", backref="matrix_composition")
 
@@ -634,12 +634,12 @@ class AdditionalSource(db.Model):
 
 class Population(db.Model):
     __tablename__ = 'populations'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
     study_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
     species_author = db.Column(db.String(64))
-    name = db.Column(db.Text(), index=True)
+    name = db.Column(db.Text())
     ecoregion_id = db.Column(db.Integer, db.ForeignKey('ecoregions.id'))
     #Django plugin for country, and generic python package too - we'll be just fine. Unfortunately, unless we download a CSV of this and enter into sep table, will probably be more efficient to do this outside of the database. Further thought reqd!
     country = db.Column(db.Text())
@@ -653,11 +653,11 @@ class Population(db.Model):
 
 class Stage(db.Model):
     __tablename__ = 'stages'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
     stage_type_id = db.Column(db.Integer, db.ForeignKey('stage_types.id')) 
-    name = db.Column(db.Text(), index=True) #Schema says 'author's', need clarification - author's name possibly, according to protocol?
+    name = db.Column(db.Text()) #Schema says 'author's', need clarification - author's name possibly, according to protocol?
 
     matrix_stages = db.relationship("MatrixStage", backref="stage")
 
@@ -666,8 +666,8 @@ class Stage(db.Model):
 
 class StageType(db.Model):
     __tablename__ = 'stage_types'
-    id = db.Column(db.Integer, primary_key=True)
-    type_name = db.Column(db.Text(), index=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    type_name = db.Column(db.Text())
     type_class_id = db.Column(db.Integer, db.ForeignKey('stage_type_classes.id'))
 
     stages = db.relationship("Stage", backref="stage_types")
@@ -678,10 +678,10 @@ class StageType(db.Model):
 
 class Treatment(db.Model):
     __tablename__ = 'treatments'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
     treatment_type_id = db.Column(db.Integer, db.ForeignKey('treatment_types.id'))
-    name = db.Column(db.Text(), index=True) #Schema says 'author's', need clarification - author's name possibly, according to protocol?
+    name = db.Column(db.Text()) #Schema says 'author's', need clarification - author's name possibly, according to protocol?
     description = db.Column(db.Text())
 
     matrices = db.relationship("Matrix", backref="treatment")
@@ -691,8 +691,8 @@ class Treatment(db.Model):
 
 class TreatmentType(db.Model):
     __tablename__ = 'treatment_types'
-    id = db.Column(db.Integer, primary_key=True)
-    type_name = db.Column(db.Text(), index=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    type_name = db.Column(db.Text())
     
 
     treatments = db.relationship("Treatment", backref="treatment_types")
