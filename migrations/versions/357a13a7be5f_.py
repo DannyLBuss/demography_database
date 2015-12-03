@@ -1,14 +1,14 @@
 """empty message
 
-Revision ID: 1f972cdd61aa
-Revises: d66f086b258
-Create Date: 2015-12-03 10:07:23.987846
+Revision ID: 357a13a7be5f
+Revises: 1f972cdd61aa
+Create Date: 2015-12-03 10:21:30.466659
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '1f972cdd61aa'
-down_revision = 'd66f086b258'
+revision = '357a13a7be5f'
+down_revision = '1f972cdd61aa'
 
 from alembic import op
 import sqlalchemy as sa
@@ -26,6 +26,10 @@ def downgrade():
     op.drop_index('ix_treatment_types_id', 'treatment_types')
     op.drop_index('ix_stages_id', 'stages')
     op.drop_index('ix_stage_types_id', 'stage_types')
+    op.add_column('species', sa.Column('user_modified', mysql.INTEGER(display_width=11), nullable=True))
+    op.add_column('species', sa.Column('user_created', mysql.INTEGER(display_width=11), nullable=True))
+    op.drop_column('species', 'user_modified_id')
+    op.drop_column('species', 'user_created_id')
     op.drop_index('ix_reproductive_repetition_id', 'reproductive_repetition')
     op.drop_index('ix_populations_id', 'populations')
     op.drop_index('ix_growth_forms_raunkiaer_id', 'growth_forms_raunkiaer')
