@@ -1,0 +1,90 @@
+{
+	"Publication": {
+		"SourceType": [{
+			"source_name": "Author Communication",
+			"source_description": "Matrices derived from personal communication with author"
+		}, {
+			"source_name": "Paper",
+			"source_description": "Matrices derived from a published manuscript"
+		}, {
+			"source_name": "Old Matrices",
+			"source_description": "Matrices derived from an old matrices file (no more detailed description is available)"
+		}, {
+			"source_name": "Online Appendix",
+			"source_description": "Matrices derived from the online appendix of publication"
+		}, {
+			"source_name": "Book",
+			"source_description": "Matrices derived from a book"
+		}, {
+			"source_name": "Other Sources",
+			"source_description": "Matrices derived from any other source"
+		}, {
+			"source_name": "Database",
+			"source_description": "Matrices derived from similar matrix database"
+		}],
+
+		"Database": [{
+			"database_name": "Exeter",
+			"database_description": "David Hodgson"
+		}, {
+			"database_name": "COMPADRE I",
+			"database_description": "Miguel Franco & Jonathan Silvertown"
+		}, {
+			"database_name": "Ramula",
+			"database_description": "Satu Ramula"
+		}, {
+			"database_name": "NCEAS",
+			"database_description": "Jennifer Williams et al."
+		}, {
+			"database_name": "UQ",
+			"database_description": "Yvonne Buckley and collaborators"
+		}],
+
+		"Purpose": [{
+			"purpose_name": "Comparative Demography",
+			"purpose_description": "When the authors studied two or more species"
+		}, {
+			"purpose_name": "Spatial Demography",
+			"purpose_description": "When the authors studied the demography of two or more populations within the same species"
+		}, {
+			"purpose_name": "Abiotic Impacts",
+			"purpose_description": "When the authors studied the effects of abiotic factors (e.g fire, hurricanes, rain, fertilisers, droughts, etc)"
+		}, {
+			"purpose_name": "PVA",
+			"purpose_description": "When the authors report a Population Viability Analysis of an endangered species"
+		}, {
+			"purpose_name": "Species Dynamics Description",
+			"purpose_description": "When there is no actual treatment in the study (Unmanipulated). Instead, the goal was to describe the natural dynamics of a species"
+		}, {
+			"purpose_name": "Interspecific Interactions",
+			"purpose_description": "When the authors studied the interactions between different species (e.g herbivory, pollinators, inter-specific competition, predation, parasitism, etc)"
+		}, {
+			"purpose_name": "Management Evaluation",
+			"purpose_description": "When the authors explored the effects of a specific management plan (e.g. to eradicate an invasive species, to preserve an endangered species or assess effects of management on other species)"
+		}, {
+			"purpose_name": "Methodological Advancement",
+			"purpose_description": "When the novelty of the paper is not an ecological question, but mostly to introduce a new mathematical tool often using already published matrices"
+		}],
+
+		"MissingData": [{
+			"missing_code": "M",
+			"missing_description": "All matrices missing"
+		}, {
+			"missing_code": "I",
+			"missing_description": "Only individual matrices are missing"
+		}, {
+			"missing_code": "L",
+			"missing_description": "Labels are missing (e.g. information about the populations and years)"
+		}, {
+			"missing_code": "S",
+			"missing_description": "Information about study site missing (e.g. country, geolocation, WithinSite etc)"
+		}, {
+			"missing_code": "O",
+			"missing_description": "Other priority information missing"
+		}, {
+			"missing_code": "No",
+			"missing_description": "Everything is digitised"
+		}]
+
+	}
+}

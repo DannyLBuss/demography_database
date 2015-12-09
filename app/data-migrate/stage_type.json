@@ -1,0 +1,11 @@
+{
+	"StageType": {
+		"StageTypeClass": [{
+			"type_class": "Age"
+		}, {
+			"type_class": "Size"
+		}, {
+			"type_class": "Ontogeny"
+		}]
+	}
+}

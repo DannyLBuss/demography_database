@@ -1,0 +1,26 @@
+{
+	"AdditionalSource": {
+		"SourceType": [{
+			"source_name": "Author Communication",
+			"source_description": "Matrices derived from personal communication with author"
+		}, {
+			"source_name": "Paper",
+			"source_description": "Matrices derived from a published manuscript"
+		}, {
+			"source_name": "Old Matrices",
+			"source_description": "Matrices derived from an old matrices file (no more detailed description is available)"
+		}, {
+			"source_name": "Online Appendix",
+			"source_description": "Matrices derived from the online appendix of publication"
+		}, {
+			"source_name": "Book",
+			"source_description": "Matrices derived from a book"
+		}, {
+			"source_name": "Other Sources",
+			"source_description": "Matrices derived from any other source"
+		}, {
+			"source_name": "Database",
+			"source_description": "Matrices derived from similar matrix database"
+		}]
+	}
+}
