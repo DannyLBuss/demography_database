@@ -1,0 +1,100 @@
+{
+	"Population": {
+		"Ecoregion": [{
+			"ecoregion_code": "TMB",
+			"ecoregion_description": "Tropical and subtropical moist broadleaf forests"
+		}, {
+			"ecoregion_code": "TDB",
+			"ecoregion_description": "Tropical and subtropical dry broadleaf forests"
+		}, {
+			"ecoregion_code": "TSC",
+			"ecoregion_description": "Tropical and subtropical coniferous forests"
+		}, {
+			"ecoregion_code": "TBM",
+			"ecoregion_description": "Temperate broadleaf and mixed forests"
+		}, {
+			"ecoregion_code": "TCF",
+			"ecoregion_description": "Temperate coniferous forests"
+		}, {
+			"ecoregion_code": "BOR",
+			"ecoregion_description": "Boreal forests/taiga"
+		}, {
+			"ecoregion_code": "TGV",
+			"ecoregion_description": "Tropical and subtropical grasslands, savannas and shrublands"
+		}, {
+			"ecoregion_code": "TGS",
+			"ecoregion_description": "Temperate grasslands, savannas, and shrublands"
+		}, {
+			"ecoregion_code": "FGS",
+			"ecoregion_description": "Flooded grasslands and savannas"
+		}, {
+			"ecoregion_code": "MON",
+			"ecoregion_description": "Montane grasslands and shrublands"
+		}, {
+			"ecoregion_code": "TUN",
+			"ecoregion_description": "Tundra"
+		}, {
+			"ecoregion_code": "MED",
+			"ecoregion_description": "Mediterranean forests, woodlands and scrubs"
+		}, {
+			"ecoregion_code": "DES",
+			"ecoregion_description": "Deserts and xeric shrublands"
+		}, {
+			"ecoregion_code": "MAN",
+			"ecoregion_description": "Mangroves"
+		}, {
+			"ecoregion_code": "LRE",
+			"ecoregion_description": "Large river ecosystems"
+		}, {
+			"ecoregion_code": "LRH",
+			"ecoregion_description": "Large river headwater ecosystems"
+		}, {
+			"ecoregion_code": "LRD",
+			"ecoregion_description": "Large river delta ecosystems"
+		}, {
+			"ecoregion_code": "SRE",
+			"ecoregion_description": "Small river ecosystems"
+		}, {
+			"ecoregion_code": "SLE",
+			"ecoregion_description": "Small lake ecosystems"
+		}, {
+			"ecoregion_code": "LLE",
+			"ecoregion_description": "Large lake ecosystems"
+		}, {
+			"ecoregion_code": "XBE",
+			"ecoregion_description": "Xeric basin ecosystems"
+		}, {
+			"ecoregion_code": "POE",
+			"ecoregion_description": "Polar ecosystems"
+		}, {
+			"ecoregion_code": "TSS",
+			"ecoregion_description": "Temperate shelf and seas ecosystems"
+		}, {
+			"ecoregion_code": "TEU",
+			"ecoregion_description": "Temperate upwellings"
+		}, {
+			"ecoregion_code": "TRU",
+			"ecoregion_description": "Tropical upwellings"
+		}, {
+			"ecoregion_code": "TRC",
+			"ecoregion_description": "Tropical coral"
+		}],
+
+		"Continent": [{
+			"continent_name": "Africa"
+		}, {
+			"continent_name": "Asia"
+		}, {
+			"continent_name": "Europe"
+		}, {
+			"continent_name": "N America"
+		}, {
+			"continent_name": "S America"
+		}, {
+			"continent_name": "Antartica"
+		}, {
+			"continent_name": "Oceania"
+		}]
+
+	}
+}

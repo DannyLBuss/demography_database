@@ -307,7 +307,7 @@ class ESAStatus(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<ESA Status %r>' % self.status_code
+        return '<ESA Status %r>' % self.id
 ''' End Meta Tables for Species '''
 
 ''' Meta Tables for Taxonomy '''
@@ -318,6 +318,9 @@ class TaxonomicStatus(db.Model):
     status_description = db.Column(db.Text())
 
     taxonomies = db.relationship("Taxonomy", backref="taxonomic_status")
+
+    def __getitem__(self, key):
+        return getattr(self, key)
 
     @staticmethod
     def migrate():
@@ -350,7 +353,7 @@ class GrowthType(db.Model):
     plant_traits = db.relationship("PlantTrait", backref="growth_type")
 
     def __repr__(self):
-        return '<Growth Type %r>' % self.type_name
+        return '<Growth Type %r>' % self.id
 
 class GrowthFormRaunkiaer(db.Model):
     __tablename__ = 'growth_forms_raunkiaer'
@@ -360,7 +363,7 @@ class GrowthFormRaunkiaer(db.Model):
     plant_traits = db.relationship("PlantTrait", backref="growth_form_raunkiaer")
 
     def __repr__(self):
-        return '<Growth Form Raunkiaer %r>' % self.form_name
+        return '<Growth Form Raunkiaer %r>' % self.id
 
 class ReproductiveRepetition(db.Model):
     __tablename__ = 'reproductive_repetition'
@@ -370,7 +373,7 @@ class ReproductiveRepetition(db.Model):
     plant_traits = db.relationship("PlantTrait", backref="reproductive_repetition")
 
     def __repr__(self):
-        return '<Reproductive Repetition %r>' % self.repetiton_name
+        return '<Reproductive Repetition %r>' % self.id
 
 class DicotMonoc(db.Model):
     __tablename__ = 'dicot_monoc'
@@ -380,7 +383,7 @@ class DicotMonoc(db.Model):
     plant_traits = db.relationship("PlantTrait", backref="dicot_monoc")
 
     def __repr__(self):
-        return '<Dicot Monoc %r>' % self.dicot_monoc_name
+        return '<Dicot Monoc %r>' % self.id
 
 class AngioGymno(db.Model):
     __tablename__ = 'angio_gymno'
@@ -390,7 +393,7 @@ class AngioGymno(db.Model):
     plant_traits = db.relationship("PlantTrait", backref="angio_gymno")
 
     def __repr__(self):
-        return '<Angio Gymno %r>' % self.angio_gymno
+        return '<Angio Gymno %r>' % self.id
 ''' End Meta Tables for Plant Traits '''
 
 ''' Meta Tables for Publication/Additional Source '''
@@ -399,12 +402,24 @@ class SourceType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     source_name = db.Column(db.String(64), index=True)
     source_description = db.Column(db.Text())
+    database_id = db.Column(db.Integer, db.ForeignKey('databases.id'))
 
     publications = db.relationship("Publication", backref="source_type")
     additional_sources = db.relationship("AdditionalSource", backref="source_type")
 
     def __repr__(self):
-        return '<Source Type %r>' % self.source_name
+        return '<Source Type %r>' % self.id
+
+class Database(db.Model):
+    __tablename__ = 'databases'
+    id = db.Column(db.Integer, primary_key=True)
+    database_name = db.Column(db.String(64), index=True)
+    database_description = db.Column(db.Text())
+
+    sources = db.relationship("SourceType", backref="database")
+
+    def __repr__(self):
+        return '<Database %r>' % self.id
 
 class Purpose(db.Model):
     __tablename__ = 'purposes'
@@ -415,7 +430,13 @@ class Purpose(db.Model):
     publications = db.relationship("Publication", backref="purpose")
 
     def __repr__(self):
-        return '<Purpose %r>' % self.purpose_name
+        return '<Purpose %r>' % self.id
+
+publication_purposes = db.Table('publication_purposes', db.Model.metadata,
+    db.Column('id', db.Integer, primary_key=True),
+    db.Column('purpose_id', db.Integer, db.ForeignKey('purposes.id')),
+    db.Column('publication_id', db.Integer, db.ForeignKey('publications.id'))
+)
 
 class MissingData(db.Model):
     __tablename__ = 'missing_data'
@@ -426,7 +447,15 @@ class MissingData(db.Model):
     publications = db.relationship("Publication", backref="missing_data")
 
     def __repr__(self):
-        return '<Missing Data %r>' % self.missing_code
+        return '<Missing Data %r>' % self.id
+
+
+publication_missing_data = db.Table('publication_missing_data', db.Model.metadata,
+    db.Column('id', db.Integer, primary_key=True),
+    db.Column('missing_data_id', db.Integer, db.ForeignKey('missing_data.id')),
+    db.Column('publication_id', db.Integer, db.ForeignKey('publications.id'))
+)
+
 ''' End Meta Tables for Publication/Additional Source '''
 
 ''' Meta Tables for Author Contact '''
@@ -439,7 +468,7 @@ class ContentEmail(db.Model):
     author_contacts = db.relationship("AuthorContact", backref="content_email")
 
     def __repr__(self):
-        return '<Missing Data %r>' % self.content_code
+        return '<Missing Data %r>' % self.id
 ''' End Meta Tables for Author Contact '''
 
 ''' Meta Tables for Population '''
@@ -452,7 +481,7 @@ class Ecoregion(db.Model):
     populations = db.relationship("Population", backref="ecoregion")
 
     def __repr__(self):
-        return '<Ecoregion %r>' % self.ecoregion_code
+        return '<Ecoregion %r>' % self.id
 
 class Continent(db.Model):
     __tablename__ = 'continents'
@@ -462,7 +491,7 @@ class Continent(db.Model):
     populations = db.relationship("Population", backref="continent")
 
     def __repr__(self):
-        return '<Continent %r>' % self.continent_name
+        return '<Continent %r>' % self.id
 ''' End Meta Tables for Population '''
 
 ''' Meta Tables for Stage Type '''
@@ -501,20 +530,10 @@ class MatrixComposition(db.Model):
     def __repr__(self):
         return '<Matrix Composition %r>' % self.id
 
-class Periodicity(db.Model):
-    __tablename__ = 'periodicities'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), index=True)
-
-    matrices = db.relationship("Matrix", backref="periodicity")
-
-    def __repr__(self):
-        return '<Periodicity %r>' % self.id
-
 class Season(db.Model):
     __tablename__ = 'seasons'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), index=True)
+    season_name = db.Column(db.String(64), index=True)
 
     # matrices = db.relationship("Matrix", backref="season")
     matrices = db.relationship("Matrix", backref="Matrix.matrix_start_season_id",primaryjoin="Season.id==Matrix.matrix_end_season_id", lazy="dynamic")
@@ -594,7 +613,7 @@ class Taxonomy(db.Model):
     kingdom = db.Column(db.String(64))
 
     def __repr__(self):
-        return '<Taxonomy %r>' % self.species_author
+        return '<Taxonomy %r>' % self.id
 
 
 class PlantTrait(db.Model):
@@ -805,7 +824,7 @@ class Matrix(db.Model):
     matrix_composition_id = db.Column(db.Integer, db.ForeignKey('matrix_compositions.id'))
     survival_issue = db.Column(db.Float())
     n_intervals = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, what are these? Schema says, "Number of transition intervals represented in the matrix - should only be >1 for mean matrices", so 0 or 1 or more? Can it be a float, ie 0.8?
-    periodicity_id = db.Column(db.Integer, db.ForeignKey('periodicities.id'))
+    periodicity = db.Column(db.String(64))
     # relative = db.Column(db.Boolean()) --> in schema with no description, must confirm with Judy what this relates to, any below?
     matrix_criteria_size = db.Column(db.Boolean())
     matrix_criteria_ontogeny = db.Column(db.Boolean())
