@@ -1,0 +1,23 @@
+{
+	"AuthorContact": {
+		"ContentEmail": [{
+			"content_code": "M",
+			"content_description": "All matrices missing"
+		}, {
+			"content_code": "I",
+			"content_description": "Only individual matrices are missing"
+		}, {
+			"content_code": "L",
+			"content_description": "Labels are missing (e.g. information about the populations and years)"
+		}, {
+			"content_code": "S",
+			"content_description": "Information about study site missing (e.g. country, geolocation, WithinSite etc)"
+		}, {
+			"content_code": "O",
+			"content_description": "Other priority information missing"
+		}, {
+			"content_code": "No",
+			"content_description": "Everything is digitised"
+		}]
+	}
+}

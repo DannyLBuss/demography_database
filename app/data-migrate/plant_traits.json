@@ -49,9 +49,9 @@
 		}],
 
 		"ReproductiveRepetition": [{
-			"form_name": "Monocarpic"
+			"repetition_name": "Monocarpic"
 		}, {
-			"form_name": "Polycarpic"
+			"repetition_name": "Polycarpic"
 		}],
 
 		"DicotMonoc": [{
