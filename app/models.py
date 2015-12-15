@@ -352,6 +352,23 @@ class GrowthType(db.Model):
 
     plant_traits = db.relationship("PlantTrait", backref="growth_type")
 
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/plant_traits.json') as taxonomy_file:
+            data = json.load(taxonomy_file)
+            species = data["PlantTrait"]
+            growth_types = species["GrowthType"]
+
+            for types in growth_types:
+                i = GrowthType.query.filter_by(type_name=types['type_name']).first()
+                if i is None:
+                    i = GrowthType()
+
+                i.type_name = types['type_name']
+
+                db.session.add(i)
+                db.session.commit()
+
     def __repr__(self):
         return '<Growth Type %r>' % self.id
 
@@ -361,6 +378,23 @@ class GrowthFormRaunkiaer(db.Model):
     form_name = db.Column(db.Text())
 
     plant_traits = db.relationship("PlantTrait", backref="growth_form_raunkiaer")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/plant_traits.json') as taxonomy_file:
+            data = json.load(taxonomy_file)
+            species = data["PlantTrait"]
+            growth_forms = species["GrowthFormRaunkiaer"]
+
+            for form in growth_forms:
+                i = GrowthFormRaunkiaer.query.filter_by(form_name=form['form_name']).first()
+                if i is None:
+                    i = GrowthFormRaunkiaer()
+
+                i.form_name = form['form_name']
+
+                db.session.add(i)
+                db.session.commit()
 
     def __repr__(self):
         return '<Growth Form Raunkiaer %r>' % self.id
@@ -372,6 +406,24 @@ class ReproductiveRepetition(db.Model):
 
     plant_traits = db.relationship("PlantTrait", backref="reproductive_repetition")
 
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/plant_traits.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["PlantTrait"]
+            nodes = json_data["ReproductiveRepetition"]
+
+            for node in nodes:
+
+                i = ReproductiveRepetition.query.filter_by(repetition_name=node['repetition_name']).first()
+                if i is None:
+                    i = ReproductiveRepetition()
+
+                i.repetition_name = node['repetition_name']
+
+                db.session.add(i)
+                db.session.commit()
+
     def __repr__(self):
         return '<Reproductive Repetition %r>' % self.id
 
@@ -382,6 +434,23 @@ class DicotMonoc(db.Model):
 
     plant_traits = db.relationship("PlantTrait", backref="dicot_monoc")
 
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/plant_traits.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["PlantTrait"]
+            nodes = json_data["DicotMonoc"]
+
+            for node in nodes:
+                i = DicotMonoc.query.filter_by(dicot_monoc_name=node['dicot_monoc_name']).first()
+                if i is None:
+                    i = DicotMonoc()
+
+                i.dicot_monoc_name = node['dicot_monoc_name']
+
+                db.session.add(i)
+                db.session.commit()
+
     def __repr__(self):
         return '<Dicot Monoc %r>' % self.id
 
@@ -391,6 +460,23 @@ class AngioGymno(db.Model):
     angio_gymno_name = db.Column(db.String(64), index=True)
 
     plant_traits = db.relationship("PlantTrait", backref="angio_gymno")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/plant_traits.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["PlantTrait"]
+            nodes = json_data["AngioGymno"]
+
+            for node in nodes:
+                i = AngioGymno.query.filter_by(angio_gymno_name=node['angio_gymno_name']).first()
+                if i is None:
+                    i = AngioGymno()
+
+                i.angio_gymno_name = node['angio_gymno_name']
+
+                db.session.add(i)
+                db.session.commit()
 
     def __repr__(self):
         return '<Angio Gymno %r>' % self.id
@@ -407,6 +493,24 @@ class SourceType(db.Model):
     publications = db.relationship("Publication", backref="source_type")
     additional_sources = db.relationship("AdditionalSource", backref="source_type")
 
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/publications.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Publication"]
+            nodes = json_data["SourceType"]
+
+            for node in nodes:
+                i = SourceType.query.filter_by(source_name=node['source_name']).first()
+                if i is None:
+                    i = SourceType()
+
+                i.source_name = node['source_name']
+                i.source_description = node['source_description']
+
+                db.session.add(i)
+                db.session.commit()
+
     def __repr__(self):
         return '<Source Type %r>' % self.id
 
@@ -418,6 +522,24 @@ class Database(db.Model):
 
     sources = db.relationship("SourceType", backref="database")
 
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/publications.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Publication"]
+            nodes = json_data["Database"]
+
+            for node in nodes:
+                i = Database.query.filter_by(database_name=node['database_name']).first()
+                if i is None:
+                    i = Database()
+
+                i.database_name = node['database_name']
+                i.database_description = node['database_description']
+
+                db.session.add(i)
+                db.session.commit()
+
     def __repr__(self):
         return '<Database %r>' % self.id
 
@@ -428,6 +550,24 @@ class Purpose(db.Model):
     purpose_description = db.Column(db.Text())
 
     publications = db.relationship("Publication", backref="purpose")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/publications.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Publication"]
+            nodes = json_data["Purpose"]
+
+            for node in nodes:
+                i = Purpose.query.filter_by(purpose_name=node['purpose_name']).first()
+                if i is None:
+                    i = Purpose()
+
+                i.purpose_name = node['purpose_name']
+                i.purpose_description = node['purpose_description']
+
+                db.session.add(i)
+                db.session.commit()
 
     def __repr__(self):
         return '<Purpose %r>' % self.id
@@ -445,6 +585,24 @@ class MissingData(db.Model):
     missing_description = db.Column(db.Text())
 
     publications = db.relationship("Publication", backref="missing_data")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/publications.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Publication"]
+            nodes = json_data["MissingData"]
+
+            for node in nodes:
+                i = MissingData.query.filter_by(missing_code=node['missing_code']).first()
+                if i is None:
+                    i = MissingData()
+
+                i.missing_code = node['missing_code']
+                i.missing_description = node['missing_description']
+
+                db.session.add(i)
+                db.session.commit()
 
     def __repr__(self):
         return '<Missing Data %r>' % self.id
@@ -467,6 +625,24 @@ class ContentEmail(db.Model):
 
     author_contacts = db.relationship("AuthorContact", backref="content_email")
 
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/author_contacts.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["AuthorContact"]
+            nodes = json_data["ContentEmail"]
+
+            for node in nodes:
+                i = ContentEmail.query.filter_by(content_code=node['content_code']).first()
+                if i is None:
+                    i = ContentEmail()
+
+                i.content_code = node['content_code']
+                i.content_description = node['content_description']
+
+                db.session.add(i)
+                db.session.commit()
+
     def __repr__(self):
         return '<Missing Data %r>' % self.id
 ''' End Meta Tables for Author Contact '''
@@ -480,6 +656,24 @@ class Ecoregion(db.Model):
 
     populations = db.relationship("Population", backref="ecoregion")
 
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/populations.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Population"]
+            nodes = json_data["Ecoregion"]
+
+            for node in nodes:
+                i = Ecoregion.query.filter_by(ecoregion_code=node['ecoregion_code']).first()
+                if i is None:
+                    i = Ecoregion()
+
+                i.ecoregion_code = node['ecoregion_code']
+                i.ecoregion_description = node['ecoregion_description']
+
+                db.session.add(i)
+                db.session.commit()
+
     def __repr__(self):
         return '<Ecoregion %r>' % self.id
 
@@ -489,6 +683,23 @@ class Continent(db.Model):
     continent_name = db.Column(db.String(64), index=True)   
     
     populations = db.relationship("Population", backref="continent")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/populations.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Population"]
+            nodes = json_data["Continent"]
+
+            for node in nodes:
+                i = Continent.query.filter_by(continent_name=node['continent_name']).first()
+                if i is None:
+                    i = Continent()
+
+                i.continent_name = node['continent_name']
+
+                db.session.add(i)
+                db.session.commit()
 
     def __repr__(self):
         return '<Continent %r>' % self.id
@@ -501,6 +712,23 @@ class StageTypeClass(db.Model):
     type_class = db.Column(db.String(64), index=True)
 
     stage_types = db.relationship("StageType", backref="stage_type_class")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/stage_types.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["StageType"]
+            nodes = json_data["StageTypeClass"]
+
+            for node in nodes:
+                i = StageTypeClass.query.filter_by(type_class=node['type_class']).first()
+                if i is None:
+                    i = StageTypeClass()
+
+                i.type_class = node['type_class']
+
+                db.session.add(i)
+                db.session.commit()
 
     def __repr__(self):
         return '<Stage Type Class %r>' % self.id
@@ -515,6 +743,24 @@ class TransitionType(db.Model):
 
     matrix_values = db.relationship("MatrixValue", backref="transition_type")
 
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/matrix_values.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["MatrixValue"]
+            nodes = json_data["TransitionType"]
+
+            for node in nodes:
+                i = TransitionType.query.filter_by(trans_code=node['trans_code']).first()
+                if i is None:
+                    i = TransitionType()
+
+                i.trans_code = node['trans_code']
+                i.trans_description = node['trans_description']
+
+                db.session.add(i)
+                db.session.commit()
+
     def __repr__(self):
         return '<Transition Type %r>' % self.id
 ''' End Meta Tables for MatrixValue '''
@@ -527,6 +773,23 @@ class MatrixComposition(db.Model):
 
     matrices = db.relationship("Matrix", backref="matrix_composition")
 
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/matrices.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Matrix"]
+            nodes = json_data["MatrixComposition"]
+
+            for node in nodes:
+                i = MatrixComposition.query.filter_by(comp_name=node['comp_name']).first()
+                if i is None:
+                    i = MatrixComposition()
+
+                i.comp_name = node['comp_name']
+
+                db.session.add(i)
+                db.session.commit()
+
     def __repr__(self):
         return '<Matrix Composition %r>' % self.id
 
@@ -535,8 +798,24 @@ class Season(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     season_name = db.Column(db.String(64), index=True)
 
-    # matrices = db.relationship("Matrix", backref="season")
     matrices = db.relationship("Matrix", backref="Matrix.matrix_start_season_id",primaryjoin="Season.id==Matrix.matrix_end_season_id", lazy="dynamic")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/matrices.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Matrix"]
+            nodes = json_data["Season"]
+
+            for node in nodes:
+                i = Season.query.filter_by(season_name=node['season_name']).first()
+                if i is None:
+                    i = Season()
+
+                i.season_name = node['season_name']
+
+                db.session.add(i)
+                db.session.commit()
 
     def __repr__(self):
         return '<Season %r>' % self.id
@@ -549,6 +828,24 @@ class StudiedSex(db.Model):
 
     matrices = db.relationship("Matrix", backref="studied_sex")
 
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/matrices.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Matrix"]
+            nodes = json_data["StudiedSex"]
+
+            for node in nodes:
+                i = StudiedSex.query.filter_by(sex_code=node['sex_code']).first()
+                if i is None:
+                    i = StudiedSex()
+
+                i.sex_code = node['sex_code']
+                i.sex_description = node['sex_description']
+
+                db.session.add(i)
+                db.session.commit()
+
     def __repr__(self):
         return '<Studied Sex %r>' % self.id
 
@@ -559,6 +856,24 @@ class Captivity(db.Model):
     cap_description = db.Column(db.Text())
 
     matrices = db.relationship("Matrix", backref="captivities")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/matrices.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Matrix"]
+            nodes = json_data["Captivity"]
+
+            for node in nodes:
+                i = Captivity.query.filter_by(cap_code=node['cap_code']).first()
+                if i is None:
+                    i = Captivity()
+
+                i.cap_code = node['cap_code']
+                i.cap_description = node['cap_description']
+
+                db.session.add(i)
+                db.session.commit()
 
     def __repr__(self):
         return '<Captivity %r>' % self.id
@@ -612,6 +927,10 @@ class Taxonomy(db.Model):
     phylum = db.Column(db.String(64))
     kingdom = db.Column(db.String(64))
 
+    @staticmethod
+    def migrate():
+        TaxonomicStatus.migrate()
+
     def __repr__(self):
         return '<Taxonomy %r>' % self.id
 
@@ -626,6 +945,14 @@ class PlantTrait(db.Model):
     reproductive_repetition_id = db.Column(db.Integer, db.ForeignKey('reproductive_repetition.id'))
     dicot_monoc_id = db.Column(db.Integer, db.ForeignKey('dicot_monoc.id'))
     angio_gymno_id = db.Column(db.Integer, db.ForeignKey('angio_gymno.id'))
+
+    @staticmethod
+    def migrate():
+        GrowthType.migrate()
+        GrowthFormRaunkiaer.migrate()
+        ReproductiveRepetition.migrate()
+        DicotMonoc.migrate()
+        AngioGymno.migrate()
 
     def __repr__(self):
         return '<Plant Trait %r>' % self.id
@@ -669,6 +996,14 @@ class Publication(db.Model):
     taxonomies = db.relationship("Taxonomy", backref="publication")
     studies = db.relationship("Study", backref="publication")
 
+    @staticmethod
+    def migrate():
+        SourceType.migrate()
+        Database.migrate()
+        Purpose.migrate()
+        MissingData.migrate()
+
+
     def __repr__(self):
         return '<Publication %r>' % self.id
 
@@ -696,6 +1031,10 @@ class AuthorContact(db.Model):
     contacting_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     content_email_id = db.Column(db.Integer, db.ForeignKey('content_email.id')) #possibly many to many, probably a good idea if vector
     author_reply = db.Column(db.Text())
+
+    @staticmethod
+    def migrate():
+        ContentEmail.migrate()
 
     def __repr__(self):
         return '<Author Contact %r>' % self.id
@@ -739,6 +1078,11 @@ class Population(db.Model):
 
     matrices = db.relationship("Matrix", backref="population")
 
+    @staticmethod
+    def migrate():
+        Ecoregion.migrate()
+        Continent.migrate()
+
     def __repr__(self):
         return '<Population %r>' % self.id
 
@@ -762,6 +1106,10 @@ class StageType(db.Model):
     type_class_id = db.Column(db.Integer, db.ForeignKey('stage_type_classes.id'))
 
     stages = db.relationship("Stage", backref="stage_types")
+
+    @staticmethod
+    def migrate():
+        StageTypeClass.migrate()
 
     def __repr__(self):
         return '<Stage Type %r>' % self.id
@@ -812,6 +1160,10 @@ class MatrixValue(db.Model):
 
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
+    @staticmethod
+    def migrate():
+        TransitionType.migrate()
+
     def __repr__(self):
         return '<Matrix Value %r>' % self.id
 
@@ -848,6 +1200,13 @@ class Matrix(db.Model):
     intervals = db.relationship("Interval", backref="matrix")
     matrix_values = db.relationship("MatrixValue", backref="matrix")
     matrix_stages = db.relationship("MatrixStage", backref="matrix")
+
+    @staticmethod
+    def migrate():
+        MatrixComposition.migrate()
+        Season.migrate()
+        StudiedSex.migrate()
+        Captivity.migrate()
 
     def __repr__(self):
         return '<Matrix %r>' % self.id

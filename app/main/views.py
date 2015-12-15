@@ -1,12 +1,17 @@
 from flask import render_template, redirect, url_for, abort, flash, request,\
-    current_app, make_response
+    current_app, make_response, jsonify
 from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm,\
     CommentForm
 from .. import db
-from ..models import Permission, Role, User
+from ..models import Permission, Role, User, \
+                    IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
+                    DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
+                    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
+                    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
+                    MatrixStage, MatrixValue, Matrix, Interval
 from ..decorators import admin_required, permission_required
 
 
@@ -36,6 +41,43 @@ def server_shutdown():
 def index():
  
     return render_template('index.html')
+
+@main.route('/meta-tables/')
+def meta_tables_json():
+
+    # Constructing dict for meta tables, ordering by main Class
+    meta_tables = {"Species" : {"IUCNStatus" : [], "ESAStatus" : []}, "Taxonomy" : {"TaxonomicStatus" : []}, "PlantTrait" : {"GrowthType" : [], \
+                   "GrowthFormRaunkiaer" : [], "ReproductiveRepetition" : [], "DicotMonoc" : [], "AngioGymno" : [] }, \
+                   "Publication" : {"SourceType" : [], "Database" : [], "Purpose" : [], "MissingData" : [] }, \
+                   "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] }, \
+                   "StageType" : { "StageTypeClass" : [] }, "MatrixValue" : { "TransitionType" : [] }, \
+                   "Matrix" : {"MatrixComposition" : [], "Season" : [], "StudiedSex" : [], "Captivity" : []} }
+
+    meta_tables["Species"]["IUCNStatus"].extend(IUCNStatus.query.all())
+    meta_tables["Species"]["ESAStatus"].extend(ESAStatus.query.all())
+    meta_tables["Taxonomy"]["TaxonomicStatus"].extend(TaxonomicStatus.query.all())
+    meta_tables["PlantTrait"]["GrowthType"].extend(GrowthType.query.all())
+    meta_tables["PlantTrait"]["GrowthFormRaunkiaer"].extend(GrowthFormRaunkiaer.query.all())
+    meta_tables["PlantTrait"]["ReproductiveRepetition"].extend(ReproductiveRepetition.query.all())
+    meta_tables["PlantTrait"]["DicotMonoc"].extend(DicotMonoc.query.all())
+    meta_tables["PlantTrait"]["AngioGymno"].extend(AngioGymno.query.all())
+    meta_tables["Publication"]["SourceType"].extend(SourceType.query.all())
+    meta_tables["Publication"]["Database"].extend(Database.query.all())
+    meta_tables["Publication"]["Purpose"].extend(Purpose.query.all())
+    meta_tables["Publication"]["MissingData"].extend(MissingData.query.all())
+    meta_tables["AuthorContact"]["ContentEmail"].extend(ContentEmail.query.all())
+    meta_tables["Population"]["Ecoregion"].extend(Ecoregion.query.all())
+    meta_tables["Population"]["Continent"].extend(Continent.query.all())
+    meta_tables["StageType"]["StageTypeClass"].extend(StageTypeClass.query.all())
+    meta_tables["MatrixValue"]["TransitionType"].extend(TransitionType.query.all())
+    meta_tables["Matrix"]["MatrixComposition"].extend(MatrixComposition.query.all())
+    meta_tables["Matrix"]["Season"].extend(Season.query.all())
+    meta_tables["Matrix"]["StudiedSex"].extend(StudiedSex.query.all())
+    meta_tables["Matrix"]["Captivity"].extend(Captivity.query.all())
+
+    print meta_tables
+
+    return render_template('meta.html', meta=meta_tables)
 
 
 @main.route('/user/<username>')

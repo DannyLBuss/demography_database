@@ -16,7 +16,7 @@ if os.path.exists('.env'):
 from app import create_app, db
 from app.models import User, Role, Permission, \
     IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
-    DicotMonoc, AngioGymno, SourceType, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
+    DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
     MatrixStage, MatrixValue, Matrix, Interval
@@ -31,7 +31,13 @@ migrate = Migrate(app, db)
 def make_shell_context():
     return dict(app=app, db=db, User=User, Role=Role,
                 Permission=Permission, IUCNStatus=IUCNStatus, ESAStatus=ESAStatus, Species=Species, \
-                TaxonomicStatus=TaxonomicStatus)
+                TaxonomicStatus=TaxonomicStatus, Taxonomy=Taxonomy, GrowthType=GrowthType, GrowthFormRaunkiaer=GrowthFormRaunkiaer, \
+                ReproductiveRepetition=ReproductiveRepetition, DicotMonoc=DicotMonoc, AngioGymno=AngioGymno, PlantTrait=PlantTrait, \
+                Publication=Publication, SourceType=SourceType, Database=Database, Purpose=Purpose, MissingData=MissingData, \
+                AuthorContact=AuthorContact, ContentEmail=ContentEmail, Population=Population, Ecoregion=Ecoregion, Continent=Continent, \
+                StageType=StageType, StageTypeClass=StageTypeClass, TransitionType=TransitionType, MatrixValue=MatrixValue, \
+                MatrixComposition=MatrixComposition, Season=Season, StudiedSex=StudiedSex, Captivity=Captivity, MatrixStage=MatrixStage,\
+                Matrix=Matrix, Interval=Interval)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
@@ -71,10 +77,28 @@ def profile(length=25, profile_dir=None):
 def deploy():
     """Run deployment tasks."""
     from flask.ext.migrate import upgrade
-    from app.models import Role, User
+    from app.models import User, Role, Permission, \
+    IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
+    DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
+    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
+    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
+    MatrixStage, MatrixValue, Matrix, Interval
 
     # migrate database to latest revision
-    upgrade()
+    # upgrade()
+
+    # insert all metadata into respective tables
+    print "Migrating Meta Tables..."
+    Species.migrate()
+    Taxonomy.migrate()
+    PlantTrait.migrate()
+    Publication.migrate()
+    AuthorContact.migrate()
+    Population.migrate()
+    StageType.migrate()
+    MatrixValue.migrate()
+    Matrix.migrate()
+    print "Meta Table success"
 
     # create user roles
     Role.insert_roles()

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Meta Tables for Compadre DB</h1>
+
+    <h2>Species</h2>
+    <h3>IUCN Status</h3>
+    {% for iucn in meta.Species.IUCNStatus %}
+    	<code>{{ iucn.status_code }} ({{ iucn.status_name }})</code> : {{ iucn.status_description }} <br/>
+    {% endfor %}
+    <h3>ESA Status</h3>
+    {% for esa in meta.Species.ESAStatus %}
+    	<code>{{ esa.status_code }} ({{ esa.status_name }})</code><br/>
+    {% endfor %}
+
+    <hr/>
+
+    <h2>Taxonomy</h2>
+    <h3>Taxonomic Status</h3>
+	{% for tax in meta.Taxonomy.TaxonomicStatus %}
+    	<code>{{ tax.status_name }}</code> : {{ tax.status_description }} <br/>
+    {% endfor %}
+
+    <hr/>
+
+    <h2>Plant Traits</h2>
+    <h3>Growth Types</h3>
+	{% for type in meta.PlantTrait.GrowthType %}
+    	<code>{{ type.type_name }}</code><br/>
+    {% endfor %}
+
+    <h3>Growth Form Raunkiaer</h3>
+	{% for type in meta.PlantTrait.GrowthFormRaunkiaer %}
+    	<code>{{ type.form_name }}</code><br/>
+    {% endfor %}
+
+    <h3>Reproductive Repetition</h3>
+	{% for rep in meta.PlantTrait.ReproductiveRepetition %}
+    	<code>{{ rep.repetition_name }}</code><br/>
+    {% endfor %}
+
+    <h3>Dicot/Monoc</h3>
+	{% for dic in meta.PlantTrait.DicotMonoc %}
+    	<code>{{ dic.dicot_monoc_name }}</code><br/>
+    {% endfor %}
+
+    <h3>Angio/Gymno</h3>
+	{% for ang in meta.PlantTrait.AngioGymno %}
+    	<code>{{ ang.angio_gymno_name }}</code><br/>
+    {% endfor %}
+
+    <hr/>
+
+    <h2>Publications</h2>
+    <h3>Source Types</h3>
+	{% for st in meta.Publication.SourceType %}
+    	<code>{{ st.source_name }}</code> : {{ st.source_description }}<br/>
+    {% endfor %}
+
+    <h3>Databases</h3>
+	{% for db in meta.Publication.Database %}
+    	<code>{{ db.database_name }}</code> : {{ db.database_description }}<br/>
+    {% endfor %}
+
+    <h3>Purposes</h3>
+	{% for pp in meta.Publication.Purpose %}
+    	<code>{{ pp.purpose_name }}</code> : {{ pp.purpose_description }}<br/>
+    {% endfor %}
+
+    <h3>Missing Data</h3>
+	{% for miss in meta.Publication.MissingData %}
+    	<code>{{ miss.missing_code }}</code> : {{ miss.missing_description }}<br/>
+    {% endfor %}
+
+    <hr/>
+
+    <h2>Author Contact</h2>
+    <h3>Content Email</h3>
+	{% for con in meta.AuthorContact.ContentEmail %}
+    	<code>{{ con.content_code }}</code> : {{ con.content_description }}<br/>
+    {% endfor %}
+
+    <hr/>
+
+ 	<h2>Populations</h2>
+    <h3>Ecoregions</h3>
+	{% for eco in meta.Population.Ecoregion %}
+    	<code>{{ eco.ecoregion_code }}</code> : {{ eco.ecoregion_description }}<br/>
+    {% endfor %}
+
+    <h3>Continent</h3>
+	{% for con in meta.Population.Continent %}
+    	<code>{{ con.continent_name }}</code><br/>
+    {% endfor %}
+
+    <hr/>
+
+    <h2>Stage Types</h2>
+    <h3>Stage Type Classes</h3>
+	{% for stg in meta.StageType.StageTypeClass %}
+    	<code>{{ stg.type_class }}</code><br/>
+    {% endfor %}
+
+    <hr/>
+
+    <h2>Matrix Values</h2>
+    <h3>Transition Types</h3>
+	{% for tt in meta.MatrixValue.TransitionType %}
+    	<code>{{ tt.trans_code }}</code> : {{ tt.trans_description }}<br/>
+    {% endfor %}
+
+    <hr/>
+
+    <h2>Matrices</h2>
+    <h3>Matrix Compositions</h3>
+	{% for com in meta.Matrix.MatrixComposition %}
+    	<code>{{ com.comp_name }}</code><br/>
+    {% endfor %}
+
+    <h3>Seasons</h3>
+	{% for season in meta.Matrix.Season %}
+    	<code>{{ season.season_name }}</code><br/>
+    {% endfor %}
+
+    <h3>Studied Sex</h3>
+	{% for sex in meta.Matrix.StudiedSex %}
+    	<code>{{ sex.sex_code }}</code> : {{ sex.sex_description }}<br/>
+    {% endfor %}
+
+    <h3>Captivities</h3>
+	{% for cap in meta.Matrix.Captivity %}
+    	<code>{{ cap.cap_code }}</code> : {{ cap.cap_description }}<br/>
+    {% endfor %}
+
+
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
