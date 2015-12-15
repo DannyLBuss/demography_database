@@ -1,0 +1,17 @@
+{
+	"MatrixValue": {
+		"TransitionType": [{
+			"trans_code": "U",
+			"trans_description": "The population sub-matrix model U (a sub-matrix of A), which describes the survival-dependent dynamics of a population under the conditions described above. A range of numeric values are possible, but are constrained to be between 0 and 1. These include only survival-dependent vital rates (no sexual or clonal reproduction). The values are only digitized for Divided matrices (indicated by variable MatrixSplit)"
+		}, {
+			"trans_code": "F",
+			"trans_description": "The population sub-matrix model F (a sub-matrix of A), which describes the sexual-reproduction dynamics of a population under the conditions described above. A range of numeric values are possible, but are constrained to be positive. These include only estimates of sexual reproduction (no clonal reproduction)."
+		}, {
+			"trans_code": "C",
+			"trans_description": "The population sub-matrix model C (a sub-matrix of A), which describes the clonal-reproduction dynamics of a population under the conditions described above. A range of numeric values are possible, but these are constrained to be positive. These include only estimates of clonal reproduction."
+		}, {
+			"trans_code": "A",
+			"trans_description": "The matrix population model A which describes the population dynamics of a population under conditions described by MatrixComposite, MatrixTreatment, MatrixStartYear, MatrixEndYear, Population, and Observation in the metadata object."
+		}]
+	}
+}

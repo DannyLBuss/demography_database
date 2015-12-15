@@ -1,0 +1,52 @@
+{
+	"Matrix": {
+		"MatrixComposition": [{
+			"comp_name": "Individual"
+		}, {
+			"comp_name": "Mean"
+		}, {
+			"comp_name": "Pooled"
+		}, {
+			"comp_name": "Seasonal"
+		}],
+		"Season": [{
+			"season_name": "Spring"
+		}, {
+			"season_name": "Summer"
+		}, {
+			"season_name": "Autumn"
+		}, {
+			"season_name": "Fall"
+		}, {
+			"season_name": "Winter"
+		}],
+
+		"StudiedSex": [{
+			"sex_code": "M",
+			"sex_description": "Studied only males"
+		}, {
+			"sex_code": "F",
+			"sex_description": "Studied only females"
+		}, {
+			"sex_code": "H",
+			"sex_description": "Hermaphrodites"
+		}, {
+			"sex_code": "M/F",
+			"sex_description": "Males and females separately in the same population matrix model"
+		}, {
+			"sex_code": "A",
+			"sex_description": "All sexes together"
+		}],
+
+		"Captivity": [{
+			"cap_code": "W",
+			"cap_description": "Wild: study in natural conditions"
+		}, {
+			"cap_code": "C",
+			"cap_description": "Captive: studied for most part of the life cycle of the species in a botanical garden, green house, laboratory, etc"
+		}, {
+			"cap_code": "CW",
+			"cap_description": "Captured from Wild: If the species was taken from a wild population but studied in labs or gardens etc"
+		}]
+	}
+}
