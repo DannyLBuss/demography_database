@@ -72,6 +72,17 @@ def profile(length=25, profile_dir=None):
                                       profile_dir=profile_dir)
     app.run()
 
+@manager.command
+def csv():
+    import csv
+
+    input_file = csv.DictReader(open("app/compadre/compadreFlat3.csv"))
+
+    for i, row in enumerate(input_file):
+        if i == 1:
+            for key in row:
+                print key + "   " + row[key]
+
 
 @manager.command
 def deploy():

@@ -980,6 +980,7 @@ class Publication(db.Model):
     date_digitised = db.Column(db.Date(), default=datetime.utcnow)
     embargo = db.Column(db.Date()) #nullable
     missing_data_id = db.Column(db.Integer, db.ForeignKey('missing_data.id'))
+    additional_source_string = db.Column(db.Text())
 
     # Again, these might be problematic
     user_created = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -1189,6 +1190,8 @@ class Matrix(db.Model):
     matrix_end_season_id = db.Column(db.Integer, db.ForeignKey('seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
     matrix_end_season = db.relationship('Season', foreign_keys='Matrix.matrix_end_season_id')
     matrix_fec = db.Column(db.Boolean())
+    matrix_a_string = db.Column(db.Text())
+    matrix_class_string = db.Column(db.Text())
     n_plots = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, will need your help with plots too - not quite sure what they are.
     plot_size = db.Column(db.Float()) # Schema states, 'R convert to m^2'
     n_individuals = db.Column(db.Integer()) # Schema states, 'total number of individuals observed'
