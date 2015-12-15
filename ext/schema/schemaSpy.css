@@ -165,7 +165,7 @@ table {
 }
 
 a:link {
-  color: #489148;
+  color: #333333;
 }
 
 a:visited {
@@ -274,4 +274,13 @@ div.spacer {
 
 #header li:hover a {
   background-position:100% -150px;
+}
+
+/* Custom Shit */
+.main {
+  background: #e74c3c !important;
+}
+
+.app {
+  background: #f1c40f !important;
 }
