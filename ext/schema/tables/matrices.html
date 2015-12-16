@@ -101,7 +101,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='odd'>
+<tr class='even'>
  <td class='primaryKey' title='Primary Key'>id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -110,19 +110,25 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
+    <td class='relatedTable detail' title="bussys.matrix_id refs matrices.id via bussys_ibfk_1"><a href='bussys.html'>bussys</a><span class='relatedKey'>.matrix_id</span>
+    </td>
+    <td class='constraint detail'>bussys_ibfk_1<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="intervals.matrix_id refs matrices.id via intervals_ibfk_1"><a href='intervals.html'>intervals</a><span class='relatedKey'>.matrix_id</span>
     </td>
     <td class='constraint detail'>intervals_ibfk_1<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="matrix_stages.matrix_id refs matrices.id via matrix_stages_ibfk_1"><a href='matrix_stages.html'>matrix_stages</a><span class='relatedKey'>.matrix_id</span>
     </td>
     <td class='constraint detail'>matrix_stages_ibfk_1<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="matrix_values.matrix_id refs matrices.id via matrix_values_ibfk_1"><a href='matrix_values.html'>matrix_values</a><span class='relatedKey'>.matrix_id</span>
     </td>
     <td class='constraint detail'>matrix_values_ibfk_1<span title='Restrict delete:
@@ -133,7 +139,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='indexedColumn' title='Indexed'>population_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -143,7 +149,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="matrices.population_id refs populations.id via matrices_ibfk_6"><a href='populations.html'>populations</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>matrices_ibfk_6<span title='Restrict delete:
@@ -153,7 +159,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='indexedColumn' title='Indexed'>treatment_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -163,7 +169,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="matrices.treatment_id refs treatments.id via matrices_ibfk_9"><a href='treatments.html'>treatments</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>matrices_ibfk_9<span title='Restrict delete:
@@ -173,7 +179,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>matrix_split</td>
  <td class='detail'>bit</td>
  <td class='detail' align='right'>0</td>
@@ -184,7 +190,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='indexedColumn' title='Indexed'>matrix_composition_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -194,7 +200,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="matrices.matrix_composition_id refs matrix_compositions.id via matrices_ibfk_2"><a href='matrix_compositions.html'>matrix_compositions</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>matrices_ibfk_2<span title='Restrict delete:
@@ -204,7 +210,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>survival_issue</td>
  <td class='detail'>float</td>
  <td class='detail' align='right'>12</td>
@@ -215,7 +221,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>n_intervals</td>
  <td class='detail'>smallint</td>
  <td class='detail' align='right'>5</td>
@@ -226,7 +232,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>matrix_criteria_size</td>
  <td class='detail'>bit</td>
  <td class='detail' align='right'>0</td>
@@ -237,7 +243,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>matrix_criteria_ontogeny</td>
  <td class='detail'>bit</td>
  <td class='detail' align='right'>0</td>
@@ -248,7 +254,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>matrix_criteria_age</td>
  <td class='detail'>bit</td>
  <td class='detail' align='right'>0</td>
@@ -259,7 +265,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='indexedColumn' title='Indexed'>study_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -269,7 +275,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="matrices.study_id refs studies.id via matrices_ibfk_8"><a href='studies.html'>studies</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>matrices_ibfk_8<span title='Restrict delete:
@@ -279,7 +285,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>matrix_start</td>
  <td class='detail'>date</td>
  <td class='detail' align='right'>10</td>
@@ -290,7 +296,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>matrix_end</td>
  <td class='detail'>date</td>
  <td class='detail' align='right'>10</td>
@@ -301,7 +307,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='indexedColumn' title='Indexed'>matrix_start_season_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -311,7 +317,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="matrices.matrix_start_season_id refs seasons.id via matrices_ibfk_4"><a href='seasons.html'>seasons</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>matrices_ibfk_4<span title='Restrict delete:
@@ -321,7 +327,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='indexedColumn' title='Indexed'>matrix_end_season_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -331,7 +337,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="matrices.matrix_end_season_id refs seasons.id via matrices_ibfk_3"><a href='seasons.html'>seasons</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>matrices_ibfk_3<span title='Restrict delete:
@@ -341,7 +347,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>matrix_fec</td>
  <td class='detail'>bit</td>
  <td class='detail' align='right'>0</td>
@@ -352,7 +358,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>n_plots</td>
  <td class='detail'>smallint</td>
  <td class='detail' align='right'>5</td>
@@ -363,7 +369,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>plot_size</td>
  <td class='detail'>float</td>
  <td class='detail' align='right'>12</td>
@@ -374,7 +380,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>n_individuals</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -385,7 +391,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='indexedColumn' title='Indexed'>studied_sex_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -395,7 +401,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="matrices.studied_sex_id refs studied_sex.id via matrices_ibfk_7"><a href='studied_sex.html'>studied_sex</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>matrices_ibfk_7<span title='Restrict delete:
@@ -405,7 +411,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='indexedColumn' title='Indexed'>captivity_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -415,7 +421,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="matrices.captivity_id refs captivities.id via matrices_ibfk_1"><a href='captivities.html'>captivities</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>matrices_ibfk_1<span title='Restrict delete:
@@ -425,7 +431,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>matrix_dimension</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -436,7 +442,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>observations</td>
  <td class='detail'>text</td>
  <td class='detail' align='right'>65535</td>
@@ -447,7 +453,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>periodicity</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>64</td>
@@ -458,7 +464,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>matrix_a_string</td>
  <td class='detail'>text</td>
  <td class='detail' align='right'>65535</td>
@@ -469,7 +475,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>matrix_class_string</td>
  <td class='detail'>text</td>
  <td class='detail' align='right'>65535</td>
@@ -481,7 +487,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='26 columns'>Table contained 0 rows at Tue Dec 15 16:19 GMT 2015<p/>
+<p title='26 columns'>Table contained 0 rows at Wed Dec 16 14:39 GMT 2015<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -555,38 +561,43 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from matrices'>
 &nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
 <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="intervals.html" title="intervals" alt="" coords="778,97,903,276">
-<area shape="rect" id="node2" href="matrices.html" title="matrices" alt="" coords="433,363,721,1051">
-<area shape="rect" id="node3" href="captivities.html" title="captivities" alt="" coords="235,964,373,1095">
-<area shape="rect" id="node4" href="matrix_compositions.html" title="matrix_compositions" alt="" coords="219,517,389,624">
-<area shape="rect" id="node5" href="seasons.html" title="seasons" alt="" coords="240,683,368,789">
-<area shape="rect" id="node6" href="populations.html" title="populations" alt="" coords="237,5,371,304">
-<area shape="rect" id="node7" href="studied_sex.html" title="studied_sex" alt="" coords="235,816,373,947">
-<area shape="rect" id="node8" href="studies.html" title="studies" alt="" coords="5,344,175,547">
-<area shape="rect" id="node9" href="treatments.html" title="treatments" alt="" coords="227,321,381,500">
-<area shape="rect" id="node10" href="matrix_stages.html" title="matrix_stages" alt="" coords="777,293,904,448">
-<area shape="rect" id="node11" href="matrix_values.html" title="matrix_values" alt="" coords="765,465,916,668">
+<area shape="rect" id="node1" href="bussys.html" title="bussys" alt="" coords="765,5,944,328">
+<area shape="rect" id="node2" href="matrices.html" title="matrices" alt="" coords="433,488,721,1176">
+<area shape="rect" id="node4" href="captivities.html" title="captivities" alt="" coords="235,1089,373,1220">
+<area shape="rect" id="node5" href="matrix_compositions.html" title="matrix_compositions" alt="" coords="219,643,389,749">
+<area shape="rect" id="node6" href="seasons.html" title="seasons" alt="" coords="240,808,368,915">
+<area shape="rect" id="node7" href="populations.html" title="populations" alt="" coords="237,131,371,429">
+<area shape="rect" id="node8" href="studied_sex.html" title="studied_sex" alt="" coords="235,941,373,1072">
+<area shape="rect" id="node9" href="studies.html" title="studies" alt="" coords="5,469,175,672">
+<area shape="rect" id="node10" href="treatments.html" title="treatments" alt="" coords="227,447,381,625">
+<area shape="rect" id="node3" href="intervals.html" title="intervals" alt="" coords="792,345,917,524">
+<area shape="rect" id="node11" href="matrix_stages.html" title="matrix_stages" alt="" coords="791,541,918,696">
+<area shape="rect" id="node12" href="matrix_values.html" title="matrix_values" alt="" coords="779,713,930,916">
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/matrices.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="intervals.html" title="intervals" alt="" coords="955,425,1081,604">
+<area shape="rect" id="node1" href="bussys.html" title="bussys" alt="" coords="943,1032,1121,1355">
 <area shape="rect" id="node2" href="matrices.html" title="matrices" alt="" coords="611,447,899,1135">
-<area shape="rect" id="node3" href="captivities.html" title="captivities" alt="" coords="412,1057,551,1188">
-<area shape="rect" id="node4" href="matrix_compositions.html" title="matrix_compositions" alt="" coords="396,661,567,768">
-<area shape="rect" id="node5" href="seasons.html" title="seasons" alt="" coords="417,785,545,892">
-<area shape="rect" id="node6" href="populations.html" title="populations" alt="" coords="414,105,549,404">
-<area shape="rect" id="node7" href="studied_sex.html" title="studied_sex" alt="" coords="412,909,551,1040">
-<area shape="rect" id="node8" href="studies.html" title="studies" alt="" coords="183,397,352,600">
-<area shape="rect" id="node9" href="treatments.html" title="treatments" alt="" coords="404,465,559,644">
-<area shape="rect" id="node14" href="continents.html" title="continents" alt="" coords="207,297,328,380">
-<area shape="rect" id="node15" href="ecoregions.html" title="ecoregions" alt="" coords="203,197,332,280">
-<area shape="rect" id="node16" href="publications.html" title="publications" alt="" coords="5,276,139,359">
-<area shape="rect" id="node17" href="species.html" title="species" alt="" coords="207,61,328,144">
-<area shape="rect" id="node18" href="treatment_types.html" title="treatment_types" alt="" coords="196,653,339,736">
-<area shape="rect" id="node10" href="matrix_stages.html" title="matrix_stages" alt="" coords="955,105,1081,260">
-<area shape="rect" id="node11" href="stages.html" title="stages" alt="" coords="415,5,548,88">
-<area shape="rect" id="node12" href="matrix_values.html" title="matrix_values" alt="" coords="943,851,1093,1053">
-<area shape="rect" id="node13" href="transition_types.html" title="transition_types" alt="" coords="685,1152,824,1235">
+<area shape="rect" id="node3" href="smalls.html" title="smalls" alt="" coords="694,1252,815,1335">
+<area shape="rect" id="node4" href="vector_availabilities.html" title="vector_availabilities" alt="" coords="671,1152,838,1235">
+<area shape="rect" id="node6" href="captivities.html" title="captivities" alt="" coords="412,1057,551,1188">
+<area shape="rect" id="node7" href="matrix_compositions.html" title="matrix_compositions" alt="" coords="396,661,567,768">
+<area shape="rect" id="node8" href="seasons.html" title="seasons" alt="" coords="417,785,545,892">
+<area shape="rect" id="node9" href="populations.html" title="populations" alt="" coords="414,105,549,404">
+<area shape="rect" id="node10" href="studied_sex.html" title="studied_sex" alt="" coords="412,909,551,1040">
+<area shape="rect" id="node11" href="studies.html" title="studies" alt="" coords="183,397,352,600">
+<area shape="rect" id="node12" href="treatments.html" title="treatments" alt="" coords="404,465,559,644">
+<area shape="rect" id="node5" href="intervals.html" title="intervals" alt="" coords="969,460,1095,639">
+<area shape="rect" id="node17" href="continents.html" title="continents" alt="" coords="207,297,328,380">
+<area shape="rect" id="node18" href="ecoregions.html" title="ecoregions" alt="" coords="203,197,332,280">
+<area shape="rect" id="node19" href="publications.html" title="publications" alt="" coords="5,276,139,359">
+<area shape="rect" id="node20" href="species.html" title="species" alt="" coords="207,61,328,144">
+<area shape="rect" id="node22" href="treatment_types.html" title="treatment_types" alt="" coords="196,653,339,736">
+<area shape="rect" id="node13" href="matrix_stages.html" title="matrix_stages" alt="" coords="969,48,1095,203">
+<area shape="rect" id="node14" href="stages.html" title="stages" alt="" coords="415,5,548,88">
+<area shape="rect" id="node15" href="matrix_values.html" title="matrix_values" alt="" coords="957,240,1107,443">
+<area shape="rect" id="node16" href="transition_types.html" title="transition_types" alt="" coords="685,312,824,395">
+<area shape="rect" id="node21" href="stage_class_info_bussys.html" title="stage_class_info_bussys" alt="" coords="1165,1032,1368,1115">
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/matrices.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
