@@ -878,6 +878,98 @@ class Captivity(db.Model):
     def __repr__(self):
         return '<Captivity %r>' % self.id
 ''' End Meta Tables for Matrix '''
+
+''' Meta Tables for Bussy '''
+stage_class_info_bussys = db.Table('stage_class_info_bussys', db.Model.metadata,
+    db.Column('id', db.Integer, primary_key=True),
+    db.Column('stage_class_info_id', db.Integer, db.ForeignKey('stage_class_infos.id')),
+    db.Column('bussys_id', db.Integer, db.ForeignKey('bussys.id'))
+)
+
+class VectorAvailability(db.Model):
+    __tablename__ = 'vector_availabilities'
+    id = db.Column(db.Integer, primary_key=True)
+    availability_name = db.Column(db.String(200), index=True)
+
+    bussys = db.relationship("Bussy", backref="vector_availabilities")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/bussys.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Bussy"]
+            nodes = json_data["VectorAvailability"]
+
+            for node in nodes:
+                i = VectorAvailability.query.filter_by(availability_name=node['availability_name']).first()
+                if i is None:
+                    i = VectorAvailability()
+
+                i.availability_name = node['availability_name']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return '<Vector Availability %r>' % self.id
+
+class StageClassInfo(db.Model):
+    __tablename__ = 'stage_class_infos'
+    id = db.Column(db.Integer, primary_key=True)
+    info_code = db.Column(db.String(200), index=True)
+    info_description = db.Column(db.Text())
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/bussys.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Bussy"]
+            nodes = json_data["StageClassInfo"]
+
+            for node in nodes:
+                i = StageClassInfo.query.filter_by(info_code=node['info_code']).first()
+                if i is None:
+                    i = StageClassInfo()
+
+                i.info_code = node['info_code']
+                i.info_description = node['info_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return '<StageClassInfo %r>' % self.id
+
+class Small(db.Model):
+    __tablename__ = 'smalls'
+    id = db.Column(db.Integer, primary_key=True)
+    small_name = db.Column(db.String(200), index=True)
+    small_description = db.Column(db.Text())
+
+    bussys = db.relationship("Bussy", backref="smalls")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/bussys.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Bussy"]
+            nodes = json_data["Small"]
+
+            for node in nodes:
+                i = Small.query.filter_by(small_name=node['small_name']).first()
+                if i is None:
+                    i = Small()
+
+                i.small_name = node['small_name']
+                i.small_description = node['small_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return '<StageClassInfo %r>' % self.id
+''' End Meta Tables for Bussy '''
+
 ''' End Meta Tables '''
 
 class Species(db.Model):
@@ -1203,6 +1295,7 @@ class Matrix(db.Model):
     intervals = db.relationship("Interval", backref="matrix")
     matrix_values = db.relationship("MatrixValue", backref="matrix")
     matrix_stages = db.relationship("MatrixStage", backref="matrix")
+    bussys = db.relationship("Bussy", backref="matrix")
 
     @staticmethod
     def migrate():
@@ -1225,3 +1318,31 @@ class Interval(db.Model):
 
     def __repr__(self):
         return '<Interval %r>' % self.id
+
+''' Secret & Important Bussy Stuff '''
+class Bussy(db.Model):
+    __tablename__ = 'bussys'
+    id = db.Column(db.Integer, primary_key=True)
+    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'), index=True)
+    vector_str = db.Column(db.Text())
+    vector_present = db.Column(db.Boolean())
+    total_pop_no = db.Column(db.Integer())
+    vector_availablility_id = db.Column(db.Integer, db.ForeignKey('vector_availabilities.id'))
+    stage_class_info = db.relationship('StageClassInfo', secondary=stage_class_info_bussys, backref=db.backref('bussys', lazy='dynamic')) 
+    availability_notes = db.Column(db.Text())
+    population_info = db.Column(db.Text())
+    sampled_entire = db.Column(db.Text())
+    small_id = db.Column(db.Integer, db.ForeignKey('smalls.id'))
+    private = db.Column(db.Boolean(), default=True)
+
+    @staticmethod
+    def migrate():
+        VectorAvailability.migrate()
+        StageClassInfo.migrate()
+        Small.migrate()
+
+    def __repr__(self):
+        return '<Bussy %r>' % self.id
+
+
+

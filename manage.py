@@ -19,7 +19,7 @@ from app.models import User, Role, Permission, \
     DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
-    MatrixStage, MatrixValue, Matrix, Interval
+    MatrixStage, MatrixValue, Matrix, Interval, Bussy, VectorAvailability, StageClassInfo, Small
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -37,7 +37,7 @@ def make_shell_context():
                 AuthorContact=AuthorContact, ContentEmail=ContentEmail, Population=Population, Ecoregion=Ecoregion, Continent=Continent, \
                 StageType=StageType, StageTypeClass=StageTypeClass, TransitionType=TransitionType, MatrixValue=MatrixValue, \
                 MatrixComposition=MatrixComposition, Season=Season, StudiedSex=StudiedSex, Captivity=Captivity, MatrixStage=MatrixStage,\
-                Matrix=Matrix, Interval=Interval)
+                Matrix=Matrix, Interval=Interval, Bussy=Bussy, VectorAvailability=VectorAvailability, StageClassInfo=StageClassInfo, Small=Small)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
@@ -83,33 +83,42 @@ def csv():
             for key in row:
                 print key + "   " + row[key]
 
-
 @manager.command
-def deploy():
-    """Run deployment tasks."""
-    from flask.ext.migrate import upgrade
+def migrate_meta():
     from app.models import User, Role, Permission, \
     IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
-    MatrixStage, MatrixValue, Matrix, Interval
+    MatrixStage, MatrixValue, Matrix, Interval, Bussy, VectorAvailability, StageClassInfo, Small
 
+    print "Migrating Meta Tables..."
+    try:
+        Species.migrate()
+        Taxonomy.migrate()
+        PlantTrait.migrate()
+        Publication.migrate()
+        AuthorContact.migrate()
+        Population.migrate()
+        StageType.migrate()
+        MatrixValue.migrate()
+        Matrix.migrate()
+        Bussy.migrate()
+    except:
+        "Error migrating metadata"
+    finally:
+        "Done + good"
+   
+    return
+
+
+@manager.command
+def deploy():
+    """Run deployment tasks."""
+    from flask.ext.migrate import upgrade
+    from app.models import User, Role, Permission
     # migrate database to latest revision
     # upgrade()
-
-    # insert all metadata into respective tables
-    print "Migrating Meta Tables..."
-    Species.migrate()
-    Taxonomy.migrate()
-    PlantTrait.migrate()
-    Publication.migrate()
-    AuthorContact.migrate()
-    Population.migrate()
-    StageType.migrate()
-    MatrixValue.migrate()
-    Matrix.migrate()
-    print "Meta Table success"
 
     # create user roles
     Role.insert_roles()
