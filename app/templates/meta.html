@@ -137,6 +137,24 @@
     	<code>{{ cap.cap_code }}</code> : {{ cap.cap_description }}<br/>
     {% endfor %}
 
+    <hr/>
+
+    <h2>Bussy's</h2>
+    <h3>Vector Availabilities</h3>
+    {% for vec in meta.Bussy.VectorAvailability %}
+        <code>{{ vec.availability_name }}</code><br/>
+    {% endfor %}
+
+    <h3>Stage Class Info</h3>
+    {% for class in meta.Bussy.StageClassInfo %}
+        <code>{{ class.info_code }}</code> : {{ class.info_description }}<br/>
+    {% endfor %}
+
+    <h3>Smalls</h3>
+    {% for small in meta.Bussy.Small %}
+        <code>{{ small.small_name }}</code> : {{ small.small_description }}<br/>
+    {% endfor %}
+
 
 
 </div>

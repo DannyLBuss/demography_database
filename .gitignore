@@ -42,3 +42,6 @@ nosetests.xml
 venv
 
 config.py
+
+ext/schema.jar
+ext/mysql-connector-java-5.1.38-bin.jar
