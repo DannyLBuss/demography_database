@@ -42,7 +42,9 @@ def index():
  
     return render_template('index.html')
 
+
 @main.route('/meta-tables/')
+@login_required
 def meta_tables_json():
 
     # Constructing dict for meta tables, ordering by main Class
@@ -51,7 +53,8 @@ def meta_tables_json():
                    "Publication" : {"SourceType" : [], "Database" : [], "Purpose" : [], "MissingData" : [] }, \
                    "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] }, \
                    "StageType" : { "StageTypeClass" : [] }, "MatrixValue" : { "TransitionType" : [] }, \
-                   "Matrix" : {"MatrixComposition" : [], "Season" : [], "StudiedSex" : [], "Captivity" : []} }
+                   "Matrix" : {"MatrixComposition" : [], "Season" : [], "StudiedSex" : [], "Captivity" : []}, \
+                   "Bussy" : { "VectorAvailability" : [],  "StageClassInfo": [], "Small": [] }}
 
     meta_tables["Species"]["IUCNStatus"].extend(IUCNStatus.query.all())
     meta_tables["Species"]["ESAStatus"].extend(ESAStatus.query.all())
@@ -74,6 +77,10 @@ def meta_tables_json():
     meta_tables["Matrix"]["Season"].extend(Season.query.all())
     meta_tables["Matrix"]["StudiedSex"].extend(StudiedSex.query.all())
     meta_tables["Matrix"]["Captivity"].extend(Captivity.query.all())
+    meta_tables["Bussy"]["VectorAvailability"].extend(VectorAvailability.query.all())
+    meta_tables["Bussy"]["StageClassInfo"].extend(StageClassInfo.query.all())
+    meta_tables["Bussy"]["Small"].extend(Small.query.all())
+
 
     print meta_tables
 
