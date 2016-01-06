@@ -80,12 +80,103 @@ def csv_migrate():
 
     all_deets = []   
 
-    for i, row in enumerate(input_file): 
-        if i == 1000:                     
-            data = convert_all_headers(row)
-            all_deets.append(data)
+    for i, row in enumerate(input_file):                     
+        data = convert_all_headers(row)
+        entry = add_to_classes(data)
+        all_deets.append(entry)
 
-    return all_deets
+
+    return submit(entry)
+
+def add_to_classes(data):
+    from app.conversion.models import Taxonomy, Publication, Population, PlantTrait, Matrix, Study, Entry
+    
+    matrix = Matrix(data['treatment_id'], data['matrix_split'], data['matrix_composition_id'], data['survival_issue'], data['periodicity'], data['matrix_criteria_size'], \
+        data['matrix_criteria_ontogeny'], data['matrix_criteria_age'], data['matrix_start_month'], data['matrix_start_year'], data['matrix_end_month'], data['matrix_end_year'], \
+        data['matrix_start_season_id'], data['matrix_end_season_id'], data['matrix_fec'], data['matrix_a_string'], data['matrix_class_string'], data['studied_sex_id'], \
+        data['captivity_id'], data['matrix_dimension'], data['observations'])
+    study = Study(data['study_duration'], data['study_start'], data['study_end'])
+    tax = Taxonomy(data['species_author'], data['species_accepted'], data['authority'], data['tpl_version'], data['taxonomic_status_id'], data['infraspecies_accepted'], data['species_epithet_accepted'], \
+        data['genus_accepted'], data['genus'], data['family'], data['tax_order'], data['tax_class'], data['phylum'], data['kingdom'])
+    pop = Population(data['species_author'], data['name'], data['geometries_lat_min'], data['geometries_lon_deg'], data['geometries_lat_ns'], data['geometries_lat_we'], \
+        data['geometries_lat_sec'], data['geometries_lon_sec'], data['geometries_lon_min'], data['geometries_lat_deg'], data['geometries_altitude'], data['ecoregion_id'], \
+        data['country'], data['continent_id'], matrix)
+    trait = PlantTrait(data['growth_type_id'], data['dicot_monoc_id'], data['angio_gymno_id'])
+    pub = Publication(data['authors'], data['year'], data['DOI_ISBN'], data['additional_source_string'], tax, pop, trait, study)
+
+    entry = Entry(pub, study, pop, tax, trait, matrix)
+    
+    return entry
+
+def submit(entry):
+    matrix = Matrix()
+    # matrix.treatment_id = Treatment.query.filter_by(name=entry.matrix.treatment_id).first() 
+    matrix.matrix_split = coerce_boolean(entry.matrix.matrix_split) 
+    # matrix.matrix_composition_id = MatrixComposition.query.filter_by(comp_name=entry.matrix.matrix_composition_id).first()
+    matrix.survival_issue = float(entry.matrix.survival_issue)
+    matrix.periodicity = entry.matrix.periodicity
+    matrix.matrix_criteria_size = coerce_boolean(entry.matrix.matrix_criteria_size)
+    matrix.matrix_criteria_ontogeny = coerce_boolean(entry.matrix.matrix_criteria_ontogeny)
+    matrix.matrix_criteria_age = coerce_boolean(entry.matrix.matrix_criteria_age) 
+    matrix.matrix_start = coerce_date(entry.matrix.matrix_start, 'start') #Coerced into date conidering NA
+    matrix.matrix_end = coerce_date(entry.matrix.matrix_end , 'end') #Coerced into date considering NA
+    # matrix.matrix_start_season_id = Season.query.filter_by(season_name=entry.matrix.matrix_start_season_id).first()
+    # matrix.matrix_end_season_id = Season.query.filter_by(season_name=entry.matrix.matrix_end_season_id).first()
+    matrix.matrix_fec = coerce_boolean(entry.matrix.matrix_fec)
+    matrix.matrix_a_string = entry.matrix.matrix_a_string
+    matrix.matrix_class_string = entry.matrix.matrix_class_string
+    # matrix.studied_sex_id = StudiedSex.query.filter_by(sex_code=entry.matrix.studied_sex_id).first()
+    # matrix.captivity_id = Captivity.query.filter_by(cap_code=entry.matrix.captivity_id).first()
+    matrix.matrix_dimension = int(entry.matrix.matrix_dimension)
+    matrix.observations = entry.matrix.observations
+
+
+    publication = Publication()
+    publication.authors = entry.publication.authors
+    publication.year = entry.publication.year
+    publication.DOI_ISBN = entry.publication.DOI_ISBN
+    publication.additional_source_string = entry.publication.additional_source_string
+
+
+
+    print entry.matrix.treatment_id
+
+    return vars(matrix)
+
+    # for key, value in vars(entry.matrix).items():
+    #     print key, '|', value
+
+# This can be padded out for future stuff...
+def coerce_boolean(string):
+    true = ['Yes', 'Divided']
+    false = ['No', 'Undivided']
+
+    if string in true:
+        return True
+    elif string in false:
+        return False
+
+def coerce_date(dict, type):
+    import datetime
+    date = dict
+
+    datetime.date()
+
+    month_start = date['matrix_'+type+'_month']
+    year_start = date['matrix_'+type+'_year']
+
+    if month_start and year_start == 'NA':
+        date = None
+    elif month_start == 'NA' and year_start != 'NA':
+        date = datetime.datetime(datetime.date(int(year_start), 0, 0))
+    elif month_start != 'NA' and year_start == 'NA':
+        date = datetime.datetime(1, datetime.date(int(month_start), 0))
+
+    return date
+
+    #CREATE DATE
+
+
 
 def convert_all_headers(dict):
 
