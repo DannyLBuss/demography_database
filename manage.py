@@ -78,79 +78,69 @@ def csv_migrate():
 
     input_file = csv.DictReader(open("app/compadre/compadreFlat3.csv"))
 
-    data = {}
+    all_deets = []   
 
-    taxonomy = {'SpeciesAuthor' : ['species_author'], 'SpeciesAccepted' : ['species_accepted'], 'TaxonomicStatus' : ['taxonomic_status_id'], 'TPLVersion' : ['tpl_version'],\
-                 'InfraspecificAccepted' : ['infraspecies_accepted'], 'SpeciesEpithetAccepted' : ['species_epithet_accepted'], 'GenusAccepted' : ['genus_accepted'], \
-                 'Genus' : ['genus'], 'Family' : ['family'], 'Order' : ['tax_order'], 'Class' : ['tax_class'], \
-                 'Phylum' : ['phylum'], 'Kingdom' : ['kingdom']}
+    for i, row in enumerate(input_file): 
+        if i == 1000:                     
+            data = convert_all_headers(row)
+            all_deets.append(data)
 
-    for i, row in enumerate(input_file):
-        if i == 1000:
-            for key in row:                    
-                data[key] = row[key]
+    return all_deets
 
-    # for key in data:
-    #     print key
-    #     if key in taxonomy:
-    #         print key
-
-    print convert_headers(data)
-
-def convert_headers(dict):
+def convert_all_headers(dict):
 
     new_dict = {}
 
     new_dict['additional_source_string'] = dict['AdditionalSource']
     new_dict['matrix_end_season_id'] = dict['MatrixEndSeason']
     new_dict['growth_type_id'] = dict['GrowthType']
-    new_dict['geometries'][0] = dict['LatSec']
+    new_dict['geometries_lat_sec'] = dict['LatSec']
     new_dict['study_duration'] = dict['StudyDuration']
-    new_dict['matrix_values']['c'] = dict['matrixC']
-    new_dict['geometries']['lat_we'] = dict['LonWE']
+    new_dict['matrix_values_c'] = dict['matrixC']
+    new_dict['geometries_lat_we'] = dict['LonWE']
     new_dict['infraspecies_accepted'] = dict['InfraspecificAccepted']
-    new_dict['matrix_values']['a'] = dict['matrixA']
+    new_dict['matrix_values_a'] = dict['matrixA']
     new_dict['matrix_a_string'] = dict['matrixA']
-    new_dict['matrix_start']['year'] = dict['MatrixStartYear']
+    new_dict['matrix_start_year'] = dict['MatrixStartYear']
     new_dict['kingdom'] = dict['Kingdom']
     new_dict['DOI_ISBN'] = dict['DOI.ISBN']
     new_dict['genus'] = dict['Genus']
     new_dict['species_epithet_accepted'] = dict['SpeciesEpithetAccepted']
     new_dict['name'] = dict['Journal']
-    new_dict['geometries']['lat_ns'] = dict['LatNS']
+    new_dict['geometries_lat_ns'] = dict['LatNS']
     new_dict['number_populations'] = dict['NumberPopulations']
     new_dict['matrix_fec'] = dict['MatrixFec']
     new_dict['matrix_criteria_size'] = dict['CriteriaSize']
-    new_dict['geometries']['lon_min'] = dict['LonMin']
-    new_dict['matrix_start']['month'] = dict['MatrixStartMonth']
+    new_dict['geometries_lon_min'] = dict['LonMin']
+    new_dict['matrix_start_month'] = dict['MatrixStartMonth']
     new_dict['authors'] = dict['Authors']
-    new_dict['geometries']['lon_sec'] = dict['LonSec']
+    new_dict['geometries_lon_sec'] = dict['LonSec']
     new_dict['taxonomic_status_id'] = dict['TaxonomicStatus']
     new_dict['matrix_dimension'] = dict['MatrixDimension']
-    new_dict['geometries']['altitude'] = dict['Altitude']
-    new_dict['geometries']['lat_min'] = dict['LatMin']
+    new_dict['geometries_altitude'] = dict['Altitude']
+    new_dict['geometries_lat_min'] = dict['LatMin']
     new_dict['observations'] = dict['Observation']
     new_dict['study_start'] = dict['StudyStart']
     new_dict['country'] = dict['Country']
     new_dict['survival_issue'] = dict['SurvivalIssue']
-    new_dict['geometries']['lat_deg'] = dict['LatDeg']
+    new_dict['geometries_lat_deg'] = dict['LatDeg']
     new_dict['dicot_monoc_id'] = dict['DicotMonoc']
     new_dict['angio_gymno_id'] = dict['AngioGymno']
     new_dict['matrix_criteria_ontogeny'] = dict['CriteriaOntogeny']
     new_dict['year'] = dict['YearPublication']
     new_dict['species_accepted'] = dict['SpeciesAccepted']
     new_dict['periodicity'] = dict['AnnualPeriodicity']
-    new_dict['matrix_end']['year'] = dict['MatrixEndYear']
+    new_dict['matrix_end_year'] = dict['MatrixEndYear']
     new_dict['tax_order'] = dict['Order']
     new_dict['studied_sex_id'] = dict['StudiedSex']
-    new_dict['geometries']['lon_deg'] = dict['LonDeg']
+    new_dict['geometries_lon_deg'] = dict['LonDeg']
     new_dict['genus_accepted'] = dict['GenusAccepted']
     new_dict['family'] = dict['Family']
-    new_dict['matrix_end']['month'] = dict['MatrixEndMonth']
+    new_dict['matrix_end_month'] = dict['MatrixEndMonth']
     new_dict['matrix_composition_id'] = dict['MatrixComposite']
-    new_dict['matrix_values']['f'] = dict['matrixF']
+    new_dict['matrix_values_a'] = dict['matrixF']
     new_dict['matrix_start_season_id'] = dict['MatrixStartSeason']
-    new_dict['populations']['name'] = dict['MatrixPopulation']
+    new_dict['populations_name'] = dict['MatrixPopulation']
     new_dict['species_author'] = dict['SpeciesAuthor']
     new_dict['tax_class'] = dict['Class']
     new_dict['continent_id'] = dict['Continent']
@@ -162,7 +152,7 @@ def convert_headers(dict):
     new_dict['study_end'] = dict['StudyEnd']
     new_dict['captivity_id'] = dict['MatrixCaptivity']
     new_dict['ecoregion_id'] = dict['Ecoregion']
-    new_dict['matrix_values']['u'] = dict['matrixU']
+    new_dict['matrix_values_a'] = dict['matrixU']
     new_dict['authority'] = dict['Authority']
     new_dict['matrix_split'] = dict['MatrixSplit']
 
