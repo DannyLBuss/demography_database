@@ -1208,6 +1208,7 @@ class StageType(db.Model):
         return '<Stage Type %r>' % self.id
 
 
+#Ignore this one for a while, not enough data just yet
 class Treatment(db.Model):
     __tablename__ = 'treatments'
     id = db.Column(db.Integer, primary_key=True, index=True)
@@ -1216,7 +1217,7 @@ class Treatment(db.Model):
     name = db.Column(db.Text()) #Schema says 'author's', need clarification - author's name possibly, according to protocol?
     description = db.Column(db.Text())
 
-    matrices = db.relationship("Matrix", backref="treatment")
+    # matrices = db.relationship("Matrix", backref="treatment")
 
     def __repr__(self):
         return '<Treatment %r>' % self.id
@@ -1227,7 +1228,25 @@ class TreatmentType(db.Model):
     type_name = db.Column(db.Text())
     
 
-    treatments = db.relationship("Treatment", backref="treatment_types")
+    # treatments = db.relationship("Treatment", backref="treatment_types")
+    matrices = db.relationship("Matrix", backref="treatment")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/matrices.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Matrix"]
+            nodes = json_data["TreatmentType"]
+
+            for node in nodes:
+                i = TreatmentType.query.filter_by(type_name=node['type_name']).first()
+                if i is None:
+                    i = TreatmentType()
+
+                i.type_name = node['type_name']
+
+                db.session.add(i)
+                db.session.commit()
 
     def __repr__(self):
         return '<Treatment Type %r>' % self.id
@@ -1264,7 +1283,7 @@ class Matrix(db.Model):
     __tablename__ = 'matrices'
     id = db.Column(db.Integer, primary_key=True)
     population_id = db.Column(db.Integer, db.ForeignKey('populations.id'))
-    treatment_id = db.Column(db.Integer, db.ForeignKey('treatments.id'))
+    treatment_id = db.Column(db.Integer, db.ForeignKey('treatment_types.id'))
     matrix_split = db.Column(db.Boolean())
     matrix_composition_id = db.Column(db.Integer, db.ForeignKey('matrix_compositions.id'))
     survival_issue = db.Column(db.Float())
@@ -1275,8 +1294,8 @@ class Matrix(db.Model):
     matrix_criteria_ontogeny = db.Column(db.Boolean())
     matrix_criteria_age = db.Column(db.Boolean())
     study_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
-    matrix_start = db.Column(db.Date()) # These will include month, day, etc. Create method to return these - matrix_start.day() matrix_start.year() etc
-    matrix_end = db.Column(db.Date()) # These will include month, day, etc. Create method to return these - matrix_start.day() matrix_start.year() etc
+    matrix_start = db.Column(db.String(64)) # These will include month, day, etc. Create method to return these - matrix_start.day() matrix_start.year() etc
+    matrix_end = db.Column(db.String(64)) # These will include month, day, etc. Create method to return these - matrix_start.day() matrix_start.year() etc
     matrix_start_season_id = db.Column(db.Integer, db.ForeignKey('seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
     matrix_start_season = db.relationship('Season', foreign_keys='Matrix.matrix_start_season_id')
     matrix_end_season_id = db.Column(db.Integer, db.ForeignKey('seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date

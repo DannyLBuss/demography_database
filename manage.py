@@ -37,7 +37,8 @@ def make_shell_context():
                 AuthorContact=AuthorContact, ContentEmail=ContentEmail, Population=Population, Ecoregion=Ecoregion, Continent=Continent, \
                 StageType=StageType, StageTypeClass=StageTypeClass, TransitionType=TransitionType, MatrixValue=MatrixValue, \
                 MatrixComposition=MatrixComposition, Season=Season, StudiedSex=StudiedSex, Captivity=Captivity, MatrixStage=MatrixStage,\
-                Matrix=Matrix, Interval=Interval, Bussy=Bussy, VectorAvailability=VectorAvailability, StageClassInfo=StageClassInfo, Small=Small)
+                Matrix=Matrix, Interval=Interval, Bussy=Bussy, VectorAvailability=VectorAvailability, StageClassInfo=StageClassInfo, Small=Small, \
+                TreatmentType=TreatmentType)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
@@ -80,10 +81,11 @@ def csv_migrate():
 
     all_deets = []   
 
-    for i, row in enumerate(input_file):                     
-        data = convert_all_headers(row)
-        entry = add_to_classes(data)
-        all_deets.append(entry)
+    for i, row in enumerate(input_file):
+        if i == 1:                     
+            data = convert_all_headers(row)
+            entry = add_to_classes(data)
+            all_deets.append(entry)
 
 
     return submit(entry)
@@ -110,9 +112,22 @@ def add_to_classes(data):
 
 def submit(entry):
     matrix = Matrix()
-    # matrix.treatment_id = Treatment.query.filter_by(name=entry.matrix.treatment_id).first() 
-    matrix.matrix_split = coerce_boolean(entry.matrix.matrix_split) 
+
+    #TreatmentType relationship  
+    treatment_type = TreatmentType.query.filter_by(type_name=entry.matrix.treatment_id).first()
+    if treatment_type == None:
+        treatment_type = TreatmentType(type_name=entry.matrix.treatment_id)
+        db.session.add(treatment_type)
+    matrix.treatment_id = treatment_type.id
+
+    matrix.matrix_split = coerce_boolean(entry.matrix.matrix_split)
+
+    #Matrix composition ID
+    comp_id = MatrixComposition.query.filter_by(comp_name=entry.matrix.matrix_composition_id).first()
+    if comp_id != None:
+        matrix.matrix_composition_id = comp_id.id
     # matrix.matrix_composition_id = MatrixComposition.query.filter_by(comp_name=entry.matrix.matrix_composition_id).first()
+    
     matrix.survival_issue = float(entry.matrix.survival_issue)
     matrix.periodicity = entry.matrix.periodicity
     matrix.matrix_criteria_size = coerce_boolean(entry.matrix.matrix_criteria_size)
@@ -120,16 +135,41 @@ def submit(entry):
     matrix.matrix_criteria_age = coerce_boolean(entry.matrix.matrix_criteria_age) 
     matrix.matrix_start = coerce_date(entry.matrix.matrix_start, 'start') #Coerced into date conidering NA
     matrix.matrix_end = coerce_date(entry.matrix.matrix_end , 'end') #Coerced into date considering NA
+    
+    #Season Start
+    start_id = Season.query.filter_by(season_name=entry.matrix.matrix_start_season_id).first()
+    if start_id != None:
+        matrix.matrix_start_season_id = start_id.id
     # matrix.matrix_start_season_id = Season.query.filter_by(season_name=entry.matrix.matrix_start_season_id).first()
+
+    #Season End
+    end_id = Season.query.filter_by(season_name=entry.matrix.matrix_end_season_id).first()
+    if end_id != None:
+        matrix.matrix_end_season_id = end_id.id
     # matrix.matrix_end_season_id = Season.query.filter_by(season_name=entry.matrix.matrix_end_season_id).first()
+
     matrix.matrix_fec = coerce_boolean(entry.matrix.matrix_fec)
     matrix.matrix_a_string = entry.matrix.matrix_a_string
     matrix.matrix_class_string = entry.matrix.matrix_class_string
+
+    #Studied Sex
+    sex_id = StudiedSex.query.filter_by(sex_code=entry.matrix.studied_sex_id).first()
+    if sex_id != None:
+        matrix.studied_sex_id = sex_id.id
     # matrix.studied_sex_id = StudiedSex.query.filter_by(sex_code=entry.matrix.studied_sex_id).first()
+
+    #Captivity
+    cap_id = Captivity.query.filter_by(cap_code=entry.matrix.captivity_id).first()
+    if cap_id != None:
+        matrix.captivity_id = cap_id.id
     # matrix.captivity_id = Captivity.query.filter_by(cap_code=entry.matrix.captivity_id).first()
+
     matrix.matrix_dimension = int(entry.matrix.matrix_dimension)
     matrix.observations = entry.matrix.observations
 
+    print vars(matrix)
+
+    submit_model(matrix)
 
     publication = Publication()
     publication.authors = entry.publication.authors
@@ -137,14 +177,12 @@ def submit(entry):
     publication.DOI_ISBN = entry.publication.DOI_ISBN
     publication.additional_source_string = entry.publication.additional_source_string
 
+    return 
 
+def submit_model(instance):
+    db.session.add(instance)
+    db.session.commit()
 
-    print entry.matrix.treatment_id
-
-    return vars(matrix)
-
-    # for key, value in vars(entry.matrix).items():
-    #     print key, '|', value
 
 # This can be padded out for future stuff...
 def coerce_boolean(string):
@@ -156,21 +194,23 @@ def coerce_boolean(string):
     elif string in false:
         return False
 
-def coerce_date(dict, type):
+#Month doesn't seem to be i
+def coerce_date(dict, typeof):
     import datetime
+
     date = dict
 
-    datetime.date()
-
-    month_start = date['matrix_'+type+'_month']
-    year_start = date['matrix_'+type+'_year']
+    month_start = date['matrix_'+typeof+'_month']
+    year_start = date['matrix_'+typeof+'_year']
 
     if month_start and year_start == 'NA':
         date = None
     elif month_start == 'NA' and year_start != 'NA':
-        date = datetime.datetime(datetime.date(int(year_start), 0, 0))
+        date = 'M/' + year_start
     elif month_start != 'NA' and year_start == 'NA':
-        date = datetime.datetime(1, datetime.date(int(month_start), 0))
+        date = month_start + '/YYYY'
+    elif month_start != 'NA' and year_start != 'NA':
+        date = month_start + '/' + year_start
 
     return date
 
