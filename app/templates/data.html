@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Species in Compadre DB</h1>
+
+    {% for s in species %}
+        <h2>{{ s.species_accepted }}</h2>
+        <ul>
+            <li><h3>Taxonomy</h3>
+            {% for taxonomy in s.taxonomies %}
+                <ul>
+                    <li><strong>species_author</strong> : {{ taxonomy.species_author }}</li>
+                    <li><strong>authority</strong> : {{ taxonomy.authority }}</li>
+                    <li><strong>tpl_version</strong> : {{ taxonomy.tpl_version }}</li>
+                    <li><strong>taxonomic_status</strong> : {{ taxonomy.taxonomic_status.status_name }}</li>
+                    <li><strong>infraspecies_accepted</strong> : {{ taxonomy.infraspecies_accepted }}</li>
+                    <li><strong>species_epithet_accepted</strong> : {{ taxonomy.species_epithet_accepted }}</li>
+                    <li><strong>genus_accepted</strong> : {{ taxonomy.genus_accepted }}</li>
+                    <li><strong>genus</strong> : {{ taxonomy.genus }}</li>
+                    <li><strong>family</strong> : {{ taxonomy.family }}</li>
+                    <li><strong>tax_order</strong> : {{ taxonomy.tax_order }}</li>
+                    <li><strong>tax_class</strong> : {{ taxonomy.tax_class }}</li>
+                    <li><strong>phylum</strong> : {{ taxonomy.phylum }}</li>
+                    <li><strong>kingdom</strong> : {{ taxonomy.kingdom }}</li>
+                </ul>
+            </li>
+            {% endfor %}
+
+            <li><h3>Populations</h3>
+                {% for population in s.populations %}
+                <ul>
+                    <li><h4>{{ population.name }} </h4>
+                        <ul>
+                            <li><strong>ecoregion_id: </strong> {{ population.ecoregion.ecoregion_code }} (<em>{{ population.ecoregion.ecoregion_description }}</em>)</li>
+                            <li><strong>country: </strong> {{ population.country }}</li>
+                            <li><strong>geometries: </strong> {{ population.geometries }}</li>
+                            <li><strong>continent: </strong> {{ population.continent.continent_name }}</li>
+                            <li><strong>publication: </strong> {{ population.publication.authors }}</li>
+                            <li><strong>study:</strong> {{ population.study.study_duration }} years</li>
+                            <li><h5>Matrices</h5>
+                                {% for matrix in population.matrices %}
+                                <ul>
+                                    <li><h5>matrix_split: {{ matrix.matrix_split }}</h5></li>
+                                        <ul>
+                                            <li><strong>treatment: </strong> {{ matrix.treatment.type_name }}</li>
+                                            <li><strong>matrix_composition: </strong> {{ matrix.matrix_composition.comp_name }}</li>
+                                            <li><strong>periodicity: </strong> {{ matrix.periodicity }}</li>
+                                            <li><strong>matrix_criteria_size: </strong> {{ matrix.matrix_criteria_size }}</li>
+                                            <li><strong>matrix_criteria_ontogeny: </strong> {{ matrix.matrix_criteria_ontogeny }}</li>
+                                            <li><strong>matrix_criteria_age: </strong> {{ matrix.matrix_criteria_age }}</li>
+                                            <li><strong>matrix_start: </strong> {{ matrix.matrix_start }}</li>
+                                            <li><strong>matrix_end: </strong> {{ matrix.matrix_end }}</li>
+                                            <li><strong>matrix_start_season: </strong> {{ matrix.matrix_start_season_id }}</li>
+                                            <li><strong>matrix_end_season: </strong> {{ matrix.matrix_end_season_id }}</li>
+                                            <li><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</li>
+                                            <li><strong>studied_sex: </strong> {{ matrix.studied_sex.sex_code }}</li>
+                                            <li><strong>captivities: </strong> {{ matrix.captivities.cap_code }}</li>
+                                            <li><strong>matrix_dimension: </strong> {{ matrix.matrix_dimension }}</li>
+                                            <li><strong>observations: </strong> {{ matrix.observations }}</li>
+                                            <li><strong>matrix_a_string: </strong> {{ matrix.matrix_a_string }}</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                {% endfor %}
+                            </li>
+                        </ul></li>
+                </ul>
+            {% endfor %}</li>
+
+            <li><h3>Plant Traits</h3>
+                {% for trait in s.plant_traits %}
+                    <ul>
+                        <li><strong>growth_type: </strong> {{ trait.growth_type.type_name }}</li>
+                        <li><strong>dicot_monoc: </strong> {{ trait.dicot_monoc.dicot_monoc_name }}</li>
+                        <li><strong>angio_gymno: </strong> {{ trait.angio_gymno.angio_gymno_name }}</li>
+                    </ul>
+                {% endfor %}</li>
+        </ul>
+
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
