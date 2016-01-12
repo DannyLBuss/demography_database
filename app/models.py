@@ -976,6 +976,7 @@ class Species(db.Model):
     __tablename__ = 'species'
     id = db.Column(db.Integer, primary_key=True)
     # subspecies = db.Column(db.String(64))
+    species_accepted = db.Column(db.String(64))
     iucn_status_id = db.Column(db.Integer, db.ForeignKey('iucn_status.id'))
     esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id'))
     invasive_status = db.Column(db.Boolean())
@@ -1069,7 +1070,7 @@ class Publication(db.Model):
     corresponding_author = db.Column(db.Text())
     email = db.Column(db.Text())
     purposes_id = db.Column(db.Integer, db.ForeignKey('purposes.id'))
-    date_digitised = db.Column(db.Date(), default=datetime.utcnow)
+    date_digitised = db.Column(db.DateTime(), default=datetime.now)
     embargo = db.Column(db.Date()) #nullable
     missing_data_id = db.Column(db.Integer, db.ForeignKey('missing_data.id'))
     additional_source_string = db.Column(db.Text())
@@ -1106,8 +1107,8 @@ class Study(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
     study_duration = db.Column(db.Integer(), index=True)
-    study_start = db.Column(db.Date())
-    study_end = db.Column(db.Date())
+    study_start = db.Column(db.Integer())
+    study_end = db.Column(db.Integer())
 
     matrices = db.relationship("Matrix", backref="study")
     populations = db.relationship("Population", backref="study")
@@ -1227,9 +1228,9 @@ class TreatmentType(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
     type_name = db.Column(db.Text())
     
-
-    # treatments = db.relationship("Treatment", backref="treatment_types")
     matrices = db.relationship("Matrix", backref="treatment")
+    # treatments = db.relationship("Treatment", backref="treatment_types")
+    
 
     @staticmethod
     def migrate():

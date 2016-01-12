@@ -38,7 +38,7 @@ def make_shell_context():
                 StageType=StageType, StageTypeClass=StageTypeClass, TransitionType=TransitionType, MatrixValue=MatrixValue, \
                 MatrixComposition=MatrixComposition, Season=Season, StudiedSex=StudiedSex, Captivity=Captivity, MatrixStage=MatrixStage,\
                 Matrix=Matrix, Interval=Interval, Bussy=Bussy, VectorAvailability=VectorAvailability, StageClassInfo=StageClassInfo, Small=Small, \
-                TreatmentType=TreatmentType)
+                TreatmentType=TreatmentType, Study=Study)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
@@ -81,14 +81,26 @@ def csv_migrate():
 
     all_deets = []   
 
-    for i, row in enumerate(input_file):
-        if i == 1:                     
-            data = convert_all_headers(row)
-            entry = add_to_classes(data)
-            all_deets.append(entry)
+    for i, row in enumerate(input_file):                    
+        data = convert_all_headers(row)
+        entry = add_to_classes(data)
+        all_deets.append(entry)
+        submit(entry)
+    return 
 
+@manager.command
+def delete_table_data():
+    Taxonomy.query.delete()
+    Matrix.query.delete()
+    Population.query.delete()
+    Study.query.delete()    
+    Publication.query.delete()    
+    PlantTrait.query.delete()
+    Species.query.delete()
+    db.session.commit()
 
-    return submit(entry)
+    print "All data has been removed"
+    return 
 
 def add_to_classes(data):
     from app.conversion.models import Taxonomy, Publication, Population, PlantTrait, Matrix, Study, Entry
@@ -111,71 +123,152 @@ def add_to_classes(data):
     return entry
 
 def submit(entry):
-    matrix = Matrix()
+    import json
+    print entry.matrix.matrix_a_string
 
-    #TreatmentType relationship  
+    ''' Species '''
+    species = Species.query.filter_by(species_accepted=entry.taxonomy.species_accepted).first()
+    if species == None:
+        species = Species(species_accepted=entry.taxonomy.species_accepted)
+    db.session.add(species)
+    db.session.commit()
+
+    ''' Publication '''
+    publication = Publication.query.filter_by(DOI_ISBN=entry.publication.DOI_ISBN).first()
+    if publication == None:
+        publication = Publication()
+        publication.authors = entry.publication.authors
+        publication.year = entry.publication.year
+        publication.DOI_ISBN = entry.publication.DOI_ISBN
+        publication.additional_source_string = entry.publication.additional_source_string
+        db.session.add(publication)
+        db.session.commit()
+
+    ''' Plant Trait '''
+    trait = PlantTrait.query.filter_by(species_id=species.id).first()
+    if trait == None:
+        trait = PlantTrait()
+        growth_type = GrowthType.query.filter_by(type_name=entry.plant_trait.growth_type_id).first()
+        if growth_type != None:
+            trait.growth_type_id = growth_type.id
+        dicot_monoc = DicotMonoc.query.filter_by(dicot_monoc_name=entry.plant_trait.dicot_monoc_id).first()
+        if dicot_monoc != None:
+            trait.dicot_monoc_id = dicot_monoc.id
+        angio_gymno = AngioGymno.query.filter_by(angio_gymno_name=entry.plant_trait.angio_gymno_id).first()
+        if angio_gymno != None:
+            trait.angio_gymno_id = angio_gymno.id
+        trait.species_id = species.id
+        db.session.add(trait)
+        db.session.commit()
+
+    ''' Study '''
+    study = Study.query.filter_by(publication_id=publication.id, study_start=entry.study.study_start, study_end=entry.study.study_end).first()
+    if study == None:
+        study = Study()
+        if entry.study.study_duration != 'NA':
+            study.study_duration = entry.study.study_duration
+
+        if entry.study.study_start != 'NA':
+            study.study_start = entry.study.study_start
+
+        if entry.study.study_end != 'NA':
+            study.study_end = entry.study.study_end
+
+        study.publication_id = publication.id
+        db.session.add(study)
+        db.session.commit()
+
+    ''' Population '''
+    pop = Population.query.filter_by(geometries=json.dumps(entry.population.geometries), species_id=species.id, publication_id=publication.id).first()
+    if pop == None:
+        pop = Population()
+        pop.species_author = entry.population.species_author
+        pop.name = entry.population.name    
+        ecoregion = Ecoregion.query.filter_by(ecoregion_code=entry.population.ecoregion_id).first()
+        if ecoregion != None:
+            pop.ecoregion_id = ecoregion.id
+        pop.country = entry.population.country    
+        continent = Continent.query.filter_by(continent_name=entry.population.continent_id).first()
+        if continent != None:
+            pop.continent_id = continent.id
+        pop.geometries = json.dumps(entry.population.geometries)
+        print pop.geometries
+        pop.species_id = species.id
+        pop.publication_id = publication.id
+        pop.study_id = study.id
+        db.session.add(pop)
+        db.session.commit()
+
+    ''' Taxonomy '''
+    tax = Taxonomy.query.filter_by(species_id=species.id).first()
+    if tax == None:
+        tax = Taxonomy()
+        tax.species_author = entry.taxonomy.species_author
+        tax.species_accepted = entry.taxonomy.species_accepted
+        tax.authority = entry.taxonomy.authority
+        tax.tpl_version = entry.taxonomy.tpl_version    
+        tax_status = TaxonomicStatus.query.filter_by(status_name=entry.taxonomy.taxonomic_status_id).first()
+        if tax_status != None:
+            tax.taxonomic_status_id = tax_status.id
+        tax.infraspecies_accepted = entry.taxonomy.infraspecies_accepted
+        tax.species_epithet_accepted = entry.taxonomy.species_epithet_accepted
+        tax.genus_accepted = entry.taxonomy.genus_accepted
+        tax.genus = entry.taxonomy.genus
+        tax.family = entry.taxonomy.family
+        tax.tax_order = entry.taxonomy.tax_order
+        tax.tax_class = entry.taxonomy.tax_class
+        tax.phylum = entry.taxonomy.phylum
+        tax.kingdom = entry.taxonomy.kingdom
+        tax.species_id = species.id
+        tax.publication_id = publication.id
+        db.session.add(tax)
+        db.session.commit()
+
+    ''' Matrix '''
+    matrix = Matrix()
     treatment_type = TreatmentType.query.filter_by(type_name=entry.matrix.treatment_id).first()
     if treatment_type == None:
         treatment_type = TreatmentType(type_name=entry.matrix.treatment_id)
         db.session.add(treatment_type)
+        db.session.commit()
     matrix.treatment_id = treatment_type.id
-
+    matrix.treatment_type_id = treatment_type.id
     matrix.matrix_split = coerce_boolean(entry.matrix.matrix_split)
-
-    #Matrix composition ID
     comp_id = MatrixComposition.query.filter_by(comp_name=entry.matrix.matrix_composition_id).first()
     if comp_id != None:
-        matrix.matrix_composition_id = comp_id.id
-    # matrix.matrix_composition_id = MatrixComposition.query.filter_by(comp_name=entry.matrix.matrix_composition_id).first()
+        matrix.matrix_composition_id = comp_id.id  
+
+    print matrix.survival_issue
+    if entry.matrix.survival_issue != 'NA':  
+        matrix.survival_issue = float(entry.matrix.survival_issue)
     
-    matrix.survival_issue = float(entry.matrix.survival_issue)
     matrix.periodicity = entry.matrix.periodicity
     matrix.matrix_criteria_size = coerce_boolean(entry.matrix.matrix_criteria_size)
     matrix.matrix_criteria_ontogeny = coerce_boolean(entry.matrix.matrix_criteria_ontogeny)
     matrix.matrix_criteria_age = coerce_boolean(entry.matrix.matrix_criteria_age) 
     matrix.matrix_start = coerce_date(entry.matrix.matrix_start, 'start') #Coerced into date conidering NA
     matrix.matrix_end = coerce_date(entry.matrix.matrix_end , 'end') #Coerced into date considering NA
-    
-    #Season Start
     start_id = Season.query.filter_by(season_name=entry.matrix.matrix_start_season_id).first()
     if start_id != None:
         matrix.matrix_start_season_id = start_id.id
-    # matrix.matrix_start_season_id = Season.query.filter_by(season_name=entry.matrix.matrix_start_season_id).first()
-
-    #Season End
     end_id = Season.query.filter_by(season_name=entry.matrix.matrix_end_season_id).first()
     if end_id != None:
         matrix.matrix_end_season_id = end_id.id
-    # matrix.matrix_end_season_id = Season.query.filter_by(season_name=entry.matrix.matrix_end_season_id).first()
-
     matrix.matrix_fec = coerce_boolean(entry.matrix.matrix_fec)
     matrix.matrix_a_string = entry.matrix.matrix_a_string
     matrix.matrix_class_string = entry.matrix.matrix_class_string
-
-    #Studied Sex
     sex_id = StudiedSex.query.filter_by(sex_code=entry.matrix.studied_sex_id).first()
     if sex_id != None:
         matrix.studied_sex_id = sex_id.id
-    # matrix.studied_sex_id = StudiedSex.query.filter_by(sex_code=entry.matrix.studied_sex_id).first()
-
-    #Captivity
     cap_id = Captivity.query.filter_by(cap_code=entry.matrix.captivity_id).first()
     if cap_id != None:
         matrix.captivity_id = cap_id.id
-    # matrix.captivity_id = Captivity.query.filter_by(cap_code=entry.matrix.captivity_id).first()
-
     matrix.matrix_dimension = int(entry.matrix.matrix_dimension)
     matrix.observations = entry.matrix.observations
-
-    print vars(matrix)
-
-    submit_model(matrix)
-
-    publication = Publication()
-    publication.authors = entry.publication.authors
-    publication.year = entry.publication.year
-    publication.DOI_ISBN = entry.publication.DOI_ISBN
-    publication.additional_source_string = entry.publication.additional_source_string
+    matrix.population_id = pop.id
+    matrix.study_id = study.id
+    db.session.add(matrix)
+    db.session.commit()
 
     return 
 
@@ -323,11 +416,13 @@ def deploy():
     """Run deployment tasks."""
     from flask.ext.migrate import upgrade
     from app.models import User, Role, Permission
-    # migrate database to latest revision
-    # upgrade()
-
     # create user roles
+    print "Inserting roles..."
     Role.insert_roles()
+    print "Migrating meta data to tables..."
+    migrate_meta()
+    print "Initial migration of our current version of database..."
+    csv_migrate()
 
 
 if __name__ == '__main__':
