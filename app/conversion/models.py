@@ -102,5 +102,12 @@ class Study:
 	def __repr__(self):
 			return '<Study %r>' % vars(self)
 
+class Species:
+	def __init__(self, name):
+		self.name = name
+
+	def __repr__(self):
+		return '<Species %r>' % vars(self)
+
 
 
