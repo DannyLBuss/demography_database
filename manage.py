@@ -330,7 +330,7 @@ def convert_all_headers(dict):
     new_dict['DOI_ISBN'] = dict['DOI.ISBN']
     new_dict['genus'] = dict['Genus']
     new_dict['species_epithet_accepted'] = dict['SpeciesEpithetAccepted']
-    new_dict['name'] = dict['Journal']
+    new_dict['name'] = dict['MatrixPopulation']
     new_dict['geometries_lat_ns'] = dict['LatNS']
     new_dict['number_populations'] = dict['NumberPopulations']
     new_dict['matrix_fec'] = dict['MatrixFec']

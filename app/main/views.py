@@ -86,6 +86,13 @@ def meta_tables_json():
 
     return render_template('meta.html', meta=meta_tables)
 
+@main.route('/data/')
+@login_required
+def data():
+    species = Species.query.all()
+
+    return render_template('data.html', species=species)
+
 @main.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()    
