@@ -44,7 +44,7 @@ def index():
 
 
 @main.route('/meta-tables/')
-@login_required
+# @login_required
 def meta_tables_json():
 
     # Constructing dict for meta tables, ordering by main Class
@@ -87,7 +87,7 @@ def meta_tables_json():
     return render_template('meta.html', meta=meta_tables)
 
 @main.route('/data/')
-@login_required
+# @login_required
 def data():
     species = Species.query.all()
 
