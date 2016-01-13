@@ -55,8 +55,8 @@
                                             <li><strong>matrix_criteria_age: </strong> {{ matrix.matrix_criteria_age }}</li>
                                             <li><strong>matrix_start: </strong> {{ matrix.matrix_start }}</li>
                                             <li><strong>matrix_end: </strong> {{ matrix.matrix_end }}</li>
-                                            <li><strong>matrix_start_season: </strong> {{ matrix.matrix_start_season_id }}</li>
-                                            <li><strong>matrix_end_season: </strong> {{ matrix.matrix_end_season_id }}</li>
+                                            <li><strong>matrix_start_season: </strong> {% if matrix.matrix_start_season_id > 0 %}{{ matrix.matrix_start_season.season_name }}{% else %} NA{% endif %}</li>
+                                            <li><strong>matrix_end_season: </strong> {% if matrix.matrix_end_season_id > 0 %}{{ matrix.matrix_end_season.season_name }}{% else %} NA{% endif %}</li></li>
                                             <li><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</li>
                                             <li><strong>studied_sex: </strong> {{ matrix.studied_sex.sex_code }}</li>
                                             <li><strong>captivities: </strong> {{ matrix.captivities.cap_code }}</li>

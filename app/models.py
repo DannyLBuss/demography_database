@@ -796,6 +796,7 @@ class MatrixComposition(db.Model):
 class Season(db.Model):
     __tablename__ = 'seasons'
     id = db.Column(db.Integer, primary_key=True)
+    season_id = db.Column(db.Integer())
     season_name = db.Column(db.String(64), index=True)
 
     matrices = db.relationship("Matrix", backref="Matrix.matrix_start_season_id",primaryjoin="Season.id==Matrix.matrix_end_season_id", lazy="dynamic")
@@ -808,10 +809,11 @@ class Season(db.Model):
             nodes = json_data["Season"]
 
             for node in nodes:
-                i = Season.query.filter_by(season_name=node['season_name']).first()
+                i = Season.query.filter_by(season_id=node['season_id']).first()
                 if i is None:
                     i = Season()
 
+                i.season_id = node['season_id']
                 i.season_name = node['season_name']
 
                 db.session.add(i)
