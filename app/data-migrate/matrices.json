@@ -10,14 +10,19 @@
 			"comp_name": "Seasonal"
 		}],
 		"Season": [{
+			"season_id" : 1,
 			"season_name": "Spring"
 		}, {
+			"season_id" : 2,
 			"season_name": "Summer"
 		}, {
+			"season_id" : 3,
 			"season_name": "Autumn"
 		}, {
+			"season_id" : 5,
 			"season_name": "Fall"
 		}, {
+			"season_id" : 4,
 			"season_name": "Winter"
 		}],
 

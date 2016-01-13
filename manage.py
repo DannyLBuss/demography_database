@@ -81,7 +81,7 @@ def csv_migrate():
 
     all_deets = []   
 
-    for i, row in enumerate(input_file):                    
+    for i, row in enumerate(input_file):                      
         data = convert_all_headers(row)
         entry = add_to_classes(data)
         all_deets.append(entry)
@@ -124,7 +124,6 @@ def add_to_classes(data):
 
 def submit(entry):
     import json
-    print entry.matrix.matrix_a_string
 
     ''' Species '''
     species = Species.query.filter_by(species_accepted=entry.taxonomy.species_accepted).first()
@@ -192,7 +191,6 @@ def submit(entry):
         if continent != None:
             pop.continent_id = continent.id
         pop.geometries = json.dumps(entry.population.geometries)
-        print pop.geometries
         pop.species_id = species.id
         pop.publication_id = publication.id
         pop.study_id = study.id
@@ -238,7 +236,6 @@ def submit(entry):
     if comp_id != None:
         matrix.matrix_composition_id = comp_id.id  
 
-    print matrix.survival_issue
     if entry.matrix.survival_issue != 'NA':  
         matrix.survival_issue = float(entry.matrix.survival_issue)
     
@@ -249,11 +246,29 @@ def submit(entry):
     matrix.matrix_start = coerce_date(entry.matrix.matrix_start, 'start') #Coerced into date conidering NA
     matrix.matrix_end = coerce_date(entry.matrix.matrix_end , 'end') #Coerced into date considering NA
     start_id = Season.query.filter_by(season_name=entry.matrix.matrix_start_season_id).first()
+
+
+    if entry.matrix.matrix_start_season_id != 'NA':
+        print entry.matrix.matrix_start_season_id
+        try:
+            start_id = Season.query.filter_by(season_id=int(entry.matrix.matrix_start_season_id)).first()
+        except ValueError:
+            pass
+
     if start_id != None:
         matrix.matrix_start_season_id = start_id.id
+
+    if entry.matrix.matrix_end_season_id != 'NA':
+        print entry.matrix.matrix_end_season_id
+        try:
+            end_id = Season.query.filter_by(season_id=int(entry.matrix.matrix_end_season_id)).first()
+        except ValueError:
+            pass
+    
     end_id = Season.query.filter_by(season_name=entry.matrix.matrix_end_season_id).first()
     if end_id != None:
         matrix.matrix_end_season_id = end_id.id
+        
     matrix.matrix_fec = coerce_boolean(entry.matrix.matrix_fec)
     matrix.matrix_a_string = entry.matrix.matrix_a_string
     matrix.matrix_class_string = entry.matrix.matrix_class_string
