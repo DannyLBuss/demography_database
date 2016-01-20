@@ -998,6 +998,17 @@ class Species(db.Model):
         IUCNStatus.migrate()
         ESAStatus.migrate()
 
+    def to_json(self):
+        species = {
+            'species_accepted': self.species_accepted,
+            'iucn_status': self.iucn_status.status_name
+            # Url for taxonomies
+            # Url for traits
+            # Url for populations
+            # Url for stages
+        }
+        return species
+
 
     def __repr__(self):
         return '<Species %r>' % self.id
@@ -1026,6 +1037,27 @@ class Taxonomy(db.Model):
     def migrate():
         TaxonomicStatus.migrate()
 
+    def to_json(self):
+        taxonomy = {
+            # 'species_id' : self.species url???
+            'species_author' : self.species_author,
+            'species_accepted' : self.species_accepted,
+            # 'publication_id' : self.publication url???
+            'authority' : self.authority,
+            'taxonomic_status' : self.taxonomic_status.status_name,
+            'tpl_version' : self.tpl_version,
+            'infraspecies_accepted' : self.infraspecies_accepted,
+            'species_epithet_accepted' : self.species_epithet_accepted,
+            'genus_accepted' : self.genus_accepted,
+            'genus' : self.genus,
+            'family' : self.family,
+            'tax_order' : self.tax_order,
+            'tax_class' : self.tax_class,
+            'phylum' : self.phylum,
+            'kingdom' : self.kingdom
+        }
+        return taxonomy
+
     def __repr__(self):
         return '<Taxonomy %r>' % self.id
 
@@ -1048,6 +1080,19 @@ class PlantTrait(db.Model):
         ReproductiveRepetition.migrate()
         DicotMonoc.migrate()
         AngioGymno.migrate()
+
+    def to_json(self):
+        plant_trait = {
+            # 'species_id' : self.species url???
+            'max_height' : self.max_height,
+            'species_accepted' : self.species_accepted,
+            'growth_type_id' : self.growth_type.type_name,
+            'growth_form_raunkiaer' : self.growth_form_raunkiaer.form_name,
+            'reproductive_repetition' : self.reproductive_repetition.repetition_name,
+            'dicot_monoc' : self.dicot_monoc.dicot_monoc_name,
+            'angio_gymno' : self.angio_gymno.angio_gymno_name
+        }
+        return plant_trait
 
     def __repr__(self):
         return '<Plant Trait %r>' % self.id
@@ -1099,6 +1144,40 @@ class Publication(db.Model):
         Purpose.migrate()
         MissingData.migrate()
 
+    def to_json(self):
+        publication = {
+            # 'species_id' : self.species url???
+            'max_height' : self.max_height,
+            'source_type' : self.source_type.source_name,
+            'authors' : self.authors,
+            'editors' : self.editors,
+            'pub_title' : self.pub_title,
+            'journal_book_conf' : self.journal_book_conf,
+            'year' : self.year,
+            'volume' : self.volume,
+            'pages' : self.pages,
+            'publisher' : self.publisher,
+            'city' : self.city,
+            'country' : self.country,
+            'DOI_ISBN' : self.DOI_ISBN,
+            'name' : self.name,
+            'corresponding_author' : self.corresponding_author,
+            'email' : self.email,
+            'purposes' : self.purposes.purpose_name,
+            'date_digitised' : self.date_digitised,
+            'embargo' : self.embargo,
+            'missing_data' : self.missing_data.missing_code,
+            'additional_source_string' : self.additional_source_string
+            # Author contacts?
+            # Additional Sources?
+            # Populations?
+            # Stages?
+            # Treatments?
+            # Taxonomies?
+            # Studies?
+        }
+        return publication
+
 
     def __repr__(self):
         return '<Publication %r>' % self.id
@@ -1116,6 +1195,18 @@ class Study(db.Model):
     populations = db.relationship("Population", backref="study")
     number_populations = db.Column(db.Integer()) #could verify with populations.count()
 
+    def to_json(self):
+        study = {
+            # 'publication' : self.publication, url??
+            'study_duration' : self.study_duration,
+            'study_start' : self.study_start,
+            'study_end' : self.study_end,
+            'number_populations' : self.number_populations,
+            # Matrices?
+            # Populations?
+        }
+        return study
+
     def __repr__(self):
         return '<Study %r>' % self.id
 
@@ -1131,6 +1222,16 @@ class AuthorContact(db.Model):
     @staticmethod
     def migrate():
         ContentEmail.migrate()
+
+    def to_json(self):
+        author_contact = {
+            # 'publication' : self.publication, url??
+            'date_contacted' : self.date_contacted,
+            'contacting_user_id' : self.contacting_user_id,
+            'content_email_id' : self.content_email_id,
+            'author_reply' : self.author_reply,
+        }
+        return author_contact
 
     def __repr__(self):
         return '<Author Contact %r>' % self.id
@@ -1155,6 +1256,28 @@ class AdditionalSource(db.Model):
     name = db.Column(db.Text()) #r-generated, needs more info, probably to be generated in method of this model, first author in author list?
     description = db.Column(db.Text())
 
+    def to_json(self):
+        additional_source = {
+            # 'publication' : self.publication, url??
+            'source_type' : self.source_type.source_name,
+            'contacting_user_id' : self.contacting_user_id,
+            'authors' : self.authors,
+            'editors' : self.editors,
+            'pub_title' : self.pub_title,
+            'journal_book_conf' : self.journal_book_conf,
+            'year' : self.year,
+            'volume' : self.volume,
+            'pages' : self.pages,
+            'publisher' : self.publisher,
+            'city' : self.city,
+            'country' : self.country,
+            'institution' : self.institution,
+            'DOI_ISBN' : self.DOI_ISBN,
+            'name' : self.name,
+            'description' : self.description
+        }
+        return additional_source
+
     def __repr__(self):
         return '<Additional Source %r>' % self.id
 
@@ -1174,6 +1297,42 @@ class Population(db.Model):
 
     matrices = db.relationship("Matrix", backref="population")
 
+    def geometries_dec(self):
+        geo = json.loads(self.geometries)
+
+        lat_min = geo['lat_min']
+        lat_deg = geo['lat_deg']
+        lat_sec = geo['lat_sec']
+        lat_ns = geo['lat_ns']
+        lon_min = geo['lon_min']
+        lon_deg = geo['lon_deg']
+        lon_sec = geo['lon_sec']
+        lat_we = geo['lat_we']
+        altitude = geo['altitude']
+
+        decimal_lat = (float(lat_deg) + (float(lat_min) * 1/60) + (float(lat_sec) * 1/60 * 1/60))
+        decimal_lon = (float(lon_deg) + (float(lon_min) * 1/60) + (float(lon_sec) * 1/60 * 1/60))
+
+        geometries = json.dumps({"latitude" : decimal_lat, "longitude" : decimal_lon, "altitude" : float(altitude)})
+        return geometries
+
+
+    def to_json(self):
+        population = {
+            # 'species' : self.species, url??
+            # 'publication' : self.publication, url??
+            # 'study' : self.study, url??
+            'species_author' : self.species_author,
+            'name' : self.name,
+            'ecoregion' : self.ecoregion.ecoregion_code,
+            'country' : self.country,
+            'continent' : self.continent.continent_name,
+            'geometries' : self.geometries_dec()
+
+            # Matrices?
+        }
+        return population
+
     @staticmethod
     def migrate():
         Ecoregion.migrate()
@@ -1192,6 +1351,17 @@ class Stage(db.Model):
 
     matrix_stages = db.relationship("MatrixStage", backref="stage")
 
+    def to_json(self):
+        stage = {
+            # species : self.species url?
+            # publication : self.publication url?
+            # stage_type: self.stage_type url?
+            'name' : self.name
+
+            # matrix_stages ?
+        }
+        return stage
+
     def __repr__(self):
         return '<Stage %r>' % self.id
 
@@ -1202,6 +1372,15 @@ class StageType(db.Model):
     type_class_id = db.Column(db.Integer, db.ForeignKey('stage_type_classes.id'))
 
     stages = db.relationship("Stage", backref="stage_types")
+
+    def to_json(self):
+        stage_type = {
+            'type_name' : self.type_name,
+            'type_class' : self.type_class.type_class
+
+            # Stages?
+        }
+        return stage_type
 
     @staticmethod
     def migrate():
@@ -1251,6 +1430,15 @@ class TreatmentType(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self):
+        treatment_type = {
+            'type_name' : self.type_name,
+
+            # Matrices?
+        }
+        return treatment_type
+
+
     def __repr__(self):
         return '<Treatment Type %r>' % self.id
 
@@ -1261,6 +1449,14 @@ class MatrixStage(db.Model):
     stage_id = db.Column(db.Integer, db.ForeignKey('stages.id'))
 
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
+
+    def to_json(self):
+        matrix_stage = {
+            'stage_order' : self.stage_order,
+            'stage_id' : self.stage_id
+            # 'matrix' : self.matrix.id (url?)
+        }
+        return matrix_stage
 
     def __repr__(self):
         return '<Matrix Stage %r>' % self.id
@@ -1278,6 +1474,16 @@ class MatrixValue(db.Model):
     @staticmethod
     def migrate():
         TransitionType.migrate()
+
+    def to_json(self):
+        matrix_value = {
+            'column_number' : self.column_number,
+            'row_number' : self.row_number,
+            'transition_type_id' : self.transition_type.trans_code,
+            'value' : self.value
+            # 'matrix' : self.matrix.id (url?)
+        }
+        return matrix_value
 
     def __repr__(self):
         return '<Matrix Value %r>' % self.id
@@ -1326,6 +1532,41 @@ class Matrix(db.Model):
         StudiedSex.migrate()
         Captivity.migrate()
 
+    def to_json(self):
+        matrix = {
+            # 'population_id' : self.population url???
+            # 'study_id' : self.study url???
+            'treatment' : self.treatment.name,
+            'matrix_split' : self.matrix_split,
+            'matrix_composition' : self.matrix_composition.comp_name,
+            'survival_issue' : self.survival_issue,
+            'n_intervals' : self.n_intervals,
+            'periodicity' : self.periodicity,
+            'matrix_criteria_size' : self.matrix_criteria_size,
+            'matrix_criteria_ontogeny' : self.matrix_criteria_ontogeny,
+            'matrix_criteria_age' : self.matrix_criteria_age,
+            'matrix_start' : self.matrix_start,
+            'matrix_end' : self.matrix_end,
+            'matrix_start_season' : self.matrix_start_season.season_name,
+            'matrix_end_season' : self.matrix_end_season.season_name,
+            'matrix_fec' : self.matrix_fec,
+            'matrix_a_string' : self.matrix_a_string,
+            'matrix_class_string' : self.matrix_class_string,
+            'n_plots' : self.n_plots,
+            'plot_size' : self.plot_size,
+            'studied_sex' : self.studied_sex.sex_code,
+            'captivity' : self.captivity.cap_code,
+            'matrix_dimension' : self.matrix_dimension,
+            'observations' : self.observations
+            
+            # Intervals?
+            # Matrix Values?
+            # Matrix Stages?
+            # Stages?
+            # Bussys?
+        }
+        return matrix
+
     def __repr__(self):
         return '<Matrix %r>' % self.id
 
@@ -1337,6 +1578,15 @@ class Interval(db.Model):
     interval_order = db.Column(db.Integer())
     interval_start = db.Column(db.Date())
     interval_end = db.Column(db.Date())
+
+    def to_json(self):
+        interval = {
+            # 'matrix' : self.matrix.id (url?)
+            'interval_order' : self.interval_order,
+            'interval_start' : self.interval_start,
+            'interval_end' : self.interval_end
+        }
+        return interval
 
     def __repr__(self):
         return '<Interval %r>' % self.id
@@ -1363,8 +1613,27 @@ class Bussy(db.Model):
         StageClassInfo.migrate()
         Small.migrate()
 
+    def to_json(self):
+        bussy = {
+            # 'matrix' : self.matrix.id (url?)
+            'vector_str' : self.vector_str,
+            'interval_start' : self.interval_start,
+            'vector_present' : self.vector_present,
+            'total_pop_no' : self.total_pop_no,
+            'vector_availablility' : self.vector_availablility.availability_name,
+            'availability_notes' : self.availability_notes,
+            'population_info' : self.population_info,
+            'sampled_entire' : self.sampled_entire,
+            'small' : self.small_name,
+            'private' : self.private
+
+            # Stage Class Info?
+        }
+        return bussy
+
     def __repr__(self):
         return '<Bussy %r>' % self.id
+
 
 
 
