@@ -195,7 +195,7 @@ class User(UserMixin, db.Model):
 
     def to_json(self):
         json_user = {
-            'url': url_for('api.get_post', id=self.id, _external=True),
+            
             'username': self.username,
             'member_since': self.member_since,
             'last_seen': self.last_seen
@@ -1001,11 +1001,10 @@ class Species(db.Model):
     def to_json(self):
         species = {
             'species_accepted': self.species_accepted,
-            'iucn_status': self.iucn_status.status_name
-            # Url for taxonomies
-            # Url for traits
-            # Url for populations
-            # Url for stages
+            'taxonomy' : [taxonomy.to_json() for taxonomy in self.taxonomies][0],
+            'plant_traits' : [plant_trait.to_json() for plant_trait in self.plant_traits][0],
+            'populations' : [population.to_json() for population in self.populations][0]
+            # 'stages' : [stage.to_json() for stage in self.stages][0]
         }
         return species
 
@@ -1039,10 +1038,9 @@ class Taxonomy(db.Model):
 
     def to_json(self):
         taxonomy = {
-            # 'species_id' : self.species url???
             'species_author' : self.species_author,
             'species_accepted' : self.species_accepted,
-            # 'publication_id' : self.publication url???
+            'publication' : (self.publication).to_json(),
             'authority' : self.authority,
             'taxonomic_status' : self.taxonomic_status.status_name,
             'tpl_version' : self.tpl_version,
@@ -1083,12 +1081,10 @@ class PlantTrait(db.Model):
 
     def to_json(self):
         plant_trait = {
-            # 'species_id' : self.species url???
             'max_height' : self.max_height,
-            'species_accepted' : self.species_accepted,
             'growth_type_id' : self.growth_type.type_name,
-            'growth_form_raunkiaer' : self.growth_form_raunkiaer.form_name,
-            'reproductive_repetition' : self.reproductive_repetition.repetition_name,
+            # 'growth_form_raunkiaer' : self.growth_form_raunkiaer.form_name,
+            # 'reproductive_repetition' : self.reproductive_repetition.repetition_name,
             'dicot_monoc' : self.dicot_monoc.dicot_monoc_name,
             'angio_gymno' : self.angio_gymno.angio_gymno_name
         }
@@ -1146,9 +1142,7 @@ class Publication(db.Model):
 
     def to_json(self):
         publication = {
-            # 'species_id' : self.species url???
-            'max_height' : self.max_height,
-            'source_type' : self.source_type.source_name,
+            # 'source_type' : self.source_type.source_name,
             'authors' : self.authors,
             'editors' : self.editors,
             'pub_title' : self.pub_title,
@@ -1163,18 +1157,18 @@ class Publication(db.Model):
             'name' : self.name,
             'corresponding_author' : self.corresponding_author,
             'email' : self.email,
-            'purposes' : self.purposes.purpose_name,
-            'date_digitised' : self.date_digitised,
+            # 'purposes' : self.purposes.purpose_name,
+            # 'date_digitised' : self.date_digitised,
             'embargo' : self.embargo,
-            'missing_data' : self.missing_data.missing_code,
-            'additional_source_string' : self.additional_source_string
+            # 'missing_data' : self.missing_data.missing_code,
+            'additional_source_string' : self.additional_source_string,
             # Author contacts?
             # Additional Sources?
-            # Populations?
-            # Stages?
-            # Treatments?
-            # Taxonomies?
-            # Studies?
+            'populations' : url_array(self, 'populations'),   
+            # 'stages' : [stage.to_json() for stage in self.stages][0]
+            # 'treatments' : [treatment.to_json() for treatment in self.treatments][0]
+            'taxonomies' : url_array(self, 'taxonomies'),
+            'studies' : url_array(self, 'studies')
         }
         return publication
 
@@ -1197,13 +1191,14 @@ class Study(db.Model):
 
     def to_json(self):
         study = {
-            # 'publication' : self.publication, url??
+            'publication' : url_for('api.get_publication', id=self.publication.id,
+                                  _external=False),
             'study_duration' : self.study_duration,
             'study_start' : self.study_start,
             'study_end' : self.study_end,
-            'number_populations' : self.number_populations,
-            # Matrices?
-            # Populations?
+            'number_populations' : self.number_populations,           
+            'matrices' : url_array(self, 'matrices'),
+            'populations' : url_array(self, 'populations')
         }
         return study
 
@@ -1313,15 +1308,17 @@ class Population(db.Model):
         decimal_lat = (float(lat_deg) + (float(lat_min) * 1/60) + (float(lat_sec) * 1/60 * 1/60))
         decimal_lon = (float(lon_deg) + (float(lon_min) * 1/60) + (float(lon_sec) * 1/60 * 1/60))
 
-        geometries = json.dumps({"latitude" : decimal_lat, "longitude" : decimal_lon, "altitude" : float(altitude)})
+        geometries = {"latitude" : decimal_lat, "longitude" : decimal_lon, "altitude" : float(altitude)}
         return geometries
 
 
     def to_json(self):
         population = {
-            # 'species' : self.species, url??
-            # 'publication' : self.publication, url??
-            # 'study' : self.study, url??
+            'species' : url_for('api.get_species', id=self.species.id,
+                                  _external=False),
+            'publication' : url_for('api.get_publication', id=self.publication.id,
+                                  _external=False),
+            'study' : self.study.to_json(),
             'species_author' : self.species_author,
             'name' : self.name,
             'ecoregion' : self.ecoregion.ecoregion_code,
@@ -1479,7 +1476,7 @@ class MatrixValue(db.Model):
         matrix_value = {
             'column_number' : self.column_number,
             'row_number' : self.row_number,
-            'transition_type_id' : self.transition_type.trans_code,
+            'transition_type' : self.transition_type.trans_code,
             'value' : self.value
             # 'matrix' : self.matrix.id (url?)
         }
@@ -1533,38 +1530,77 @@ class Matrix(db.Model):
         Captivity.migrate()
 
     def to_json(self):
-        matrix = {
-            # 'population_id' : self.population url???
-            # 'study_id' : self.study url???
-            'treatment' : self.treatment.name,
-            'matrix_split' : self.matrix_split,
-            'matrix_composition' : self.matrix_composition.comp_name,
-            'survival_issue' : self.survival_issue,
-            'n_intervals' : self.n_intervals,
-            'periodicity' : self.periodicity,
-            'matrix_criteria_size' : self.matrix_criteria_size,
-            'matrix_criteria_ontogeny' : self.matrix_criteria_ontogeny,
-            'matrix_criteria_age' : self.matrix_criteria_age,
-            'matrix_start' : self.matrix_start,
-            'matrix_end' : self.matrix_end,
-            'matrix_start_season' : self.matrix_start_season.season_name,
-            'matrix_end_season' : self.matrix_end_season.season_name,
-            'matrix_fec' : self.matrix_fec,
-            'matrix_a_string' : self.matrix_a_string,
-            'matrix_class_string' : self.matrix_class_string,
-            'n_plots' : self.n_plots,
-            'plot_size' : self.plot_size,
-            'studied_sex' : self.studied_sex.sex_code,
-            'captivity' : self.captivity.cap_code,
-            'matrix_dimension' : self.matrix_dimension,
-            'observations' : self.observations
-            
-            # Intervals?
-            # Matrix Values?
-            # Matrix Stages?
-            # Stages?
-            # Bussys?
-        }
+        try:
+            matrix = {
+                'population' : url_for('api.get_population', id=self.population.id,
+                                  _external=False),
+                'study' : url_for('api.get_study', id=self.study.id,
+                                  _external=False),
+                'treatment' : self.treatment.type_name,
+                'matrix_split' : self.matrix_split,
+                'matrix_composition' : self.matrix_composition.comp_name,
+                'survival_issue' : self.survival_issue,
+                'n_intervals' : self.n_intervals,
+                'periodicity' : self.periodicity,
+                'matrix_criteria_size' : self.matrix_criteria_size,
+                'matrix_criteria_ontogeny' : self.matrix_criteria_ontogeny,
+                'matrix_criteria_age' : self.matrix_criteria_age,
+                'matrix_start' : self.matrix_start,
+                'matrix_end' : self.matrix_end,
+                'matrix_start_season' : self.matrix_start_season.season_name,
+                'matrix_end_season' : self.matrix_end_season.season_name,
+                'matrix_fec' : self.matrix_fec,
+                'matrix_a_string' : self.matrix_a_string,
+                'matrix_class_string' : self.matrix_class_string,
+                'n_plots' : self.n_plots,
+                'plot_size' : self.plot_size,
+                'studied_sex' : self.studied_sex.sex_code,
+                'captivity' : self.captivity.cap_code,
+                'matrix_dimension' : self.matrix_dimension,
+                'observations' : self.observations
+                
+                # Intervals?
+                # Matrix Values?
+                # Matrix Stages?
+                # Stages?
+                # Bussys?
+            }
+        except:
+            # Without seasons
+            matrix = {
+                'population' : url_for('api.get_population', id=self.population.id,
+                                  _external=False),
+                'study' : url_for('api.get_study', id=self.study.id,
+                                  _external=False),
+                'treatment' : self.treatment.type_name,
+                'matrix_split' : self.matrix_split,
+                'matrix_composition' : self.matrix_composition.comp_name,
+                'survival_issue' : self.survival_issue,
+                'n_intervals' : self.n_intervals,
+                'periodicity' : self.periodicity,
+                'matrix_criteria_size' : self.matrix_criteria_size,
+                'matrix_criteria_ontogeny' : self.matrix_criteria_ontogeny,
+                'matrix_criteria_age' : self.matrix_criteria_age,
+                'matrix_start' : self.matrix_start,
+                'matrix_end' : self.matrix_end,
+                'matrix_start_season' : None,
+                'matrix_end_season' : None,
+                'matrix_fec' : self.matrix_fec,
+                'matrix_a_string' : self.matrix_a_string,
+                'matrix_class_string' : self.matrix_class_string,
+                'n_plots' : self.n_plots,
+                'plot_size' : self.plot_size,
+                'studied_sex' : self.studied_sex.sex_code,
+                'captivity' : None,
+                'matrix_dimension' : self.matrix_dimension,
+                'observations' : self.observations
+                
+                # Intervals?
+                # Matrix Values?
+                # Matrix Stages?
+                # Stages?
+                # Bussys?
+            }
         return matrix
 
     def __repr__(self):
@@ -1634,6 +1670,36 @@ class Bussy(db.Model):
     def __repr__(self):
         return '<Bussy %r>' % self.id
 
+def url_array(self, string):
+    if string == 'populations':
+        population_urls = []
+        for population in self.populations:
+            url = url_for('api.get_population', id=population.id,
+                                  _external=False)
+            population_urls.append(url)
+        return population_urls
+
+    elif string == 'taxonomies':
+        taxonomy_urls = []
+        for taxonomy in self.taxonomies:
+            url = url_for('api.get_taxonomy', id=taxonomy.id,
+                                  _external=False)
+            taxonomy_urls.append(url)
+        return taxonomy_urls
+    elif string == 'studies':
+        study_urls = []
+        for study in self.studies:
+            url = url_for('api.get_study', id=study.id,
+                                  _external=False)
+            study_urls.append(url)
+        return study_urls
+    elif string == 'matrices':
+        matrix_urls = []
+        for matrix in self.matrices:
+            url = url_for('api.get_matrix', id=matrix.id,
+                                  _external=False)
+            matrix_urls.append(url)
+        return matrix_urls
 
 
 
