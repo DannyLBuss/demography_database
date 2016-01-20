@@ -1590,7 +1590,7 @@ class Matrix(db.Model):
                 'matrix_class_string' : self.matrix_class_string,
                 'n_plots' : self.n_plots,
                 'plot_size' : self.plot_size,
-                'studied_sex' : self.studied_sex.sex_code,
+                # 'studied_sex' : self.studied_sex.sex_code,
                 'captivity' : None,
                 'matrix_dimension' : self.matrix_dimension,
                 'observations' : self.observations
