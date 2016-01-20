@@ -13,6 +13,11 @@ def get_species(id):
     species = Species.query.get_or_404(id)
     return jsonify(species.to_json())
 
+@api.route('/query/species-name/<name>')
+def get_species_name(name):
+    species = Species.query.filter_by(species_accepted=name).first()
+    return jsonify(species.to_json())
+
 @api.route('/query/taxonomy/<int:id>')
 def get_taxonomy(id):
     taxonomy = Taxonomy.query.get_or_404(id)
