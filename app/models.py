@@ -1334,8 +1334,8 @@ class Population(db.Model):
         altitude = geo['altitude']
 
         try:
-            decimal_lat = (float(lat_deg) + (float(lat_min) * 1/60) + (float(lat_sec) * 1/60 * 1/60))
-            decimal_lon = (float(lon_deg) + (float(lon_min) * 1/60) + (float(lon_sec) * 1/60 * 1/60))
+            decimal_lat = int(lat_deg)+int(lat_min)/60+int(lat_sec)/3600
+            decimal_lon = int(lon_deg)+int(lon_min)/60+int(lon_sec)/3600
             altitude = float(altitude)
         except:
             decimal_lat = 'NA'
