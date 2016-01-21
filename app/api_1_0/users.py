@@ -1,6 +1,7 @@
 from flask import jsonify, request, current_app, url_for
 from . import api
 from ..models import User, Species, Population, Taxonomy, PlantTrait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, TreatmentType, MatrixStage, MatrixValue, Matrix, Interval, Bussy
+from ..decorators import admin_required, permission_required, crossdomain
 
 
 @api.route('/users/<int:id>')
@@ -9,6 +10,7 @@ def get_user(id):
     return jsonify(user.to_json())
 
 @api.route('/query/species')
+@crossdomain(origin='*')
 def get_all_species():
     all_species = Species.query.all()
     species = {'species' : []}
