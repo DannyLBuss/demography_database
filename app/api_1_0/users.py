@@ -21,6 +21,18 @@ def get_all_species():
     print species
     return jsonify(species)
 
+@api.route('/query/species-names')
+@crossdomain(origin='*')
+def get_all_species_names():
+    all_species = Species.query.all()
+    species = {'species' : []}
+    for s in all_species:
+        sp = s.to_json_simple()
+        species['species'].append(sp)
+
+    print species
+    return jsonify(species)
+
 @api.route('/query/species/<int:id>')
 @crossdomain(origin='*')
 def get_species(id):
