@@ -1008,6 +1008,16 @@ class Species(db.Model):
         }
         return species
 
+    def to_json_simple(self):
+        species = {
+            'species_accepted': self.species_accepted,
+            'taxonomy' : url_array(self, 'taxonomies'),
+            'plant_traits' : url_array(self, 'planttraits'),
+            'populations' : url_array(self, 'populations')
+            # 'stages' : [stage.to_json() for stage in self.stages][0]
+        }
+        return species
+
 
     def __repr__(self):
         return '<Species %r>' % self.id
@@ -1740,6 +1750,13 @@ def url_array(self, string):
                                   _external=False)
             matrix_urls.append(url)
         return matrix_urls
+    elif string == 'planttraits':
+        trait_urls = []
+        for trait in self.plant_traits:
+            url = url_for('api.get_planttrait', id=trait.id,
+                                  _external=False)
+            trait_urls.append(url)
+        return trait_urls
 
 
 
