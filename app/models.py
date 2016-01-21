@@ -1037,23 +1037,41 @@ class Taxonomy(db.Model):
         TaxonomicStatus.migrate()
 
     def to_json(self):
-        taxonomy = {
-            'species_author' : self.species_author,
-            'species_accepted' : self.species_accepted,
-            'publication' : (self.publication).to_json(),
-            'authority' : self.authority,
-            'taxonomic_status' : self.taxonomic_status.status_name,
-            'tpl_version' : self.tpl_version,
-            'infraspecies_accepted' : self.infraspecies_accepted,
-            'species_epithet_accepted' : self.species_epithet_accepted,
-            'genus_accepted' : self.genus_accepted,
-            'genus' : self.genus,
-            'family' : self.family,
-            'tax_order' : self.tax_order,
-            'tax_class' : self.tax_class,
-            'phylum' : self.phylum,
-            'kingdom' : self.kingdom
-        }
+        try:
+            taxonomy = {
+                'species_author' : self.species_author,
+                'species_accepted' : self.species_accepted,
+                'publication' : (self.publication).to_json(),
+                'authority' : self.authority,
+                'taxonomic_status' : self.taxonomic_status.status_name,
+                'tpl_version' : self.tpl_version,
+                'infraspecies_accepted' : self.infraspecies_accepted,
+                'species_epithet_accepted' : self.species_epithet_accepted,
+                'genus_accepted' : self.genus_accepted,
+                'genus' : self.genus,
+                'family' : self.family,
+                'tax_order' : self.tax_order,
+                'tax_class' : self.tax_class,
+                'phylum' : self.phylum,
+                'kingdom' : self.kingdom
+            }
+        except:
+            taxonomy = {
+                'species_author' : self.species_author,
+                'species_accepted' : self.species_accepted,
+                'publication' : (self.publication).to_json(),
+                'authority' : self.authority,
+                'tpl_version' : self.tpl_version,
+                'infraspecies_accepted' : self.infraspecies_accepted,
+                'species_epithet_accepted' : self.species_epithet_accepted,
+                'genus_accepted' : self.genus_accepted,
+                'genus' : self.genus,
+                'family' : self.family,
+                'tax_order' : self.tax_order,
+                'tax_class' : self.tax_class,
+                'phylum' : self.phylum,
+                'kingdom' : self.kingdom
+            }
         return taxonomy
 
     def __repr__(self):
@@ -1305,15 +1323,38 @@ class Population(db.Model):
         lat_we = geo['lat_we']
         altitude = geo['altitude']
 
-        decimal_lat = (float(lat_deg) + (float(lat_min) * 1/60) + (float(lat_sec) * 1/60 * 1/60))
-        decimal_lon = (float(lon_deg) + (float(lon_min) * 1/60) + (float(lon_sec) * 1/60 * 1/60))
+        try:
+            decimal_lat = (float(lat_deg) + (float(lat_min) * 1/60) + (float(lat_sec) * 1/60 * 1/60))
+            decimal_lon = (float(lon_deg) + (float(lon_min) * 1/60) + (float(lon_sec) * 1/60 * 1/60))
+            altitude = float(altitude)
+        except:
+            decimal_lat = 'NA'
+            decimal_lon = 'NA'
+            altitude = 'NA'
 
-        geometries = {"latitude" : decimal_lat, "longitude" : decimal_lon, "altitude" : float(altitude)}
+        geometries = {"latitude" : decimal_lat, "longitude" : decimal_lon, "altitude" : altitude}
         return geometries
 
 
     def to_json(self):
-        population = {
+        try:
+            population = {
+                'species' : url_for('api.get_species', id=self.species.id,
+                                      _external=False),
+                'publication' : url_for('api.get_publication', id=self.publication.id,
+                                      _external=False),
+                'study' : self.study.to_json(),
+                'species_author' : self.species_author,
+                'name' : self.name,
+                'ecoregion' : self.ecoregion.ecoregion_code,
+                'country' : self.country,
+                'continent' : self.continent.continent_name,
+                'geometries' : self.geometries_dec()
+
+                # Matrices?
+            }
+        except: 
+            population = {
             'species' : url_for('api.get_species', id=self.species.id,
                                   _external=False),
             'publication' : url_for('api.get_publication', id=self.publication.id,
@@ -1321,13 +1362,12 @@ class Population(db.Model):
             'study' : self.study.to_json(),
             'species_author' : self.species_author,
             'name' : self.name,
-            'ecoregion' : self.ecoregion.ecoregion_code,
             'country' : self.country,
-            'continent' : self.continent.continent_name,
             'geometries' : self.geometries_dec()
 
             # Matrices?
         }
+        return population
         return population
 
     @staticmethod

@@ -8,6 +8,17 @@ def get_user(id):
     user = User.query.get_or_404(id)
     return jsonify(user.to_json())
 
+@api.route('/query/species')
+def get_all_species():
+    all_species = Species.query.all()
+    species = {'species' : []}
+    for s in all_species:
+        sp = s.to_json()
+        species['species'].append(sp)
+
+    print species
+    return jsonify(species)
+
 @api.route('/query/species/<int:id>')
 def get_species(id):
     species = Species.query.get_or_404(id)
