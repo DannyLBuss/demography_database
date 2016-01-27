@@ -113,7 +113,7 @@ def add_to_classes(data):
     tax = Taxonomy(data['species_author'], data['species_accepted'], data['authority'], data['tpl_version'], data['taxonomic_status_id'], data['infraspecies_accepted'], data['species_epithet_accepted'], \
         data['genus_accepted'], data['genus'], data['family'], data['tax_order'], data['tax_class'], data['phylum'], data['kingdom'])
     pop = Population(data['species_author'], data['name'], data['geometries_lat_min'], data['geometries_lon_deg'], data['geometries_lat_ns'], data['geometries_lat_we'], \
-        data['geometries_lat_sec'], data['geometries_lon_sec'], data['geometries_lon_min'], data['geometries_lat_deg'], data['geometries_latitude_dec'], data['geometries_longitude_dec'], data['geometries_altitude'], data['ecoregion_id'], \
+        data['geometries_lat_sec'], data['geometries_lon_sec'], data['geometries_lon_min'], data['geometries_lat_deg'], data['geometries_altitude'], data['ecoregion_id'], \
         data['country'], data['continent_id'], matrix)
     trait = PlantTrait(data['growth_type_id'], data['dicot_monoc_id'], data['angio_gymno_id'])
     pub = Publication(data['authors'], data['year'], data['DOI_ISBN'], data['additional_source_string'], tax, pop, trait, study)
@@ -283,13 +283,13 @@ def submit(entry):
     matrix.population_id = pop.id
     matrix.study_id = study.id
     db.session.add(matrix)
-    db.session.commit()
+    # db.session.commit()
 
     return 
 
 def submit_model(instance):
     db.session.add(instance)
-    db.session.commit()
+    # db.session.commit()
 
 
 # This can be padded out for future stuff...
@@ -394,8 +394,7 @@ def convert_all_headers(dict):
     new_dict['matrix_values_a'] = dict['matrixU']
     new_dict['authority'] = dict['Authority']
     new_dict['matrix_split'] = dict['MatrixSplit']
-    new_dict['geometries_latitude_dec'] = dict['LatitudeDec']
-    new_dict['geometries_longitude_dec'] = dict['LongitudeDec']
+
     return new_dict
 
 @manager.command
