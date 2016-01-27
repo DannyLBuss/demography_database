@@ -1003,7 +1003,7 @@ class Species(db.Model):
             'species_accepted': self.species_accepted,
             'taxonomy' : [taxonomy.to_json() for taxonomy in self.taxonomies][0],
             'plant_traits' : [plant_trait.to_json() for plant_trait in self.plant_traits][0],
-            'populations' : [population.to_json() for population in self.populations][0]
+            'populations' : [population.to_json() for population in self.populations]
             # 'stages' : [stage.to_json() for stage in self.stages][0]
         }
         return species
@@ -1333,9 +1333,13 @@ class Population(db.Model):
         lat_we = geo['lat_we']
         altitude = geo['altitude']
 
+        if lat_we != 'NA':
+            if lat_we == 'W':
+                lon_deg = -float(lon_deg)
+                
         try:
-            decimal_lat = int(lat_deg)+int(lat_min)/60+int(lat_sec)/3600
-            decimal_lon = int(lon_deg)+int(lon_min)/60+int(lon_sec)/3600
+            decimal_lat = float(lat_deg)+float(lat_min)/60+float(lat_sec)/3600
+            decimal_lon = float(lon_deg)+float(lon_min)/60+float(lon_sec)/3600
             altitude = float(altitude)
         except:
             decimal_lat = 'NA'
