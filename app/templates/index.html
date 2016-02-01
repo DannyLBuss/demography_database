@@ -6,7 +6,9 @@
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
+	<h1>Demography Database</h1>
+	<h2>University of Exeter</h2>
+    <h3>Welcome {% if current_user.is_authenticated %}back, {{ current_user.username }}{% else %}to the database{% endif %}</h3>
 </div>
 
 {% endblock %}
