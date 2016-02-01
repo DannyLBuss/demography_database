@@ -11,7 +11,7 @@ from ..models import Permission, Role, User, \
                     DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
                     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
-                    MatrixStage, MatrixValue, Matrix, Interval, Bussy, VectorAvailability, StageClassInfo, Small
+                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, VectorAvailability, StageClassInfo, Small
 from ..decorators import admin_required, permission_required, crossdomain
 
 
@@ -54,7 +54,7 @@ def meta_tables_json():
                    "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] }, \
                    "StageType" : { "StageTypeClass" : [] }, "MatrixValue" : { "TransitionType" : [] }, \
                    "Matrix" : {"MatrixComposition" : [], "Season" : [], "StudiedSex" : [], "Captivity" : []}, \
-                   "Bussy" : { "VectorAvailability" : [],  "StageClassInfo": [], "Small": [] }}
+                   "Fixed" : { "VectorAvailability" : [],  "StageClassInfo": [], "Small": [] }}
 
     meta_tables["Species"]["IUCNStatus"].extend(IUCNStatus.query.all())
     meta_tables["Species"]["ESAStatus"].extend(ESAStatus.query.all())
@@ -77,9 +77,9 @@ def meta_tables_json():
     meta_tables["Matrix"]["Season"].extend(Season.query.all())
     meta_tables["Matrix"]["StudiedSex"].extend(StudiedSex.query.all())
     meta_tables["Matrix"]["Captivity"].extend(Captivity.query.all())
-    meta_tables["Bussy"]["VectorAvailability"].extend(VectorAvailability.query.all())
-    meta_tables["Bussy"]["StageClassInfo"].extend(StageClassInfo.query.all())
-    meta_tables["Bussy"]["Small"].extend(Small.query.all())
+    meta_tables["Fixed"]["VectorAvailability"].extend(VectorAvailability.query.all())
+    meta_tables["Fixed"]["StageClassInfo"].extend(StageClassInfo.query.all())
+    meta_tables["Fixed"]["Small"].extend(Small.query.all())
 
 
     print meta_tables

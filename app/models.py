@@ -881,11 +881,11 @@ class Captivity(db.Model):
         return '<Captivity %r>' % self.id
 ''' End Meta Tables for Matrix '''
 
-''' Meta Tables for Bussy '''
-stage_class_info_bussys = db.Table('stage_class_info_bussys', db.Model.metadata,
+''' Meta Tables for Fixed '''
+stage_class_info_fixed = db.Table('stage_class_info_fixed', db.Model.metadata,
     db.Column('id', db.Integer, primary_key=True),
     db.Column('stage_class_info_id', db.Integer, db.ForeignKey('stage_class_infos.id')),
-    db.Column('bussys_id', db.Integer, db.ForeignKey('bussys.id'))
+    db.Column('fixed_id', db.Integer, db.ForeignKey('fixed.id'))
 )
 
 class VectorAvailability(db.Model):
@@ -893,13 +893,13 @@ class VectorAvailability(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     availability_name = db.Column(db.String(200), index=True)
 
-    bussys = db.relationship("Bussy", backref="vector_availabilities")
+    fixed = db.relationship("Fixed", backref="vector_availabilities")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/bussys.json') as d_file:
+        with open('app/data-migrate/fixed.json') as d_file:
             data = json.load(d_file)
-            json_data = data["Bussy"]
+            json_data = data["Fixed"]
             nodes = json_data["VectorAvailability"]
 
             for node in nodes:
@@ -923,9 +923,9 @@ class StageClassInfo(db.Model):
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/bussys.json') as d_file:
+        with open('app/data-migrate/fixed.json') as d_file:
             data = json.load(d_file)
-            json_data = data["Bussy"]
+            json_data = data["Fixed"]
             nodes = json_data["StageClassInfo"]
 
             for node in nodes:
@@ -948,13 +948,13 @@ class Small(db.Model):
     small_name = db.Column(db.String(200), index=True)
     small_description = db.Column(db.Text())
 
-    bussys = db.relationship("Bussy", backref="smalls")
+    fixed = db.relationship("Fixed", backref="smalls")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/bussys.json') as d_file:
+        with open('app/data-migrate/fixed.json') as d_file:
             data = json.load(d_file)
-            json_data = data["Bussy"]
+            json_data = data["Fixed"]
             nodes = json_data["Small"]
 
             for node in nodes:
@@ -970,7 +970,7 @@ class Small(db.Model):
 
     def __repr__(self):
         return '<StageClassInfo %r>' % self.id
-''' End Meta Tables for Bussy '''
+''' End Meta Tables for Fixed '''
 
 ''' End Meta Tables '''
 
@@ -1003,7 +1003,8 @@ class Species(db.Model):
             'species_accepted': self.species_accepted,
             'taxonomy' : [taxonomy.to_json() for taxonomy in self.taxonomies][0],
             'plant_traits' : [plant_trait.to_json() for plant_trait in self.plant_traits][0],
-            'populations' : [population.to_json() for population in self.populations]
+            'populations' : url_array(self, 'populations'),
+            'number_populations' : len(url_array(self, 'populations'))
             # 'stages' : [stage.to_json() for stage in self.stages][0]
         }
         return species
@@ -1574,7 +1575,8 @@ class Matrix(db.Model):
     intervals = db.relationship("Interval", backref="matrix")
     matrix_values = db.relationship("MatrixValue", backref="matrix")
     matrix_stages = db.relationship("MatrixStage", backref="matrix")
-    bussys = db.relationship("Bussy", backref="matrix")
+    fixed = db.relationship("Fixed", backref="matrix")
+    seeds = db.relationship("Seed", backref="matrix")
 
     @staticmethod
     def migrate():
@@ -1617,7 +1619,7 @@ class Matrix(db.Model):
                 # Matrix Values?
                 # Matrix Stages?
                 # Stages?
-                # Bussys?
+                # Fixed?
             }
         except:
             # Without seasons
@@ -1653,7 +1655,7 @@ class Matrix(db.Model):
                 # Matrix Values?
                 # Matrix Stages?
                 # Stages?
-                # Bussys?
+                # Fixed?
             }
         return matrix
 
@@ -1681,21 +1683,23 @@ class Interval(db.Model):
     def __repr__(self):
         return '<Interval %r>' % self.id
 
-''' Secret & Important Bussy Stuff '''
-class Bussy(db.Model):
-    __tablename__ = 'bussys'
+''' Secret & Important Fixed Stuff '''
+class Fixed(db.Model):
+    __tablename__ = 'fixed'
     id = db.Column(db.Integer, primary_key=True)
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'), index=True)
     vector_str = db.Column(db.Text())
     vector_present = db.Column(db.Boolean())
     total_pop_no = db.Column(db.Integer())
     vector_availablility_id = db.Column(db.Integer, db.ForeignKey('vector_availabilities.id'))
-    stage_class_info = db.relationship('StageClassInfo', secondary=stage_class_info_bussys, backref=db.backref('bussys', lazy='dynamic')) 
+    stage_class_info = db.relationship('StageClassInfo', secondary=stage_class_info_fixed, backref=db.backref('fixed', lazy='dynamic')) 
     availability_notes = db.Column(db.Text())
     population_info = db.Column(db.Text())
     sampled_entire = db.Column(db.Text())
     small_id = db.Column(db.Integer, db.ForeignKey('smalls.id'))
     private = db.Column(db.Boolean(), default=True)
+    matrix_a = db.Column(db.Text())
+    version = db.Column(db.Integer())
 
     @staticmethod
     def migrate():
@@ -1704,7 +1708,7 @@ class Bussy(db.Model):
         Small.migrate()
 
     def to_json(self):
-        bussy = {
+        fixed = {
             # 'matrix' : self.matrix.id (url?)
             'vector_str' : self.vector_str,
             'interval_start' : self.interval_start,
@@ -1719,10 +1723,28 @@ class Bussy(db.Model):
 
             # Stage Class Info?
         }
-        return bussy
+        return fixed
 
     def __repr__(self):
-        return '<Bussy %r>' % self.id
+        return '<Fixed %r>' % self.id
+
+class Seed(db.Model):
+    __tablename__ = 'seeds'
+    id = db.Column(db.Integer, primary_key=True)
+    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'), index=True)
+    matrix_a = db.Column(db.Text())
+    version = db.Column(db.Integer())
+
+    def to_json(self):
+        seeds = {
+            # 'matrix' : self.matrix.id (url?)
+            'matrix_a' : self.matrix_a,
+            'version' : self.version,
+        }
+
+    def __repr__(self):
+        return '<Seed %r>' % self.id
+
 
 def url_array(self, string):
     if string == 'populations':

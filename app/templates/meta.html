@@ -139,19 +139,19 @@
 
     <hr/>
 
-    <h2>Bussy's</h2>
+    <h2>Fixed</h2>
     <h3>Vector Availabilities</h3>
-    {% for vec in meta.Bussy.VectorAvailability %}
+    {% for vec in meta.Fixed.VectorAvailability %}
         <code>{{ vec.availability_name }}</code><br/>
     {% endfor %}
 
     <h3>Stage Class Info</h3>
-    {% for class in meta.Bussy.StageClassInfo %}
+    {% for class in meta.Fixed.StageClassInfo %}
         <code>{{ class.info_code }}</code> : {{ class.info_description }}<br/>
     {% endfor %}
 
     <h3>Smalls</h3>
-    {% for small in meta.Bussy.Small %}
+    {% for small in meta.Fixed.Small %}
         <code>{{ small.small_name }}</code> : {{ small.small_description }}<br/>
     {% endfor %}
 
