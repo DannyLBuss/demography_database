@@ -1,8 +1,11 @@
-from flask import jsonify, request, current_app, url_for
+from flask import render_template, jsonify, request, current_app, url_for
 from . import api
 from ..models import User, Species, Population, Taxonomy, PlantTrait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, TreatmentType, MatrixStage, MatrixValue, Matrix, Interval, Fixed
 from ..decorators import admin_required, permission_required, crossdomain
 
+@api.route('/')
+def home():
+    return render_template('api_1_0/index.html')
 
 @api.route('/users/<int:id>')
 def get_user(id):
@@ -13,7 +16,6 @@ def get_user(id):
 def fix_string(string):
     capitalised = string.capitalize()
     hypen_stripped = capitalised.replace("-", " ");
-
     return hypen_stripped
 
 # Traversing via Species

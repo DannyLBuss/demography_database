@@ -29,6 +29,7 @@
                 {% endif %}
                 <li><a href="{{ url_for('main.meta_tables_json') }}">Meta Tables</a></li>
                 <li><a href="{{ url_for('main.data') }}">All Data</a></li>
+                <li><a href="{{ url_for('api.home') }}">API</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
