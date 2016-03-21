@@ -104,6 +104,7 @@ def get_species_matrices(name):
 
     return jsonify(matrices)
 
+
 @api.route('/query/taxonomy/<int:id>')
 @crossdomain(origin='*')
 def get_taxonomy(id):
