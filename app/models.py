@@ -67,6 +67,7 @@ class User(UserMixin, db.Model):
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
+    api_hash = db.Column(db.Text())
 
     species = db.relationship("Species", backref="Species.user_created_id",primaryjoin="User.id==Species.user_modified_id", lazy="dynamic")
 
@@ -205,7 +206,11 @@ class User(UserMixin, db.Model):
     def generate_auth_token(self, expiration):
         s = Serializer(current_app.config['SECRET_KEY'],
                        expires_in=expiration)
-        return s.dumps({'id': self.id}).decode('ascii')
+        serial = s.dumps({'id': self.id}).decode('ascii')
+        self.api_hash = s.dumps(self.id).decode('ascii')
+        db.session.add(self)
+        return serial
+
 
     @staticmethod
     def verify_auth_token(token):
