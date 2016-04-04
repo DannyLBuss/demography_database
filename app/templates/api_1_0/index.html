@@ -10,6 +10,15 @@
 	<h2>University of Exeter</h2>
 </div>
 
+{% if current_user.is_authenticated %}
+	{% if current_user.role.name == 'Developer' %}
+	{% else %}
+	<h3><a href="{{ url_for('api.sign_up') }}"><button>Connect</button></a> for an API account</h3><hr/>
+	{% endif %}
+{% else %}
+<h3><a href="{{ url_for('api.sign_up') }}"><button>Sign Up</button></a> for an API account, or <a href="{{ url_for('auth.login') }}"><button>Log In</button></a></h3><hr/>
+{% endif %}
+
 <h3>Here will be a user guide relating to the use of the API</h3>
 <h4>Sample response for <code>http://localhost:5000/api/query/species/name=actaea-elata</code></h4>
 <pre>

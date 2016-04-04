@@ -1,17 +1,19 @@
 from flask import render_template, jsonify, request, current_app, url_for
 from . import api
+from flask.ext.login import login_user, logout_user, login_required, \
+    current_user
 from ..models import User, Species, Population, Taxonomy, PlantTrait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, TreatmentType, MatrixStage, MatrixValue, Matrix, Interval, Fixed
 from ..decorators import admin_required, permission_required, crossdomain
 
 @api.route('/')
 def home():
+    print request.cookies
     return render_template('api_1_0/index.html')
 
 @api.route('/users/<int:id>')
 def get_user(id):
     user = User.query.get_or_404(id)
     return jsonify(user.to_json())
-
 
 def fix_string(string):
     capitalised = string.capitalize()

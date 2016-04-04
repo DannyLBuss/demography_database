@@ -33,6 +33,9 @@ class Role(db.Model):
         roles = {
             'User': (Permission.FOLLOW |
                      Permission.COMMENT |
+                     Permission.WRITE_ARTICLES, False),
+            'Developer': (Permission.FOLLOW |
+                     Permission.COMMENT |
                      Permission.WRITE_ARTICLES, True),
             'Moderator': (Permission.FOLLOW |
                           Permission.COMMENT |
@@ -203,13 +206,12 @@ class User(UserMixin, db.Model):
         }
         return json_user
 
-    def generate_auth_token(self, expiration):
-        s = Serializer(current_app.config['SECRET_KEY'],
-                       expires_in=expiration)
-        serial = s.dumps({'id': self.id}).decode('ascii')
-        self.api_hash = s.dumps(self.id).decode('ascii')
+    def generate_auth_token(self):
+        username = self.username
+        hash_ = hashlib.md5(username).hexdigest()
+        self.api_hash = hash_
         db.session.add(self)
-        return serial
+        return {'id' : hash_}
 
 
     @staticmethod

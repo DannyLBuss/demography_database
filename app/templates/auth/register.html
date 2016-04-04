@@ -7,7 +7,32 @@
 <div class="page-header">
     <h1>Register</h1>
 </div>
-<div class="col-md-4">
+
+{% if current_user.is_authenticated %}
+{% if account_type == 'developer' %}
+	<div class="row-fluid">
+		<div class="col-md-12">	
+			<h4><a href="{{ url_for('api.connect_account') }}"><button>Click here</button></a> to connect your existing account to the API.</h4>
+		</div>
+	</div>
+{% else %}
+	<div class="row-fluid">
+		<div class="col-md-12">	
+			<h4>You are already registered.</h4>
+		</div>
+	</div>
+{% endif %}
+{% else %}
+<div class="col-md-6">
     {{ wtf.quick_form(form) }}
+    {% if account_type == 'developer' %}
+	<div class="row-fluid">
+		<div class="col-md-12">	
+			<h4>Or, <a href="{{ url_for('api.sign_in') }}"><button>Sign In</button></a> to connect your existing account.</h4>
+		</div>
+	</div>
+	{% endif %}
 </div>
+{% endif %}
+
 {% endblock %}
