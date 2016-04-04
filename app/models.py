@@ -197,7 +197,7 @@ class User(UserMixin, db.Model):
             url=url, hash=hash, size=size, default=default, rating=rating)
 
 
-    def to_json(self):
+    def to_json(self, key):
         json_user = {
             
             'username': self.username,
@@ -1005,23 +1005,23 @@ class Species(db.Model):
         IUCNStatus.migrate()
         ESAStatus.migrate()
 
-    def to_json(self):
+    def to_json(self, key):
         species = {
             'species_accepted': self.species_accepted,
-            'taxonomy' : [taxonomy.to_json() for taxonomy in self.taxonomies][0],
-            'plant_traits' : [plant_trait.to_json() for plant_trait in self.plant_traits][0],
-            'populations' : url_array(self, 'populations'),
-            'number_populations' : len(url_array(self, 'populations'))
+            'taxonomy' : [taxonomy.to_json(key) for taxonomy in self.taxonomies][0],
+            'plant_traits' : [plant_trait.to_json(key) for plant_trait in self.plant_traits][0],
+            'populations' : url_array(self, 'populations', key),
+            'number_populations' : len(url_array(self, 'populations', key))
             # 'stages' : [stage.to_json() for stage in self.stages][0]
         }
         return species
 
-    def to_json_simple(self):
+    def to_json_simple(self, key):
         species = {
             'species_accepted': self.species_accepted,
-            'taxonomy' : url_array(self, 'taxonomies'),
-            'plant_traits' : url_array(self, 'planttraits'),
-            'populations' : url_array(self, 'populations')
+            'taxonomy' : url_array(self, 'taxonomies', key),
+            'plant_traits' : url_array(self, 'planttraits', key),
+            'populations' : url_array(self, 'populations', key)
             # 'stages' : [stage.to_json() for stage in self.stages][0]
         }
         return species
@@ -1054,12 +1054,12 @@ class Taxonomy(db.Model):
     def migrate():
         TaxonomicStatus.migrate()
 
-    def to_json(self):
+    def to_json(self, key):
         try:
             taxonomy = {
                 'species_author' : self.species_author,
                 'species_accepted' : self.species_accepted,
-                'publication' : (self.publication).to_json(),
+                'publication' : (self.publication).to_json(key),
                 'authority' : self.authority,
                 'taxonomic_status' : self.taxonomic_status.status_name,
                 'tpl_version' : self.tpl_version,
@@ -1077,7 +1077,7 @@ class Taxonomy(db.Model):
             taxonomy = {
                 'species_author' : self.species_author,
                 'species_accepted' : self.species_accepted,
-                'publication' : (self.publication).to_json(),
+                'publication' : (self.publication).to_json(key),
                 'authority' : self.authority,
                 'tpl_version' : self.tpl_version,
                 'infraspecies_accepted' : self.infraspecies_accepted,
@@ -1115,7 +1115,7 @@ class PlantTrait(db.Model):
         DicotMonoc.migrate()
         AngioGymno.migrate()
 
-    def to_json(self):
+    def to_json(self, key):
         plant_trait = {
             'max_height' : self.max_height,
             'growth_type_id' : self.growth_type.type_name,
@@ -1176,7 +1176,7 @@ class Publication(db.Model):
         Purpose.migrate()
         MissingData.migrate()
 
-    def to_json(self):
+    def to_json(self, key):
         publication = {
             # 'source_type' : self.source_type.source_name,
             'authors' : self.authors,
@@ -1200,11 +1200,11 @@ class Publication(db.Model):
             'additional_source_string' : self.additional_source_string,
             # Author contacts?
             # Additional Sources?
-            'populations' : url_array(self, 'populations'),   
+            'populations' : url_array(self, 'populations', key),   
             # 'stages' : [stage.to_json() for stage in self.stages][0]
             # 'treatments' : [treatment.to_json() for treatment in self.treatments][0]
-            'taxonomies' : url_array(self, 'taxonomies'),
-            'studies' : url_array(self, 'studies')
+            'taxonomies' : url_array(self, 'taxonomies', key),
+            'studies' : url_array(self, 'studies', key)
         }
         return publication
 
@@ -1225,16 +1225,16 @@ class Study(db.Model):
     populations = db.relationship("Population", backref="study")
     number_populations = db.Column(db.Integer()) #could verify with populations.count()
 
-    def to_json(self):
+    def to_json(self, key):
         study = {
-            'publication' : url_for('api.get_publication', id=self.publication.id,
+            'publication' : url_for('api.get_publication', id=self.publication.id, key=key,
                                   _external=False),
             'study_duration' : self.study_duration,
             'study_start' : self.study_start,
             'study_end' : self.study_end,
             'number_populations' : self.number_populations,           
-            'matrices' : url_array(self, 'matrices'),
-            'populations' : url_array(self, 'populations')
+            'matrices' : url_array(self, 'matrices', key),
+            'populations' : url_array(self, 'populations', key)
         }
         return study
 
@@ -1254,7 +1254,7 @@ class AuthorContact(db.Model):
     def migrate():
         ContentEmail.migrate()
 
-    def to_json(self):
+    def to_json(self, key):
         author_contact = {
             # 'publication' : self.publication, url??
             'date_contacted' : self.date_contacted,
@@ -1287,7 +1287,7 @@ class AdditionalSource(db.Model):
     name = db.Column(db.Text()) #r-generated, needs more info, probably to be generated in method of this model, first author in author list?
     description = db.Column(db.Text())
 
-    def to_json(self):
+    def to_json(self, key):
         additional_source = {
             # 'publication' : self.publication, url??
             'source_type' : self.source_type.source_name,
@@ -1358,14 +1358,14 @@ class Population(db.Model):
         return geometries
 
 
-    def to_json(self):
+    def to_json(self, key):
         try:
             population = {
-                'species' : url_for('api.get_species', id=self.species.id,
+                'species' : url_for('api.get_species', id=self.species.id, key=key,
                                       _external=False),
-                'publication' : url_for('api.get_publication', id=self.publication.id,
+                'publication' : url_for('api.get_publication', id=self.publication.id, key=key,
                                       _external=False),
-                'study' : self.study.to_json(),
+                'study' : self.study.to_json(key),
                 'species_author' : self.species_author,
                 'name' : self.name,
                 'ecoregion' : self.ecoregion.ecoregion_code,
@@ -1377,11 +1377,11 @@ class Population(db.Model):
             }
         except: 
             population = {
-            'species' : url_for('api.get_species', id=self.species.id,
+            'species' : url_for('api.get_species', id=self.species.id, key=key,
                                   _external=False),
-            'publication' : url_for('api.get_publication', id=self.publication.id,
+            'publication' : url_for('api.get_publication', id=self.publication.id, key=key,
                                   _external=False),
-            'study' : self.study.to_json(),
+            'study' : self.study.to_json(key),
             'species_author' : self.species_author,
             'name' : self.name,
             'country' : self.country,
@@ -1410,7 +1410,7 @@ class Stage(db.Model):
 
     matrix_stages = db.relationship("MatrixStage", backref="stage")
 
-    def to_json(self):
+    def to_json(self, key):
         stage = {
             # species : self.species url?
             # publication : self.publication url?
@@ -1432,7 +1432,7 @@ class StageType(db.Model):
 
     stages = db.relationship("Stage", backref="stage_types")
 
-    def to_json(self):
+    def to_json(self, key):
         stage_type = {
             'type_name' : self.type_name,
             'type_class' : self.type_class.type_class
@@ -1489,7 +1489,7 @@ class TreatmentType(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
-    def to_json(self):
+    def to_json(self, key):
         treatment_type = {
             'type_name' : self.type_name,
 
@@ -1509,7 +1509,7 @@ class MatrixStage(db.Model):
 
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
-    def to_json(self):
+    def to_json(self, key):
         matrix_stage = {
             'stage_order' : self.stage_order,
             'stage_id' : self.stage_id
@@ -1534,7 +1534,7 @@ class MatrixValue(db.Model):
     def migrate():
         TransitionType.migrate()
 
-    def to_json(self):
+    def to_json(self, key):
         matrix_value = {
             'column_number' : self.column_number,
             'row_number' : self.row_number,
@@ -1592,12 +1592,12 @@ class Matrix(db.Model):
         StudiedSex.migrate()
         Captivity.migrate()
 
-    def to_json(self):
+    def to_json(self, key):
         try:
             matrix = {
-                'population' : url_for('api.get_population', id=self.population.id,
+                'population' : url_for('api.get_population', key=key, id=self.population.id,
                                   _external=False),
-                'study' : url_for('api.get_study', id=self.study.id,
+                'study' : url_for('api.get_study', id=self.study.id, key=key,
                                   _external=False),
                 'treatment' : self.treatment.type_name,
                 'matrix_split' : self.matrix_split,
@@ -1631,9 +1631,9 @@ class Matrix(db.Model):
         except:
             # Without seasons
             matrix = {
-                'population' : url_for('api.get_population', id=self.population.id,
+                'population' : url_for('api.get_population', id=self.population.id, key=key,
                                   _external=False),
-                'study' : url_for('api.get_study', id=self.study.id,
+                'study' : url_for('api.get_study', id=self.study.id, key=key,
                                   _external=False),
                 'treatment' : self.treatment.type_name,
                 'matrix_split' : self.matrix_split,
@@ -1678,7 +1678,7 @@ class Interval(db.Model):
     interval_start = db.Column(db.Date())
     interval_end = db.Column(db.Date())
 
-    def to_json(self):
+    def to_json(self, key):
         interval = {
             # 'matrix' : self.matrix.id (url?)
             'interval_order' : self.interval_order,
@@ -1714,7 +1714,7 @@ class Fixed(db.Model):
         StageClassInfo.migrate()
         Small.migrate()
 
-    def to_json(self):
+    def to_json(self, key):
         fixed = {
             # 'matrix' : self.matrix.id (url?)
             'vector_str' : self.vector_str,
@@ -1749,15 +1749,15 @@ class Seed(db.Model):
             'version' : self.version,
         }
 
-    def __repr__(self):
+    def __repr__(self, key):
         return '<Seed %r>' % self.id
 
 
-def url_array(self, string):
+def url_array(self, string, key):
     if string == 'populations':
         population_urls = []
         for population in self.populations:
-            url = url_for('api.get_population', id=population.id,
+            url = url_for('api.get_population', key=key, id=population.id,
                                   _external=False)
             population_urls.append(url)
         return population_urls
@@ -1765,28 +1765,28 @@ def url_array(self, string):
     elif string == 'taxonomies':
         taxonomy_urls = []
         for taxonomy in self.taxonomies:
-            url = url_for('api.get_taxonomy', id=taxonomy.id,
+            url = url_for('api.get_taxonomy', id=taxonomy.id, key=key,
                                   _external=False)
             taxonomy_urls.append(url)
         return taxonomy_urls
     elif string == 'studies':
         study_urls = []
         for study in self.studies:
-            url = url_for('api.get_study', id=study.id,
+            url = url_for('api.get_study', id=study.id, key=key,
                                   _external=False)
             study_urls.append(url)
         return study_urls
     elif string == 'matrices':
         matrix_urls = []
         for matrix in self.matrices:
-            url = url_for('api.get_matrix', id=matrix.id,
+            url = url_for('api.get_matrix', id=matrix.id, key=key,
                                   _external=False)
             matrix_urls.append(url)
         return matrix_urls
     elif string == 'planttraits':
         trait_urls = []
         for trait in self.plant_traits:
-            url = url_for('api.get_planttrait', id=trait.id,
+            url = url_for('api.get_planttrait', id=trait.id, key=key,
                                   _external=False)
             trait_urls.append(url)
         return trait_urls

@@ -1,19 +1,40 @@
-from flask import render_template, jsonify, request, current_app, url_for
+from flask import render_template, jsonify, request, current_app, url_for, abort
 from . import api
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user
 from ..models import User, Species, Population, Taxonomy, PlantTrait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, TreatmentType, MatrixStage, MatrixValue, Matrix, Interval, Fixed
 from ..decorators import admin_required, permission_required, crossdomain
+from .errors import unauthorized
+
+
+def key_valid(key):
+    users = User.query.all()
+    hash = ''
+    for user in users:
+        if user.api_hash == key:
+            hash = key
+            request.api_key = key
+        else:
+            pass
+
+    if hash == key:
+        return True
+    else:
+        return False
 
 @api.route('/')
 def home():
     print request.cookies
     return render_template('api_1_0/index.html')
 
-@api.route('/users/<int:id>')
-def get_user(id):
+
+@api.route('/<key>/query/users/<int:id>')
+def get_user(key, id):
     user = User.query.get_or_404(id)
-    return jsonify(user.to_json())
+    if key_valid(key):
+        return jsonify(user.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 def fix_string(string):
     capitalised = string.capitalize()
@@ -22,78 +43,98 @@ def fix_string(string):
 
 # Traversing via Species
 # All Species
-@api.route('/query/species/all')
+# Not working, hmm
+@api.route('/<key>/query/species/all')
 @crossdomain(origin='*')
-def get_all_species():
+def get_all_species(key):
     all_species = Species.query.all()
     species = {'species' : []}
     for s in all_species:
-        sp = s.to_json()
+        sp = s.to_json(key)
         species['species'].append(sp)
 
-    print species
-    return jsonify(species)
+    if key_valid(key):
+        return jsonify(species)
+    else:
+        return unauthorized('Invalid credentials')
 
 # Species by ID (not useful for client, useful for testing for now)
-@api.route('/query/species/id=<int:id>')
+@api.route('/<key>/query/species/id=<int:id>')
 @crossdomain(origin='*')
-def get_species(id):
+def get_species(key, id):
     species = Species.query.get_or_404(id)
-    return jsonify(species.to_json())
+    if key_valid(key):
+        return jsonify(species.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Go with name for protocol
-@api.route('/query/species/name=<name>')
+@api.route('/<key>/query/species/name=<name>')
 @crossdomain(origin='*')
-def get_species_name(name):
+def get_species_name(key, name):
     name = fix_string(name)
     species = Species.query.filter_by(species_accepted=name).first()
-    return jsonify(species.to_json())
+    if key_valid(key):
+        return jsonify(species.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Taxonomy of species
-@api.route('/query/species/name=<name>/taxonomy')
+@api.route('/<key>/query/species/name=<name>/taxonomy')
 @crossdomain(origin='*')
-def get_species_taxonomy(name):
+def get_species_taxonomy(key, name):
     name = fix_string(name)
     species = Species.query.filter_by(species_accepted=name).first()
     taxonomy = species.taxonomies[0]
-    return jsonify(taxonomy.to_json())
+    if key_valid(key):
+        return jsonify(taxonomy.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
-@api.route('/query/species/name=<name>/plant-traits')
+@api.route('/<key>/query/species/name=<name>/plant-traits')
 @crossdomain(origin='*')
-def get_species_traits(name):
+def get_species_traits(key, name):
     name = fix_string(name)
     species = Species.query.filter_by(species_accepted=name).first()
     traits = species.plant_traits[0]
-    return jsonify(traits.to_json())
+    if key_valid(key):
+        return jsonify(traits.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Show all populations of Species
-@api.route('/query/species/name=<name>/populations')
+@api.route('/<key>/query/species/name=<name>/populations')
 @crossdomain(origin='*')
-def get_species_populations(name):
+def get_species_populations(key, name):
     name = fix_string(name)
     species = Species.query.filter_by(species_accepted=name).first()
     all_populations = species.populations
     
     populations = {"populations" : []}
     for population in all_populations:
-        pop = population.to_json()
+        pop = population.to_json(key)
         populations['populations'].append(pop)
-
-    return jsonify(populations)
+    if key_valid(key):
+        return jsonify(populations)
+    else:
+        return unauthorized('Invalid credentials')
 
 # Show all publications featuring this species
-@api.route('/query/species/name=<name>/publication')
+@api.route('/<key>/query/species/name=<name>/publication')
 @crossdomain(origin='*')
-def get_species_publication(name):
+def get_species_publication(key, name):
     name = fix_string(name)
     species = Species.query.filter_by(species_accepted=name).first()
     publication = species.taxonomies[0].publication
-    return jsonify(publication.to_json())
+    if key_valid(key):
+        return jsonify(publication.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Show all matrices of this species
-@api.route('/query/species/name=<name>/matrices')
+@api.route('/<key>/query/species/name=<name>/matrices')
 @crossdomain(origin='*')
-def get_species_matrices(name):
+def get_species_matrices(key, name):
     name = fix_string(name)
     species = Species.query.filter_by(species_accepted=name).first()
     all_populations = species.populations
@@ -103,113 +144,165 @@ def get_species_matrices(name):
     for population in all_populations:
         matrices_pop = population.study.matrices
         for matrix in matrices_pop:
-            mat = matrix.to_json()
+            mat = matrix.to_json(key)
             matrices['matrices'].append(mat)
+    if key_valid(key):
+        return jsonify(matrices)
+    else:
+        return unauthorized('Invalid credentials')
 
-    return jsonify(matrices)
 
-
-@api.route('/query/taxonomy/<int:id>')
+@api.route('/<key>/query/taxonomy/<int:id>')
 @crossdomain(origin='*')
-def get_taxonomy(id):
-    taxonomy = Taxonomy.query.get_or_404(id)
-    return jsonify(taxonomy.to_json())
+def get_taxonomy(key, id):
+    taxonomy = Taxonomy.query.get_or_404(id)    
+    if key_valid(key):
+        return jsonify(taxonomy.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
-@api.route('/query/planttrait/<int:id>')
-@crossdomain(origin='*')
-def get_planttrait(id):
-    planttrait = PlantTrait.query.get_or_404(id)
-    return jsonify(planttrait.to_json())
 
-@api.route('/query/publication/<int:id>')
+@api.route('/<key>/query/planttrait/<int:id>')
 @crossdomain(origin='*')
-def get_publication(id):
+def get_planttrait(key, id):
+    planttrait = PlantTrait.query.get_or_404(id)    
+    if key_valid(key):
+        return jsonify(planttrait.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/publication/<int:id>')
+@crossdomain(origin='*')
+def get_publication(key, id):
     publication = Publication.query.get_or_404(id)
-    return jsonify(publication.to_json())
+    if key_valid(key):
+        return jsonify(publication.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
-@api.route('/query/study/<int:id>')
+@api.route('/<key>/query/study/<int:id>')
 @crossdomain(origin='*')
-def get_study(id):
+def get_study(key, id):
     study = Study.query.get_or_404(id)
-    return jsonify(study.to_json())
+    if key_valid(key):
+        return jsonify(study.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Not implemented yet
-@api.route('/query/authorcontact/<int:id>')
+@api.route('/<key>/query/authorcontact/<int:id>')
 @crossdomain(origin='*')
-def get_authorcontact(id):
+def get_authorcontact(key, id):
     authorcontact = AuthorContact.query.get_or_404(id)
-    return jsonify(authorcontact.to_json())
+    if key_valid(key):
+        return jsonify(authorcontact.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Not implemented yet
-@api.route('/query/additionalsource/<int:id>')
+@api.route('/<key>/query/additionalsource/<int:id>')
 @crossdomain(origin='*')
-def get_additionalsource(id):
+def get_additionalsource(key, id):
     additionalsource = AdditionalSource.query.get_or_404(id)
-    return jsonify(additionalsource.to_json())
+    if key_valid(key):
+        return jsonify(additionalsource.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Not implemented yet
-@api.route('/query/stage/<int:id>')
+@api.route('/<key>/query/stage/<int:id>')
 @crossdomain(origin='*')
-def get_stage(id):
+def get_stage(key, id):
     stage = Stage.query.get_or_404(id)
-    return jsonify(stage.to_json())
+    if key_valid(key):
+        return jsonify(stage.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Not implemented yet
-@api.route('/query/stagetype/<int:id>')
+@api.route('/<key>/query/stagetype/<int:id>')
 @crossdomain(origin='*')
-def get_stagetype(id):
+def get_stagetype(key, id):
     stagetype = StageType.query.get_or_404(id)
-    return jsonify(stagetype.to_json())
+    if key_valid(key):
+        return jsonify(stagetype.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Not implemented yet
-@api.route('/query/treatment/<int:id>')
+@api.route('/<key>/query/treatment/<int:id>')
 @crossdomain(origin='*')
-def get_treatment(id):
-    treatment = Treatment.query.get_or_404(id)
-    return jsonify(treatment.to_json())
+def get_treatment(key, id):
+    treatment = Treatment.query.get_or_404(id)    
+    if key_valid(key):
+        return jsonify(treatment.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
-@api.route('/query/treatmenttype/<int:id>')
+@api.route('/<key>/query/treatmenttype/<int:id>')
 @crossdomain(origin='*')
-def get_treatmenttype(id):
-    treatmenttype = TreatmentType.query.get_or_404(id)
-    return jsonify(treatmenttype.to_json())
+def get_treatmenttype(key, id):
+    treatmenttype = TreatmentType.query.get_or_404(id)    
+    if key_valid(key):
+        return jsonify(treatmenttype.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Not implemented yet
-@api.route('/query/matrixstage/<int:id>')
+@api.route('/<key>/query/matrixstage/<int:id>')
 @crossdomain(origin='*')
-def get_matrixstage(id):
+def get_matrixstage(key, id):
     matrixstage = MatrixStage.query.get_or_404(id)
-    return jsonify(matrixstage.to_json())
+    if key_valid(key):
+        return jsonify(matrixstage.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Not implemented yet
-@api.route('/query/matrixvalue/<int:id>')
+@api.route('/<key>/query/matrixvalue/<int:id>')
 @crossdomain(origin='*')
-def get_matrixvalue(id):
-    matrixvalue = MatrixValue.query.get_or_404(id)
-    return jsonify(matrixvalue.to_json())
+def get_matrixvalue(key, id):
+    matrixvalue = MatrixValue.query.get_or_404(id)    
+    if key_valid(key):
+        return jsonify(matrixvalue.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
-@api.route('/query/matrix/<int:id>')
+@api.route('/<key>/query/matrix/<int:id>')
 @crossdomain(origin='*')
-def get_matrix(id):
+def get_matrix(key, id):
     matrix = Matrix.query.get_or_404(id)
-    return jsonify(matrix.to_json())
+    if key_valid(key):
+        return jsonify(matrix.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
 # Not implemented yet
-@api.route('/query/interval/<int:id>')
+@api.route('/<key>/query/interval/<int:id>')
 @crossdomain(origin='*')
-def get_interval(id):
+def get_interval(key, id):
     interval = Interval.query.get_or_404(id)
-    return jsonify(interval.to_json())
+    if key_valid(key):
+        return jsonify(interval.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
 
 # Not implemented yet
-@api.route('/query/fixed/<int:id>')
+@api.route('/<key>/query/fixed/<int:id>')
 @crossdomain(origin='*')
-def get_fixed(id):
+def get_fixed(key, id):
     fixed = Fixed.query.get_or_404(id)
-    return jsonify(fixed.to_json())
+    if key_valid(key):
+        return jsonify(fixed.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
 
-@api.route('/query/population/<int:id>')
+@api.route('/<key>/query/population/<int:id>')
 @crossdomain(origin='*')
-def get_population(id):
+def get_population(key, id):
     population = Population.query.get_or_404(id)
-    return jsonify(population.to_json())
+    if key_valid(key):
+        return jsonify(population.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
