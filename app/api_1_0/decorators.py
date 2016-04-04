@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import g
 from .errors import forbidden
+from ..models import User
 
 
 def permission_required(permission):
@@ -12,3 +13,4 @@ def permission_required(permission):
             return f(*args, **kwargs)
         return decorated_function
     return decorator
+

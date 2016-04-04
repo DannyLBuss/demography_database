@@ -1,11 +1,43 @@
-from flask import g, jsonify, redirect, url_for
+from flask import g, jsonify, redirect, url_for, request, current_app, render_template
+from flask.ext.login import login_user, logout_user, login_required, \
+    current_user
+from .. import db
 from flask.ext.httpauth import HTTPBasicAuth
-from ..models import User, AnonymousUser
+from ..models import User, AnonymousUser, Role
 from . import api
 from .errors import unauthorized, forbidden
 
 auth = HTTPBasicAuth()
 
+@api.route('/connect')
+def connect_account():
+    user = current_user
+    user.role = Role.query.filter_by(name='Developer').first()
+    user.generate_auth_token()
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for('api.home'))
+
+@api.route('/sign-in')
+def sign_in():
+    redirect_to_sign_in = redirect('/auth/login')
+    response = current_app.make_response(redirect_to_sign_in)
+    response.set_cookie('request_path', value='api')
+    return response
+
+@api.route('/sign-up')
+def sign_up():
+    redirect_to_sign_up = redirect('/auth/register')
+    response = current_app.make_response(redirect_to_sign_up)
+    response.set_cookie('account_type', value='developer')
+    return response
+
+@api.route('/del-cookie')
+def del_cookie():
+    redirect_to_sign_up = redirect('/api/connect')
+    response = current_app.make_response(redirect_to_sign_up)
+    response.set_cookie('request_path', '', expires=0)
+    return response
 
 @auth.verify_password
 @api.route('/verify_password/<email_or_token>/<password>')
