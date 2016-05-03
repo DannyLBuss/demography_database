@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 COV = None
 if os.environ.get('FLASK_COVERAGE'):
@@ -100,7 +102,7 @@ def delete_table_data():
     db.session.commit()
 
     print "All data has been removed"
-    return 
+    return    
 
 def add_to_classes(data):
     from app.conversion.models import Taxonomy, Publication, Population, PlantTrait, Matrix, Study, Entry
@@ -324,7 +326,59 @@ def coerce_date(dict, typeof):
 
     #CREATE DATE
 
+def return_con(obj):
+    joined =''.join([value for key, value in obj.items()])
+    lower = joined.lower()
+    stripped = lower #lower.replace(' ', '')
+    return stripped
 
+def create_id_string(dict):
+    new_dict = {
+    "species_accepted" : dict["species_accepted"], #
+    "journal" : dict['journal'], #
+    "year_pub" : dict["year"], #
+    "authors" : dict["authors"][:15], #first15 (if > 15, add character to end >)
+    "name" : dict["name"], #
+    "matrix_composite" : dict['matrix_composition_id'], #
+    "matrix_treatment" : dict['treatment_id'], #
+    "matrix_start_year" : dict['matrix_start_year'], #
+    "observation" : dict['observations'], #
+    "matrix_a_string" : dict['matrix_a_string'] #
+    }
+    return return_con(new_dict)
+
+def similar(a, b):
+    from difflib import SequenceMatcher
+    return SequenceMatcher(None, a, b).ratio()
+
+@manager.command
+def csv_dupes():
+    import csv
+
+    input_file = csv.DictReader(open("app/compadre/compadreFlat3.csv", "rU"))
+
+    all_deets = []   
+
+    for i, row in enumerate(input_file):                    
+        data = convert_all_headers(row)
+        all_deets.append(create_id_string(data))
+
+    f = open("dupes.txt","a")
+    
+    for n, item in enumerate(all_deets):
+        print "\n ["+str(n)+"]", item, "\n Checking for duplicates. Ratios above 0.75 similarity as follows: \n \n"
+        f.write("\n ["+str(n)+"] " + item + "\n Checking for duplicates. Ratios above 0.75 similarity as follows: \n \n")
+        for i, detail in enumerate(all_deets):
+            ratio = similar(item, detail)
+            if ratio > 0.75:
+                print "[" + str(i) + "]", detail, "[" + str(ratio) + "] \n \n"
+                f.write("[" + str(i) + "] "+ detail + "[" + str(ratio) + "] \n \n")
+        print "------------------------------------"
+        f.write("------------------------------------")
+
+    f.close()
+
+    return
 
 def convert_all_headers(dict):
 
@@ -337,6 +391,7 @@ def convert_all_headers(dict):
     new_dict['study_duration'] = dict['StudyDuration']
     new_dict['matrix_values_c'] = dict['matrixC']
     new_dict['geometries_lat_we'] = dict['LonWE']
+    new_dict['journal'] = dict['Journal']
     new_dict['infraspecies_accepted'] = dict['InfraspecificAccepted']
     new_dict['matrix_values_a'] = dict['matrixA']
     new_dict['matrix_a_string'] = dict['matrixA']
@@ -396,6 +451,7 @@ def convert_all_headers(dict):
     new_dict['matrix_split'] = dict['MatrixSplit']
 
     return new_dict
+
 
 @manager.command
 def migrate_meta():
