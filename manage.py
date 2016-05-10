@@ -327,10 +327,13 @@ def coerce_date(dict, typeof):
     #CREATE DATE
 
 def return_con(obj):
+    import re, string
     joined =''.join([value for key, value in obj.items()])
     lower = joined.lower()
-    stripped = lower #lower.replace(' ', '')
-    return stripped
+    stripped = lower.replace(' ', '')
+    alphanumeric = re.sub('[\W_]+', '', stripped)
+
+    return lower
 
 def create_id_string(dict):
     new_dict = {
@@ -357,28 +360,71 @@ def csv_dupes():
 
     input_file = csv.DictReader(open("app/compadre/compadreFlat3.csv", "rU"))
 
-    all_deets = []   
+    all_data = []
+    all_ids = []   
 
     for i, row in enumerate(input_file):                    
         data = convert_all_headers(row)
-        all_deets.append(create_id_string(data))
+        all_ids.append(create_id_string(data))
+        all_data.append(data)
 
-    f = open("dupes.txt","a")
     
-    for n, item in enumerate(all_deets):
-        print "\n ["+str(n)+"]", item, "\n Checking for duplicates. Ratios above 0.75 similarity as follows: \n \n"
-        f.write("\n ["+str(n)+"] " + item + "\n Checking for duplicates. Ratios above 0.75 similarity as follows: \n \n")
-        for i, detail in enumerate(all_deets):
-            ratio = similar(item, detail)
-            if ratio > 0.75:
-                print "[" + str(i) + "]", detail, "[" + str(ratio) + "] \n \n"
-                f.write("[" + str(i) + "] "+ detail + "[" + str(ratio) + "] \n \n")
-        print "------------------------------------"
-        f.write("------------------------------------")
+    
+    spot_vals = [67, 142, 678, 1389, 4454]
+
+    # Check each against all others
+    f = open("dupes.csv","a")
+    for n, item in enumerate(all_data):
+        if n in spot_vals:
+            species_accepted = item['species_accepted']
+            authors = item['authors'][:15]            
+            uid = create_id_string(item)
+            f.write('Index, Species Accepted, Journal, Authors (capped to 15), Population Name, UID, Ratio\n')
+            temp_ratio = []
+            for i, detail in enumerate(all_data):
+                record_species = detail['species_accepted']
+                record_journal = detail['journal'].replace(",", "")
+                record_authors = detail['authors'].replace(",", "")[:15] 
+                record_population = detail['name'].replace(",", "")
+                record_uid = create_id_string(detail)
+                record_uid = record_uid.replace(",", "")
+                ratio = similar(uid, record_uid)
+                if ratio >= 0.75:
+                    f.write('{},{},{},{},{},{},{}\n'.format(i, record_species, record_journal, record_authors, record_population, record_uid, ratio))
+                    temp_ratio.append(ratio)
+                # if species_accepted == record_species:
+                #     f.write('{},{},{},{},{},{},{}\n'.format(i, record_species, record_journal, record_authors, record_population, record_uid, ratio))
+                #     temp_ratio.append(ratio)
+                # if authors == record_authors:
+                #     f.write('{},{},{},{},{},{},{}\n'.format(i, record_species, record_journal, record_authors, record_population, record_uid, ratio))
+                #     temp_ratio.append(ratio)
+            mini = min(temp_ratio)
+            maxi = max(temp_ratio)
+            average = sum(temp_ratio) / float(len(temp_ratio))
+            length = len(temp_ratio)
+            f.write('Count, Minimum, Maximum, Average\n{},{},{},{}\n'.format(length, mini, maxi, average))
 
     f.close()
 
-    return
+    # Check spot check indexes against all others of species name for similarity
+    # f = open("species_check.csv", "a")
+    # for i, row in enumerate(all_data):
+    #     if i in spot_vals:
+    #         species_accepted = row['species_accepted']            
+    #         uid = create_id_string(row)
+    #         f.write('Index, Species Accepted, Journal, Authors, Population Name, UID, Ratio\n')
+    #         for n, record in enumerate(all_data):
+    #             record_species = record['species_accepted']
+    #             record_uid = create_id_string(record)
+    #             record_journal = record['journal']
+    #             record_authors = record['authors']
+    #             record_population = record['name']
+    #             record_uid = record_uid.replace(",", "")
+    #             if species_accepted == record_species:
+    #                 print '{},{},{},{}\n'.format(n, record_species, record_uid, similar(uid, record_uid))
+    #                 f.write('{},{},{},{}\n'.format(n, record_species, record_uid, similar(uid, record_uid)))
+    # f.close()
+    # return
 
 def convert_all_headers(dict):
 
