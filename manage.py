@@ -333,7 +333,7 @@ def return_con(obj):
     stripped = lower.replace(' ', '')
     alphanumeric = re.sub('[\W_]+', '', stripped)
 
-    return lower
+    return alphanumeric
 
 def create_id_string(dict):
     new_dict = {
@@ -370,61 +370,63 @@ def csv_dupes():
 
     
     
-    spot_vals = [67, 142, 678, 1389, 4454]
+    spot_vals = [67, 142, 678, 1389, 4454, 5172, 295]
 
     # Check each against all others
-    f = open("dupes.csv","a")
+    f = open("dupes_96.csv","a")
     for n, item in enumerate(all_data):
         if n in spot_vals:
             species_accepted = item['species_accepted']
-            authors = item['authors'][:15]            
+            authors = item['authors'][:15]
+            journal = item['journal'].replace(",", "")
+            population = item['name'].replace(",", "")
+            matrix_composite = item['matrix_composition_id'].replace(",", "") 
+            matrix_treatment = item['treatment_id'].replace(",", "") 
+            matrix_start_year = item['matrix_start_year'].replace(",", "") 
+            observation = item['observations'].replace(",", "") 
+            matrix_a_string = item['matrix_a_string'].replace(",", "")        
             uid = create_id_string(item)
-            f.write('Index, Species Accepted, Journal, Authors (capped to 15), Population Name, UID, Ratio\n')
+            f.write('Index, Species Accepted, Journal, Authors (capped to 15), Population Name, Matrix Composite, Matrix Treatment, Matrix Start Year, Observation, Matrix A String, UID, Ratio\n')
+            f.write('{},{},{},{},{},{},{},{},{},{},{},{}\n'.format(n, species_accepted, journal, authors, population, matrix_composite, matrix_treatment, matrix_start_year, observation, matrix_a_string, uid, 1))
             temp_ratio = []
             for i, detail in enumerate(all_data):
                 record_species = detail['species_accepted']
                 record_journal = detail['journal'].replace(",", "")
                 record_authors = detail['authors'].replace(",", "")[:15] 
                 record_population = detail['name'].replace(",", "")
+                record_matrix_composite = detail['matrix_composition_id'].replace(",", "") 
+                record_matrix_treatment = detail['treatment_id'].replace(",", "") 
+                record_matrix_start_year = detail['matrix_start_year'].replace(",", "") 
+                record_observation = detail['observations'].replace(",", "") 
+                record_matrix_a_string = detail['matrix_a_string'].replace(",", "")
                 record_uid = create_id_string(detail)
                 record_uid = record_uid.replace(",", "")
                 ratio = similar(uid, record_uid)
-                if ratio >= 0.75:
-                    f.write('{},{},{},{},{},{},{}\n'.format(i, record_species, record_journal, record_authors, record_population, record_uid, ratio))
-                    temp_ratio.append(ratio)
+
+                if ratio >= 0.96:
+                    if i != n:
+                        print '{},{},{},{},{},{},{},{},{},{},{},{}\n'.format(i, record_species, record_journal, record_authors, record_population, record_matrix_composite, record_matrix_treatment, record_matrix_start_year, record_observation, record_matrix_a_string, record_uid, ratio)
+                        f.write('{},{},{},{},{},{},{},{},{},{},{},{}\n'.format(i, record_species, record_journal, record_authors, record_population, record_matrix_composite, record_matrix_treatment, record_matrix_start_year, record_observation, record_matrix_a_string, record_uid, ratio))
+                        temp_ratio.append(ratio)
                 # if species_accepted == record_species:
                 #     f.write('{},{},{},{},{},{},{}\n'.format(i, record_species, record_journal, record_authors, record_population, record_uid, ratio))
                 #     temp_ratio.append(ratio)
                 # if authors == record_authors:
                 #     f.write('{},{},{},{},{},{},{}\n'.format(i, record_species, record_journal, record_authors, record_population, record_uid, ratio))
                 #     temp_ratio.append(ratio)
-            mini = min(temp_ratio)
-            maxi = max(temp_ratio)
-            average = sum(temp_ratio) / float(len(temp_ratio))
-            length = len(temp_ratio)
-            f.write('Count, Minimum, Maximum, Average\n{},{},{},{}\n'.format(length, mini, maxi, average))
+            
+            if temp_ratio:
+                mini = min(temp_ratio)
+                maxi = max(temp_ratio)
+                average = sum(temp_ratio) / float(len(temp_ratio))
+                length = len(temp_ratio)
+                print 'Count, Minimum, Maximum, Average\n{},{},{},{}\n\n'.format(length, mini, maxi, average)
+                f.write('Count, Minimum, Maximum, Average\n{},{},{},{}\n'.format(length, mini, maxi, average))
+            else:
+                print 'Count, Minimum, Maximum, Average\n{},{},{},{}\n\n'.format(0, 0, 0, 0)
+                f.write('Count, Minimum, Maximum, Average\n{},{},{},{}\n'.format(0, 0, 0, 0))
 
     f.close()
-
-    # Check spot check indexes against all others of species name for similarity
-    # f = open("species_check.csv", "a")
-    # for i, row in enumerate(all_data):
-    #     if i in spot_vals:
-    #         species_accepted = row['species_accepted']            
-    #         uid = create_id_string(row)
-    #         f.write('Index, Species Accepted, Journal, Authors, Population Name, UID, Ratio\n')
-    #         for n, record in enumerate(all_data):
-    #             record_species = record['species_accepted']
-    #             record_uid = create_id_string(record)
-    #             record_journal = record['journal']
-    #             record_authors = record['authors']
-    #             record_population = record['name']
-    #             record_uid = record_uid.replace(",", "")
-    #             if species_accepted == record_species:
-    #                 print '{},{},{},{}\n'.format(n, record_species, record_uid, similar(uid, record_uid))
-    #                 f.write('{},{},{},{}\n'.format(n, record_species, record_uid, similar(uid, record_uid)))
-    # f.close()
-    # return
 
 def convert_all_headers(dict):
 
