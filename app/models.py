@@ -1550,6 +1550,7 @@ class MatrixValue(db.Model):
 class Matrix(db.Model):
     __tablename__ = 'matrices'
     id = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.String(500), index=True, unique=True)
     population_id = db.Column(db.Integer, db.ForeignKey('populations.id'))
     treatment_id = db.Column(db.Integer, db.ForeignKey('treatment_types.id'))
     matrix_split = db.Column(db.Boolean())
@@ -1591,6 +1592,42 @@ class Matrix(db.Model):
         Season.migrate()
         StudiedSex.migrate()
         Captivity.migrate()
+
+    # Generate UID for this Matrix
+    def create_uid(self):
+        import re
+        species_accepted = self.population.species.species_accepted
+        journal = self.population.publication.pub_title
+        year_pub = self.population.publication.year
+        authors = self.population.publication.authors[:15].encode('utf-8')
+        pop_name = self.population.name.encode('utf-8')
+        
+        try:
+            composite = self.matrix_composition.comp_name
+        except AttributeError:
+            composite = ''
+
+        treatment = self.treatment.type_name
+        try:
+            start_year = self.matrix_start[-4:]
+        except TypeError:
+            start_year = ''
+
+        observation = self.observations.encode('utf-8')
+        matrix_a_string = self.matrix_a_string
+
+        print(species_accepted, journal, year_pub, authors, pop_name, composite, treatment, start_year, observation, matrix_a_string)
+        uid_concat = '{}{}{}{}{}{}{}{}{}{}'.format(species_accepted, journal, year_pub, authors, pop_name, composite, treatment, start_year, observation, matrix_a_string)
+        uid_lower = uid_concat.lower()
+        uid = re.sub('[\W_]+', '', uid_lower)
+
+        self.uid = uid
+        if Matrix.query.filter_by(uid=uid).first() == None:
+            db.session.add(self)
+            db.session.commit()
+            return uid
+        else:
+            return print("UID already exists")
 
     def to_json(self, key):
         try:
