@@ -49,4 +49,7 @@ def create_app(config_name):
     from .user_guide import user_guide as user_guide_blueprint
     app.register_blueprint(user_guide_blueprint, url_prefix='/user-guide')
 
+    from .compadre import compadre as compadre_blueprint
+    app.register_blueprint(compadre_blueprint, url_prefix='/compadre')
+
     return app

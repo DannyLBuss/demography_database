@@ -7,6 +7,172 @@ class Entry:
 		self.plant_trait = plant_trait
 		self.matrix = matrix
 
+	# Submit to the database
+	def submit_to_database(self):
+	    import json, re
+
+	    ''' Species '''
+	    species = Species.query.filter_by(species_accepted=self.taxonomy.species_accepted).first()
+	    if species == None:
+	        species = Species(species_accepted=self.taxonomy.species_accepted)
+	    db.session.add(species)
+	    db.session.commit()
+
+	    ''' Publication '''
+	    publication = Publication.query.filter_by(DOI_ISBN=self.publication.DOI_ISBN).first()
+	    if publication == None:
+	        publication = Publication()
+	        publication.authors = self.publication.authors
+	        publication.year = self.publication.year
+	        publication.DOI_ISBN = self.publication.DOI_ISBN
+	        publication.additional_source_string = self.publication.additional_source_string
+	        publication.pub_title = self.publication.pub_name
+	        db.session.add(publication)
+	        db.session.commit()
+
+	    ''' Plant Trait '''
+	    trait = PlantTrait.query.filter_by(species_id=species.id).first()
+	    if trait == None:
+	        trait = PlantTrait()
+	        growth_type = GrowthType.query.filter_by(type_name=self.plant_trait.growth_type_id).first()
+	        if growth_type != None:
+	            trait.growth_type_id = growth_type.id
+	        dicot_monoc = DicotMonoc.query.filter_by(dicot_monoc_name=self.plant_trait.dicot_monoc_id).first()
+	        if dicot_monoc != None:
+	            trait.dicot_monoc_id = dicot_monoc.id
+	        angio_gymno = AngioGymno.query.filter_by(angio_gymno_name=self.plant_trait.angio_gymno_id).first()
+	        if angio_gymno != None:
+	            trait.angio_gymno_id = angio_gymno.id
+	        trait.species_id = species.id
+	        db.session.add(trait)
+	        db.session.commit()
+
+	    ''' Study '''
+	    study = Study.query.filter_by(publication_id=publication.id, study_start=self.study.study_start, study_end=self.study.study_end).first()
+	    if study == None:
+	        study = Study()
+	        if self.study.study_duration != 'NA':
+	            study.study_duration = self.study.study_duration
+
+	        if self.study.study_start != 'NA':
+	            study.study_start = self.study.study_start
+
+	        if self.study.study_end != 'NA':
+	            study.study_end = self.study.study_end
+
+	        study.publication_id = publication.id
+	        db.session.add(study)
+	        db.session.commit()
+
+	    ''' Population '''
+	    pop = Population.query.filter_by(geometries=json.dumps(self.population.geometries), species_id=species.id, publication_id=publication.id).first()
+	    if pop == None:
+	        pop = Population()
+	        pop.species_author = self.population.species_author
+	        pop.name = self.population.name.encode('utf-8')   
+	        ecoregion = Ecoregion.query.filter_by(ecoregion_code=self.population.ecoregion_id).first()
+	        if ecoregion != None:
+	            pop.ecoregion_id = ecoregion.id
+	        pop.country = self.population.country    
+	        continent = Continent.query.filter_by(continent_name=self.population.continent_id).first()
+	        if continent != None:
+	            pop.continent_id = continent.id
+	        pop.geometries = json.dumps(self.population.geometries)
+	        pop.species_id = species.id
+	        pop.publication_id = publication.id
+	        pop.study_id = study.id
+	        db.session.add(pop)
+	        db.session.commit()
+
+	    ''' Taxonomy '''
+	    tax = Taxonomy.query.filter_by(species_id=species.id).first()
+	    if tax == None:
+	        tax = Taxonomy()
+	        tax.species_author = self.taxonomy.species_author
+	        tax.species_accepted = self.taxonomy.species_accepted
+	        tax.authority = self.taxonomy.authority
+	        tax.tpl_version = self.taxonomy.tpl_version    
+	        tax_status = TaxonomicStatus.query.filter_by(status_name=self.taxonomy.taxonomic_status_id).first()
+	        if tax_status != None:
+	            tax.taxonomic_status_id = tax_status.id
+	        tax.infraspecies_accepted = self.taxonomy.infraspecies_accepted
+	        tax.species_epithet_accepted = self.taxonomy.species_epithet_accepted
+	        tax.genus_accepted = self.taxonomy.genus_accepted
+	        tax.genus = self.taxonomy.genus
+	        tax.family = self.taxonomy.family
+	        tax.tax_order = self.taxonomy.tax_order
+	        tax.tax_class = self.taxonomy.tax_class
+	        tax.phylum = self.taxonomy.phylum
+	        tax.kingdom = self.taxonomy.kingdom
+	        tax.species_id = species.id
+	        tax.publication_id = publication.id
+	        db.session.add(tax)
+	        db.session.commit()
+
+	    ''' Matrix '''
+	    matrix = Matrix()
+	    treatment_type = TreatmentType.query.filter_by(type_name=self.matrix.treatment_id).first()
+	    if treatment_type == None:
+	        treatment_type = TreatmentType(type_name=self.matrix.treatment_id)
+	        db.session.add(treatment_type)
+	        db.session.commit()
+	    matrix.treatment_id = treatment_type.id
+	    matrix.treatment_type_id = treatment_type.id
+	    matrix.matrix_split = coerce_boolean(self.matrix.matrix_split)
+	    comp_id = MatrixComposition.query.filter_by(comp_name=self.matrix.matrix_composition_id).first()
+	    if comp_id != None:
+	        matrix.matrix_composition_id = comp_id.id  
+
+	    if self.matrix.survival_issue != 'NA':  
+	        matrix.survival_issue = float(self.matrix.survival_issue)
+	    
+	    matrix.periodicity = self.matrix.periodicity
+	    matrix.matrix_criteria_size = coerce_boolean(self.matrix.matrix_criteria_size)
+	    matrix.matrix_criteria_ontogeny = coerce_boolean(self.matrix.matrix_criteria_ontogeny)
+	    matrix.matrix_criteria_age = coerce_boolean(self.matrix.matrix_criteria_age) 
+	    matrix.matrix_start = coerce_date(self.matrix.matrix_start, 'start') #Coerced into date conidering NA
+	    matrix.matrix_end = coerce_date(self.matrix.matrix_end , 'end') #Coerced into date considering NA
+	    start_id = Season.query.filter_by(season_name=self.matrix.matrix_start_season_id).first()
+
+
+	    if self.matrix.matrix_start_season_id != 'NA':
+	        try:
+	            start_id = Season.query.filter_by(season_id=int(self.matrix.matrix_start_season_id)).first()
+	        except ValueError:
+	            pass
+
+	    if start_id != None:
+	        matrix.matrix_start_season_id = start_id.id
+
+	    if self.matrix.matrix_end_season_id != 'NA':
+	        try:
+	            end_id = Season.query.filter_by(season_id=int(self.matrix.matrix_end_season_id)).first()
+	        except ValueError:
+	            pass
+	    
+	    end_id = Season.query.filter_by(season_name=self.matrix.matrix_end_season_id).first()
+	    if end_id != None:
+	        matrix.matrix_end_season_id = end_id.id
+	        
+	    matrix.matrix_fec = coerce_boolean(self.matrix.matrix_fec)
+	    matrix.matrix_a_string = self.matrix.matrix_a_string
+	    matrix.matrix_class_string = self.matrix.matrix_class_string
+	    sex_id = StudiedSex.query.filter_by(sex_code=self.matrix.studied_sex_id).first()
+	    if sex_id != None:
+	        matrix.studied_sex_id = sex_id.id
+	    cap_id = Captivity.query.filter_by(cap_code=self.matrix.captivity_id).first()
+	    if cap_id != None:
+	        matrix.captivity_id = cap_id.id
+	    matrix.matrix_dimension = int(self.matrix.matrix_dimension)
+	    matrix.observations = self.matrix.observations
+	    matrix.population_id = pop.id
+	    matrix.study_id = study.id
+	    db.session.add(matrix)   
+	    db.session.commit()
+	    matrix.create_uid()
+
+	    return 
+
 	def __repr__(self):
 		return '<Entry %r>' % vars(self)
 
@@ -32,7 +198,7 @@ class Taxonomy:
 
 
 class Publication:
-	def __init__(self, authors, year, DOI_ISBN, additional_source_string, taxonomy, population, plant_trait, study):
+	def __init__(self, authors, year, DOI_ISBN, additional_source_string, taxonomy, population, plant_trait, study, pub_name):
 		self.authors = authors
 		self.year = year
 		self.DOI_ISBN = DOI_ISBN
@@ -41,6 +207,7 @@ class Publication:
 		self.population = population
 		self.plant_trait = plant_trait
 		self.study = study
+		self.pub_name = pub_name
 		# studies
 
 	def __repr__(self):

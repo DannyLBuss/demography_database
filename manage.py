@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
+import os, csv
 COV = None
 if os.environ.get('FLASK_COVERAGE'):
     import coverage
@@ -75,33 +75,47 @@ def profile(length=25, profile_dir=None):
                                       profile_dir=profile_dir)
     app.run()
 
+def UnicodeDictReader(utf8_data, **kwargs):
+    csv_reader = csv.DictReader(utf8_data, **kwargs)
+    for row in csv_reader:
+        yield {key: unicode(value, 'latin-1') for key, value in row.iteritems()}
+
+
 @manager.command
 def csv_migrate():
     import csv
 
-    input_file = csv.DictReader(open("app/compadre/compadreFlat3.csv"))
+    input_file = UnicodeDictReader(open("app/compadre/compadreFlat3.csv", "rU"))
 
     all_deets = []   
 
-    for i, row in enumerate(input_file):                      
-        data = convert_all_headers(row)
-        entry = add_to_classes(data)
-        all_deets.append(entry)
-        submit(entry)
+    for i, row in enumerate(input_file):
+        if i > 6235:                      
+            data = convert_all_headers(row)
+            entry = add_to_classes(data)
+            all_deets.append(entry)
+            submit(entry)
     return 
 
 @manager.command
 def delete_table_data():
-    Taxonomy.query.delete()
-    Matrix.query.delete()
-    Population.query.delete()
-    Study.query.delete()    
-    Publication.query.delete()    
-    PlantTrait.query.delete()
-    Species.query.delete()
-    db.session.commit()
+    response = raw_input("Are you sure you want to delete all data? (y/n): ")
 
-    print "All data has been removed"
+    if response == "y":
+        Taxonomy.query.delete()
+        Matrix.query.delete()
+        Population.query.delete()
+        Study.query.delete()    
+        Publication.query.delete()    
+        PlantTrait.query.delete()
+        Species.query.delete()
+        db.session.commit()
+        print "All data has been removed"
+    elif response == "n":
+        print "Table data not deleted"
+        pass
+    else:
+        print("Valid response required (y/n)")
     return    
 
 def add_to_classes(data):
@@ -118,14 +132,14 @@ def add_to_classes(data):
         data['geometries_lat_sec'], data['geometries_lon_sec'], data['geometries_lon_min'], data['geometries_lat_deg'], data['geometries_altitude'], data['ecoregion_id'], \
         data['country'], data['continent_id'], matrix)
     trait = PlantTrait(data['growth_type_id'], data['dicot_monoc_id'], data['angio_gymno_id'])
-    pub = Publication(data['authors'], data['year'], data['DOI_ISBN'], data['additional_source_string'], tax, pop, trait, study)
+    pub = Publication(data['authors'], data['year'], data['DOI_ISBN'], data['additional_source_string'], tax, pop, trait, study, data['pub_name'])
 
     entry = Entry(pub, study, pop, tax, trait, matrix)
     
     return entry
 
 def submit(entry):
-    import json
+    import json, re
 
     ''' Species '''
     species = Species.query.filter_by(species_accepted=entry.taxonomy.species_accepted).first()
@@ -142,6 +156,7 @@ def submit(entry):
         publication.year = entry.publication.year
         publication.DOI_ISBN = entry.publication.DOI_ISBN
         publication.additional_source_string = entry.publication.additional_source_string
+        publication.pub_title = entry.publication.pub_name
         db.session.add(publication)
         db.session.commit()
 
@@ -184,7 +199,7 @@ def submit(entry):
     if pop == None:
         pop = Population()
         pop.species_author = entry.population.species_author
-        pop.name = entry.population.name    
+        pop.name = entry.population.name.encode('utf-8')   
         ecoregion = Ecoregion.query.filter_by(ecoregion_code=entry.population.ecoregion_id).first()
         if ecoregion != None:
             pop.ecoregion_id = ecoregion.id
@@ -251,7 +266,6 @@ def submit(entry):
 
 
     if entry.matrix.matrix_start_season_id != 'NA':
-        print entry.matrix.matrix_start_season_id
         try:
             start_id = Season.query.filter_by(season_id=int(entry.matrix.matrix_start_season_id)).first()
         except ValueError:
@@ -261,7 +275,6 @@ def submit(entry):
         matrix.matrix_start_season_id = start_id.id
 
     if entry.matrix.matrix_end_season_id != 'NA':
-        print entry.matrix.matrix_end_season_id
         try:
             end_id = Season.query.filter_by(season_id=int(entry.matrix.matrix_end_season_id)).first()
         except ValueError:
@@ -284,8 +297,9 @@ def submit(entry):
     matrix.observations = entry.matrix.observations
     matrix.population_id = pop.id
     matrix.study_id = study.id
-    db.session.add(matrix)
-    # db.session.commit()
+    db.session.add(matrix)   
+    db.session.commit()
+    matrix.create_uid()
 
     return 
 
@@ -355,7 +369,7 @@ def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
 
 @manager.command
-def csv_dupes():
+def duplicates():
     import csv
 
     input_file = csv.DictReader(open("app/compadre/compadreFlat3.csv", "rU"))
@@ -429,6 +443,7 @@ def csv_dupes():
     f.close()
 
 def convert_all_headers(dict):
+    import re
 
     new_dict = {}
 
@@ -470,6 +485,7 @@ def convert_all_headers(dict):
     new_dict['angio_gymno_id'] = dict['AngioGymno']
     new_dict['matrix_criteria_ontogeny'] = dict['CriteriaOntogeny']
     new_dict['year'] = dict['YearPublication']
+    new_dict['pub_name'] = dict['Journal']
     new_dict['species_accepted'] = dict['SpeciesAccepted']
     new_dict['periodicity'] = dict['AnnualPeriodicity']
     new_dict['matrix_end_year'] = dict['MatrixEndYear']
