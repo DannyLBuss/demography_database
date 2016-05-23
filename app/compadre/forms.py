@@ -135,8 +135,9 @@ class EntryForm(Form):
 	plant_traits = FormField(PlantTraitForm)
 	population = FormField(PopulationForm)
 	publication = FormField(PublicationForm)
-	study = FormField(StudyForm)
 	matrix = FormField(MatrixForm)
+	study = FormField(StudyForm)
+	
 
 
 
