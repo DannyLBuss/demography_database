@@ -284,7 +284,7 @@ class IUCNStatus(db.Model):
             
 
     def __repr__(self):
-        return '<IUCN Status %r>' % self.id
+        return '{} - {} ({})'.format(self.status_code, self.status_name, self.status_description)
 
 class ESAStatus(db.Model):
     __tablename__ = 'esa_statuses'
@@ -314,7 +314,8 @@ class ESAStatus(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<ESA Status %r>' % self.id
+        return '{} - {}'.format(self.status_code, self.status_name)
+
 ''' End Meta Tables for Species '''
 
 ''' Meta Tables for Taxonomy '''
@@ -348,7 +349,7 @@ class TaxonomicStatus(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Taxonomic Status %r>' % self.id
+        return '{} - {}'.format(self.status_name, self.status_description)
 ''' End Meta Tables for Taxonomy '''
 
 ''' Meta Tables for Plant Traits '''
@@ -377,7 +378,7 @@ class GrowthType(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Growth Type %r>' % self.id
+        return self.type_name
 
 class GrowthFormRaunkiaer(db.Model):
     __tablename__ = 'growth_forms_raunkiaer'
@@ -404,7 +405,7 @@ class GrowthFormRaunkiaer(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Growth Form Raunkiaer %r>' % self.id
+        return self.form_name
 
 class ReproductiveRepetition(db.Model):
     __tablename__ = 'reproductive_repetition'
@@ -432,7 +433,7 @@ class ReproductiveRepetition(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Reproductive Repetition %r>' % self.id
+        return self.repetition_name
 
 class DicotMonoc(db.Model):
     __tablename__ = 'dicot_monoc'
@@ -459,7 +460,7 @@ class DicotMonoc(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Dicot Monoc %r>' % self.id
+        return self.dicot_monoc_name
 
 class AngioGymno(db.Model):
     __tablename__ = 'angio_gymno'
@@ -486,7 +487,8 @@ class AngioGymno(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Angio Gymno %r>' % self.id
+        return self.angio_gymno_name
+
 ''' End Meta Tables for Plant Traits '''
 
 ''' Meta Tables for Publication/Additional Source '''
@@ -519,7 +521,7 @@ class SourceType(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Source Type %r>' % self.id
+        return '{} - {}'.format(self.source_name, self.source_description)
 
 class Database(db.Model):
     __tablename__ = 'databases'
@@ -577,7 +579,7 @@ class Purpose(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Purpose %r>' % self.id
+        return '{} - {}'.format(self.purpose_name, self.purpose_description)
 
 publication_purposes = db.Table('publication_purposes', db.Model.metadata,
     db.Column('id', db.Integer, primary_key=True),
@@ -612,7 +614,7 @@ class MissingData(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Missing Data %r>' % self.id
+        return '{} - {}'.format(self.missing_code, self.missing_description)
 
 
 publication_missing_data = db.Table('publication_missing_data', db.Model.metadata,
@@ -682,7 +684,7 @@ class Ecoregion(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Ecoregion %r>' % self.id
+        return '{} - {}'.format(self.ecoregion_code, self.ecoregion_description)
 
 class Continent(db.Model):
     __tablename__ = 'continents'
@@ -709,7 +711,7 @@ class Continent(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Continent %r>' % self.id
+        return self.continent_name
 ''' End Meta Tables for Population '''
 
 ''' Meta Tables for Stage Type '''
@@ -798,7 +800,7 @@ class MatrixComposition(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Matrix Composition %r>' % self.id
+        return self.comp_name
 
 class Season(db.Model):
     __tablename__ = 'seasons'
@@ -827,7 +829,7 @@ class Season(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Season %r>' % self.id
+        return '{} - {}'.format(self.season_id, self.season_name)
 
 class StudiedSex(db.Model):
     __tablename__ = 'studied_sex'
@@ -856,7 +858,7 @@ class StudiedSex(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Studied Sex %r>' % self.id
+        return '{} - {}'.format(self.sex_code, self.sex_description)
 
 class Captivity(db.Model):
     __tablename__ = 'captivities'
@@ -885,7 +887,7 @@ class Captivity(db.Model):
                 db.session.commit()
 
     def __repr__(self):
-        return '<Captivity %r>' % self.id
+        return '{} - {}'.format(self.cap_code, self.cap_description)
 ''' End Meta Tables for Matrix '''
 
 ''' Meta Tables for Fixed '''
