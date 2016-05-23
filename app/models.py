@@ -1627,7 +1627,8 @@ class Matrix(db.Model):
             db.session.commit()
             return uid
         else:
-            return print("UID already exists")
+            print("UID already exists")
+            return 
 
     def to_json(self, key):
         try:
