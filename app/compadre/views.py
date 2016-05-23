@@ -4,6 +4,7 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import compadre
 from .. import db
+from forms import EntryForm, SpeciesForm, TaxonomyForm, PlantTraitForm, PopulationForm, PublicationForm, StudyForm, MatrixForm
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
@@ -13,6 +14,10 @@ from ..models import Permission, Role, User, \
 from ..decorators import admin_required, permission_required, crossdomain
 
 # This blueprint handles the validation, error checking and duplicates. Basically ensuring that the database runs smoothly.
+@compadre.route('/')
+def homepage():
+    form = EntryForm()
+    return render_template('test.html', form=form)
 
 # return concetenated, cleansed UID string from dictionary
 def return_con(obj):

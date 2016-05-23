@@ -1,10 +1,11 @@
 from flask.ext.wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
-    SubmitField, QuerySelectField, DecimalField, IntegerField, DateField,\
+    SubmitField, DecimalField, IntegerField, DateField,\
     FormField
 from wtforms.validators import Required, Length, Email, Regexp
 from wtforms import ValidationError
 from flask.ext.pagedown.fields import PageDownField
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from ..models import IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
@@ -12,20 +13,7 @@ from ..models import IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthF
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, VectorAvailability, StageClassInfo, Small
 
 # THE SUPERFORM
-
-class EntryForm(form):
-	species = FormField(SpeciesForm)
-	taxonomy = FormField(TaxonomyForm)
-	plant_traits = FormField(PlantTraitForm)
-	populations = FormField(PopulationForm)
-	# taxonomies # Fkey
-	# plant_traits # Fkey
-	# populations # Fkey
-	# stages # Fkey
-	# publication
-	# study
-
-class SpeciesForm(form):
+class SpeciesForm(Form):
 	species_accepted = StringField('Species Accepted', validators=[Required(), Length(1, 64)])
 	iucn_status = QuerySelectField('IUCN Status',
             query_factory=lambda: IUCNStatus.query.all())
@@ -33,7 +21,7 @@ class SpeciesForm(form):
             query_factory=lambda: ESAStatus.query.all())
 	invasive_status = BooleanField('Invasive Status')
 
-class TaxonomyForm(form):
+class TaxonomyForm(Form):
 	species_author = StringField('Species Author', validators=[Required(), Length(1, 64)])
 	authority = StringField('Authority', validators=[Length(1, 64)])
 	taxonomic_status = QuerySelectField('Taxonomic Status',
@@ -49,7 +37,7 @@ class TaxonomyForm(form):
 	phylum = StringField('Phylum', validators=[Length(1, 64)])
 	kingdom = StringField('Kingdom', validators=[Length(1, 64)])
 
-class PublicationForm(form):
+class PublicationForm(Form):
 	source_type = QuerySelectField('Source Type',
             query_factory=lambda: SourceType.query.all())
 	authors = StringField('Publication Authors', validators=[Required()])
@@ -68,7 +56,7 @@ class PublicationForm(form):
 	corresponding_author = StringField('Corresponding Author')
 	email = StringField('Email Address', validators=[Email()])
 	purposes = QuerySelectField('Purposes',
-            query_factory=lambda: Purposes.query.all())
+            query_factory=lambda: Purpose.query.all())
 	embargo = DateField('Embargo')
 	missing_data = QuerySelectField('Missing Data',
             query_factory=lambda: MissingData.query.all())
@@ -76,13 +64,12 @@ class PublicationForm(form):
 	# author_contacts # Fkey
 	# additional_sources # Fkey	
 
-class StudyForm(form):
+class StudyForm(Form):
 	study_duration = IntegerField('Study Duration')
 	study_start = IntegerField('Study Start')
 	study_end = IntegerField('Study End')
 
-class PopulationForm(form):
-	species_author
+class PopulationForm(Form):
 	name = StringField('Population Name', validators=[Required()])
 	ecoregion = QuerySelectField('Ecoregion',
             query_factory=lambda: Ecoregion.query.all())
@@ -99,7 +86,7 @@ class PopulationForm(form):
 	lat_deg = StringField('Lat Deg')
 	lon_deg = StringField('Lon Deg')
 
-class PlantTraitForm(form):
+class PlantTraitForm(Form):
 	max_height = StringField('Max Height')
 	growth_type = QuerySelectField('Growth Type',
             query_factory=lambda: GrowthType.query.all())
@@ -112,13 +99,13 @@ class PlantTraitForm(form):
 	angio_gymno = QuerySelectField('Angio Gymno',
             query_factory=lambda: AngioGymno.query.all())
 
-class Matrix(form):
+class MatrixForm(Form):
 	treatment = StringField('Treatment') #Fkey (not set)
 	matrix_split = IntegerField('Matrix Split')
 	matrix_composition = QuerySelectField('Matrix Composition',
             query_factory=lambda: MatrixComposition.query.all())
 	survival_issue = DecimalField('Survival Issue')
-	n_intervals = DecimalFild('Number of Intervals')
+	n_intervals = DecimalField('Number of Intervals')
 	periodicity = IntegerField('Periodicity')
 	matrix_criteria_size = IntegerField('Matrix Criteria Size')
 	matrix_criteria_ontogeny = IntegerField('Matrix Criteria Ontogeny')
@@ -141,6 +128,15 @@ class Matrix(form):
             query_factory=lambda: Captivity.query.all())
 	matrix_dimension = IntegerField('Matrix Dimension')
 	observations = TextAreaField('Observations', validators=[Required()])
+
+class EntryForm(Form):
+	species = FormField(SpeciesForm)
+	taxonomy = FormField(TaxonomyForm)
+	plant_traits = FormField(PlantTraitForm)
+	population = FormField(PopulationForm)
+	publication = FormField(PublicationForm)
+	study = FormField(StudyForm)
+	matrix = FormField(MatrixForm)
 
 
 
