@@ -12,9 +12,53 @@ from ..models import IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthF
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, VectorAvailability, StageClassInfo, Small
 
-# THE SUPERFORM
+def stringFromText(string):
+    #Formatting string and separating for use as a list
+    #string usually contained within [], remove these
+    if string.startswith('[') and string.endswith(']'):
+        string = string[1:-1]
+        matrix = []
+        xl = string.split(' ')
+        for x in xl:
+            # print x
+            if x != '':
+                if x == 'NA':
+                    matrix.append(0)
+                else:
+                    if x == 'NDY':
+                        matrix.append(0)
+                    else:
+                        matrix.append(float(x.strip()))
+
+        return matrix
+
+
+def classNamesFromText(string):
+    classNames = string.split('|')
+    return classNames
+
+def dimensionSquared(classnames, matrix):
+    m = len(matrix)
+    c = len(classnames)
+    s = len(classnames)*len(classnames)
+
+    if s == m:
+        return True
+    else:
+        return False
+
+def dimensionSize(classnames):
+    return len(classnames)
+
+def validate_dimension(matrix, classnames):
+    classnames = classNamesFromText(classnames)
+    matrix = stringFromText(matrix)
+    squared = dimensionSquared(classnames, matrix)
+    dimension = dimensionSize(classnames)
+    return squared
+
 class SpeciesForm(Form):
-	species_accepted = StringField('Species Accepted *', validators=[Required(), Length(1, 64)])
+	species_accepted = StringField('Species Accepted *', validators=[Required(), ])
 	iucn_status = QuerySelectField('IUCN Status',
             query_factory=lambda: IUCNStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {} ({})'.format(a.status_code, a.status_name, a.status_description))
@@ -26,21 +70,21 @@ class SpeciesForm(Form):
 	submit = SubmitField('Submit')
 
 class TaxonomyForm(Form):
-	species_author = StringField('Species Author *', validators=[Required(), Length(1, 64)])
-	authority = StringField('Authority', validators=[Length(1, 64)])
+	species_author = StringField('Species Author *', validators=[Required(), ])
+	authority = StringField('Authority', validators=[])
 	taxonomic_status = QuerySelectField('Taxonomic Status',
             query_factory=lambda: TaxonomicStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.status_name, a.status_description))
 	tpl_version = DecimalField('TPL Version')
-	infraspecies_accepted = StringField('Infraspecies Accepted', validators=[Length(1, 64)])
-	species_epithet_accepted = StringField('Species Epithet Accepted', validators=[Length(1, 64)])
-	genus_accepted = StringField('Genus Accepted', validators=[Length(1, 64)])
-	genus = StringField('Genus', validators=[Length(1, 64)])
-	family = StringField('Family', validators=[Length(1, 64)])
-	tax_order = StringField('Order', validators=[Length(1, 64)])
-	tax_class = StringField('Class', validators=[Length(1, 64)])
-	phylum = StringField('Phylum', validators=[Length(1, 64)])
-	kingdom = StringField('Kingdom', validators=[Length(1, 64)])
+	infraspecies_accepted = StringField('Infraspecies Accepted', validators=[])
+	species_epithet_accepted = StringField('Species Epithet Accepted', validators=[])
+	genus_accepted = StringField('Genus Accepted', validators=[])
+	genus = StringField('Genus', validators=[])
+	family = StringField('Family', validators=[])
+	tax_order = StringField('Order', validators=[])
+	tax_class = StringField('Class', validators=[])
+	phylum = StringField('Phylum', validators=[])
+	kingdom = StringField('Kingdom', validators=[])
 
 	submit = SubmitField('Submit')
 
@@ -153,7 +197,7 @@ class MatrixForm(Form):
 
 class EntryForm(Form):
 	# Species
-	species_accepted = StringField('Species Accepted *', validators=[Required(), Length(1, 64)])
+	species_accepted = StringField('Species Accepted *', validators=[Required(), ])
 	iucn_status = QuerySelectField('IUCN Status',
             query_factory=lambda: IUCNStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {} ({})'.format(a.status_code, a.status_name, a.status_description))
@@ -163,21 +207,21 @@ class EntryForm(Form):
 	invasive_status = BooleanField('Invasive Status')
 
 	# Taxonomy
-	species_author = StringField('Species Author *', validators=[Required(), Length(1, 64)])
-	authority = StringField('Authority', validators=[Length(1, 64)])
+	species_author = StringField('Species Author *', validators=[Required(), ])
+	authority = StringField('Authority', validators=[])
 	taxonomic_status = QuerySelectField('Taxonomic Status',
             query_factory=lambda: TaxonomicStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.status_name, a.status_description))
 	tpl_version = DecimalField('TPL Version')
-	infraspecies_accepted = StringField('Infraspecies Accepted', validators=[Length(1, 64)])
-	species_epithet_accepted = StringField('Species Epithet Accepted', validators=[Length(1, 64)])
-	genus_accepted = StringField('Genus Accepted', validators=[Length(1, 64)])
-	genus = StringField('Genus', validators=[Length(1, 64)])
-	family = StringField('Family', validators=[Length(1, 64)])
-	tax_order = StringField('Order', validators=[Length(1, 64)])
-	tax_class = StringField('Class', validators=[Length(1, 64)])
-	phylum = StringField('Phylum', validators=[Length(1, 64)])
-	kingdom = StringField('Kingdom', validators=[Length(1, 64)])
+	infraspecies_accepted = StringField('Infraspecies Accepted', validators=[])
+	species_epithet_accepted = StringField('Species Epithet Accepted', validators=[])
+	genus_accepted = StringField('Genus Accepted', validators=[])
+	genus = StringField('Genus', validators=[])
+	family = StringField('Family', validators=[])
+	tax_order = StringField('Order', validators=[])
+	tax_class = StringField('Class', validators=[])
+	phylum = StringField('Phylum', validators=[])
+	kingdom = StringField('Kingdom', validators=[])
 
 	# Plant Traits
 	max_height = StringField('Max Height')
@@ -265,7 +309,8 @@ class EntryForm(Form):
             query_factory=lambda: Season.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.season_id, a.season_name))
 	matrix_fec = IntegerField('Matrix Fecundity')
-	matrix_a_string = TextAreaField('Matrix String *', validators=[Required(), Regexp('^\[.*\]$', 0, 'Matrix must be a vector, contained within []')]) #Must be in specific format
+	matrix_a_string = TextAreaField('Matrix String *', validators=[Required(), Regexp('^\[.*\]$', 0, 'Matrix must be a vector, contained within []')]) 
+	# ^[0-9]+([,.][0-9]+)?$ Must be in specific format
 	matrix_class_string = TextAreaField('Matrix Class Names String * (stages to be seperated by pipe |)', validators=[Required()]) #Must be in specific format
 	n_plots = IntegerField('# Plots')
 	plot_size = IntegerField('Plot Size')
@@ -284,11 +329,22 @@ class EntryForm(Form):
 	study_start = IntegerField('Study Start')
 	study_end = IntegerField('Study End')
 
+	def validate(self):
+		if not validate_dimension(self.matrix_a_string.data, self.matrix_class_string.data):
+			self.matrix_a_string.errors = list(self.matrix_a_string.errors)
+			self.matrix_a_string.errors.append('Matrix A String Vector and Class Names do not validate.\
+				Please ensure they are formatted correctly.')
+			self.matrix_a_string.errors = tuple(self.matrix_a_string.errors)
+			self.matrix_class_string.errors = list(self.matrix_class_string.errors)
+			self.matrix_class_string.errors.append('Matrix A String Vector and Class Names do not validate.\
+				Please ensure they are formatted correctly.')
+			self.matrix_class_string.errors = tuple(self.matrix_class_string.errors)
+			return False
+		else:
+			return True
+
+
 	submit = SubmitField('Submit')
-	
-
-
-
 
 
 
