@@ -14,9 +14,17 @@ from ..models import Permission, Role, User, \
 from ..decorators import admin_required, permission_required, crossdomain
 
 # This blueprint handles the validation, error checking and duplicates. Basically ensuring that the database runs smoothly.
-@compadre.route('/')
+@compadre.route('/', methods=['GET', 'POST'])
 def homepage():
     form = EntryForm()
+
+    if form.validate_on_submit():
+        print form
+        # print form.population.data
+        # print form.publication.data
+        # print form.study.data
+        # print form.matrix.data
+        # print form.plant_traits.data
     return render_template('test.html', form=form)
 
 # return concetenated, cleansed UID string from dictionary
