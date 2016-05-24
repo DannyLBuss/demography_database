@@ -13,18 +13,60 @@ from ..models import Permission, Role, User, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, VectorAvailability, StageClassInfo, Small
 from ..decorators import admin_required, permission_required, crossdomain
 
+def similar(a, b):
+    from difflib import SequenceMatcher
+    return SequenceMatcher(None, a, b).ratio()
+
+def create_uid(form):
+    import re
+    species_accepted = form.species_accepted.data
+    journal = form.pub_title.data
+    year_pub = form.year.data
+    authors = form.authors.data[:15]
+    pop_name = form.name.data
+    composite = MatrixComposition.query.get(form.matrix_composition.data)
+    treatment = form.treatment.data
+    start_year = form.matrix_start.data[-4:]
+    observation = form.observations.data
+    matrix_a_string = form.matrix_a_string.data
+
+    print(species_accepted, journal, year_pub, authors, pop_name, composite, treatment, start_year, observation, matrix_a_string)
+    uid_concat = '{}{}{}{}{}{}{}{}{}{}'.format(species_accepted, journal, year_pub, authors, pop_name, composite, treatment, start_year, observation, matrix_a_string)
+    uid_lower = uid_concat.lower()
+    uid = re.sub('[\W_]+', '', uid_lower)
+
+    return uid
+
+def check_uid(form):
+    # Query the database for species matching the species_accepted form value
+    species_accepted = form.species_accepted.data
+    species = Species.query.filter_by(species_accepted=species_accepted).first()
+    uid = create_uid(form)
+
+    similarity = []
+    # If not none, 
+    if species != None:
+        for population in species.populations:
+            for matrix in population.matrices:
+                print "uid type", type(uid)
+                print "matrix type", type(matrix.uid)
+                ratio = similar(uid, matrix.uid)
+                if ratio > 0.95:
+                    print "Above", matrix.uid
+                    similarity.append(matrix)
+                else:
+                    print "Below", matrix.uid
+
+    print similarity
+    return similarity
 # This blueprint handles the validation, error checking and duplicates. Basically ensuring that the database runs smoothly.
 @compadre.route('/', methods=['GET', 'POST'])
 def homepage():
     form = EntryForm()
 
     if form.validate_on_submit():
-        print form
-        # print form.population.data
-        # print form.publication.data
-        # print form.study.data
-        # print form.matrix.data
-        # print form.plant_traits.data
+        check_uid(form)
+
     return render_template('test.html', form=form)
 
 # return concetenated, cleansed UID string from dictionary
