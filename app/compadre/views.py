@@ -48,26 +48,23 @@ def check_uid(form):
     if species != None:
         for population in species.populations:
             for matrix in population.matrices:
-                print "uid type", type(uid)
-                print "matrix type", type(matrix.uid)
                 ratio = similar(uid, matrix.uid)
                 if ratio > 0.95:
-                    print "Above", matrix.uid
                     similarity.append(matrix)
                 else:
-                    print "Below", matrix.uid
-
-    print similarity
+                    pass
     return similarity
 # This blueprint handles the validation, error checking and duplicates. Basically ensuring that the database runs smoothly.
 @compadre.route('/', methods=['GET', 'POST'])
 def homepage():
     form = EntryForm()
+    similar = []
 
     if form.validate_on_submit():
-        check_uid(form)
+        similar = check_uid(form)
 
-    return render_template('test.html', form=form)
+        print vars(similar[0])
+    return render_template('test.html', form=form, similar=similar)
 
 # return concetenated, cleansed UID string from dictionary
 def return_con(obj):
