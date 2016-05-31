@@ -45,15 +45,16 @@ def check_uid(form):
     species = Species.query.filter_by(species_accepted=species_accepted).first()
     uid = create_uid(form)
     similarity = [[], None]
-
+    print "UID", uid
     if species != None:
         similarity[0] = []
         for population in species.populations:
             for matrix in population.matrices:
                 ratio = similar(uid, matrix.uid)
+
                 if ratio == 1:
                     similarity[1] = matrix
-                elif ratio > 0.96 and ratio < 100:
+                elif ratio > 0.90 and ratio < 100:
                     similarity[0].append(matrix)
                 else:
                     pass
@@ -70,12 +71,19 @@ def homepage():
     if form.validate_on_submit():
         similar = check_uid(form)
 
+    print similar 
+
+    if len(similar) > 0:
+        similarities = similar[0]
+    else:
+        similarities = []
+
     if len(similar) < 2:
         exact = None
     else:
         exact = similar[1]
 
-    return render_template('test.html', form=form, similar=similar[0], exact=exact)
+    return render_template('test.html', form=form, similar=similarities, exact=exact)
 
 # return concetenated, cleansed UID string from dictionary
 def return_con(obj):
@@ -115,7 +123,7 @@ def check_for_duplicate_single(obj):
     similar = []
     for matrix in all_matrices:
         ratio = similar(matrix.uid, uid_string)
-        if ratio > 0.96:
+        if ratio > 0.90:
             similar.append(matrix)
 
     return jsonify(similar)
@@ -127,7 +135,7 @@ def check_for_duplicate_single_view(uid):
         ratio = similar(matrix.uid, uid)
         if ratio == 1:
             similarity[1] = matrix
-        elif ratio > 0.96 and ratio < 100:
+        elif ratio > 0.90 and ratio < 100:
             similarity[0].append(matrix)
         else:
             pass

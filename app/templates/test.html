@@ -7,6 +7,49 @@
 <div class="page-header">
     <h1>Big Old Form</h1>
 </div>
+{% if similar|length > 0 or exact > 0 %}
+<div class="similarity col-md-8">
+	<h3>Do you mean any of the following?</h3>
+	<h4>The submitted entry is a possible duplicate of existing entries. Below are some suggestions. To accept an entry as a duplicate, click the 'Accept' button below the entry - your submission will be discarded. To edit an existing entry, click the 'Edit' button below the entry. To submit your entry, proceed to click 'Submit' below the form. Changes and additions will be reviewed by a moderator before the entry is fully intergrated into the database.</h4>
+	{% if exact > 0 %}
+		<hr/>
+		<h4><i>Exact Match</i></h4>
+		<hr/>
+		<ul>
+			<li><strong>Species Accepted</strong><br/>
+			{{ exact.population.species.species_accepted }}</li>
+			<li><strong>Journal/Publication Title</strong><br/>
+			{{ exact.population.publication.pub_title }}</li>
+			<li><strong>Year Publication Published</strong><br/>
+			{{ exact.population.publication.year }}</li>
+			<li><strong>Publication Authors</strong><br/>
+			{{ exact.population.publication.authors }}</li>
+			<li><strong>Population Name</strong><br/>
+			{{ exact.population.name }}</li>
+			<li><strong>Matrix Composition</strong><br/>
+			{{ exact.matrix_composition.comp_name }}</li>
+			<li><strong>Matrix Treatment</strong><br/>
+			{{ exact.treatment.type_name }}</li>
+			<li><strong>Matrix Start</strong><br/>
+			{{ exact.matrix_start }}</li>
+			<li><strong>Observation</strong><br/>
+			{{ exact.observations }}</li>
+			<li><strong>Matrix A String</strong><br/>
+			{{ exact.matrix_a_string }}</li>
+
+			<button class="btn btn-success">Accept</button> <button class="btn btn-info">Edit</button>
+		</ul>
+	{% endif %}
+	{% if similar|length > 0 or similar[0] != "None" %}
+		<hr/>
+		<h4><i>Similar matches</i></h4>
+		<ul>
+		{% include '_matrices.html' %}
+		</ul>
+	{% endif %}
+	<hr/>
+</div>
+{% endif %}
 <div class="col-md-4">
     {{ wtf.quick_form(form) }}
 </div>
