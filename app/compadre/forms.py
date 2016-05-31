@@ -197,7 +197,7 @@ class MatrixForm(Form):
 
 class EntryForm(Form):
 	# Species
-	species_accepted = StringField('Species Accepted *', validators=[Required()], default="Hordeum spontaneum")
+	species_accepted = StringField('Species Accepted *', validators=[Required()], default="Cytisus scoparius")
 	iucn_status = QuerySelectField('IUCN Status',
             query_factory=lambda: IUCNStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {} ({})'.format(a.status_code, a.status_name, a.status_description))
@@ -207,7 +207,7 @@ class EntryForm(Form):
 	invasive_status = BooleanField('Invasive Status')
 
 	# Taxonomy
-	species_author = StringField('Species Author *', validators=[Required()], default="Hordeum_spontaneum")
+	species_author = StringField('Species Author *', validators=[Required()], default="Cytisus_scoparius")
 	authority = StringField('Authority', validators=[])
 	taxonomic_status = QuerySelectField('Taxonomic Status',
             query_factory=lambda: TaxonomicStatus.query.all(), get_pk=lambda a: a.id,
@@ -242,7 +242,7 @@ class EntryForm(Form):
                             get_label=lambda a:a.angio_gymno_name)
 
 	# Population
-	name = StringField('Population Name *', validators=[Required()], default="Desert")
+	name = StringField('Population Name *', validators=[Required()], default="Johnson Prairie; Discovery Park; 13th Division Prairie; Weir Prairie; Magnuson Park; Montlake Fill")
 	ecoregion = QuerySelectField('Ecoregion',
             query_factory=lambda: Ecoregion.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.ecoregion_code, a.ecoregion_description))
@@ -264,11 +264,11 @@ class EntryForm(Form):
 	source_type = QuerySelectField('Source Type',
             query_factory=lambda: SourceType.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.source_name, a.source_description))	
-	authors = StringField('Publication Authors *', validators=[Required()], default="Volis; Mendlinger; Ward")
+	authors = StringField('Publication Authors *', validators=[Required()], default="Neubert; Parker")
 	editors = StringField('Publication Editors')
-	pub_title = StringField('Jorunal/Publication Title (ie J Ecol) *', validators=[Required()], default="Bas and Appl Ecol")
+	pub_title = StringField('Jorunal/Publication Title (ie J Ecol) *', validators=[Required()], default="Risk Anal")
 	journal_book_conf = StringField('Journal/Book Conf')
-	year = IntegerField('Year Publication Published *', validators=[Required()], default=2003)
+	year = IntegerField('Year Publication Published *', validators=[Required()], default=2004)
 	volume = StringField('Journal/Publication Volume')
 	pages  = StringField('Publication Pages')
 	publisher = StringField('Publication Publisher')
@@ -300,7 +300,7 @@ class EntryForm(Form):
 	matrix_criteria_size = IntegerField('Matrix Criteria Size')
 	matrix_criteria_ontogeny = IntegerField('Matrix Criteria Ontogeny')
 	matrix_criteria_age = IntegerField('Matrix Criteria Age')
-	matrix_start = StringField('Matrix Start *', validators=[Required(), Regexp('^(\d{1}[/-]\d{1,4})*$', 0, 'Must be M/YYYY')], default="M/1996")
+	matrix_start = StringField('Matrix Start *', validators=[Required(), Regexp('^(\d{1}[/-]\d{1,4})*$', 0, 'Must be M/YYYY')], default="M/1994")
 	matrix_end = StringField('Matrix End', validators=[Regexp('(?<=\[).+(?=\])', 0, 'Must be M/YYYY')])
 	matrix_start_season = QuerySelectField('Matrix Start Season',
             query_factory=lambda: Season.query.all(), get_pk=lambda a: a.id,
@@ -310,9 +310,9 @@ class EntryForm(Form):
                             get_label=lambda a:'{} - {}'.format(a.season_id, a.season_name))
 	matrix_fec = IntegerField('Matrix Fecundity')
 	matrix_a_string = TextAreaField('Matrix String *', validators=[Required(), Regexp('^\[.*\]$', 0, 'Matrix must be a vector, contained within []')], \
-		default="[0 0 0.232 0.232 0.232 0.276 0 0 0 0 0 0 0.141 0.141 0.141 0.347 0 0 0 0 0 0.344 0 0 0]") 
+		default="[0.73 0 6.4 95.7 274 447.2 4074 2e-05 0.54 0 0 0 0 0 0 0.17 0.64 0 0 0 0 0 0 0.27 0.66 0 0 0 0 0 0 0.19 0.64 0 0 0 0 0 0 0.32 0.64 0 0 0 0 0 0 0.31 0.96]") 
 	# ^[0-9]+([,.][0-9]+)?$ Must be in specific format
-	matrix_class_string = TextAreaField('Matrix Class Names String * (stages to be seperated by pipe |)', validators=[Required()], default="1 year Seadbank| 2 year old Seedbank| 1 year old Adult| 2 year old Adult| 3 year old Adult") #Must be in specific format
+	matrix_class_string = TextAreaField('Matrix Class Names String * (stages to be seperated by pipe |)', validators=[Required()], default="Seeds| Seedlings| Juveniles| Small adults: <100 g| Medium adults: 100''400 g| Large adults: 400''900 g| Extra-large adults: >900 g") #Must be in specific format
 	n_plots = IntegerField('# Plots')
 	plot_size = IntegerField('Plot Size')
 	n_individuals = IntegerField('# Individuals')
@@ -323,7 +323,7 @@ class EntryForm(Form):
             query_factory=lambda: Captivity.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.cap_code, a.cap_description))
 	matrix_dimension = IntegerField('Matrix Dimension')
-	observations = TextAreaField('Observations *', validators=[Required()], default="Good year(Enough Precipitation); Geolocation assumed from paper (Negev Desert); Age of adults includes time of Seedbank")
+	observations = TextAreaField('Observations *', validators=[Required()], default="Invasion stage: edge")
 
 	# Study Form
 	study_duration = IntegerField('Study Duration')
