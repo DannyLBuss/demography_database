@@ -25,7 +25,9 @@ def create_uid(form):
     authors = form.authors.data[:15]
     pop_name = form.name.data
     composite = MatrixComposition.query.get(form.matrix_composition.data)
+    composite = composite.comp_name
     treatment = form.treatment.data
+
     start_year = form.matrix_start.data[-4:]
     observation = form.observations.data
     matrix_a_string = form.matrix_a_string.data
@@ -42,17 +44,22 @@ def check_uid(form):
     species_accepted = form.species_accepted.data
     species = Species.query.filter_by(species_accepted=species_accepted).first()
     uid = create_uid(form)
+    similarity = [[], None]
 
-    similarity = []
-    # If not none, 
     if species != None:
+        similarity[0] = []
         for population in species.populations:
             for matrix in population.matrices:
                 ratio = similar(uid, matrix.uid)
-                if ratio > 0.95:
-                    similarity.append(matrix)
+                if ratio == 1:
+                    similarity[1] = matrix
+                elif ratio > 0.96 and ratio < 100:
+                    similarity[0].append(matrix)
                 else:
                     pass
+    else: 
+        similarity = check_for_duplicate_single_view(uid)
+
     return similarity
 # This blueprint handles the validation, error checking and duplicates. Basically ensuring that the database runs smoothly.
 @compadre.route('/', methods=['GET', 'POST'])
@@ -63,8 +70,12 @@ def homepage():
     if form.validate_on_submit():
         similar = check_uid(form)
 
-        print vars(similar[0])
-    return render_template('test.html', form=form, similar=similar)
+    if len(similar) < 2:
+        exact = None
+    else:
+        exact = similar[1]
+
+    return render_template('test.html', form=form, similar=similar[0], exact=exact)
 
 # return concetenated, cleansed UID string from dictionary
 def return_con(obj):
@@ -108,6 +119,20 @@ def check_for_duplicate_single(obj):
             similar.append(matrix)
 
     return jsonify(similar)
+
+def check_for_duplicate_single_view(uid): 
+    all_matrices = Matrix.query.all()
+    similarity = [[], None]
+    for matrix in all_matrices:
+        ratio = similar(matrix.uid, uid)
+        if ratio == 1:
+            similarity[1] = matrix
+        elif ratio > 0.96 and ratio < 100:
+            similarity[0].append(matrix)
+        else:
+            pass
+    print similarity
+    return similarity
 
 # build an Entry using the data from the sanitised object, submitting to database
 def add_to_classes(data):
