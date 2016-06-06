@@ -118,7 +118,7 @@ tbody {
 
 .verbose-topic {
     margin: 1em 0 1em 0;
-    background: #ecf0f1;
+    /*background: #ecf0f1;*/
 }
 
 /*.form-control {
