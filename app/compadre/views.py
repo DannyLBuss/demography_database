@@ -83,7 +83,7 @@ def homepage():
     else:
         exact = similar[1]
 
-    return render_template('test.html', form=form, similar=similarities, exact=exact)
+    return render_template('test.html', form=form, similar=similarities, exact=[exact])
 
 # return concetenated, cleansed UID string from dictionary
 def return_con(obj):

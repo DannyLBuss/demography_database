@@ -1,32 +1,32 @@
-{% for m in similar %}
+{% for e in exact %}
 <div id="accordion" role="tablist" aria-multiselectable="true">
   <div class="panel panel-default">
   	<div class="panel-heading" role="tab" id="headingOne">
 	      	<h4 class="panel-title">
-				{{ m.population.species.species_accepted }}
+				{{ e.population.species.species_accepted }}
 			</h4>
 		</div>
   	<div class="row verbose-topic">
 			<span class="col-xs-4 verbose-entry"><strong>Species Accepted: </strong>
-			{{ m.population.species.species_accepted }}</span>
+			{{ e.population.species.species_accepted }}</span>
 			<span class="col-xs-4 verbose-entry"><strong>Journal/Publication Title: </strong>
-			{{ m.population.publication.pub_title }}</span>
+			{{ e.population.publication.pub_title }}</span>
 			<span class="col-xs-4 verbose-entry"><strong>Year Publication Published: </strong>
-			{{ m.population.publication.year }}</span>
+			{{ e.population.publication.year }}</span>
 			<span class="col-xs-4 verbose-entry"><strong>Publication Authors: </strong>
-			{{ m.population.publication.authors }}</span>
+			{{ e.population.publication.authors }}</span>
 			<span class="col-xs-4 verbose-entry"><strong>Population Name: </strong>
-			{{ m.population.name }}</span>
+			{{ e.population.name }}</span>
 			<span class="col-xs-4 verbose-entry"><strong>Matrix Composition: </strong>
-			{{ m.matrix_composition.comp_name }}</span>
+			{{ e.matrix_composition.comp_name }}</span>
 			<span class="col-xs-4 verbose-entry"><strong>Matrix Treatment: </strong>
-			{{ m.treatment.type_name }}</span>
+			{{ e.treatment.type_name }}</span>
 			<span class="col-xs-4 verbose-entry"><strong>Matrix Start: </strong>
-			{{ m.matrix_start }}</span>
+			{{ e.matrix_start }}</span>
 			<span class="col-xs-4 verbose-entry"><strong>Observation: </strong>
-			{{ m.observations }}</span>
+			{{ e.observations }}</span>
 			<span class="col-xs-4 verbose-entry"><strong>Matrix A String: </strong>
-			{{ m.matrix_a_string }}</span>
+			{{ e.matrix_a_string }}</span>
 			<button class="btn btn-success">Accept</button> <button class="btn btn-info">Edit</button>
 		</div>
 
@@ -48,43 +48,43 @@
 		</div>
 		<div class="panel-body">
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Treatment: </strong>
-			{{ m.treatment.type_name }}</span>
+			{{ e.treatment.type_name }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Split: </strong>
-			{{ m.matrix_split }}</span>
+			{{ e.matrix_split }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Composition: </strong>
-			{{ m.matrix_composition.comp_name }}</span>
+			{{ e.matrix_composition.comp_name }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Survival Issue: </strong>
-			{{ m.survivial_issue }}</span>
+			{{ e.survivial_issue }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Periodicity: </strong>
-			{{ m.periodicity }}</span>
+			{{ e.periodicity }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Criteria Size: </strong>
-			{{ m.matrix_criteria_size }}</span>
+			{{ e.matrix_criteria_size }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Criteria Ontogeny: </strong>
-			{{ m.matrix_criteria_ontogeny }}</span>
+			{{ e.matrix_criteria_ontogeny }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Criteria Age: </strong>
-			{{ m.matrix_criteria_age }}</span>
+			{{ e.matrix_criteria_age }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Start: </strong>
-			{{ m.matrix_start }}</span>
+			{{ e.matrix_start }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix End: </strong>
-			{{ m.matrix_end }}</span>
+			{{ e.matrix_end }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Start Season: </strong>
-			{{ m.matrix_start_season }}</span>
+			{{ e.matrix_start_season }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix End Season: </strong>
-			{{ m.matrix_end_season }}</span>
+			{{ e.matrix_end_season }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Fec: </strong>
-			{{ m.matrix_fec }}</span>
+			{{ e.matrix_fec }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix A String: </strong>
-			{{ m.matrix_a_string }}</span>
+			{{ e.matrix_a_string }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Class String: </strong>
-			{{ m.matrix_class_string }}</span>
+			{{ e.matrix_class_string }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Studied Sex: </strong>
-			{{ m.studied_sex.sex_code }}</span>
+			{{ e.studied_sex.sex_code }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Captivity: </strong>
-			{{ m.captivities }}</span>
+			{{ e.captivities }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Dimension: </strong>
-			{{ m.matrix_dimension }}</span>
+			{{ e.matrix_dimension }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Matrix Observations: </strong>
-			{{ m.observations }}</span>
+			{{ e.observations }}</span>
 	</div>
 	</div>
 	<div class="row verbose-topic">
@@ -96,39 +96,39 @@
 		</div>
 		<div class="panel-body">
 		<span class="col-xs-4 verbose-entry"><strong>Species Accepted: </strong>
-			{{ m.population.species.species_accepted }}</span>
+			{{ e.population.species.species_accepted }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>IUCN Status: </strong>
-			{{ m.population.species.iucn_status.status_name }}</span>
+			{{ e.population.species.iucn_status.status_name }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>ESA Status: </strong>
-			{{ m.population.species.esa_status.status_name}}</span>
+			{{ e.population.species.esa_status.status_name}}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Invasive Status: </strong>
-			{{ m.population.species.invasive_status }}</span>			
+			{{ e.population.species.invasive_status }}</span>			
 		<span class="col-xs-4 verbose-entry"><strong>Species Author: </strong>
-			{{ m.population.species.taxonomies[0].species_author }}</span>
+			{{ e.population.species.taxonomies[0].species_author }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Authority: </strong>
-			{{ m.population.species.taxonomies[0].authority }}</span>
+			{{ e.population.species.taxonomies[0].authority }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Taxonomic Status: </strong>
-			{{ m.population.species.taxonomies[0].taxonomic_status.status_name }}</span>
+			{{ e.population.species.taxonomies[0].taxonomic_status.status_name }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>TPL Version: </strong>
-			{{ m.population.species.taxonomies[0].tpl_version }}</span>
+			{{ e.population.species.taxonomies[0].tpl_version }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Infraspecies Accepted: </strong>
-			{{ m.population.species.taxonomies[0].infraspecies_accepted }}</span>
+			{{ e.population.species.taxonomies[0].infraspecies_accepted }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Species Ephitet Accepted: </strong>
-			{{ m.population.species.taxonomies[0].species_epithet_accepted }}</span>
+			{{ e.population.species.taxonomies[0].species_epithet_accepted }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Genus Accepted: </strong>
-			{{ m.population.species.taxonomies[0].genus_accepted }}</span>
+			{{ e.population.species.taxonomies[0].genus_accepted }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Genus: </strong>
-			{{ m.population.species.taxonomies[0].genus }}</span>
+			{{ e.population.species.taxonomies[0].genus }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Family: </strong>
-			{{ m.population.species.taxonomies[0].family }}</span>
+			{{ e.population.species.taxonomies[0].family }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Order: </strong>
-			{{ m.population.species.taxonomies[0].tax_order }}</span>
+			{{ e.population.species.taxonomies[0].tax_order }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Class: </strong>
-			{{ m.population.species.taxonomies[0].tax_class }}</span>
+			{{ e.population.species.taxonomies[0].tax_class }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Phylum: </strong>
-			{{ m.population.species.taxonomies[0].phylum }}</span>
+			{{ e.population.species.taxonomies[0].phylum }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Kingdom: </strong>
-			{{ m.population.species.taxonomies[0].kingdom }}</span>
+			{{ e.population.species.taxonomies[0].kingdom }}</span>
 	</div>
 </div>
 	<div class="row verbose-topic">
@@ -140,47 +140,47 @@
 		</div>
 		<div class="panel-body">
 		<span class="col-xs-4 verbose-entry"><strong>Source Type: </strong>
-			{{ m.population.publication.source_type.source_name }}</span>
+			{{ e.population.publication.source_type.source_name }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Authors: </strong>
-			{{ m.population.publication.authors }}</span>
+			{{ e.population.publication.authors }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Editors: </strong>
-			{{ m.population.publication.editors }}</span>
+			{{ e.population.publication.editors }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Journal/Publication Title: </strong>
-			{{ m.population.publication.pub_title }}</span>			
+			{{ e.population.publication.pub_title }}</span>			
 		<span class="col-xs-4 verbose-entry"><strong>Journal/Book Conf: </strong>
-			{{ m.population.publication.journal_book_conf }}</span>
+			{{ e.population.publication.journal_book_conf }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Year Published: </strong>
-			{{ m.population.publication.year }}</span>
+			{{ e.population.publication.year }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Volume: </strong>
-			{{ m.population.publication.volume }}</span>
+			{{ e.population.publication.volume }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Pages: </strong>
-			{{ m.population.publication.pages }}</span>
+			{{ e.population.publication.pages }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Publisher: </strong>
-			{{ m.population.publication.publisher }}</span>
+			{{ e.population.publication.publisher }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>City: </strong>
-			{{ m.population.publication.city }}</span>
+			{{ e.population.publication.city }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Country: </strong>
-			{{ m.population.publication.country }}</span>
+			{{ e.population.publication.country }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Institution: </strong>
-			{{ m.population.publication.insitution }}</span>
+			{{ e.population.publication.insitution }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>DOI/ISBN: </strong>
-			{{ m.population.publication.DOI_ISBN }}</span>
+			{{ e.population.publication.DOI_ISBN }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Name: </strong>
-			{{ m.population.publication.name }}</span>
+			{{ e.population.publication.name }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Corresponding Author: </strong>
-			{{ m.population.publication.corresponding_author }}</span>
+			{{ e.population.publication.corresponding_author }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Email: </strong>
-			{{ m.population.publication.email }}</span>
+			{{ e.population.publication.email }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Purposes: </strong>
-			{{ m.population.publication.purpose.purpose_name }}</span>
+			{{ e.population.publication.purpose.purpose_name }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Date Digitised: </strong>
-			{{ m.population.publication.date_digitised }}</span>
+			{{ e.population.publication.date_digitised }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Embargo: </strong>
-			{{ m.population.publication.embargo }}</span>
+			{{ e.population.publication.embargo }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Missing Data: </strong>
-			{{ m.population.publication.missing_data.missing_code }}</span>
+			{{ e.population.publication.missing_data.missing_code }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Additional Source: </strong>
-			{{ m.population.publication.additional_source_string }}</span>
+			{{ e.population.publication.additional_source_string }}</span>
 		</div>
 	</div>
 </div>
@@ -194,17 +194,17 @@
 		</div>
 		<div class="panel-body">	
 		<span class="col-xs-4 verbose-entry"><strong>Max Height: </strong>
-			{{ m.population.species.plant_traits[0].max_height }}</span>
+			{{ e.population.species.plant_traits[0].max_height }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Growth Type: </strong>
-			{{ m.population.species.plant_traits[0].growth_type.type_name }}</span>
+			{{ e.population.species.plant_traits[0].growth_type.type_name }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Growth Form Raunkiaer: </strong>
-			{{ m.population.species.plant_traits[0].growth_form_raunkiaer.form_name }}</span>
+			{{ e.population.species.plant_traits[0].growth_form_raunkiaer.form_name }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Reproductive Repetiton: </strong>
-			{{ m.population.species.plant_traits[0].reproductive_repetition.repetition_name }}</span>
+			{{ e.population.species.plant_traits[0].reproductive_repetition.repetition_name }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Dicot Monoc: </strong>
-			{{ m.population.species.plant_traits[0].dicot_monoc.dicot_monoc_name }}</span>
+			{{ e.population.species.plant_traits[0].dicot_monoc.dicot_monoc_name }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Angio Gymno: </strong>
-			{{ m.population.species.plant_traits[0].angio_gymno_id.angio_gymno_name }}</span>
+			{{ e.population.species.plant_traits[0].angio_gymno_id.angio_gymno_name }}</span>
 		</div>
 	</div>
 </div>
@@ -217,15 +217,15 @@
 		</div>
 		<div class="panel-body">
 			<span class="col-xs-4 verbose-entry"><strong>Population Name: </strong>
-				{{ m.population.name }}</span>	
+				{{ e.population.name }}</span>	
 			<span class="col-xs-4 verbose-entry"><strong>Ecoregion: </strong>
-				{{ m.population.ecoregion.ecoregion_code }}</span>
+				{{ e.population.ecoregion.ecoregion_code }}</span>
 			<span class="col-xs-4 verbose-entry"><strong>Country: </strong>
-				{{ m.population.country }}</span>
+				{{ e.population.country }}</span>
 			<span class="col-xs-4 verbose-entry"><strong>Continent: </strong>
-				{{ m.population.continent.continent_name }}</span>		
+				{{ e.population.continent.continent_name }}</span>		
 			<span class="col-xs-4 verbose-entry"><strong>Geometries: </strong>
-				{{ m.population.geometries }}</span>
+				{{ e.population.geometries }}</span>
 		</div>
 	</div>
 </div>
@@ -238,13 +238,13 @@
 		</div>
 		<div class="panel-body">
 		<span class="col-xs-4 verbose-entry"><strong>Study Duration: </strong>
-			{{ m.study.study_duration }}</span>	
+			{{ e.study.study_duration }}</span>	
 		<span class="col-xs-4 verbose-entry"><strong>Study Start: </strong>
-			{{ m.study.study_start }}</span>
+			{{ e.study.study_start }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Study End: </strong>
-			{{ m.study.study_end }}</span>
+			{{ e.study.study_end }}</span>
 		<span class="col-xs-4 verbose-entry"><strong>Number of Populations Studied: </strong>
-			{{ m.study.populations|length }}</span>		
+			{{ e.study.populations|length }}</span>		
 	</div>
     </div>
 	</div>

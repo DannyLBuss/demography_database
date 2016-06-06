@@ -15,30 +15,7 @@
 		<hr/>
 		<h4><i>Exact Match</i></h4>
 		<hr/>
-		<ul>
-			<li><strong>Species Accepted</strong><br/>
-			{{ exact.population.species.species_accepted }}</li>
-			<li><strong>Journal/Publication Title</strong><br/>
-			{{ exact.population.publication.pub_title }}</li>
-			<li><strong>Year Publication Published</strong><br/>
-			{{ exact.population.publication.year }}</li>
-			<li><strong>Publication Authors</strong><br/>
-			{{ exact.population.publication.authors }}</li>
-			<li><strong>Population Name</strong><br/>
-			{{ exact.population.name }}</li>
-			<li><strong>Matrix Composition</strong><br/>
-			{{ exact.matrix_composition.comp_name }}</li>
-			<li><strong>Matrix Treatment</strong><br/>
-			{{ exact.treatment.type_name }}</li>
-			<li><strong>Matrix Start</strong><br/>
-			{{ exact.matrix_start }}</li>
-			<li><strong>Observation</strong><br/>
-			{{ exact.observations }}</li>
-			<li><strong>Matrix A String</strong><br/>
-			{{ exact.matrix_a_string }}</li>
-
-			<button class="btn btn-success">Accept</button> <button class="btn btn-info">Edit</button>
-		</ul>
+			{% include '_exact.html' %}
 	{% endif %}
 	{% if similar|length > 0 or similar[0] != "None" %}
 		<hr/>
@@ -48,6 +25,7 @@
 		</ul>
 	{% endif %}
 	<hr/>
+</div>
 </div>
 {% endif %}
 <div class="col-md-4">
