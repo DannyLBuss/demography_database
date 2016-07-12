@@ -5,30 +5,33 @@
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Big Old Form</h1>
+    <h1>Form</h1>
 </div>
-{% if similar|length > 0 or exact > 0 %}
+{% if exact != None %}
+{% if exact > 0 %}
+<div class="similarity col-md-7">
+	<h3>Record exists in the database</h3>
+	<h4>This record already exists in our database. Please click 'Accept' to discard form data and redirect to the input page.</h4>
+	<hr/>
+		{% include '_exact.html' %}
+	<hr/>
+</div>
+{% endif %}
+{% elif similar != None %}
 <div class="similarity col-md-8">
 	<h3>Do you mean any of the following?</h3>
 	<h4>The submitted entry is a possible duplicate of existing entries. Below are some suggestions. To accept an entry as a duplicate, click the 'Accept' button below the entry - your submission will be discarded. To edit an existing entry, click the 'Edit' button below the entry. To submit your entry, proceed to click 'Submit' below the form. Changes and additions will be reviewed by a moderator before the entry is fully intergrated into the database.</h4>
-	{% if exact > 0 %}
+	{% if similar|length > 0 %}
 		<hr/>
-		<h4><i>Exact Match</i></h4>
-		<hr/>
-			{% include '_exact.html' %}
-	{% endif %}
-	{% if similar|length > 0 or similar[0] != "None" %}
-		<hr/>
-		<h4><i>Similar matches</i></h4>
 		<ul>
 		{% include '_matrices.html' %}
 		</ul>
 	{% endif %}
 	<hr/>
 </div>
-</div>
 {% endif %}
-<div class="col-md-4">
+
+<div class="{% if similar == None and exact == None %}col-xs-8 col-xs-offset-2{% else %}col-md-4{% endif %}">
     {{ wtf.quick_form(form) }}
 </div>
 {% endblock %}

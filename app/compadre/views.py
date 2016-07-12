@@ -10,13 +10,16 @@ from ..models import Permission, Role, User, \
                     DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
                     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
-                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, VectorAvailability, StageClassInfo, Small
+                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, VectorAvailability, StageClassInfo, Small, Status
 from ..decorators import admin_required, permission_required, crossdomain
 
+'''Migration functions, etc.'''
+# Function to determine similarity between string a and b
 def similar(a, b):
     from difflib import SequenceMatcher
     return SequenceMatcher(None, a, b).ratio()
 
+# Function to create Unique ID from FORM VALUES
 def create_uid(form):
     import re
     species_accepted = form.species_accepted.data
@@ -39,13 +42,13 @@ def create_uid(form):
 
     return uid
 
+# Base function to check UID against other UIDS from FORM
 def check_uid(form):
     # Query the database for species matching the species_accepted form value
     species_accepted = form.species_accepted.data
     species = Species.query.filter_by(species_accepted=species_accepted).first()
     uid = create_uid(form)
     similarity = [[], None]
-    print "UID", uid
     if species != None:
         similarity[0] = []
         for population in species.populations:
@@ -62,28 +65,43 @@ def check_uid(form):
         similarity = check_for_duplicate_single_view(uid)
 
     return similarity
-# This blueprint handles the validation, error checking and duplicates. Basically ensuring that the database runs smoothly.
-@compadre.route('/', methods=['GET', 'POST'])
-def homepage():
-    form = EntryForm()
-    similar = []
 
-    if form.validate_on_submit():
-        similar = check_uid(form)
+# Base test function to check UID against other UIDS from FORM
+def check_uid_test(form):
+    # Query the database for species matching the species_accepted form value
+    species_accepted = form.species_accepted.data
+    species = Species.query.filter_by(species_accepted=species_accepted).first()
+    uid = create_uid(form)
+    similarity = {'exact' : [], 'similar' : []}
 
-    print similar 
+    if species != None:
+        for population in species.populations:
+            for matrix in population.matrices:
+                ratio = similar(uid, matrix.uid)
+                if ratio == 1:
+                    similarity['exact'].append(matrix)
+                elif ratio > 0.90 and ratio < 100:
+                    similarity['similar'].append(matrix)
+                else:
+                    pass
+    else: 
+        similarity = check_for_duplicate_single_view(uid)
 
-    if len(similar) > 0:
-        similarities = similar[0]
-    else:
-        similarities = []
+    return similarity
 
-    if len(similar) < 2:
-        exact = None
-    else:
-        exact = similar[1]
-
-    return render_template('test.html', form=form, similar=similarities, exact=[exact])
+# Base function to check UID against other UIDS from UID
+def check_for_duplicate_single_view(uid): 
+    all_matrices = Matrix.query.all()
+    similarity = {'exact' : [], 'similar' : []}
+    for matrix in all_matrices:
+        ratio = similar(matrix.uid, uid)
+        if ratio == 1:
+            similarity['exact'].append(matrix)
+        elif ratio > 0.90 and ratio < 100:
+            similarity['similar'].append(matrix)
+        else:
+            pass
+    return similarity
 
 # return concetenated, cleansed UID string from dictionary
 def return_con(obj):
@@ -128,20 +146,6 @@ def check_for_duplicate_single(obj):
 
     return jsonify(similar)
 
-def check_for_duplicate_single_view(uid): 
-    all_matrices = Matrix.query.all()
-    similarity = [[], None]
-    for matrix in all_matrices:
-        ratio = similar(matrix.uid, uid)
-        if ratio == 1:
-            similarity[1] = matrix
-        elif ratio > 0.90 and ratio < 100:
-            similarity[0].append(matrix)
-        else:
-            pass
-    print similarity
-    return similarity
-
 # build an Entry using the data from the sanitised object, submitting to database
 def add_to_classes(data):
     from ..conversion.models import Taxonomy, Publication, Population, PlantTrait, Matrix, Study, Entry
@@ -163,6 +167,7 @@ def add_to_classes(data):
     
     return entry.submit_to_database()
 
+# Convert CSV headers
 def convert_all_headers(dict):
     new_dict = {}
     new_dict['additional_source_string'] = dict['AdditionalSource']
@@ -232,3 +237,29 @@ def convert_all_headers(dict):
     new_dict['matrix_split'] = dict['MatrixSplit']
 
     return new_dict
+'''End Migration functions, etc.'''
+
+'''Routing webpages'''
+# This blueprint handles the validation, error checking and duplicates. Basically ensuring that the database runs smoothly.
+@compadre.route('/', methods=['GET', 'POST'])
+def homepage():
+    form = EntryForm()
+    similar = None
+    exact = None
+
+    if form.validate_on_submit():
+        similarity = check_uid_test(form)
+
+        print "Similarity", similarity
+        if len(similarity['exact']) > 0:
+            exact = similarity['exact']
+        else: 
+            exact = None
+
+        if len(similarity['similar']) > 0:
+            similar = similarity['similar']
+        else:
+            similar = None        
+
+    return render_template('test.html', form=form, similar=similar, exact=exact)
+''' End Routing '''

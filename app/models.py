@@ -888,6 +888,37 @@ class Captivity(db.Model):
 
     def __repr__(self):
         return str(self.id)
+
+
+class Status(db.Model):
+    __tablename__ = 'statuses'
+    id = db.Column(db.Integer, primary_key=True)
+    status_name = db.Column(db.String(64), index=True)
+    status_description = db.Column(db.Text())
+    notes = db.Column(db.Text())
+
+    matrices = db.relationship("Matrix", backref="statuses")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/matrices.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Matrix"]
+            nodes = json_data["Status"]
+
+            for node in nodes:
+                i = Status.query.filter_by(status_name=node['status_name']).first()
+                if i is None:
+                    i = Status()
+
+                i.status_name = node['status_name']
+                i.status_description = node['status_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return str(self.id)
 ''' End Meta Tables for Matrix '''
 
 ''' Meta Tables for Fixed '''
@@ -1552,11 +1583,12 @@ class MatrixValue(db.Model):
 class Matrix(db.Model):
     __tablename__ = 'matrices'
     id = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.String(500), index=True, unique=True)
+    uid = db.Column(db.Text())
     population_id = db.Column(db.Integer, db.ForeignKey('populations.id'))
     treatment_id = db.Column(db.Integer, db.ForeignKey('treatment_types.id'))
     matrix_split = db.Column(db.Boolean())
     matrix_composition_id = db.Column(db.Integer, db.ForeignKey('matrix_compositions.id'))
+    seasonal = db.Column(db.Boolean())
     survival_issue = db.Column(db.Float())
     n_intervals = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, what are these? Schema says, "Number of transition intervals represented in the matrix - should only be >1 for mean matrices", so 0 or 1 or more? Can it be a float, ie 0.8?
     periodicity = db.Column(db.String(64))
@@ -1581,12 +1613,19 @@ class Matrix(db.Model):
     captivity_id = db.Column(db.Integer, db.ForeignKey('captivities.id'))
     matrix_dimension = db.Column(db.Integer()) # dimension of matrix population A   
     observations = db.Column(db.Text())
+    checked = db.Column(db.Boolean())
+    status_id = db.Column(db.Integer, db.ForeignKey('statuses.id'))
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
+    proceeds_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
     intervals = db.relationship("Interval", backref="matrix")
     matrix_values = db.relationship("MatrixValue", backref="matrix")
     matrix_stages = db.relationship("MatrixStage", backref="matrix")
     fixed = db.relationship("Fixed", backref="matrix")
     seeds = db.relationship("Seed", backref="matrix")
+    versions = db.relationship("Matrix", backref="original")
+    preceeds = db.relationship("Matrix", backref="proceeds")
 
     @staticmethod
     def migrate():
@@ -1594,6 +1633,7 @@ class Matrix(db.Model):
         Season.migrate()
         StudiedSex.migrate()
         Captivity.migrate()
+        Status.migrate()
 
     # Generate UID for this Matrix
     def create_uid(self):
