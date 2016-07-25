@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+    <h1>Species in Compadre DB</h1>
+    <div id="species-search">
+        <input class="search" placeholder="Search" />
+        <button class="sort" data-sort="species">
+            Sort by name
+        </button>
+        <table class="table" >
+            <thead>
+                <th>Species Name</th>
+                <th>Genus</th>
+                <th>Family</th>        
+            </thead>
+            <tbody class="list">
+                {% for s in species %}
+                    {% for taxonomy in s.taxonomies %}
+                        <tr>
+                            <td class="species"><a href="../species/{{ s.species_accepted }}"><em>{{ s.species_accepted }}</em></a></td>
+                            <td class="genus">{{ taxonomy.genus }}</td>
+                            <td class="family">{{ taxonomy.family }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        
+        
+    <script src="http://listjs.com/no-cdn/list.js"></script>
+    <script>
+        var options = {
+      valueNames: [ 'species', 'genus', 'family' ]
+    };
+
+    var userList = new List('species-search', options);
+    </script>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
