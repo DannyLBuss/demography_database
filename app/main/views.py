@@ -93,6 +93,19 @@ def data():
 
     return render_template('data.html', species=species)
 
+@main.route('/species-table/')
+# @login_required
+def species_table():
+    species = Species.query.all()
+
+    return render_template('species_table_template.html', species=species)
+
+@main.route('/species/<species_name>')
+# @login_required
+def species_page(species_name):
+    species = Species.query.filter_by(species_accepted=species_name).first_or_404()
+    return render_template('species_template.html',species = species)
+
 @main.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()    

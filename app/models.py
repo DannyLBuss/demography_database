@@ -1615,17 +1615,17 @@ class Matrix(db.Model):
     observations = db.Column(db.Text())
     checked = db.Column(db.Boolean())
     status_id = db.Column(db.Integer, db.ForeignKey('statuses.id'))
-    version = db.Column(db.Integer())
-    version_of_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
-    proceeds_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
+    #version = db.Column(db.Integer())
+    #version_of_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
+    #proceeds_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
     intervals = db.relationship("Interval", backref="matrix")
     matrix_values = db.relationship("MatrixValue", backref="matrix")
     matrix_stages = db.relationship("MatrixStage", backref="matrix")
     fixed = db.relationship("Fixed", backref="matrix")
     seeds = db.relationship("Seed", backref="matrix")
-    versions = db.relationship("Matrix", backref="original")
-    preceeds = db.relationship("Matrix", backref="proceeds")
+    #versions = db.relationship("Matrix", backref="original")
+    #preceeds = db.relationship("Matrix", backref="proceeds")
 
     @staticmethod
     def migrate():
@@ -1786,7 +1786,7 @@ class Fixed(db.Model):
     small_id = db.Column(db.Integer, db.ForeignKey('smalls.id'))
     private = db.Column(db.Boolean(), default=True)
     matrix_a = db.Column(db.Text())
-    version = db.Column(db.Integer())
+    #version = db.Column(db.Integer())
 
     @staticmethod
     def migrate():
@@ -1820,13 +1820,13 @@ class Seed(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'), index=True)
     matrix_a = db.Column(db.Text())
-    version = db.Column(db.Integer())
+    #version = db.Column(db.Integer())
 
     def to_json(self):
         seeds = {
             # 'matrix' : self.matrix.id (url?)
             'matrix_a' : self.matrix_a,
-            'version' : self.version,
+            #'version' : self.version,
         }
 
     def __repr__(self, key):

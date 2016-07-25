@@ -106,11 +106,6 @@ div.flask-pagedown-preview h3 {
     border-bottom: 1px solid #e0e0e0;
 }
 
-tbody {
-    float: left;
-    padding: 2em 0 2em 0;
-}
-
 .verbose-entry {
     padding: 0.3em;
     text-align: justify;
@@ -126,3 +121,38 @@ tbody {
     -webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
     box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
 }*/
+
+
+/* Simon's changes
+
+.navbar-inverse {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#165833+0,0d2d52+100 */
+background: #165833; /* Old browsers */
+background: -moz-linear-gradient(left,  #165833 0%, #0d2d52 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left,  #165833 0%,#0d2d52 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right,  #165833 0%,#0d2d52 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#165833', endColorstr='#0d2d52',GradientType=1 ); /* IE6-9 */
+
+}
+
+.masthead{
+    background-color: #e2ebf0;
+    padding: 1em;
+}
+
+.nav.navbar-nav li a {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+ul.top-bar a:hover { background-color: rgba(255, 255, 255, 0.31) !important; }
+
+.panel-heading {
+    cursor: pointer;
+}
+
+footer {
+  color: #868686;
+  padding-bottom: 200px;
+    text-align: center;
+}
