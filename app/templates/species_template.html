@@ -1,17 +1,21 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
-<div class="masthead"> {% for taxonomy in species.taxonomies %}
+<div class="masthead"> {% for taxonomy in species.taxonomies %}{% for trait in species.plant_traits %}
+    <div class="pull-right">
+        <a href="/species/{{species.id}}/edit" type="button" class="btn btn-info">Edit species infomation</a>
+        <a href="/taxonomy/{{taxonomy.id}}/edit" type="button" class="btn btn-info">Edit taxonomy</a>
+        <a href="/traits/{{trait.id}}/edit" type="button" class="btn btn-info">Edit plant traits</a>
+    </div>
+    
+            <h1><i>{{species.species_accepted}}</i> <small>ID: {{species.id}}</small></h1> <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" class="btn btn-default" role="button">Search Enyclopedia of Life</a> <a href="http://www.catalogueoflife.org/col/search/all/key/{{species.species_accepted}}/" class="btn btn-default" role="button">Search Catalogue of Life</a> <a href="https://en.wikipedia.org/wiki/{{species.species_accepted}}" class="btn btn-default" role="button">Wikipedia</a> <a href="https://www.google.co.uk/search?q={{species.species_accepted}}" class="btn btn-default" role="button">Google</a> <a href="https://scholar.google.co.uk/scholar?q={{species.species_accepted}}" class="btn btn-default" role="button">Scholar</a>
     <div class="row">
-        <div class="col-sm-9">
-            <h1><i>{{species.species_accepted}}</i> ({{ taxonomy.authority }})</h1> <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" class="btn btn-default" role="button">Search Enyclopedia of Life</a> <a href="http://www.catalogueoflife.org/col/search/all/key/{{species.species_accepted}}/" class="btn btn-default" role="button">Search Catalogue of Life</a> <a href="https://en.wikipedia.org/wiki/{{species.species_accepted}}" class="btn btn-default" role="button">Wikipedia</a> <a href="https://www.google.co.uk/search?q={{species.species_accepted}}" class="btn btn-default" role="button">Google</a> <a href="https://scholar.google.co.uk/scholar?q={{species.species_accepted}}" class="btn btn-default" role="button">Scholar</a>
-            <h3>Plant Traits</h3> {% for trait in species.plant_traits %}
-            <ul>
-                <li><strong>Growth type: </strong> {{ trait.growth_type.type_name }}</li>
-                <li><strong>Dicotyledon/monocotyledon: </strong> {{ trait.dicot_monoc.dicot_monoc_name }}</li>
-                <li><strong>Angiosperm/gymnosperm: </strong> {{ trait.angio_gymno.angio_gymno_name }}</li>
-            </ul> {% endfor %}</div>
-        <div class="col-sm-3">
-            <h3>Taxonomy</h3>
-            <table style="width:100%">
+        <div class="col-sm-8">   
+            <h3>Distribution map (GBIF)</h3>
+        <div id="dist_map"></div>
+        </div>
+        
+        <div class="col-sm-4">
+            <h3>Taxonomy <small>ID: {{taxonomy.id}}</small></h3>
+            <table style="width:100%" class="table">
                 <tbody>
                     <tr>
                         <td><strong>Kingdom:</strong></td>
@@ -41,76 +45,146 @@
                         <td><strong>Species:</strong></td>
                         <td><i>{{species.species_accepted}}</i></td>
                     </tr>
+                    <tr>
+                        <td>Authority: </td>
+                        <td>{{ taxonomy.authority }}</td>
+                    </tr>
                 </tbody>
             </table>
+            <h3>Plant Traits <small>ID: {{trait.id}}</small></h3> 
+            <ul>
+                <li><strong>Growth type: </strong> {{ trait.growth_type.type_name }}</li>
+                <li><strong>Dicotyledon/monocotyledon: </strong> {{ trait.dicot_monoc.dicot_monoc_name }}</li>
+                <li><strong>Angiosperm/gymnosperm: </strong> {{ trait.angio_gymno.angio_gymno_name }}</li>
+            </ul> {% endfor %}
         </div>
-    </div> {% endfor %} </div>
-<!-- /cont -->
-        <h3>Populations</h3> {% for population in species.populations %}
-                <h4>{{ population.name }} </h4>
-                <ul>
-                    <li><strong>ecoregion_id: </strong> {{ population.ecoregion.ecoregion_code }} (<em>{{ population.ecoregion.ecoregion_description }}</em>)</li>
-                    <li><strong>country: </strong> {{ population.country }}</li>
-                    <li><strong>geometries: </strong> {{ population.geometries }}</li>
-                    <li><strong>continent: </strong> {{ population.continent.continent_name }}</li>
-                    <li><strong>publication: </strong> {{ population.publication.authors }}</li>
-                    <li><strong>study:</strong> {{ population.study.study_duration }} years</li>
-                </ul>
+    </div> 
+    {% endfor %}
+    <br>
+</div>
+<br> 
+{% for population in species.populations %}
+<div class="masthead3">
+    <div class="pull-right"><button type="button" class="btn btn-info">Edit population</button> <button type="button" class="btn btn-info">Add new matrix</button></div>
+    
+        <h4><strong>Population Name: </strong>{{ population.name }} <small>ID: {{ population.id }}</small> </h4>
+        <h4><strong>Source: </strong>{{ population.publication.authors }} {{ population.publication.year }}</h4>
+    <ul>
+        <li>Studied for {{ population.study.study_duration }} years</li>
+        <li><strong>Location: </strong> <img src="../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
+        <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}
+            <li><strong>Geometries: </strong> {{ population.geometries }}</li>
+    </ul>
+    <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> Show/hide matrices </button>
+</div>
+        
+<div id="population_{{ population.id }}" class='panel-collapse collapse'> 
+
+    {% for matrix in population.matrices %}
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading" data-toggle="collapse" href="#matrix_{{matrix.id}}2">
+                <h4 id="{{matrix.id}}" class="panel-title">
+                        <p><span class="label label-default">{{ matrix.matrix_composition.comp_name }}</span> <span class="label label-default">{{ matrix.matrix_dimension }} x {{ matrix.matrix_dimension }}</span> <span class="label label-default">{{ matrix.matrix_start }}-{{ matrix.matrix_end }}</span> <span background-color="#" class="label label-default">{{ matrix.treatment.type_name }}</span> <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span> <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span><small> ID: {{matrix.id}}</small></p>
+                    </h4> </div>
+            <div id="matrix_{{matrix.id}}2" class="panel-collapse collapse">
+                <li class="list-group-item">
+                    <ul class="nav nav-pills matrices">
+                        <li class="active"><a data-toggle="pill" href="#home_{{matrix.id}}">Matrix</a></li>
+                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_1">Survival Matrix </a></li>
+                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_2">Fecundity Matrix</a></li>
+                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_3">Clonal Matrix</a></li>
+                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li>
+                        <button type="button" class="btn btn-info pull-right">Edit matrix</button>
+                    </ul>
                     
-{% for matrix in population.matrices %}
-                    <div class="panel-group-">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" data-toggle="collapse" href="#matrix_{{matrix.id}}2">
-                                <h4 id="{{matrix.id}}" class="panel-title">
-                                <p><span class="label label-default">{{ matrix.matrix_composition.comp_name }}</span> <span class="label label-default">{{ matrix.matrix_dimension }} x {{ matrix.matrix_dimension }}</span> <span class="label label-default">{{ matrix.matrix_start }}-{{ matrix.matrix_end }}</span> </p>
-                                <p><b>Population:</b> {{ population.name }} <b>Treatment:</b> {{ matrix.treatment.type_name }} </p>
-                            </h4> </div>
-                            <div id="matrix_{{matrix.id}}2" class="panel-collapse collapse">
-                                <li class="list-group-item">
-                                    <ul class="nav nav-pills matrices">
-                                        <li class="active"><a data-toggle="pill" href="#home_{{matrix.id}}">Matrix</a></li>
-                                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_1">Survival Matrix </a></li>
-                                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_2">Fecundity Matrix</a></li>
-                                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_3">Clonal Matrix</a></li>
-                                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div id="home_{{matrix.id}}" class="tab-pane in active">
-                                            <div class="table-responsive"> {{ matrix.matrix_a_string }} </div>
-                                        </div>
-                                        <div id="menu_{{matrix.id}}_1" class="tab-pane">
-                                            <div class="table-responsive"> INSERT_MAT_U </div>
-                                        </div>
-                                        <div id="menu_{{matrix.id}}_2" class="tab-pane">
-                                            <div class="table-responsive"> INSERT_MAT_F </div>
-                                        </div>
-                                        <div id="menu_{{matrix.id}}_3" class="tab-pane">
-                                            <div class="table-responsive"> INSERT_MAT_C </div>
-                                        </div>
-                                        <div id="menu_{{matrix.id}}_4" class="tab-pane">
-
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <p>Matrix start season: {% if matrix.matrix_start_season_id > 0 %}{{ matrix.matrix_start_season.season_name }}{% else %} NA{% endif %}</p>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <p>Matrix end season: {% if matrix.matrix_end_season_id > 0 %}{{ matrix.matrix_end_season.season_name }}{% else %} NA{% endif %}</p>
-                                                </div>
-                                                
-                                            </div>
-                                            <p><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</p>
-                                            <p><strong>studied_sex: </strong> {{ matrix.studied_sex.sex_code }}</p>
-                                            <p><strong>captivities: </strong> {{ matrix.captivities.cap_code }}</p>
-                                            <p><strong>observations: </strong> {{ matrix.observations }}</p>
-                                        </div>
-                                    </div>
-                                </li>
-                            </div>
+                    <div class="tab-content">
+                        <div id="home_{{matrix.id}}" class="tab-pane in active">
+                            <div class="table-responsive matA"> {{ matrix.matrix_a_string }} </div>
                         </div>
-                        {% endfor %}
-                        
-                    </div> 
-                {% endfor %}
+                        <div id="menu_{{matrix.id}}_1" class="tab-pane">
+                            <div class="table-responsive"> INSERT_MAT_U </div>
+                        </div>
+                        <div id="menu_{{matrix.id}}_2" class="tab-pane">
+                            <div class="table-responsive"> INSERT_MAT_F </div>
+                        </div>
+                        <div id="menu_{{matrix.id}}_3" class="tab-pane">
+                            <div class="table-responsive"> INSERT_MAT_C </div>
+                        </div>
+                        <div id="menu_{{matrix.id}}_4" class="tab-pane">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p>Matrix start season: {% if matrix.matrix_start_season_id > 0 %}{{ matrix.matrix_start_season.season_name }}{% else %} NA{% endif %}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p>Matrix end season: {% if matrix.matrix_end_season_id > 0 %}{{ matrix.matrix_end_season.season_name }}{% else %} NA{% endif %}</p>
+                                </div>
+                            </div>
+                            <p><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</p>
+                        </div>
+                        <p><strong>Observations: </strong> {{ matrix.observations }}</p>
+                    </div>
+                </li>
+            </div>
+         </div>
+    </div> 
+    {% endfor %}
+</div>
+<br>
+{% endfor %}
+<script>
+    // Change matrix strings into tables
+    var divs = document.getElementsByClassName("matA");
+    
+    for(var ii = 0; ii < divs.length; ii++){
 
-{% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }} {% endblock %}
+        var matrix_string = divs[ii].innerHTML;
+        var matrix_string = matrix_string.replace(" [", "");
+        var matrix_string = matrix_string.replace("] ", "");
 
+        var matrix_string_array = matrix_string.split(" ");
+        matSize = Math.sqrt(matrix_string_array.length)
+
+        var table_new = document.createElement('TABLE');
+        table_new.className = 'table table-bordered';
+
+        var tableBody = document.createElement('TBODY');
+        table_new.appendChild(tableBody);
+
+        var index = 0;
+        for (var i = 0; i < matSize; i++) {
+            var tr = document.createElement('TR');
+            tableBody.appendChild(tr);
+
+            for (var j = 0; j < matSize; j++) {
+                var td = document.createElement('TD');
+                td.appendChild(document.createTextNode(matrix_string_array[index]));
+                tr.appendChild(td);
+                index = index + 1;
+            }
+        }
+        divs[ii].innerHTML = "";
+        divs[ii].appendChild(table_new);
+    }
+</script>
+
+<script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
+<script>
+    var mymap = L.map('dist_map').setView([20, 0], 1);
+    var Esri_WorldGrayCanvas = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+	maxZoom: 16
+    ,minZoom: 1,
+    }).addTo(mymap);
+    L.tileLayer('http://api.gbif.org/v1/map/density/tile?x={x}&y={y}&z={z}&type=TAXON&key=8522&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=greens', {
+        attribution: 'GBIF'
+        , maxZoom: 8
+        , minZoom: 1,
+    }).addTo(mymap);
+</script>
+
+{% endblock %} 
+{% block scripts %} 
+{{ super() }} 
+{{ pagedown.include_pagedown() }} 
+{% endblock %}

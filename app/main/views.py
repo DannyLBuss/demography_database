@@ -3,8 +3,8 @@ from flask import render_template, redirect, url_for, abort, flash, request,\
 from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import main
-from .forms import EditProfileForm, EditProfileAdminForm, PostForm,\
-    CommentForm
+from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
+from ..compadre.forms import SpeciesForm, TaxonomyForm, PlantTraitForm
 from .. import db
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
@@ -93,11 +93,17 @@ def data():
 
     return render_template('data.html', species=species)
 
+@main.route('/matrix/<species_id>/<pop_id>/<mat_id>')
+def matrix(species_id,pop_id,mat_id):
+    species = Species.query.filter_by(id=species_id).first_or_404()
+    population = Population.query.filter_by(id=pop_id).first_or_404()
+    matrix = Matrix.query.filter_by(id=mat_id).first_or_404()
+    return render_template('matrix.html', species=species, population=population, matrix=matrix)
+
 @main.route('/species-table/')
 # @login_required
 def species_table():
     species = Species.query.all()
-
     return render_template('species_table_template.html', species=species)
 
 @main.route('/species/<species_name>')
@@ -105,6 +111,93 @@ def species_table():
 def species_page(species_name):
     species = Species.query.filter_by(species_accepted=species_name).first_or_404()
     return render_template('species_template.html',species = species)
+
+# SPECIES/TAXONOMY/TRAIT FORMS
+@main.route('/species/<int:id>/edit', methods=['GET', 'POST'])
+def species_form(id):
+    species = Species.query.get_or_404(id)
+    form = SpeciesForm(species=species)
+
+    if form.validate_on_submit():
+        species.species_accepted = form.species_accepted.data
+        species.iucn_status = form.iucn_status.data
+        species.esa_status = form.esa_status.data
+        species.invasive_status = form.invasive_status.data
+        flash('The species infomation has been updated.')
+        species_name = species.species_accepted
+        return redirect(url_for('.species_page',species_name=species_name))
+    
+    form.species_accepted.data = species.species_accepted
+    form.iucn_status.udata = species.iucn_status
+    form.esa_status.data = species.esa_status
+    form.invasive_status.data = species.invasive_status
+    
+    return render_template('species_form.html', form=form, species=species)
+
+@main.route('/taxonomy/<int:id>/edit', methods=['GET', 'POST'])
+def taxonomy_form(id):
+    taxonomy = Taxonomy.query.get_or_404(id)
+    species = Species.query.get_or_404(taxonomy.species_id)
+    form = TaxonomyForm(taxonomy=taxonomy)
+    
+    if form.validate_on_submit():
+        taxonomy.species_author = form.species_author.data
+        taxonomy.authority = form.authority.data
+        taxonomy.taxonomic_status = form.taxonomic_status.data
+        taxonomy.tpl_version = form.tpl_version.data
+        taxonomy.infraspecies_accepted = form.infraspecies_accepted.data
+        taxonomy.species_epithet_accepted = form.species_epithet_accepted.data 
+        taxonomy.genus_accepted = form.genus_accepted.data
+        taxonomy.genus = form.genus.data
+        taxonomy.family = form.family.data
+        taxonomy.tax_order = form.tax_order.data
+        taxonomy.tax_class = form.tax_class.data
+        taxonomy.phylum = form.phylum.data
+        taxonomy.kingdom = form.kingdom.data
+        flash('The taxonomy has been updated.')
+        species_name = species.species_accepted
+        return redirect(url_for('.species_page',species_name=species_name))
+    
+    form.species_author.data = taxonomy.species_author
+    form.authority.data = taxonomy.authority
+    form.taxonomic_status.data = taxonomy.taxonomic_status
+    form.tpl_version.data = taxonomy.tpl_version
+    form.infraspecies_accepted.data = taxonomy.infraspecies_accepted
+    form.species_epithet_accepted.data = taxonomy.species_epithet_accepted
+    form.genus_accepted.data = taxonomy.genus_accepted
+    form.genus.data = taxonomy.genus
+    form.family.data = taxonomy.family
+    form.tax_order.data = taxonomy.tax_order
+    form.tax_class.data = taxonomy.tax_class
+    form.phylum.data = taxonomy.phylum
+    form.kingdom.data = taxonomy.kingdom
+
+    return render_template('species_form.html', form=form, taxonomy=taxonomy,species = species)
+
+@main.route('/traits/<int:id>/edit', methods=['GET', 'POST'])
+def trait_form(id):
+    planttrait = PlantTrait.query.get_or_404(id)
+    species = Species.query.get_or_404(planttrait.species_id)
+    form = PlantTraitForm(planttrait=planttrait)
+    
+    if form.validate_on_submit():
+        planttrait.max_height = form.max_height.data
+        planttrait.growth_type = form.growth_type.data
+        planttrait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
+        planttrait.reproductive_repetition = form.reproductive_repetition.data
+        planttrait.dicot_monoc = form.dicot_monoc.data
+        planttrait.angio_gymno = form.angio_gymno.data
+        flash('The plant trait infomation has been updated.')
+        species_name = species.species_accepted
+        return redirect(url_for('.species_page',species_name=species_name))
+    
+    form.max_height.data = planttrait.max_height
+    form.growth_type.data = planttrait.growth_type
+    form.growth_form_raunkiaer.data = planttrait.growth_form_raunkiaer
+    form.reproductive_repetition.data = planttrait.reproductive_repetition
+    form.dicot_monoc.data = planttrait.dicot_monoc
+    form.angio_gymno.data = planttrait.angio_gymno
+    return render_template('species_form.html', form=form, planttrait=planttrait,species = species)
 
 @main.route('/user/<username>')
 def user(username):

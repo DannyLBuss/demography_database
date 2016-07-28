@@ -1,7 +1,6 @@
 from flask.ext.wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
-    SubmitField, DecimalField, IntegerField, DateField,\
-    FormField
+    SubmitField, DecimalField, IntegerField, DateField, FloatField, FormField
 from wtforms.validators import Required, Length, Email, Regexp
 from wtforms import ValidationError
 from flask.ext.pagedown.fields import PageDownField
@@ -75,7 +74,7 @@ class TaxonomyForm(Form):
 	taxonomic_status = QuerySelectField('Taxonomic Status',
             query_factory=lambda: TaxonomicStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.status_name, a.status_description))
-	tpl_version = DecimalField('TPL Version')
+	tpl_version = StringField('TPL Version')
 	infraspecies_accepted = StringField('Infraspecies Accepted', validators=[])
 	species_epithet_accepted = StringField('Species Epithet Accepted', validators=[])
 	genus_accepted = StringField('Genus Accepted', validators=[])
@@ -87,7 +86,7 @@ class TaxonomyForm(Form):
 	kingdom = StringField('Kingdom', validators=[])
 
 	submit = SubmitField('Submit')
-
+    
 class PublicationForm(Form):
 	source_type = QuerySelectField('Source Type',
             query_factory=lambda: SourceType.query.all(), get_pk=lambda a: a.id,
@@ -143,7 +142,7 @@ class PopulationForm(Form):
 	lon_deg = StringField('Lon Deg')
 
 class PlantTraitForm(Form):
-	max_height = StringField('Max Height')
+	max_height = FloatField('Max Height')
 	growth_type = QuerySelectField('Growth Type',
             query_factory=lambda: GrowthType.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.type_name)
@@ -159,7 +158,8 @@ class PlantTraitForm(Form):
 	angio_gymno = QuerySelectField('Angio Gymno',
             query_factory=lambda: AngioGymno.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.angio_gymno_name)
-
+        submit = SubmitField('Submit')
+    
 class MatrixForm(Form):
 	treatment = StringField('Treatment *', validators=[Required()]) #Fkey (not set)
 	matrix_split = IntegerField('Matrix Split')
