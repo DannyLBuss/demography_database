@@ -262,4 +262,91 @@ def homepage():
             similar = None        
 
     return render_template('test.html', form=form, similar=similar, exact=exact)
+
+@compadre.route('/species_form/<int:id>', methods=['GET', 'POST'])
+def species_form(id):
+    species = Species.query.get_or_404(id)
+    form = SpeciesForm(species=species)
+      
+    if form.validate_on_submit():
+        print "species stuff", species.species_accepted
+        print "form stuff", form.species_accepted
+        species.species_accepted = form.species_accepted.data
+        species.iucn_status = form.iucn_status.data
+        species.esa_status = form.esa_status.data
+        species.invasive_status = form.invasive_status.data
+        flash('The species infomation has been updated.')
+        return redirect("/species-table")
+    
+    form.species_accepted.data = species.species_accepted
+    form.iucn_status.data = species.iucn_status
+    form.esa_status.data = species.esa_status
+    form.invasive_status.data = species.invasive_status
+    
+    return render_template('species_form.html', form=form, species=species)
+
+@compadre.route('/taxonomy_form/<int:id>', methods=['GET', 'POST'])
+def taxonomy_form(id):
+    taxonomy = Taxonomy.query.get_or_404(id)
+    species = Species.query.get_or_404(taxonomy.species_id)
+    form = TaxonomyForm(taxonomy=taxonomy)
+    
+    if form.validate_on_submit():
+        taxonomy.species_author = form.species_author.data
+        taxonomy.authority = form.authority.data
+        taxonomy.taxonomic_status = form.taxonomic_status.data
+        taxonomy.tpl_version = form.tpl_version.data
+        taxonomy.infraspecies_accepted = form.infraspecies_accepted.data
+        taxonomy.species_epithet_accepted = form.species_epithet_accepted.data 
+        taxonomy.genus_accepted = form.genus_accepted.data
+        taxonomy.genus = form.genus.data
+        taxonomy.family = form.family.data
+        taxonomy.tax_order = form.tax_order.data
+        taxonomy.tax_class = form.tax_class.data
+        taxonomy.phylum = form.phylum.data
+        taxonomy.kingdom = form.kingdom.data
+        flash('The taxonomy has been updated.')
+        return redirect("/species-table")
+    
+    form.species_author.data = taxonomy.species_author
+    form.authority.data = taxonomy.authority
+    form.taxonomic_status.data = taxonomy.taxonomic_status
+    form.tpl_version.data = taxonomy.tpl_version
+    form.infraspecies_accepted.data = taxonomy.infraspecies_accepted
+    form.species_epithet_accepted.data = taxonomy.species_epithet_accepted
+    form.genus_accepted.data = taxonomy.genus_accepted
+    form.genus.data = taxonomy.genus
+    form.family.data = taxonomy.family
+    form.tax_order.data = taxonomy.tax_order
+    form.tax_class.data = taxonomy.tax_class
+    form.phylum.data = taxonomy.phylum
+    form.kingdom.data = taxonomy.kingdom
+
+    return render_template('species_form.html', form=form, taxonomy=taxonomy,species = species)
+
+@compadre.route('/trait_form/<int:id>', methods=['GET', 'POST'])
+def trait_form(id):
+    planttrait = PlantTrait.query.get_or_404(id)
+    species = Species.query.get_or_404(planttrait.species_id)
+    form = PlantTraitForm(species=species)
+    
+    if form.validate_on_submit():
+        planttrait.max_height = form.max_height.data
+        planttrait.growth_type = form.growth_type.data
+        planttrait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
+        planttrait.reproductive_repetition = form.reproductive_repetition.data
+        planttrait.dicot_monoc = form.dicot_monoc.data
+        planttrait.angio_gymno = form.angio_gymno.data 
+        flash('The planttrait infomation has been updated.')
+        print url_for('.species_page', species_name=species.species_accepted)
+        return redirect("/species-table")
+    
+    form.max_height.data = planttrait.max_height
+    form.growth_type.data = planttrait.growth_type
+    form.growth_form_raunkiaer.data = planttrait.growth_form_raunkiaer
+    form.reproductive_repetition.data = planttrait.reproductive_repetition
+    form.dicot_monoc.data = planttrait.dicot_monoc
+    form.angio_gymno.data = planttrait.angio_gymno
+    return render_template('species_form.html', form=form, planttrait=planttrait,species = species)
+
 ''' End Routing '''

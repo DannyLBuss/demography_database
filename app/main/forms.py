@@ -6,7 +6,6 @@ from wtforms import ValidationError
 from flask.ext.pagedown.fields import PageDownField
 from ..models import Role, User
 
-
 class NameForm(Form):
     name = StringField('What is your name?', validators=[Required()])
     submit = SubmitField('Submit')
@@ -58,3 +57,4 @@ class PostForm(Form):
 class CommentForm(Form):
     body = StringField('Enter your comment', validators=[Required()])
     submit = SubmitField('Submit')
+    

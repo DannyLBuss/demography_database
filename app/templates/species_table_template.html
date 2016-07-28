@@ -5,41 +5,121 @@
 {% block title %}Demography Database{% endblock %}
 
 {% block page_content %}
-    <h1>Species in Compadre DB</h1>
-    <div id="species-search">
-        <input class="search" placeholder="Search" />
-        <button class="sort" data-sort="species">
-            Sort by name
-        </button>
-        <table class="table" >
-            <thead>
-                <th>Species Name</th>
-                <th>Genus</th>
-                <th>Family</th>        
-            </thead>
-            <tbody class="list">
-                {% for s in species %}
-                    {% for taxonomy in s.taxonomies %}
-                        <tr>
-                            <td class="species"><a href="../species/{{ s.species_accepted }}"><em>{{ s.species_accepted }}</em></a></td>
-                            <td class="genus">{{ taxonomy.genus }}</td>
-                            <td class="family">{{ taxonomy.family }}</td>
-                        </tr>
-                    {% endfor %}
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-        
-        
-    <script src="http://listjs.com/no-cdn/list.js"></script>
-    <script>
-        var options = {
-      valueNames: [ 'species', 'genus', 'family' ]
-    };
+<h1>All Species in Compadre</h1>
+<hr>
+<div id="species-search">
+    <div class="form-group">
 
-    var userList = new List('species-search', options);
-    </script>
+        <input type="text" class="search form-control" placeholder="Search everything" id="big_search">
+    </div>
+    <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default">
+            <input type="checkbox" class="filter" data-value="Algae"/> Algae</label>
+            <label class="btn btn-default">
+            <input type="checkbox" class="filter" data-value="Annual"/> Annual </label>
+            <label class="btn btn-default">
+            <input type="checkbox" class="filter" data-value="Bryophyte"/> Bryophyte </label>
+            <label class="btn btn-default">
+            <input type="checkbox" class="filter" data-value="Epiphyte"/> Epiphyte </label>
+            <label class="btn btn-default">
+            <input type="checkbox" class="filter" data-value="Fern"/> Fern </label>
+            <label class="btn btn-default">
+            <input type="checkbox" class="filter" data-value="Herbaceous perennial"/> Herbaceous perennial </label>
+            <label class="btn btn-default">
+            <input type="checkbox" class="filter" data-value="Liana"/> Liana </label>
+            <label class="btn btn-default">
+            <input type="checkbox" class="filter" data-value="Palm"/> Palm </label>
+            <label class="btn btn-default ">
+            <input type="checkbox" class="filter" data-value="Shrub"/> Shrub </label>
+            <label class="btn btn-default">
+            <input type="checkbox" class="filter" data-value="Succulent"/> Succulent </label>
+            <label class="btn btn-default">
+
+            <input type="checkbox" class="filter" data-value="Tree"/> Tree </label>
+        </div>
+    <hr>
+    <table class="table" >
+        <thead>
+            <th>Growth type
+                <button type="button" class="sort btn btn-xs" data-sort="growth_type"> Sort </button>
+            </th>
+            <th>Kingdom <button type="button" class="sort btn btn-xs" data-sort="kingdom"> Sort </button></th>
+            <th>Phylum <button type="button" class="sort btn btn-xs" data-sort="phylum"> Sort </button></th>
+            <th>Class <button type="button" class="sort btn btn-xs" data-sort="class"> Sort </button></th>
+            <th>Order <button type="button" class="sort btn btn-xs" data-sort="order"> Sort </button></th>
+            <th>Family <button type="button" class="sort btn btn-xs" data-sort="family"> Sort </button></th>
+            <th>Species <button type="button" class="sort btn btn-xs" data-sort="species"> Sort </button></th>
+        </thead>
+        <tbody class="list">
+            {% for s in species %}
+                {% for taxonomy in s.taxonomies %}
+                    <tr>
+                        {% for trait in s.plant_traits %}
+                        <td class="growthtype">{{ trait.growth_type.type_name }}</td>
+                        {% endfor %}
+                        <td class="kingdom" onClick="addTextTag('{{ taxonomy.kingdom }}');">{{ taxonomy.kingdom }}</td>
+                        <td class="phylum">{{ taxonomy.phylum }}</td>
+                        <td class="class">{{ taxonomy.tax_class }}</td>
+                        <td class="order">{{ taxonomy.tax_order }}</td>
+                        <td class="family">{{ taxonomy.family }}</td>
+                        <td class="species"><a href="../species/{{ s.species_accepted }}"><em>{{ s.species_accepted }}</em></a></td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>    
+<script src="http://listjs.com/no-cdn/list.js"></script>
+
+<script>
+$(function() {
+	var options = {
+		valueNames: ['kingdom', 'phylum', 'class', 'order', 'family', 'species','growthtype']
+	};
+
+	var userList = new List('species-search', options);
+	var activeFilters = [];
+
+
+    //filter
+    $('.filter').change(function() {
+        var isChecked = this.checked;
+        var value = $(this).data("value");
+      
+		if(isChecked){
+			//  add to list of active filters
+			activeFilters.push(value);
+		}
+		else
+		{
+			// remove from active filters
+			activeFilters.splice(activeFilters.indexOf(value), 1);
+		}
+		
+		userList.filter(function (item) {
+			if(activeFilters.length > 0)
+			{
+				return(activeFilters.indexOf(item.values().growthtype)) > -1;
+			}
+			return true;
+		});
+     });
+    
+    
+    
+});
+    
+    
+</script>
+<script>
+function addTextTag(text){
+    document.getElementById('big_search').value = text;
+    }
+</script>
+
+
 {% endblock %}
 
 {% block scripts %}

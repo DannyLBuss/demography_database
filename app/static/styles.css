@@ -140,9 +140,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#165833', end
     padding: 1em;
 }
 
-.nav.navbar-nav li a {
-    color: #ffffff;
+.masthead3{
+    background-color: #e2ebf0;
+    padding: 1em;
+}
+
+matrix_cont{
+    background-color: #e2f0e5; 
+}
+
+.navbar-nav navbar-right {
+    color:black;
+}
+
+ul.top-bar a {
     font-weight: bold;
+    color: #FFFFFF !important;
 }
 
 ul.top-bar a:hover { background-color: rgba(255, 255, 255, 0.31) !important; }
@@ -155,4 +168,46 @@ footer {
   color: #868686;
   padding-bottom: 200px;
     text-align: center;
+}
+
+.panel > .panel-heading {
+
+    background-color: #c0d2e2;
+    color: black;
+    
+}
+
+.label-default{
+    color: black;
+    background-color: #ffffff;
+    font-weight: normal;
+}
+
+.panel {
+    border-left-width: 1em;
+    border-right-width: 1em;
+    border-color: #e2ebf0;
+    border-bottom-width: 0.5em;
+}
+
+* {
+  border-radius: 0 !important;
+}
+
+.matA
+{
+    text-align:center; 
+    vertical-align:middle;
+}
+
+#dist_map {
+    height: 400px;
+}
+
+.btn-info {
+    padding:2px;
+}
+
+h1 {
+    font-size: 40px;
 }
