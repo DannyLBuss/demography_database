@@ -2,7 +2,8 @@
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-<link rel="stylesheet" type="text/css" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />{% endblock %} {% block navbar %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='leaflet.css') }}" />{% endblock %} {% block navbar %}
+
 <div class="navbar navbar-inverse navbar-static-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -18,7 +19,8 @@
             <ul class="nav navbar-nav top-bar">
                 <li><a href="{{ url_for('main.index') }}">Home</a></li> {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li> {% endif %}
-                <li><a href="{{ url_for('main.species_table') }}">Table of Species</a></li>
+                <li><a href="{{ url_for('main.species_table') }}">Search by Species</a></li>
+                <li><a href="{{ url_for('main.publications_table') }}">Search by Publication</a></li>
                 <li><a href="{{ url_for('api.home') }}">API</a></li>
                 <li><a href="{{ url_for('main.meta_tables_json') }}">Meta Tables</a></li>
             </ul>
@@ -41,5 +43,5 @@
 
 </div> 
 <footer><hr>
-            <img img-responsive src="https://upload.wikimedia.org/wikipedia/en/c/cc/University_of_Exeter_new_logo.svg">
+    <img img-responsive src="https://upload.wikimedia.org/wikipedia/en/c/cc/University_of_Exeter_new_logo.svg"></footer>
 {% endblock %} {% block scripts %} {{ super() }} {{ moment.include_moment() }}  {% endblock %}
