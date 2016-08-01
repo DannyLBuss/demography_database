@@ -4,7 +4,7 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
-from ..compadre.forms import SpeciesForm, TaxonomyForm, PlantTraitForm
+from ..compadre.forms import SpeciesForm, TaxonomyForm, PlantTraitForm, PopulationForm
 from .. import db
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
@@ -106,11 +106,23 @@ def species_table():
     species = Species.query.all()
     return render_template('species_table_template.html', species=species)
 
-@main.route('/species/<species_name>')
+@main.route('/publications-table/')
 # @login_required
-def species_page(species_name):
-    species = Species.query.filter_by(species_accepted=species_name).first_or_404()
+def publications_table():
+    publications = Publication.query.all()
+    return render_template('publications_table_template.html', publications=publications)
+
+@main.route('/species/<int:id>/overview')
+# @login_required
+def species_page(id):
+    species = Species.query.filter_by(id=id).first_or_404()
     return render_template('species_template.html',species = species)
+
+@main.route('/publication/<int:id>')
+# @login_required
+def publication_page(id):
+    publication = Publication.query.filter_by(id=id).first_or_404()
+    return render_template('source_template.html',publication = publication)
 
 # SPECIES/TAXONOMY/TRAIT FORMS
 @main.route('/species/<int:id>/edit', methods=['GET', 'POST'])
@@ -198,6 +210,17 @@ def trait_form(id):
     form.dicot_monoc.data = planttrait.dicot_monoc
     form.angio_gymno.data = planttrait.angio_gymno
     return render_template('species_form.html', form=form, planttrait=planttrait,species = species)
+
+@main.route('/population/<int:id>/edit', methods=['GET', 'POST'])
+def population_form(id):
+    population = Population.query.get_or_404(id)
+    species = Species.query.get_or_404(population.species_id)
+    form = PopulationForm(population=population)
+    
+    return render_template('species_form.html', form=form, population=population,species = species)
+
+
+# end of forms
 
 @main.route('/user/<username>')
 def user(username):
