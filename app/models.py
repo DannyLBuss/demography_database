@@ -1303,6 +1303,10 @@ class AuthorContact(db.Model):
     content_email_id = db.Column(db.Integer, db.ForeignKey('content_email.id')) #possibly many to many, probably a good idea if vector
     author_reply = db.Column(db.Text())
 
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('author_contacts.id'))
+    versions = db.relationship("AuthorContact", backref="original")
+
 
     @staticmethod
     def migrate():
@@ -1342,8 +1346,8 @@ class AdditionalSource(db.Model):
     description = db.Column(db.Text())
 
     version = db.Column(db.Integer())
-    version_of_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
-    versions = db.relationship("Publication", backref="original")
+    version_of_id = db.Column(db.Integer, db.ForeignKey('additional_sources.id'))
+    versions = db.relationship("AdditionalSource", backref="original")
 
     def to_json(self, key):
         additional_source = {
