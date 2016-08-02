@@ -135,8 +135,10 @@ def species_form(id):
         species.iucn_status = form.iucn_status.data
         species.esa_status = form.esa_status.data
         species.invasive_status = form.invasive_status.data
-        flash('The species infomation has been updated.')
+
+        species.save_as_version()
         species_name = species.species_accepted
+        flash('The species infomation has been updated.')
         return redirect(url_for('.species_page',species_name=species_name))
     
     form.species_accepted.data = species.species_accepted

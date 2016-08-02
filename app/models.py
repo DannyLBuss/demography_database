@@ -1042,6 +1042,9 @@ class Species(db.Model):
         IUCNStatus.migrate()
         ESAStatus.migrate()
 
+    def save_as_version(self):
+        print self
+
     def to_json(self, key):
         species = {
             'species_accepted': self.species_accepted,

@@ -97,6 +97,55 @@ def csv_migrate():
             submit(entry)
     return 
 
+
+def versions_to_nil(array):
+    for x in array:
+        if x.version is None:
+            x.version = 0
+            x.version_of_id = x.id
+            
+            db.session.add(x)
+            db.session.commit()
+
+@manager.command
+def version_null_to_0():
+    print "Setting ALL null versions to 0"
+
+    print "Resetting Species..."
+    versions_to_nil(Species.query.all())
+
+    print "Resetting Taxonomy..."
+    versions_to_nil(Taxonomy.query.all())
+    
+    print "Resetting Matrix..."
+    versions_to_nil(Matrix.query.all())
+
+    print "Resetting Study..."
+    versions_to_nil(Study.query.all())
+
+    print "Resetting Publication..."
+    versions_to_nil(Publication.query.all())
+
+    print "Resetting PlantTrait..."
+    versions_to_nil(PlantTrait.query.all())
+
+    print "Resetting Population..."
+    versions_to_nil(Population.query.all())
+
+    print "Resetting AuthorContact..."
+    versions_to_nil(AuthorContact.query.all())
+
+    print "Resetting Stage..."
+    versions_to_nil(Stage.query.all())
+
+    print "Resetting StageType..."
+    versions_to_nil(StageType.query.all())
+
+    print "Resetting MatrixStage..."
+    versions_to_nil(MatrixStage.query.all())
+
+
+
 @manager.command
 def delete_table_data():
     response = raw_input("Are you sure you want to delete all data? (y/n): ")
