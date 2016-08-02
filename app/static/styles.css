@@ -138,6 +138,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#165833', end
 .info_box{
     background-color: #e2ebf0;
     padding: 1em;
+    margin-bottom: 20px;
+    
 }
 
 matrix_cont{
@@ -224,4 +226,17 @@ h1 {
 
 .little_logo{
     height:18px;
+}
+
+.footer-logo{
+    height:60px;
+}
+
+td {
+    word-wrap:break-word;
+}
+
+.filter {
+    width: 20px; 
+    height: 20px;
 }
