@@ -1033,6 +1033,10 @@ class Species(db.Model):
     populations = db.relationship("Population", backref="species")
     stages = db.relationship("Stage", backref="species")
 
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('species.id'))
+    versions = db.relationship("Species", backref="original")
+
     @staticmethod
     def migrate():
         IUCNStatus.migrate()
@@ -1082,6 +1086,10 @@ class Taxonomy(db.Model):
     tax_class = db.Column(db.String(64))
     phylum = db.Column(db.String(64))
     kingdom = db.Column(db.String(64))
+
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('taxonomies.id'))
+    versions = db.relationship("Taxonomy", backref="original")
 
     @staticmethod
     def migrate():
@@ -1139,6 +1147,10 @@ class PlantTrait(db.Model):
     reproductive_repetition_id = db.Column(db.Integer, db.ForeignKey('reproductive_repetition.id'))
     dicot_monoc_id = db.Column(db.Integer, db.ForeignKey('dicot_monoc.id'))
     angio_gymno_id = db.Column(db.Integer, db.ForeignKey('angio_gymno.id'))
+
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('plant_traits.id'))
+    versions = db.relationship("PlantTrait", backref="original")
 
     @staticmethod
     def migrate():
@@ -1202,6 +1214,10 @@ class Publication(db.Model):
     taxonomies = db.relationship("Taxonomy", backref="publication")
     studies = db.relationship("Study", backref="publication")
 
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
+    versions = db.relationship("Publication", backref="original")
+
     @staticmethod
     def migrate():
         SourceType.migrate()
@@ -1258,6 +1274,10 @@ class Study(db.Model):
     populations = db.relationship("Population", backref="study")
     number_populations = db.Column(db.Integer()) #could verify with populations.count()
 
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
+    versions = db.relationship("Study", backref="original")
+
     def to_json(self, key):
         study = {
             'publication' : url_for('api.get_publication', id=self.publication.id, key=key,
@@ -1282,6 +1302,7 @@ class AuthorContact(db.Model):
     contacting_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     content_email_id = db.Column(db.Integer, db.ForeignKey('content_email.id')) #possibly many to many, probably a good idea if vector
     author_reply = db.Column(db.Text())
+
 
     @staticmethod
     def migrate():
@@ -1319,6 +1340,10 @@ class AdditionalSource(db.Model):
     DOI_ISBN = db.Column(db.Text())
     name = db.Column(db.Text()) #r-generated, needs more info, probably to be generated in method of this model, first author in author list?
     description = db.Column(db.Text())
+
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
+    versions = db.relationship("Publication", backref="original")
 
     def to_json(self, key):
         additional_source = {
@@ -1360,6 +1385,10 @@ class Population(db.Model):
     geometries = db.Column(db.Text()) #This needs work once i've decided wether to use Flask or Django - such good cases for both. Databases support point geometry, including altitude.
 
     matrices = db.relationship("Matrix", backref="population")
+
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('populations.id'))
+    versions = db.relationship("Population", backref="original")
 
     def geometries_dec(self):
         geo = json.loads(self.geometries)
@@ -1443,6 +1472,10 @@ class Stage(db.Model):
 
     matrix_stages = db.relationship("MatrixStage", backref="stage")
 
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('stages.id'))
+    versions = db.relationship("Stage", backref="original")
+
     def to_json(self, key):
         stage = {
             # species : self.species url?
@@ -1464,6 +1497,10 @@ class StageType(db.Model):
     type_class_id = db.Column(db.Integer, db.ForeignKey('stage_type_classes.id'))
 
     stages = db.relationship("Stage", backref="stage_types")
+
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('stage_types.id'))
+    versions = db.relationship("StageType", backref="original")
 
     def to_json(self, key):
         stage_type = {
@@ -1542,6 +1579,10 @@ class MatrixStage(db.Model):
 
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('matrix_stages.id'))
+    versions = db.relationship("MatrixStage", backref="original")
+
     def to_json(self, key):
         matrix_stage = {
             'stage_order' : self.stage_order,
@@ -1562,6 +1603,10 @@ class MatrixValue(db.Model):
     value = db.Column(db.Float())
 
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
+
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('matrix_values.id'))
+    versions = db.relationship("MatrixValue", backref="original")
 
     @staticmethod
     def migrate():
@@ -1615,17 +1660,18 @@ class Matrix(db.Model):
     observations = db.Column(db.Text())
     checked = db.Column(db.Boolean())
     status_id = db.Column(db.Integer, db.ForeignKey('statuses.id'))
-    #version = db.Column(db.Integer())
-    #version_of_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
-    #proceeds_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
     intervals = db.relationship("Interval", backref="matrix")
     matrix_values = db.relationship("MatrixValue", backref="matrix")
     matrix_stages = db.relationship("MatrixStage", backref="matrix")
     fixed = db.relationship("Fixed", backref="matrix")
     seeds = db.relationship("Seed", backref="matrix")
-    #versions = db.relationship("Matrix", backref="original")
-    #preceeds = db.relationship("Matrix", backref="proceeds")
+
+    # Versioning
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
+    versions = db.relationship("Matrix", backref="original")
+    
 
     @staticmethod
     def migrate():
