@@ -139,7 +139,7 @@ def species_form(id):
         species.save_as_version()
         species_name = species.species_accepted
         flash('The species infomation has been updated.')
-        return redirect(url_for('.species_page',species_name=species_name))
+        return redirect(url_for('.species_page',id=id))
     
     form.species_accepted.data = species.species_accepted
     form.iucn_status.udata = species.iucn_status
@@ -170,7 +170,7 @@ def taxonomy_form(id):
         taxonomy.kingdom = form.kingdom.data
         flash('The taxonomy has been updated.')
         species_name = species.species_accepted
-        return redirect(url_for('.species_page',species_name=species_name))
+        return redirect(url_for('.species_page',id=id))
     
     form.species_author.data = taxonomy.species_author
     form.authority.data = taxonomy.authority

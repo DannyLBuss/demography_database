@@ -4,10 +4,10 @@
     <div class="pull-right">
         <a href="/publication/{{publication.id}}/edit" type="button" class="btn btn-info">Edit publication</a>         
     </div>
-    <h1>{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_book_conf }}</i> {{ publication.volume }}, {{ publication.pages }}.</h1>
-    <h3><strong>Additional Source:</strong> ({{publication.additional_source_string}}) </h3>
+    <h2>{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_book_conf }}</i> {{ publication.volume }}, {{ publication.pages }}.<small> ID: {{publication.id}}</small></h2>
+    <h4><strong>Additional Source:</strong> ({{publication.additional_source_string}}) </h4>
 </div>
-<br>
+
 {% for population in publication.populations %}
 
 <div class="info_box">
@@ -15,7 +15,7 @@
         <a href="/population/{{population.id}}/edit" type="button" class="btn btn-info">Edit population</a> 
         <a type="button" class="btn btn-info disabled">Add new matrix</a>
     </div>
-        <h4><strong>Species:</strong> <a href="../species/{{ population.species_id }}/overview"><em>{{ population.species_id }}</em></a></h4>
+        <h4><strong>Species:</strong> <a href="../species/{{ population.species.id }}/overview"><em>{{ population.species.species_accepted }}</em></a><small> ID: {{ population.species.id }}</small></h4>
         <h4><strong>Population Name: </strong>{{ population.name }} <small>ID: {{ population.id }}</small> </h4>
     <ul>
         <li>Studied for {{ population.study.study_duration }} years</li>
@@ -24,7 +24,7 @@
             <li><strong>Geometries: </strong> {{ population.geometries }}</li>
     </ul>
     <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> Show/hide matrices </button>
-</div>
+
         
 <div id="population_{{ population.id }}" class='panel-collapse collapse'> 
 
@@ -76,9 +76,11 @@
             </div>
          </div>
     </div> 
+    
     {% endfor %}
 </div>
-<br>
+    </div>
+
 {% endfor %}
 <script>
     // Change matrix strings into tables

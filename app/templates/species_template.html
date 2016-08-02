@@ -1,21 +1,18 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
 <div class="info_box"> {% for taxonomy in species.taxonomies %}{% for trait in species.plant_traits %}
-    <div class="pull-right">
-        <a href="/species/{{species.id}}/edit" type="button" class="btn btn-info">Edit species infomation</a>
-        <a href="/taxonomy/{{taxonomy.id}}/edit" type="button" class="btn btn-info">Edit taxonomy</a>
-        <a href="/traits/{{trait.id}}/edit" type="button" class="btn btn-info">Edit plant traits</a>
-    </div>
-    
+    <div class="pull-right"> <a href="/species/{{species.id}}/edit" type="button" class="btn btn-info">Edit species infomation</a> <a href="/taxonomy/{{taxonomy.id}}/edit" type="button" class="btn btn-info">Edit taxonomy</a> <a href="/traits/{{trait.id}}/edit" type="button" class="btn btn-info">Edit plant traits</a> </div>
     <h1><i>{{species.species_accepted}}</i> <small>ID: {{species.id}}</small></h1>
-    
-    <h4>Search external sources:</h4>        
-    <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://media.eol.org//assets/favicon-9de6ee8ce10b9ad7b2662236411f4539.ico" class="little_logo"> Enyclopedia of Life</a> <a href="http://www.catalogueoflife.org/col/search/all/key/{{species.species_accepted}}/" target="_blank" class="btn btn-default" role="button"><img src="http://www.catalogueoflife.org/sites/default/files/favicon.gif" class="little_logo"> Catalogue of Life</a> <a href="https://en.wikipedia.org/wiki/{{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://en.wikipedia.org/static/favicon/wikipedia.ico" class="little_logo"> Wikipedia</a> <a href="http://www.ncbi.nlm.nih.gov/nuccore/?term=%22{{species.species_accepted}}%22" target="_blank" class="btn btn-default" role="button"><img class="little_logo" src="https://www.ncbi.nlm.nih.gov/favicon.ico"> Genbank</a> <a href="https://scholar.google.co.uk/scholar?q={{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://scholar.google.co.uk/favicon-png.ico" class="little_logo"> Scholar</a>
+    <h4>Search external sources:</h4>
+    <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://media.eol.org//assets/favicon-9de6ee8ce10b9ad7b2662236411f4539.ico" class="little_logo"> Enyclopedia of Life</a>
+    <a href="http://www.catalogueoflife.org/col/search/all/key/{{species.species_accepted}}/" target="_blank" class="btn btn-default" role="button"><img src="http://www.catalogueoflife.org/sites/default/files/favicon.gif" class="little_logo"> Catalogue of Life</a>
+    <a href="https://en.wikipedia.org/wiki/{{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://en.wikipedia.org/static/favicon/wikipedia.ico" class="little_logo"> Wikipedia</a>
+    <a href="http://www.ncbi.nlm.nih.gov/nuccore/?term=%22{{species.species_accepted}}%22" target="_blank" class="btn btn-default" role="button"><img class="little_logo" src="https://www.ncbi.nlm.nih.gov/favicon.ico"> Genbank</a>
+    <a href="https://scholar.google.co.uk/scholar?q={{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://scholar.google.co.uk/favicon-png.ico" class="little_logo"> Scholar</a>
     <div class="row">
-        <div class="col-sm-8">   
+        <div class="col-sm-8">
             <h3>Distribution map (GBIF)</h3>
-        <div id="dist_map"></div>
+            <div id="dist_map"></div>
         </div>
-        
         <div class="col-sm-4">
             <h3>Taxonomy <small>ID: {{taxonomy.id}}</small></h3>
             <table style="width:100%" class="table">
@@ -54,143 +51,130 @@
                     </tr>
                 </tbody>
             </table>
-            <h3>Plant Traits <small>ID: {{trait.id}}</small></h3> 
+            <h3>Plant Traits <small>ID: {{trait.id}}</small></h3>
             <ul>
                 <li><strong>Growth type: </strong> {{ trait.growth_type.type_name }}</li>
                 <li><strong>Dicotyledon/monocotyledon: </strong> {{ trait.dicot_monoc.dicot_monoc_name }}</li>
                 <li><strong>Angiosperm/gymnosperm: </strong> {{ trait.angio_gymno.angio_gymno_name }}</li>
-            </ul> {% endfor %}
-        </div>
-    </div> 
-    {% endfor %}
-    <br>
+            </ul> {% endfor %} </div>
+    </div> {% endfor %}
 </div>
-<br>
-<div class = "info_box">
-    <h4><strong>Publications</strong></h4>
-    <table style="width:100%" class="table">
-        <thead>
-            <tr>
-                <td>Reference</td>
-                <td>DOI</td>
-                <td>Filter</td>
-            </tr>
-        </thead>
-        
-        <tbody>
-            {% for population in species.populations %}
-            <tr>
-                <td>
-                    <h4><a href="../../publication/{{ population.publication.id }}">{{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.pub_title }}" in <i>{{ population.publication.journal_book_conf }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}.  </a> <small>ID: {{population.publication.id}}</small></h4>
-                </td>
-                <td>
-                    <a href="https://doi.org/{{ population.publication.DOI_ISBN }}" target="_blank" class="btn btn-default" role="button">{{ population.publication.DOI_ISBN }}</a></td>
-                <td>
-                    <input type="checkbox" value="">
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    </div>
-<br> 
-{% for population in species.populations %}
-<div class="info_box">
-    <div class="pull-right">
-        <a href="/population/{{population.id}}/edit" type="button" class="btn btn-info">Edit population</a> 
-        <a type="button" class="btn btn-info disabled">Add new matrix</a>
-    </div>
-    
-        <h4><strong>Population Name: </strong>{{ population.name }} <small>ID: {{ population.id }}</small> </h4>
-        <ul>
-            <li><strong>Publication: </strong>{{ population.publication.pub_title }}</li>
-            <li>Studied for {{ population.study.study_duration }} years</li>
-            <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
-            <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}
-            <li><strong>Geometries: </strong> {{ population.geometries }}</li>
-    </ul>
-    <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> Show/hide matrices </button>
-</div>
-        
-<div id="population_{{ population.id }}" class='panel-collapse collapse'> 
 
-    {% for matrix in population.matrices %}
-    <div class="panel-group">
-        <div class="panel panel-default">
-            <div class="panel-heading" data-toggle="collapse" href="#matrix_{{matrix.id}}2">
-                <h4 id="{{matrix.id}}" class="panel-title">
+<div id="publication_filter">
+    
+    <div class="info_box">
+        <table style="width:100%" class="table">
+            <thead>
+                <tr>
+                    <td><h4><strong>Publications:</strong></h4></td>
+                    <td><h4>DOI/ISBN</h4></td>
+                    <td><h4>Filter</h4></td>
+                </tr>
+            </thead>
+            <tbody> {% for population in species.populations %}
+                <tr class="remove_duplicates">
+                    <td>
+                        <a href="../../publication/{{ population.publication.id }}">{{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.pub_title }}" in <i>{{ population.publication.journal_book_conf }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}.  </a> <small>ID: {{population.publication.id}}</small> </td>
+                    <td> <a href="https://doi.org/{{ population.publication.DOI_ISBN }}" target="_blank" >{{ population.publication.DOI_ISBN }}</a></td>
+                    <td>
+                        <input type="checkbox" class="filter" data-value="id{{population.publication.id}}"> 
+                    </td>
+                </tr> {% endfor %} </tbody>
+        </table>
+        
+    </div>
+    
+    <div class="list">
+    {% for population in species.populations %}
+        <div class="info_box">
+            <div class="population" data-value="id{{population.publication.id}}"></div>
+            <div class="pull-right"> <a href="/population/{{population.id}}/edit" type="button" class="btn btn-info">Edit population</a> <a type="button" class="btn btn-info disabled">Add new matrix</a> </div>
+            <h4><strong>Population Name: </strong>{{ population.name }} <small>ID: {{ population.id }}</small> </h4>
+            <ul>
+                <li><strong>Publication: </strong>{{ population.publication.authors }}</li>
+                <li>Studied for {{ population.study.study_duration }} years</li>
+                <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
+                <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}
+                    <li><strong>Geometries: </strong> {{ population.geometries }}</li>
+            </ul>
+            <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> Show/hide matrices </button>
+        
+        <div id="population_{{ population.id }}" class='panel-collapse collapse'> 
+            
+            {% for matrix in population.matrices %}
+            
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading" data-toggle="collapse" href="#matrix_{{matrix.id}}2">
+                        <h4 id="{{matrix.id}}" class="panel-title">
                         <p><span class="label label-default">{{ matrix.matrix_composition.comp_name }}</span> <span class="label label-default">{{ matrix.matrix_dimension }} x {{ matrix.matrix_dimension }}</span> <span class="label label-default">{{ matrix.matrix_start }}-{{ matrix.matrix_end }}</span> <span background-color="#" class="label label-default">{{ matrix.treatment.type_name }}</span> <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span> <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span><small> ID: {{matrix.id}}</small></p>
                     </h4> </div>
-            <div id="matrix_{{matrix.id}}2" class="panel-collapse collapse">
-                <li class="list-group-item">
-                    <ul class="nav nav-pills matrices">
-                        <li class="active"><a data-toggle="pill" href="#home_{{matrix.id}}">Matrix</a></li>
-                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_1">Survival Matrix </a></li>
-                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_2">Fecundity Matrix</a></li>
-                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_3">Clonal Matrix</a></li>
-                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li>
-                        <a type="button" class="btn btn-info pull-right disabled">Edit matrix</a>
-                    </ul>
-                    
-                    <div class="tab-content">
-                        <div id="home_{{matrix.id}}" class="tab-pane in active">
-                            <div class="table-responsive matA"> {{ matrix.matrix_a_string }} </div>
-                        </div>
-                        <div id="menu_{{matrix.id}}_1" class="tab-pane">
-                            <div class="table-responsive"> INSERT_MAT_U </div>
-                        </div>
-                        <div id="menu_{{matrix.id}}_2" class="tab-pane">
-                            <div class="table-responsive"> INSERT_MAT_F </div>
-                        </div>
-                        <div id="menu_{{matrix.id}}_3" class="tab-pane">
-                            <div class="table-responsive"> INSERT_MAT_C </div>
-                        </div>
-                        <div id="menu_{{matrix.id}}_4" class="tab-pane">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <p>Matrix start season: {% if matrix.matrix_start_season_id > 0 %}{{ matrix.matrix_start_season.season_name }}{% else %} NA{% endif %}</p>
+                    <div id="matrix_{{matrix.id}}2" class="panel-collapse collapse">
+                        <li class="list-group-item">
+                            <ul class="nav nav-pills matrices">
+                                <li class="active"><a data-toggle="pill" href="#home_{{matrix.id}}">Matrix</a></li>
+                                <li><a data-toggle="pill" href="#menu_{{matrix.id}}_1">Survival Matrix </a></li>
+                                <li><a data-toggle="pill" href="#menu_{{matrix.id}}_2">Fecundity Matrix</a></li>
+                                <li><a data-toggle="pill" href="#menu_{{matrix.id}}_3">Clonal Matrix</a></li>
+                                <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li> <a type="button" class="btn btn-info pull-right disabled">Edit matrix</a> </ul>
+                            <div class="tab-content">
+                                <div id="home_{{matrix.id}}" class="tab-pane in active">
+                                    <div class="table-responsive matA"> {{ matrix.matrix_a_string }} </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <p>Matrix end season: {% if matrix.matrix_end_season_id > 0 %}{{ matrix.matrix_end_season.season_name }}{% else %} NA{% endif %}</p>
+                                <div id="menu_{{matrix.id}}_1" class="tab-pane">
+                                    <div class="table-responsive"> INSERT_MAT_U </div>
                                 </div>
+                                <div id="menu_{{matrix.id}}_2" class="tab-pane">
+                                    <div class="table-responsive"> INSERT_MAT_F </div>
+                                </div>
+                                <div id="menu_{{matrix.id}}_3" class="tab-pane">
+                                    <div class="table-responsive"> INSERT_MAT_C </div>
+                                </div>
+                                <div id="menu_{{matrix.id}}_4" class="tab-pane">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <p>Matrix start season: {% if matrix.matrix_start_season_id > 0 %}{{ matrix.matrix_start_season.season_name }}{% else %} NA{% endif %}</p>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <p>Matrix end season: {% if matrix.matrix_end_season_id > 0 %}{{ matrix.matrix_end_season.season_name }}{% else %} NA{% endif %}</p>
+                                        </div>
+                                    </div>
+                                    <p><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</p>
+                                </div>
+                                <p><strong>Observations: </strong> {{ matrix.observations }}</p>
                             </div>
-                            <p><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</p>
-                        </div>
-                        <p><strong>Observations: </strong> {{ matrix.observations }}</p>
+                        </li>
                     </div>
-                </li>
+                </div>
             </div>
-         </div>
-    </div> 
-    {% endfor %}
+            
+            
+            
+            {% endfor %} 
+            </div>
+        </div>
+        {% endfor %} 
+        
+    </div>
 </div>
-<br>
-{% endfor %}
+
 <script>
     // Change matrix strings into tables
     var divs = document.getElementsByClassName("matA");
-    
-    for(var ii = 0; ii < divs.length; ii++){
-
+    for (var ii = 0; ii < divs.length; ii++) {
         var matrix_string = divs[ii].innerHTML;
         var matrix_string = matrix_string.replace(" [", "");
         var matrix_string = matrix_string.replace("] ", "");
-
         var matrix_string_array = matrix_string.split(" ");
         matSize = Math.sqrt(matrix_string_array.length)
-
         var table_new = document.createElement('TABLE');
         table_new.className = 'table table-bordered';
-
         var tableBody = document.createElement('TBODY');
         table_new.appendChild(tableBody);
-
         var index = 0;
         for (var i = 0; i < matSize; i++) {
             var tr = document.createElement('TR');
             tableBody.appendChild(tr);
-
             for (var j = 0; j < matSize; j++) {
                 var td = document.createElement('TD');
                 td.appendChild(document.createTextNode(matrix_string_array[index]));
@@ -202,42 +186,73 @@
         divs[ii].appendChild(table_new);
     }
 </script>
-
 <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
 <script src="{{ url_for('static', filename='leaflet.js') }}"></script>
+<script src="{{ url_for('static', filename='list.js') }}"></script>
 
 <script>
     var mymap = L.map('dist_map').setView([20, 0], 1);
     var Esri_WorldPhysical = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
-	maxZoom: 8
+        attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service'
+        , maxZoom: 8
+        , minZoom: 1
     }).addTo(mymap);
     L.tileLayer('http://api.gbif.org/v1/map/density/tile?x={x}&y={y}&z={z}&type=TAXON&key=8522&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds', {
         attribution: 'Data: GBIF'
         , maxZoom: 8
-        , minZoom: 1,
-    }).addTo(mymap);
+        , minZoom: 1
+    , }).addTo(mymap);
 </script>
 
 <script>
     var seen = {};
-    $('tr').each(function() {
+    $('.remove_duplicates').each(function () {
         var txt = $(this).text();
-        if (seen[txt])
-            $(this).remove();
-        else
-            seen[txt] = true;
+        if (seen[txt]) $(this).remove();
+        else seen[txt] = true;
     });
 </script>
 
 <script>
-// ADD MARKERS TO MAP
-
+    // ADD MARKERS TO MAP
 </script>
 
+<script>
+    $(function () {
+        var options = {
+            valueNames: [
+                {attr: 'data-value', name: 'population'}
+            ]
+        };
+        
+        var userList = new List('publication_filter', options);
+        
+        var activeFilters = [];
+        
+        //filter
+        $('.filter').change(function() {
+            var isChecked = this.checked;
+            var value = $(this).data("value");
 
-{% endblock %} 
-{% block scripts %} 
-{{ super() }} 
-{{ pagedown.include_pagedown() }} 
-{% endblock %}
+            if(isChecked){
+                //  add to list of active filters
+                activeFilters.push(value);
+            }
+            else
+            {
+                // remove from active filters
+                activeFilters.splice(activeFilters.indexOf(value), 1);
+            }
+
+            userList.filter(function (item) {
+                if(activeFilters.length > 0)
+                {
+                    return(activeFilters.indexOf(item.values().population)) > -1;
+                }
+                return true;
+            });
+         });
+    });
+</script> 
+
+{% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }} {% endblock %}

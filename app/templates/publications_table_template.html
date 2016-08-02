@@ -12,59 +12,25 @@
 
         <input type="text" class="search form-control" placeholder="Search everything" id="big_search">
     </div>
-    <div class="btn-group togglers" data-toggle="buttons">
-            <label class="btn btn-default">
-            <input type="checkbox" class="filter" data-value="Algae"/> Algae</label>
-            <label class="btn btn-default">
-            <input type="checkbox" class="filter" data-value="Annual"/> Annual </label>
-            <label class="btn btn-default">
-            <input type="checkbox" class="filter" data-value="Bryophyte"/> Bryophyte </label>
-            <label class="btn btn-default">
-            <input type="checkbox" class="filter" data-value="Epiphyte"/> Epiphyte </label>
-            <label class="btn btn-default">
-            <input type="checkbox" class="filter" data-value="Fern"/> Fern </label>
-            <label class="btn btn-default">
-            <input type="checkbox" class="filter" data-value="Herbaceous perennial"/> Herbaceous perennial </label>
-            <label class="btn btn-default">
-            <input type="checkbox" class="filter" data-value="Liana"/> Liana </label>
-            <label class="btn btn-default">
-            <input type="checkbox" class="filter" data-value="Palm"/> Palm </label>
-            <label class="btn btn-default ">
-            <input type="checkbox" class="filter" data-value="Shrub"/> Shrub </label>
-            <label class="btn btn-default">
-            <input type="checkbox" class="filter" data-value="Succulent"/> Succulent </label>
-            <label class="btn btn-default">
-
-            <input type="checkbox" class="filter" data-value="Tree"/> Tree </label>
-        </div>
     <hr>
-    <table class="table" >
+    <table class="table" style="table-layout: fixed; width: 100%">
         <thead>
-            <th>Growth type
-                <button type="button" class="sort btn btn-xs" data-sort="growth_type"> Sort </button>
-            </th>
-            <th>Kingdom <button type="button" class="sort btn btn-xs" data-sort="kingdom"> Sort </button></th>
-            <th>Phylum <button type="button" class="sort btn btn-xs" data-sort="phylum"> Sort </button></th>
-            <th>Class <button type="button" class="sort btn btn-xs" data-sort="class"> Sort </button></th>
-            <th>Order <button type="button" class="sort btn btn-xs" data-sort="order"> Sort </button></th>
-            <th>Family <button type="button" class="sort btn btn-xs" data-sort="family"> Sort </button></th>
-            <th>Species <button type="button" class="sort btn btn-xs" data-sort="species"> Sort </button></th>
+            <th style="width: 30%;">Author(s) <button type="button" class="sort btn btn-xs" data-sort="authors"> Sort </button></th>
+            <th style="width: 35%;">Publication name <button type="button" class="sort btn btn-xs" data-sort="name"> Sort </button></th>
+            <th style="width: 10%;">Journal <button type="button" class="sort btn btn-xs" data-sort="journal"> Sort </button></th>
+            <th style="width: 10%;">Year <button type="button" class="sort btn btn-xs" data-sort="year"> Sort </button></th>
+            <th style="width: 15%;">DOI / ISBN</th>
         </thead>
         <tbody class="list">
-            {% for s in species %}
-                {% for taxonomy in s.taxonomies %}
-                    <tr>
-                        {% for trait in s.plant_traits %}
-                        <td class="growthtype">{{ trait.growth_type.type_name }}</td>
-                        {% endfor %}
-                        <td class="kingdom" onClick="addTextTag('{{ taxonomy.kingdom }}');">{{ taxonomy.kingdom }}</td>
-                        <td class="phylum">{{ taxonomy.phylum }}</td>
-                        <td class="class">{{ taxonomy.tax_class }}</td>
-                        <td class="order">{{ taxonomy.tax_order }}</td>
-                        <td class="family">{{ taxonomy.family }}</td>
-                        <td class="species"><a href="../species/{{ s.id }}/overview"><em>{{ s.species_accepted }}</em></a></td>
-                    </tr>
-                {% endfor %}
+            {% for publication in publications %}
+                <tr>
+                    <td class="authors" >{{ publication.authors }}</td>
+                    <td class="name"><a href="../publication/{{ publication.id }}">{{ publication.name }}</a></td>
+                    <td class="journal">{{ publication.journal_book_conf }}</td>
+                    <td class="year">{{ publication.year }}</td>
+                    <td class="doi"><small><a href="https://doi.org/{{ publication.DOI_ISBN }}" target="_blank">{{ publication.DOI_ISBN }}</a></small></td>
+
+                </tr>
             {% endfor %}
         </tbody>
     </table>
@@ -79,8 +45,8 @@
 <script>
 $(function() {
 	var options = {
-		valueNames: ['kingdom', 'phylum', 'class', 'order', 'family', 'species','growthtype'],
-        page: 20,
+		valueNames: ['authors', 'name', 'journal', 'year', 'doi'],
+        page: 1000,
         plugins: [
             ListPagination({})
         ]
