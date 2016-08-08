@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Demography Database - Test{% endblock %}
+
+{% block page_content %}
+<div class="page-header info_box">
+    <a type="button" class="btn btn-default" href="../../species/{{species.id}}/overview">Go back to species overview</a>
+    <h1>Editing infomation for <i>{{species.species_accepted}}</i></h1>
+    <h3>Population: {{population.name}}</h3>
+</div>
+<div >
+    <form method="post" role="form">
+        <div class = "info_box">
+            <div class="form">
+                {{ form.hidden_tag() }}
+                {{ wtf.form_errors(form, hiddens="only") }}
+            </div>
+            <h3>Matrix infomation</h3>
+            <div class="form">
+                {{ wtf.form_field(form.treatment) }}
+                {{ wtf.form_field(form.observations) }}
+                {{ wtf.form_field(form.matrix_composition) }}
+                {{ wtf.form_field(form.n_intervals)}}
+                {{ wtf.form_field(form.captivity_id) }}
+            </div>
+            <br>
+
+            <div class="form form-inline">
+                <div class="row">
+                    <div class="col-sm-4">{{ wtf.form_field(form.matrix_criteria_size) }}</div>
+                    <div class="col-sm-4">{{ wtf.form_field(form.matrix_criteria_ontogeny) }}</div>
+                    <div class="col-sm-4">{{ wtf.form_field(form.matrix_criteria_age) }}</div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-4">{{ wtf.form_field(form.n_individuals) }}</div>
+                    <div class="col-sm-4">{{ wtf.form_field(form.studied_sex) }}</div>
+                    
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-4">{{ wtf.form_field(form.n_plots) }}</div>
+                    <div class="col-sm-4">{{ wtf.form_field(form.plot_size) }}</div>
+                    
+                </div>
+            </div>
+            <br>
+        </div>
+        <div class = "info_box">        
+            <h3>Timing</h3>
+            <div class="form form-inline">
+                <div class="row">
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end) }}</div>
+                </div>
+            </div>
+            <br>
+            <div class="form form-inline">
+                <div class="row">
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start_season) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end_season) }}</div>
+                </div>
+            </div>
+            <br>
+            
+        </div>
+        <div class= info_box>
+            <h3>Matrices</h3>
+            <div class="form form-inline">
+                <div class="row">
+                <div class="col-sm-3">{{ wtf.form_field(form.matrix_split) }}</div>
+                <div class="col-sm-3">{{ wtf.form_field(form.matrix_fec) }}</div>
+                <div class="col-sm-3">{{ wtf.form_field(form.periodicity) }}</div>
+                <div class="col-sm-3">{{ wtf.form_field(form.matrix_dimension) }}</div>
+                </div>
+            </div>
+            <br>
+            <div class="form">
+                {{ wtf.form_field(form.matrix_class_string)}}
+                {{ wtf.form_field(form.matrix_a_string) }}
+                {{ wtf.form_field(form.matrix_u_string) }}
+                {{ wtf.form_field(form.matrix_f_string) }}
+                {{ wtf.form_field(form.matrix_c_string) }}
+            </div>
+        </div>
+        <div class="info_box">
+            <h3>Submit changes</h3>
+            {{ wtf.form_field(form.submit) }}
+        </div>
+    </form>
+    
+</div>
+{% endblock %}

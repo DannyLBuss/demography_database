@@ -95,6 +95,7 @@ div.flask-pagedown-preview h3 {
 }
 .post-body h1 {
     font-size: 140%;
+
 }
 .post-body h2 {
     font-size: 130%;
@@ -139,7 +140,29 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#165833', end
     background-color: #e2ebf0;
     padding: 1em;
     margin-bottom: 20px;
-    
+}
+
+.info_box_transparent{
+    background-color: hsla(0, 0%, 100%, 0.68);
+    padding: 0.5em;
+    margin-bottom: 20px;
+}
+
+.edit_box{
+    background-color: #ffffff;
+    padding: 1em;
+    text-align: right;
+}
+
+.population_box{
+    background-color: #e2ebf0;
+    padding: 1em;
+    margin-bottom: 20px;
+    border-left: thick solid #e2ebf0; 
+}
+
+.publication_row{
+    border-left: thick solid #e2ebf0; 
 }
 
 matrix_cont{
@@ -180,13 +203,6 @@ footer {
     font-weight: normal;
 }
 
-.panel {
-    border-left-width: 1em;
-    border-right-width: 1em;
-    border-color: #e2ebf0;
-    border-bottom-width: 0.5em;
-}
-
 * {
   border-radius: 0 !important;
 }
@@ -197,20 +213,32 @@ footer {
     vertical-align:middle;
 }
 
+.matClasses
+{
+    text-align:center; 
+    vertical-align:middle;
+}
+
 #dist_map {
-    height: 400px;
+    height: 500px;
 }
 
 .btn-info {
     padding:2px;
+    font-size: 13px;
 }
 
 .btn-default {
     padding-bottom: 3px;
+    font-size: 13px;
 }
 
 h1 {
     font-size: 40px;
+}
+
+body {
+    font-size: 13px;
 }
 
 #main-nav.affix {
@@ -229,7 +257,7 @@ h1 {
 }
 
 .footer-logo{
-    height:60px;
+    height:100px;
 }
 
 td {
@@ -240,3 +268,21 @@ td {
     width: 20px; 
     height: 20px;
 }
+
+.species-image-container { 
+    width: 100%; 
+    height: 500px; 
+    background-size:cover; 
+    background-position:center;
+    background-repeat:no-repeat;
+
+}
+
+@media (min-width: 1200px) {
+    .container{
+        max-width: 978px;
+    }
+}
+
+
+

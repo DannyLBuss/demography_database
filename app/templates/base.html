@@ -36,12 +36,13 @@
                 <li><a href="{{ url_for('auth.login') }}">Log In</a></li> {% endif %} </ul>
         </div>
     </div>
-</div> {% endblock %} {% block content %}
+</div>
+{% endblock %} {% block content %}
 <div class="container"> {% for message in get_flashed_messages() %}
     <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message }} </div> {% endfor %} {% block page_content %}{% endblock %} 
 
 </div> 
 <footer><hr>
-    <img class="footer-logo" src="https://upload.wikimedia.org/wikipedia/en/c/cc/University_of_Exeter_new_logo.svg"></footer>
+    <img class="footer-logo" src="https://upload.wikimedia.org/wikipedia/en/c/cc/University_of_Exeter_new_logo.svg"> </footer>
 {% endblock %} {% block scripts %} {{ super() }} {{ moment.include_moment() }}  {% endblock %}
