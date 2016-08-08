@@ -4,7 +4,7 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
-from ..compadre.forms import SpeciesForm, TaxonomyForm, PlantTraitForm, PopulationForm
+from ..compadre.forms import SpeciesForm, TaxonomyForm, PlantTraitForm, PopulationForm, MatrixForm
 from .. import db
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
@@ -135,6 +135,8 @@ def species_form(id):
         species.iucn_status = form.iucn_status.data
         species.esa_status = form.esa_status.data
         species.invasive_status = form.invasive_status.data
+        species.GBIF_key = form.GBIF_key.data
+        species.image_path = form.image_path.data
 
         species.save_as_version()
         species_name = species.species_accepted
@@ -145,6 +147,8 @@ def species_form(id):
     form.iucn_status.udata = species.iucn_status
     form.esa_status.data = species.esa_status
     form.invasive_status.data = species.invasive_status
+    form.GBIF_key.data = species.GBIF_key
+    form.image_path.data = species.image_path
     
     return render_template('species_form.html', form=form, species=species)
 
@@ -221,6 +225,69 @@ def population_form(id):
     
     return render_template('species_form.html', form=form, population=population,species = species)
 
+@main.route('/matrix/<int:id>/edit', methods=['GET', 'POST'])
+def matrix_form(id):
+    matrix = Matrix.query.get_or_404(id)
+    population = Population.query.get_or_404(matrix.population_id)
+    species = Species.query.get_or_404(population.species_id)
+    form = MatrixForm(matrix=matrix)
+    
+    if form.validate_on_submit():
+        matrix.treatment = form.treatment.data
+        matrix.matrix_split = form.matrix_split.data
+        matrix.matrix_composition = form.matrix_composition.data
+        matrix.survival_issue = form.survival_issue.data
+        matrix.n_intervals = form.n_intervals.data
+        matrix.periodicity = form.periodicity.data
+        matrix.matrix_criteria_size = form.matrix_criteria_size.data
+        matrix.matrix_criteria_ontogeny = form.matrix_criteria_ontogeny.data
+        matrix.matrix_criteria_age = form.matrix_criteria_age.data
+        matrix.matrix_start = form.matrix_start.data
+        matrix.matrix_end = form.matrix_end.data
+        matrix.matrix_start_season = form.matrix_start_season.data
+        matrix.matrix_end_season = form.matrix_end_season.data
+        matrix.matrix_fec = form.matrix_fec.data
+        matrix.matrix_a_string = form.matrix_a_string.data
+        matrix.matrix_u_string = form.matrix_u_string.data
+        matrix.matrix_f_string = form.matrix_f_string.data
+        matrix.matrix_c_string = form.matrix_c_string.data
+        matrix.matrix_class_string = form.matrix_class_string.data
+        matrix.n_plots = form.n_plots.data
+        matrix.plot_size = form.plot_size.data
+        matrix.n_individuals = form.n_individuals.data
+        matrix.studied_sex = form.studied_sex.data
+        matrix.captivity_id = form.captivity_id.data
+        matrix.matrix_dimension = form.matrix_dimension.data
+        matrix.observations = form.observations.data
+        
+    form.treatment.data = matrix.treatment
+    form.matrix_split.data = matrix.matrix_split
+    form.matrix_composition.data = matrix.matrix_composition
+    form.survival_issue.data = matrix.survival_issue
+    form.n_intervals.data = matrix.n_intervals
+    form.periodicity.data = matrix.periodicity
+    form.matrix_criteria_size.data = matrix.matrix_criteria_size
+    form.matrix_criteria_ontogeny.data = matrix.matrix_criteria_ontogeny
+    form.matrix_criteria_age.data = matrix.matrix_criteria_age
+    form.matrix_start.data = matrix.matrix_start
+    form.matrix_end.data = matrix.matrix_end 
+    form.matrix_start_season.data = matrix.matrix_start_season
+    form.matrix_end_season.data = matrix.matrix_end_season 
+    form.matrix_fec.data = matrix.matrix_fec
+    form.matrix_dimension.data = matrix.matrix_dimension
+    form.matrix_a_string.data = matrix.matrix_a_string
+    form.matrix_u_string.data = matrix.matrix_u_string
+    form.matrix_f_string.data = matrix.matrix_f_string
+    form.matrix_c_string.data = matrix.matrix_c_string
+    form.matrix_class_string.data = matrix.matrix_class_string
+    form.n_plots.data = matrix.n_plots
+    form.plot_size.data = matrix.plot_size 
+    form.n_individuals.data = matrix.n_individuals
+    form.studied_sex.data = matrix.studied_sex
+    form.captivity_id.data = matrix.captivity_id
+    form.observations.data = matrix.observations
+    
+    return render_template('matrix_form.html', form=form, matrix=matrix,population=population,species = species)
 
 # end of forms
 

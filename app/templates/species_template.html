@@ -1,63 +1,87 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
-<div class="info_box"> {% for taxonomy in species.taxonomies %}{% for trait in species.plant_traits %}
-    <div class="pull-right"> <a href="/species/{{species.id}}/edit" type="button" class="btn btn-info">Edit species infomation</a> <a href="/taxonomy/{{taxonomy.id}}/edit" type="button" class="btn btn-info">Edit taxonomy</a> <a href="/traits/{{trait.id}}/edit" type="button" class="btn btn-info">Edit plant traits</a> </div>
+{% for taxonomy in species.taxonomies %}
+{% for trait in species.plant_traits %}
+<div class="edit_box">
+    Compadrino actions: <a href="/species/{{species.id}}/edit" type="button" class="btn btn-info">Edit species infomation</a> <a href="/taxonomy/{{taxonomy.id}}/edit" type="button" class="btn btn-info">Edit taxonomy</a> <a href="/traits/{{trait.id}}/edit" type="button" class="btn btn-info">Edit plant traits</a>
+</div>
+<div class="info_box">
+    {{ taxonomy.kingdom }} > {{ taxonomy.phylum }} > {{ taxonomy.tax_class }} > {{ taxonomy.tax_order }} > {{ taxonomy.family }} > {{ taxonomy.genus }} > <i>{{species.species_accepted}}</i> <div class="pull-right"><a  class="twitter-share-button"  href="https://twitter.com/intent/tweet"> Tweet</a></div>
     <h1><i>{{species.species_accepted}}</i> <small>ID: {{species.id}}</small></h1>
-    <h4>Search external sources:</h4>
-    <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://media.eol.org//assets/favicon-9de6ee8ce10b9ad7b2662236411f4539.ico" class="little_logo"> Enyclopedia of Life</a>
-    <a href="http://www.catalogueoflife.org/col/search/all/key/{{species.species_accepted}}/" target="_blank" class="btn btn-default" role="button"><img src="http://www.catalogueoflife.org/sites/default/files/favicon.gif" class="little_logo"> Catalogue of Life</a>
-    <a href="https://en.wikipedia.org/wiki/{{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://en.wikipedia.org/static/favicon/wikipedia.ico" class="little_logo"> Wikipedia</a>
-    <a href="http://www.ncbi.nlm.nih.gov/nuccore/?term=%22{{species.species_accepted}}%22" target="_blank" class="btn btn-default" role="button"><img class="little_logo" src="https://www.ncbi.nlm.nih.gov/favicon.ico"> Genbank</a>
-    <a href="https://scholar.google.co.uk/scholar?q={{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://scholar.google.co.uk/favicon-png.ico" class="little_logo"> Scholar</a>
-    <div class="row">
-        <div class="col-sm-8">
-            <h3>Distribution map (GBIF)</h3>
+    <h4><strong>Common name: </strong> Something something</h4>
+    
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#maptab">Map</a></li>
+        <li><a data-toggle="tab" href="#infotab">Taxonomy</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="maptab" class="tab-pane fade in active">
             <div id="dist_map"></div>
         </div>
-        <div class="col-sm-4">
-            <h3>Taxonomy <small>ID: {{taxonomy.id}}</small></h3>
-            <table style="width:100%" class="table">
-                <tbody>
-                    <tr>
-                        <td><strong>Kingdom:</strong></td>
-                        <td>{{ taxonomy.kingdom }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Phylum:</strong></td>
-                        <td>{{ taxonomy.phylum }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Class:</strong></td>
-                        <td>{{ taxonomy.tax_class }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Order:</strong></td>
-                        <td>{{ taxonomy.tax_order }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Family:</strong></td>
-                        <td>{{ taxonomy.family }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Genus:</strong></td>
-                        <td>{{ taxonomy.genus }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Species:</strong></td>
-                        <td><i>{{species.species_accepted}}</i></td>
-                    </tr>
-                    <tr>
-                        <td>Authority: </td>
-                        <td>{{ taxonomy.authority }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <h3>Plant Traits <small>ID: {{trait.id}}</small></h3>
+        <div id="infotab" class="tab-pane fade">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="species-image-container" style="background-image:url('{{ species.image_path }}');">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <h3>Taxonomy <small>ID: {{taxonomy.id}}</small></h3>
+                    <table style="width:100%" class="table">
+                        <tbody>
+                            <tr>
+                                <td><strong>Kingdom:</strong></td>
+                                <td>{{ taxonomy.kingdom }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phylum:</strong></td>
+                                <td>{{ taxonomy.phylum }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Class:</strong></td>
+                                <td>{{ taxonomy.tax_class }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Order:</strong></td>
+                                <td>{{ taxonomy.tax_order }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Family:</strong></td>
+                                <td>{{ taxonomy.family }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Genus:</strong></td>
+                                <td>{{ taxonomy.genus }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Species:</strong></td>
+                                <td><i>{{species.species_accepted}}</i></td>
+                            </tr>
+                            <tr>
+                                <td>Authority: </td>
+                                <td>{{ taxonomy.authority }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                
+                <h3>Plant Traits <small>ID: {{trait.id}}</small></h3>
             <ul>
                 <li><strong>Growth type: </strong> {{ trait.growth_type.type_name }}</li>
                 <li><strong>Dicotyledon/monocotyledon: </strong> {{ trait.dicot_monoc.dicot_monoc_name }}</li>
                 <li><strong>Angiosperm/gymnosperm: </strong> {{ trait.angio_gymno.angio_gymno_name }}</li>
-            </ul> {% endfor %} </div>
-    </div> {% endfor %}
+            </ul></div>
+            {% endfor %} 
+                
+            </div> {% endfor %}
+            
+        </div>
+    </div>
+    <div id="external-sources">
+                External Sources: <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://media.eol.org//assets/favicon-9de6ee8ce10b9ad7b2662236411f4539.ico" class="little_logo"> Enyclopedia of Life</a>
+                <a href="http://www.catalogueoflife.org/col/search/all/key/{{species.species_accepted}}/" target="_blank" class="btn btn-default" role="button"><img src="http://www.catalogueoflife.org/sites/default/files/favicon.gif" class="little_logo"> Catalogue of Life</a>
+                <a href="https://en.wikipedia.org/wiki/{{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://en.wikipedia.org/static/favicon/wikipedia.ico" class="little_logo"> Wikipedia</a>
+                <a href="http://www.ncbi.nlm.nih.gov/nuccore/?term=%22{{species.species_accepted}}%22" target="_blank" class="btn btn-default" role="button"><img class="little_logo" src="https://www.ncbi.nlm.nih.gov/favicon.ico"> Genbank</a>
+                <a href="https://scholar.google.co.uk/scholar?q={{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://scholar.google.co.uk/favicon-png.ico" class="little_logo"> Scholar</a>
+            </div>
+    
 </div>
 
 <div id="publication_filter">
@@ -72,7 +96,7 @@
                 </tr>
             </thead>
             <tbody> {% for population in species.populations %}
-                <tr class="remove_duplicates">
+                <tr class="remove_duplicates publication_row {{ population.publication.id}}p">
                     <td>
                         <a href="../../publication/{{ population.publication.id }}">{{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.pub_title }}" in <i>{{ population.publication.journal_book_conf }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}.  </a> <small>ID: {{population.publication.id}}</small> </td>
                     <td> <a href="https://doi.org/{{ population.publication.DOI_ISBN }}" target="_blank" >{{ population.publication.DOI_ISBN }}</a></td>
@@ -86,7 +110,7 @@
     
     <div class="list">
     {% for population in species.populations %}
-        <div class="info_box">
+        <div class="population_box {{ population.publication.id}}p">
             <div class="population" data-value="id{{population.publication.id}}"></div>
             <div class="pull-right"> <a href="/population/{{population.id}}/edit" type="button" class="btn btn-info">Edit population</a> <a type="button" class="btn btn-info disabled">Add new matrix</a> </div>
             <h4><strong>Population Name: </strong>{{ population.name }} <small>ID: {{ population.id }}</small> </h4>
@@ -95,7 +119,7 @@
                 <li>Studied for {{ population.study.study_duration }} years</li>
                 <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
                 <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}
-                    <li><strong>Geometries: </strong> {{ population.geometries }}</li>
+                    <li><strong>Geometries: </strong><span class="coordinates">{{ population.geometries }}</span></li>
             </ul>
             <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> Show/hide matrices </button>
         
@@ -116,9 +140,10 @@
                                 <li><a data-toggle="pill" href="#menu_{{matrix.id}}_1">Survival Matrix </a></li>
                                 <li><a data-toggle="pill" href="#menu_{{matrix.id}}_2">Fecundity Matrix</a></li>
                                 <li><a data-toggle="pill" href="#menu_{{matrix.id}}_3">Clonal Matrix</a></li>
-                                <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li> <a type="button" class="btn btn-info pull-right disabled">Edit matrix</a> </ul>
+                                <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li> <a type="button" class="btn btn-info pull-right" href="../../matrix/{{matrix.id}}/edit">Edit matrix</a> </ul>
                             <div class="tab-content">
                                 <div id="home_{{matrix.id}}" class="tab-pane in active">
+                                    <div class="table-responsive matClasses"> {{ matrix.matrix_class_string }} </div>
                                     <div class="table-responsive matA"> {{ matrix.matrix_a_string }} </div>
                                 </div>
                                 <div id="menu_{{matrix.id}}_1" class="tab-pane">
@@ -158,6 +183,15 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+
+
+
 <script>
     // Change matrix strings into tables
     var divs = document.getElementsByClassName("matA");
@@ -166,7 +200,7 @@
         var matrix_string = matrix_string.replace(" [", "");
         var matrix_string = matrix_string.replace("] ", "");
         var matrix_string_array = matrix_string.split(" ");
-        matSize = Math.sqrt(matrix_string_array.length)
+        matSize = Math.sqrt(matrix_string_array.length);
         var table_new = document.createElement('TABLE');
         table_new.className = 'table table-bordered';
         var tableBody = document.createElement('TBODY');
@@ -186,25 +220,61 @@
         divs[ii].appendChild(table_new);
     }
 </script>
+
+<script>
+    // Change class strings into tables
+    var divs = document.getElementsByClassName("matClasses");
+    for (var ii = 0; ii < divs.length; ii++) {
+        var matrix_string = divs[ii].innerHTML;
+        var matrix_string_array = matrix_string.split("|");
+        numberOfClasses= matrix_string_array.length;
+        var table_new = document.createElement('TABLE');
+        table_new.className = 'table table-bordered';
+        var tableBody = document.createElement('TBODY');
+        table_new.appendChild(tableBody);
+        var index = 0;
+        var tr = document.createElement('TR');
+        tableBody.appendChild(tr);
+            for (var j = 0; j < numberOfClasses; j++) {
+                var td = document.createElement('TD');
+                td.appendChild(document.createTextNode(matrix_string_array[index]));
+                tr.appendChild(td);
+                index = index + 1;
+            }
+        divs[ii].innerHTML = "";
+        divs[ii].appendChild(table_new);
+    }
+</script>
+
 <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
 <script src="{{ url_for('static', filename='leaflet.js') }}"></script>
 <script src="{{ url_for('static', filename='list.js') }}"></script>
+<script src="{{ url_for('static', filename='leaflet-vector-markers.min.js') }}"></script>
+<script src="{{ url_for('static', filename='oms.min.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='leaflet-vector-markers.css') }}">
 
 <script>
-    var mymap = L.map('dist_map').setView([20, 0], 1);
+    // draw empty map
+    var mymap = L.map('dist_map').setView([20, 0], 2);
     var Esri_WorldPhysical = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service'
         , maxZoom: 8
-        , minZoom: 1
+        , minZoom: 2
     }).addTo(mymap);
-    L.tileLayer('http://api.gbif.org/v1/map/density/tile?x={x}&y={y}&z={z}&type=TAXON&key=8522&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds', {
+    
+    {% if species.GBIF_key %} 
+    L.tileLayer('http://api.gbif.org/v1/map/density/tile?x={x}&y={y}&z={z}&type=TAXON&key={{species.GBIF_key}}&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds', {
         attribution: 'Data: GBIF'
         , maxZoom: 8
-        , minZoom: 1
+        , minZoom: 2
     , }).addTo(mymap);
+     {% endif %}
+     
 </script>
 
 <script>
+
+    // remove duplicate publications
     var seen = {};
     $('.remove_duplicates').each(function () {
         var txt = $(this).text();
@@ -212,12 +282,86 @@
         else seen[txt] = true;
     });
 </script>
-
 <script>
-    // ADD MARKERS TO MAP
+    // string to colour hash
+    var stringToColour = function(str) {
+        var hash = 2000*parseInt(str)^4;
+        for (var i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        var colour = '#';
+        for (var i = 0; i < 3; i++) {
+            var value = (hash >> (i * 8)) & 0xFF;
+            colour += ('00' + value.toString(16)).substr(-2);
+        }
+        return colour;
+    }
 </script>
-
 <script>
+    // change colour or left hand border of populations
+    {% for population in species.populations %}
+    $('.{{ population.publication.id}}p').css('border-left-color', stringToColour("{{ population.publication.id}}p"));
+    {% endfor%}
+</script>
+<script>
+    // create new spidery thing
+    var oms = new OverlappingMarkerSpiderfier(mymap,{keepSpiderfied: true});
+    
+    // convert lat long coordinates to decimal coordinates
+    var converCoords = function(txt) {
+        var txt = JSON.parse(txt);
+        var coords = Object.keys(txt).map(function(k) { return txt[k] });
+        var lat_dec = 1;
+        var lon_dec = 1;
+        if (coords[0] != 'NA'){
+            if (coords[2] == "S") {
+                var lat_dec = -1;
+            }
+            if (coords[1] == "W") {
+                var lon_dec = -1;
+            }
+            var decCoords = [0,0];
+            var decCoords[0] = lat_dec * (parseInt(coords[8]) + parseInt(coords[6])/60 + parseInt(coords[7])/3600);
+            var decCoords[1] = lon_dec * (parseInt(coords[3]) + parseInt(coords[0])/60 + parseInt(coords[4])/3600); 
+        }
+        return decCoords
+    }
+</script>
+<script>     
+    // add map markers
+    $('.coordinates').each(function () {
+        var txt = $(this).text();
+        var txt = JSON.parse(txt);
+        var coords = Object.keys(txt).map(function(k) { return txt[k] });
+        var lat_dec = 1;
+        var lon_dec = 1;
+        if (coords[0] != 'NA'){
+            if (coords[2] == "S") {
+                var lat_dec = -1;
+            }
+            if (coords[1] == "W") {
+                var lon_dec = -1;
+            }
+            var lat_dec = lat_dec * (parseInt(coords[8]) + parseInt(coords[6])/60 + parseInt(coords[7])/3600);
+            var lon_dec = lon_dec * (parseInt(coords[3]) + parseInt(coords[0])/60 + parseInt(coords[4])/3600);
+
+            var parentDiv = $(this).closest("div");
+            var parentDiv = $(parentDiv).attr('class');
+            var parentDiv = parentDiv.split(' ')[1];
+
+            var hexMarker = L.VectorMarkers.icon({markerColor: stringToColour(parentDiv)});
+            hexMarker.options.shadowSize = [0,0];
+            hexMarker.options.iconSize = [16,16];
+            hexMarker.options.iconAnchor = [8, 16];
+            var marker = L.marker([lat_dec, lon_dec], {icon: hexMarker});
+            mymap.addLayer(marker);
+            oms.addMarker(marker);
+        }
+
+    });
+ </script>
+<script>   
+    // list.js stuff
     $(function () {
         var options = {
             valueNames: [
@@ -253,6 +397,25 @@
             });
          });
     });
-</script> 
+</script>
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+ 
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+ 
+  return t;
+}(document, "script", "twitter-wjs"));</script>
 
-{% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }} {% endblock %}
+
+
+
+{% endblock %}

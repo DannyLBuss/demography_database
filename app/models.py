@@ -1022,6 +1022,8 @@ class Species(db.Model):
     iucn_status_id = db.Column(db.Integer, db.ForeignKey('iucn_status.id'))
     esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id'))
     invasive_status = db.Column(db.Boolean())
+    GBIF_key = db.Column(db.Integer())
+    image_path = db.Column(db.Text)
     user_created = db.relationship('User', foreign_keys='Species.user_created_id') # user keys might be a problem.. or might not.. will implement and find out
     user_created_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user_modified = db.relationship('User', foreign_keys='Species.user_modified_id')
@@ -1201,6 +1203,7 @@ class Publication(db.Model):
     embargo = db.Column(db.Date()) #nullable
     missing_data_id = db.Column(db.Integer, db.ForeignKey('missing_data.id'))
     additional_source_string = db.Column(db.Text())
+    colour = db.Column(db.String(6))
 
     # Again, these might be problematic
     user_created = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -1657,6 +1660,9 @@ class Matrix(db.Model):
     matrix_end_season = db.relationship('Season', foreign_keys='Matrix.matrix_end_season_id')
     matrix_fec = db.Column(db.Boolean())
     matrix_a_string = db.Column(db.Text())
+    matrix_u_string = db.Column(db.Text())
+    matrix_f_string = db.Column(db.Text())
+    matrix_c_string = db.Column(db.Text())
     matrix_class_string = db.Column(db.Text())
     n_plots = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, will need your help with plots too - not quite sure what they are.
     plot_size = db.Column(db.Float()) # Schema states, 'R convert to m^2'
