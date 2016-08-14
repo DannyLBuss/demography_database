@@ -140,6 +140,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#165833', end
     background-color: #e2ebf0;
     padding: 1em;
     margin-bottom: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
 .info_box_transparent{
@@ -159,6 +160,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#165833', end
     padding: 1em;
     margin-bottom: 20px;
     border-left: thick solid #e2ebf0; 
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
 .publication_row{
@@ -252,6 +254,10 @@ body {
     padding-left: 5px;
 }
 
+.header_logo{
+    height:18px;
+}
+
 .little_logo{
     height:18px;
 }
@@ -284,5 +290,21 @@ td {
     }
 }
 
+#matrix_a_matrixtable {background-color:#FFFFFF;text-align: center;}
+#matrix_u_matrixtable {background-color:#FFFFFF;text-align: center;}
+#matrix_f_matrixtable {background-color:#FFFFFF;text-align: center;}
+#matrix_c_matrixtable {background-color:#FFFFFF;text-align: center;}
+#matrix_class_matrixtable {background-color:#FFFFFF;text-align: left;}
 
+#matrix_a_matrixtablenoedit {background-color:#FFFFFF;text-align: center;}
+#matrix_u_matrixtablenoedit {background-color:#FFFFFF;text-align: center;}
+#matrix_f_matrixtablenoedit {background-color:#FFFFFF;text-align: center;}
+#matrix_c_matrixtablenoedit {background-color:#FFFFFF;text-align: center;}
+#matrix_class_matrixtablenoedit {background-color:#FFFFFF;text-align: left;}
+
+#matrix_a_smart-input{border-left-color: darksalmon;border-left-style: solid;padding-left: 1em;padding-right: 1em;background-color: #f5e7de;}
+#matrix_u_smart-input{border-left-color: darksalmon;border-left-style: solid;padding-left: 1em;padding-right: 1em;background-color: #f5e7de;}
+#matrix_f_smart-input{border-left-color: darksalmon;border-left-style: solid;padding-left: 1em;padding-right: 1em;background-color: #f5e7de;}
+#matrix_c_smart-input{border-left-color: darksalmon;border-left-style: solid;padding-left: 1em;padding-right: 1em;background-color: #f5e7de;}
+#matrix_class_smart-input{border-left-color: darksalmon;border-left-style: solid;padding-left: 1em;padding-right: 1em;background-color: #f5e7de;}
 
