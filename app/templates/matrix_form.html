@@ -6,8 +6,9 @@
 {% block page_content %}
 <div class="page-header info_box">
     <a type="button" class="btn btn-default" href="../../species/{{species.id}}/overview">Go back to species overview</a>
-    <h1>Editing infomation for <i>{{species.species_accepted}}</i></h1>
-    <h3>Population: {{population.name}}</h3>
+    <h1>Editing matrix #{{matrix.id}} for <i>{{species.species_accepted}}</i></h1>
+    <h3><strong>Population:</strong> {{population.name}}</h3>
+    <h3><strong>Publication:</strong> {{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.pub_title }}" in <i>{{ population.publication.journal_book_conf }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}</h3>
 </div>
 <div >
     <form method="post" role="form">
@@ -66,7 +67,7 @@
             
         </div>
         <div class= info_box>
-            <h3>Matrices</h3>
+            <h3>Matrix format infomation</h3>
             <div class="form form-inline">
                 <div class="row">
                 <div class="col-sm-3">{{ wtf.form_field(form.matrix_split) }}</div>
@@ -77,11 +78,28 @@
             </div>
             <br>
             <div class="form">
+                <h3>Stage classes and matrices</h3>
+                
+                <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_class_')">Edit matrix classes</button>
                 {{ wtf.form_field(form.matrix_class_string)}}
+                <div id="matrix_class_smart-input"></div>
+                
+                <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_a_')">Edit matrix A</button>
                 {{ wtf.form_field(form.matrix_a_string) }}
+                <div id="matrix_a_smart-input"></div>
+                
+                <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_u_')">Edit matrix U</button>
                 {{ wtf.form_field(form.matrix_u_string) }}
+                <div id="matrix_u_smart-input"></div>
+                
+                <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_f_')">Edit matrix F</button>
                 {{ wtf.form_field(form.matrix_f_string) }}
+                <div id="matrix_f_smart-input"></div>
+                
+                <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_c_')">Edit matrix C</button>
                 {{ wtf.form_field(form.matrix_c_string) }}
+                <div id="matrix_c_smart-input"></div>
+                
             </div>
         </div>
         <div class="info_box">
@@ -91,4 +109,310 @@
     </form>
     
 </div>
+{% endblock %}
+{% block scripts %}
+
+
+<script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='mindmup-editabletable.js') }}"></script>
+
+
+<script>
+
+    // this function happens when edit matrix is pressed
+    // whichmatrix is either matrix_a_ or matrix_u_ etc so that the right divs are targetted by jquery
+    function addmat(whichmatrix) {
+        
+        
+        // used by the edit matrix button and the undo edits button
+        // empties the editable matrix area
+        if ($(('#').concat(whichmatrix.concat('smart-input'))).length > 0) {
+            document.getElementById(whichmatrix.concat("smart-input")).innerHTML = "";
+        }
+        
+        if (whichmatrix == 'matrix_a_' || whichmatrix == 'matrix_u_' || whichmatrix == 'matrix_f_' || whichmatrix == 'matrix_c_'){
+            // get the matrix string from the box, remove brackets and make into array
+            var matrix_string = $(('#').concat(whichmatrix.concat('string'))).val()
+            var matrix_string = matrix_string.replace("[", "");
+            var matrix_string = matrix_string.replace("]", "");
+            var matrix_string_array = matrix_string.split(" ");
+        }
+        
+        if (whichmatrix == 'matrix_class_' || whichmatrix =='matrix_class_organised_'){
+            var matrix_string = $(('#').concat(whichmatrix.concat('string'))).val()
+            var matrix_string_array = matrix_string.split("|");
+        }
+        
+        // create a table and set classes + id
+        var table_before_edit = document.createElement('TABLE');
+        table_before_edit.className = 'table table-bordered';
+        table_before_edit.id = whichmatrix.concat('matrixtablenoedit');
+        
+        if (whichmatrix == 'matrix_a_' || whichmatrix == 'matrix_u_' || whichmatrix == 'matrix_f_' || whichmatrix == 'matrix_c_'){
+            matSize = Math.sqrt(matrix_string_array.length)
+            // ceate table body
+            var tableBody = document.createElement('TBODY');
+            table_before_edit.appendChild(tableBody);
+            // nested loop through the dimensions of the matrix adding values of the array into it
+            var index = 0;
+            for (var i = 0; i < matSize; i++) {
+                var tr = document.createElement('TR');
+                tableBody.appendChild(tr);
+
+                for (var j = 0; j < matSize; j++) {
+                    var td = document.createElement('TD');
+                    td.appendChild(document.createTextNode(matrix_string_array[index]));
+                    tr.appendChild(td);
+                    index = index + 1;
+                }
+            }
+        }
+    
+        if (whichmatrix == 'matrix_class_' || whichmatrix =='matrix_class_organised_'){
+            matSize = matrix_string_array.length
+            var tableBody = document.createElement('TBODY');
+            table_before_edit.appendChild(tableBody);
+            var index = 0;
+            
+            for (var i = 0; i < matSize; i++){
+                var tr = document.createElement('TR');
+                tableBody.appendChild(tr);
+                var td = document.createElement('TD');
+                td.appendChild(document.createTextNode(matrix_string_array[index]));
+                tr.appendChild(td);
+                index = index + 1;
+            }
+        }
+        
+        // do the same again for the editable table
+        var table = document.createElement('TABLE');
+        table.className = 'table table-bordered';
+        table.id = whichmatrix.concat('matrixtable');
+        
+        if (whichmatrix == 'matrix_a_' || whichmatrix == 'matrix_u_' || whichmatrix == 'matrix_f_' || whichmatrix == 'matrix_c_'){
+            matSize = $('#matrix_dimension').val()
+            var tableBody = document.createElement('TBODY');
+            table.appendChild(tableBody);
+            var index = 0;
+            for (var i = 0; i < matSize; i++) {
+                var tr = document.createElement('TR');
+                tableBody.appendChild(tr);
+
+                for (var j = 0; j < matSize; j++) {
+                    var td = document.createElement('TD');
+                    td.appendChild(document.createTextNode(matrix_string_array[index]));
+                    tr.appendChild(td);
+                    index = index + 1;
+                }
+            }
+        }
+        
+        if (whichmatrix == 'matrix_class_' || whichmatrix =='matrix_class_organised_'){
+            matSize = matrix_string_array.length
+            var tableBody = document.createElement('TBODY');
+            table.appendChild(tableBody);
+            var index = 0;
+            
+            for (var i = 0; i < matSize; i++){
+                var tr = document.createElement('TR');
+                tableBody.appendChild(tr);
+                var td = document.createElement('TD');
+                td.appendChild(document.createTextNode(matrix_string_array[index]));
+                tr.appendChild(td);
+                index = index + 1;
+            }
+        }
+        
+        // append everything into the div
+        $(('#').concat(whichmatrix.concat('smart-input'))).append('<br>');
+        $(('#').concat(whichmatrix.concat('smart-input'))).append("<p><strong>Before changes:</strong></p>")
+        document.getElementById(whichmatrix.concat("smart-input")).appendChild(table_before_edit); //append table to div
+        $(('#').concat(whichmatrix.concat('smart-input'))).append("<p><strong>After changes:</strong></p>")
+        $(('#').concat(whichmatrix.concat('smart-input'))).append("<div class=\"form-group\"><input type=\"text\" class=\"form-control\" id=\""+whichmatrix+"pastebox\" placeholder=\"Paste from excel\"><button type=\"button\" onclick=\"Javascript:pastemat('"+whichmatrix+"')\" class=\"btn btn-default\">Input</button></div>");
+        
+        document.getElementById(whichmatrix.concat("smart-input")).appendChild(table); //append table to div
+        $(('#').concat(whichmatrix.concat('smart-input'))).append('<div id="'+whichmatrix+'changes_note"></div>');
+        
+        $(('#').concat(whichmatrix.concat('string'))).prop('disabled', true)
+        
+        // make tables editable
+        $(('#').concat(whichmatrix.concat('matrixtable'))).editableTableWidget();
+        $(('#').concat(whichmatrix.concat('smart-input'))).append("<div class=\"btn-group\"><button class=\"btn btn-default\" type=\"button\" onclick=\"Javascript:inputmat('"+whichmatrix+"')\">Input changes</button><button class=\"btn btn-default\" type=\"button\" onclick=\"Javascript:highlightmat('"+whichmatrix+"')\">Highlight changes</button><button class=\"btn btn-default\" type=\"button\" onclick=\"Javascript:addmat('"+whichmatrix+"')\">Undo edits</button><button class=\"btn btn-default\" type=\"button\" onclick=\"Javascript:cancelmat('"+whichmatrix+"')\">Cancel</button></div><hr>");
+        
+    }
+</script>
+
+<script>
+    // this function takes a string pasted from excel (or anything with a space or comma delimiter) and recreates the editable matrix table
+    function pastemat(whichmatrix) {
+        var matrix_string = $(('#').concat(whichmatrix.concat('pastebox'))).val()
+        var matrix_string = matrix_string.replace(",", " ");
+        var matrix_string_array = matrix_string.split(" ");
+
+        var table = document.createElement('TABLE');
+        table.className = 'table table-bordered';
+        table.id = whichmatrix.concat('matrixtable matrixtable');
+        matSize = Math.sqrt(matrix_string_array.length)
+        var tableBody = document.createElement('TBODY');
+        table.appendChild(tableBody);
+        var index = 0;
+        for (var i = 0; i < matSize; i++) {
+            var tr = document.createElement('TR');
+            tableBody.appendChild(tr);
+
+            for (var j = 0; j < matSize; j++) {
+                var td = document.createElement('TD');
+                td.appendChild(document.createTextNode(matrix_string_array[index]));
+                tr.appendChild(td);
+                index = index + 1;
+            }
+        }
+        document.getElementById(whichmatrix.concat("matrixtable")).innerHTML = "";
+        document.getElementById(whichmatrix.concat("matrixtable")).appendChild(tableBody);
+        $(('#').concat(whichmatrix.concat('matrixtable'))).editableTableWidget();
+    }
+</script>
+
+
+<script>
+    function inputmat(whichmatrix) {
+        // adds edited table into the field
+        var myTableArray = [];
+
+        // matrix
+        $("table#"+whichmatrix+"matrixtable tr").each(function () {
+            var arrayOfThisRow = [];
+            var tableData = $(this).find('td');
+            if (tableData.length > 0) {
+                tableData.each(function () {
+                    arrayOfThisRow.push($(this).text());
+                });
+                myTableArray.push(arrayOfThisRow);
+            }
+        });
+
+        if (whichmatrix == 'matrix_a_' || whichmatrix == 'matrix_u_' || whichmatrix == 'matrix_f_' || whichmatrix == 'matrix_c_'){
+            myTableArray = "[".concat(myTableArray);
+            myTableArray = myTableArray.replace(/,/g, " ");
+            myTableArray = myTableArray.concat("]");
+            document.getElementById(whichmatrix.concat('string')).value = myTableArray;
+            document.getElementById(whichmatrix.concat("smart-input")).innerHTML = "";
+        }
+        
+        if (whichmatrix == 'matrix_class_' || whichmatrix =='matrix_class_organised_'){
+            // make it so that it concatonates with | symbol
+            document.getElementById(whichmatrix.concat('string')).value = myTableArray;
+            myTableArray = myTableArray.join("|");
+            document.getElementById(whichmatrix.concat('string')).value = myTableArray;
+            document.getElementById(whichmatrix.concat("smart-input")).innerHTML = "";
+        }
+        
+
+        $(('#').concat(whichmatrix.concat('string'))).prop('disabled', false)
+
+    }
+
+</script>
+
+<script>
+    function cancelmat(whichmatrix) {
+        // empty the div
+        var myTableArray = [];
+
+        document.getElementById(whichmatrix.concat("smart-input")).innerHTML = "";
+        $(('#').concat(whichmatrix.concat('string'))).prop('disabled', false)
+
+    }
+
+</script>
+
+<script>
+    // RECREATE TABLE WITH HIGHLIGHTED BACKGROUND COLOURS
+    function highlightmat(whichmatrix) {
+        var whichmatrix = whichmatrix;
+        document.getElementById(whichmatrix.concat("changes_note")).innerHTML = "";
+        
+        var beforeEditArray = [];
+        $("table#"+whichmatrix+"matrixtablenoedit tr").each(function () {
+            var arrayOfThisRow = [];
+            var tableData = $(this).find('td');
+            if (tableData.length > 0) {
+                tableData.each(function () {
+                    arrayOfThisRow.push($(this).text());
+                });
+                beforeEditArray.push(arrayOfThisRow);
+            }
+        });
+        var beforeEditArray = [].concat.apply([], beforeEditArray);
+        
+        var afterEditArray = [];
+        $("table#"+whichmatrix+"matrixtable tr").each(function () {
+            var arrayOfThisRow = [];
+            var tableData = $(this).find('td');
+            if (tableData.length > 0) {
+                tableData.each(function () {
+                    arrayOfThisRow.push($(this).text());
+                });
+                afterEditArray.push(arrayOfThisRow);
+            }
+        });
+        var afterEditArray = [].concat.apply([], afterEditArray);
+        
+        if (beforeEditArray.length != afterEditArray.length){
+            document.getElementById(whichmatrix.concat("changes_note")).innerHTML = '<div class="alert alert-danger">Matrices dimensions have changed so edits connot be highlighted</div>';
+        }
+        
+        if (beforeEditArray.length == afterEditArray.length){
+            if (whichmatrix == 'matrix_a_' || whichmatrix == 'matrix_u_' || whichmatrix == 'matrix_f_' || whichmatrix == 'matrix_c_') {
+                matSize = Math.sqrt(afterEditArray.length);
+                document.getElementById(whichmatrix.concat("changes_note")).innerHTML = '<div class="alert alert-info">Changes have been highlighted, click <i>highlight changes</i> to refresh</div>';
+
+                var tableBody = document.createElement('TBODY');
+                var index = 0;
+
+                for (var i = 0; i < matSize; i++) {
+                    var tr = document.createElement('TR');
+                    tableBody.appendChild(tr);
+
+                    for (var j = 0; j < matSize; j++) {
+                        var td = document.createElement('TD');
+                        td.appendChild(document.createTextNode(afterEditArray[index]));
+                        if (afterEditArray[index] != beforeEditArray[index]){
+                            td.style.background = "#D9EDF7";
+                        }
+                        tr.appendChild(td);
+                        index = index + 1;
+
+                    }
+                }
+            }
+            
+            if (whichmatrix == 'matrix_class_' || whichmatrix =='matrix_class_organised_'){
+                matSize = afterEditArray.length;
+                document.getElementById(whichmatrix.concat("changes_note")).innerHTML = '<div class="alert alert-info">Changes have been highlighted, click <i>highlight changes</i> to refresh</div>';
+                
+                var tableBody = document.createElement('TBODY');
+                var index = 0; 
+                for (var i = 0; i < matSize; i++){
+                    var tr = document.createElement('TR');
+                    tableBody.appendChild(tr);
+                    tableBody.appendChild(tr);
+                    var td = document.createElement('TD');
+                    td.appendChild(document.createTextNode(afterEditArray[index]));
+                    if (afterEditArray[index] != beforeEditArray[index]){
+                        td.style.background = "#D9EDF7";
+                    }
+                    tr.appendChild(td);
+                    index = index + 1;
+                }
+                
+            }
+            
+            document.getElementById(whichmatrix.concat("matrixtable")).innerHTML = "";
+            document.getElementById(whichmatrix.concat("matrixtable")).appendChild(tableBody);
+            $(('#').concat(whichmatrix.concat('matrixtable'))).editableTableWidget();
+        }
+    }
+</script>
+
 {% endblock %}

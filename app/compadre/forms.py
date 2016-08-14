@@ -168,16 +168,16 @@ class PlantTraitForm(Form):
     
 class MatrixForm(Form):
     treatment = StringField('Treatment *', validators=[Required()])
-    matrix_split = IntegerField('Matrix Split')
+    matrix_split = BooleanField('Matrix Split')
     matrix_composition = QuerySelectField('Matrix Composition *',
             query_factory=lambda: MatrixComposition.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.comp_name, validators=[Required()])
     survival_issue = DecimalField('Survival Issue')
     n_intervals = DecimalField('Number of Intervals')
     periodicity = IntegerField('Periodicity')
-    matrix_criteria_size = IntegerField('Matrix Criteria Size')
-    matrix_criteria_ontogeny = IntegerField('Matrix Criteria Ontogeny')
-    matrix_criteria_age = IntegerField('Matrix Criteria Age')
+    matrix_criteria_size = BooleanField('Matrix Criteria Size')
+    matrix_criteria_ontogeny = BooleanField('Matrix Criteria Ontogeny')
+    matrix_criteria_age = BooleanField('Matrix Criteria Age')
     matrix_start = StringField('Matrix Start *', validators=[Required(), Regexp('^(\d{1}[/-]\d{1,4})*$', 0, 'Must be M/YYYY')])
     matrix_end = StringField('Matrix End')
     matrix_start_season = QuerySelectField('Matrix Start Season',
@@ -186,7 +186,7 @@ class MatrixForm(Form):
     matrix_end_season = QuerySelectField('Matrix End Season',
             query_factory=lambda: Season.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.season_id, a.season_name))
-    matrix_fec = IntegerField('Matrix Fecundity')
+    matrix_fec = BooleanField('Matrix Fecundity')
     matrix_dimension = IntegerField('Matrix Dimension')
     matrix_a_string = TextAreaField('Matrix A String *', validators=[Required()]) #Must be in specific format
     matrix_u_string = TextAreaField('Matrix U String *', validators=[Required()]) #Must be in specific format
