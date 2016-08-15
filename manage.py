@@ -198,7 +198,10 @@ def submit(entry):
     db.session.commit()
 
     ''' Publication '''
-    publication = Publication.query.filter_by(DOI_ISBN=entry.publication.DOI_ISBN).first()
+    if entry.publication.DOI_ISBN == "None" or entry.publication.DOI_ISBN == "NA":
+        publication = Publication.query.filter_by(authors=entry.publication.authors).filter_by(year=entry.publication.year).filter_by(pub_title=entry.publication.pub_name).first()
+    else: 
+        publication = Publication.query.filter_by(DOI_ISBN=entry.publication.DOI_ISBN).first()
     if publication == None:
         publication = Publication()
         publication.authors = entry.publication.authors
@@ -208,6 +211,7 @@ def submit(entry):
         publication.pub_title = entry.publication.pub_name
         db.session.add(publication)
         db.session.commit()
+
 
     ''' Plant Trait '''
     trait = PlantTrait.query.filter_by(species_id=species.id).first()
