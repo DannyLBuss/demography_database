@@ -244,7 +244,7 @@ def submit(entry):
         db.session.commit()
 
     ''' Population '''
-    pop = Population.query.filter_by(geometries=json.dumps(entry.population.geometries), species_id=species.id, publication_id=publication.id).first()
+    pop = Population.query.filter_by(name=json.dumps(entry.population.name), species_id=species.id, publication_id=publication.id).first()
     if pop == None:
         pop = Population()
         pop.species_author = entry.population.species_author
