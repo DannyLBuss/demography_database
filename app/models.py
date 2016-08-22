@@ -1673,6 +1673,7 @@ class Matrix(db.Model):
     observations = db.Column(db.Text())
     checked = db.Column(db.Boolean())
     status_id = db.Column(db.Integer, db.ForeignKey('statuses.id'))
+    checked_count = db.Column(db.Integer(), default=0)
 
     intervals = db.relationship("Interval", backref="matrix")
     matrix_values = db.relationship("MatrixValue", backref="matrix")
