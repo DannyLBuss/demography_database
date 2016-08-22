@@ -1671,7 +1671,13 @@ class Matrix(db.Model):
     captivity_id = db.Column(db.Integer, db.ForeignKey('captivities.id'))
     matrix_dimension = db.Column(db.Integer()) # dimension of matrix population A   
     observations = db.Column(db.Text())
-    checked = db.Column(db.Boolean())
+    
+    independent = db.Column(db.Boolean())
+    non_independence = db.Column(db.Text())
+    non_independence_author = db.Column(db.Text())
+
+    checked = db.Column(db.Boolean()) #Is this needed?
+    
     status_id = db.Column(db.Integer, db.ForeignKey('statuses.id'))
     checked_count = db.Column(db.Integer(), default=0)
 
