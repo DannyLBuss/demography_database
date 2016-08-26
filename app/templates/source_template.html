@@ -1,8 +1,12 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
 
 <div class="info_box">
-    <div class="pull-right">
-        <a href="/publication/{{publication.id}}/edit" type="button" class="btn btn-info">Edit publication</a>         
+    <div class="dropdown pull-right">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right">
+            <li><a href="../../publication/{{publication.id}}/edit">Edit publication</a></li>
+            <li><a href="../../publication/{{publication.id}}/edit-history">View edits</a></li>
+        </ul>
     </div>
     <h2>{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_book_conf }}</i> {{ publication.volume }}, {{ publication.pages }}.<small> ID: {{publication.id}}</small></h2>
     <h4><strong>Additional Source:</strong> ({{publication.additional_source_string}}) </h4>
@@ -11,14 +15,18 @@
 {% for population in publication.populations %}
 
 <div class="info_box">
-    <div class="pull-right">
-        <a href="/population/{{population.id}}/edit" type="button" class="btn btn-info">Edit population</a> 
-        <a type="button" class="btn btn-info disabled">Add new matrix</a>
+    <div class="dropdown pull-right">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right">
+            <li><a href="/population/{{population.id}}/edit">Edit population</a></li>
+            <li><a href="../../population/{{population.id}}/edit-history">View edits</a></li>
+            <li class="disabled"><a href="#">Add new matrix</a></li>
+        </ul>
     </div>
         <h4><strong>Species:</strong> <a href="../species/{{ population.species.id }}/overview"><em>{{ population.species.species_accepted }}</em></a><small> ID: {{ population.species.id }}</small></h4>
         <h4><strong>Population Name: </strong>{{ population.name }} <small>ID: {{ population.id }}</small> </h4>
     <ul>
-        <li>Studied for {{ population.study.study_duration }} years</li>
+        <li>Studied for {{ population.study.study_duration }} year(s) from {{ population.study.study_start }} to {{ population.study.study_end }} <small>ID: {{ population.study.id }}</small></li>
         <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
         <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}
             <li><strong>Geometries: </strong> {{ population.geometries }}</li>
@@ -26,60 +34,67 @@
     <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> Show/hide matrices </button>
 
         
-<div id="population_{{ population.id }}" class='panel-collapse collapse'> 
+    <div id="population_{{ population.id }}" class='panel-collapse collapse'> 
+        <small>Click on the sections below to view matrix models</small>
 
-    {% for matrix in population.matrices %}
-    <div class="panel-group">
-        <div class="panel panel-default">
-            <div class="panel-heading" data-toggle="collapse" href="#matrix_{{matrix.id}}2">
-                <h4 id="{{matrix.id}}" class="panel-title">
-                        <p><span class="label label-default">{{ matrix.matrix_composition.comp_name }}</span> <span class="label label-default">{{ matrix.matrix_dimension }} x {{ matrix.matrix_dimension }}</span> <span class="label label-default">{{ matrix.matrix_start }}-{{ matrix.matrix_end }}</span> <span background-color="#" class="label label-default">{{ matrix.treatment.type_name }}</span> <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span> <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span><small> ID: {{matrix.id}}</small></p>
-                    </h4> </div>
-            <div id="matrix_{{matrix.id}}2" class="panel-collapse collapse">
-                <li class="list-group-item">
-                    <ul class="nav nav-pills matrices">
-                        <li class="active"><a data-toggle="pill" href="#home_{{matrix.id}}">Matrix</a></li>
-                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_1">Survival Matrix </a></li>
-                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_2">Fecundity Matrix</a></li>
-                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_3">Clonal Matrix</a></li>
-                        <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li>
-                        <a type="button" class="btn btn-info pull-right disabled">Edit matrix</a>
-                    </ul>
-                    
-                    <div class="tab-content">
-                        <div id="home_{{matrix.id}}" class="tab-pane in active">
-                            <div class="table-responsive matA"> {{ matrix.matrix_a_string }} </div>
-                        </div>
-                        <div id="menu_{{matrix.id}}_1" class="tab-pane">
-                            <div class="table-responsive"> INSERT_MAT_U </div>
-                        </div>
-                        <div id="menu_{{matrix.id}}_2" class="tab-pane">
-                            <div class="table-responsive"> INSERT_MAT_F </div>
-                        </div>
-                        <div id="menu_{{matrix.id}}_3" class="tab-pane">
-                            <div class="table-responsive"> INSERT_MAT_C </div>
-                        </div>
-                        <div id="menu_{{matrix.id}}_4" class="tab-pane">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <p>Matrix start season: {% if matrix.matrix_start_season_id > 0 %}{{ matrix.matrix_start_season.season_name }}{% else %} NA{% endif %}</p>
-                                </div>
-                                <div class="col-sm-6">
-                                    <p>Matrix end season: {% if matrix.matrix_end_season_id > 0 %}{{ matrix.matrix_end_season.season_name }}{% else %} NA{% endif %}</p>
-                                </div>
+        {% for matrix in population.matrices %}
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading" data-toggle="collapse" href="#matrix_{{matrix.id}}2">
+                    <h4 id="{{matrix.id}}" class="panel-title">
+                            <p><span class="label label-default">{{ matrix.matrix_composition.comp_name }}</span> <span class="label label-default">{{ matrix.matrix_dimension }} x {{ matrix.matrix_dimension }}</span> <span class="label label-default">Periodicity: {{ matrix.periodicity }}</span> <span class="label label-default">{{ matrix.matrix_start }}-{{ matrix.matrix_end }}</span> <span background-color="#" class="label label-default">{{ matrix.treatment.type_name }}</span> <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span> <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span><small> ID: {{matrix.id}}</small></p>
+                        </h4> </div>
+                <div id="matrix_{{matrix.id}}2" class="panel-collapse collapse">
+                    <li class="list-group-item">
+                        <ul class="nav nav-pills matrices">
+                            <li class="active"><a data-toggle="pill" href="#home_{{matrix.id}}">Matrix</a></li>
+                            <li><a data-toggle="pill" href="#menu_{{matrix.id}}_1">Survival Matrix </a></li>
+                            <li><a data-toggle="pill" href="#menu_{{matrix.id}}_2">Fecundity Matrix</a></li>
+                            <li><a data-toggle="pill" href="#menu_{{matrix.id}}_3">Clonal Matrix</a></li>
+                            <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li>
+                            <div class="dropdown pull-right">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a href="../../matrix/{{matrix.id}}/edit">Edit matrix</a></li>
+                                    <li><a href="../../matrix/{{matrix.id}}/edit-history">View edits</a></li>
+                                </ul>
                             </div>
-                            <p><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</p>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div id="home_{{matrix.id}}" class="tab-pane in active">
+                                <div class="table-responsive matA"> {{ matrix.matrix_a_string }} </div>
+                            </div>
+                            <div id="menu_{{matrix.id}}_1" class="tab-pane">
+                                <div class="table-responsive"> INSERT_MAT_U </div>
+                            </div>
+                            <div id="menu_{{matrix.id}}_2" class="tab-pane">
+                                <div class="table-responsive"> INSERT_MAT_F </div>
+                            </div>
+                            <div id="menu_{{matrix.id}}_3" class="tab-pane">
+                                <div class="table-responsive"> INSERT_MAT_C </div>
+                            </div>
+                            <div id="menu_{{matrix.id}}_4" class="tab-pane">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p>Matrix start season: {% if matrix.matrix_start_season_id > 0 %}{{ matrix.matrix_start_season.season_name }}{% else %} NA{% endif %}</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p>Matrix end season: {% if matrix.matrix_end_season_id > 0 %}{{ matrix.matrix_end_season.season_name }}{% else %} NA{% endif %}</p>
+                                    </div>
+                                </div>
+                                <p><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</p>
+                            </div>
+                            <p><strong>Observations: </strong> {{ matrix.observations }}</p>
                         </div>
-                        <p><strong>Observations: </strong> {{ matrix.observations }}</p>
-                    </div>
-                </li>
-            </div>
-         </div>
-    </div> 
-    
-    {% endfor %}
-</div>
+                    </li>
+                </div>
+             </div>
+        </div> 
+
+        {% endfor %}
     </div>
+</div>
 
 {% endfor %}
 <script>
@@ -118,26 +133,22 @@
     }
 </script>
 
-<script src="{{ url_for('static', filename='leaflet.js') }}"></script>
-
 <script>
-    var mymap = L.map('dist_map').setView([20, 0], 1);
-    var Esri_WorldPhysical = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
-	maxZoom: 8
-    }).addTo(mymap);
-    L.tileLayer('http://api.gbif.org/v1/map/density/tile?x={x}&y={y}&z={z}&type=TAXON&key=8522&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds', {
-        attribution: 'Data: GBIF'
-        , maxZoom: 8
-        , minZoom: 1,
-    }).addTo(mymap);
+function htmlreplace(a, b, element) {    
+    if (!element) element = document.body;    
+    var nodes = element.childNodes;
+    for (var n=0; n<nodes.length; n++) {
+        if (nodes[n].nodeType == Node.TEXT_NODE) {
+            var r = new RegExp(a, 'gi');
+            nodes[n].textContent = nodes[n].textContent.replace(r, b);
+        } else {
+            htmlreplace(a, b, nodes[n]);
+        }
+    }
+}
+
+htmlreplace('None', 'Unknown');
 </script>
-
-<script>
-// ADD MARKERS TO MAP
-
-</script>
-
 
 {% endblock %} 
 {% block scripts %} 

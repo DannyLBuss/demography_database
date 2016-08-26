@@ -124,17 +124,73 @@ div.flask-pagedown-preview h3 {
 }*/
 
 
-/* Simon's changes */
+/* Simon's changes -------------------------------------------------*/
 
+/* makes everything square and science looking */
+* {
+  border-radius: 0 !important;
+}
+
+@media (min-width: 1200px) {
+    .container{
+        max-width: 1100px;
+    }
+}
+
+/* navbar etc */
 .navbar-inverse {
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#165833+0,0d2d52+100 */
-background: #165833; /* Old browsers */
-background: -moz-linear-gradient(left,  #165833 0%, #0d2d52 100%); /* FF3.6-15 */
-background: -webkit-linear-gradient(left,  #165833 0%,#0d2d52 100%); /* Chrome10-25,Safari5.1-6 */
-background: linear-gradient(to right,  #165833 0%,#0d2d52 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#165833', endColorstr='#0d2d52',GradientType=1 ); /* IE6-9 */
-
+    background: #165833; /* Old browsers */
+    background: -moz-linear-gradient(left,  #165833 0%, #0d2d52 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left,  #165833 0%,#0d2d52 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right,  #165833 0%,#0d2d52 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#165833', endColorstr='#0d2d52',GradientType=1 ); /* IE6-9 */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    border-style: none;
 }
+
+.top-banner {
+    height: 100px;
+    background: #165833; /* Old browsers */
+    background: -moz-linear-gradient(left,  #165833 0%, #0d2d52 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left,  #165833 0%,#0d2d52 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right,  #165833 0%,#0d2d52 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#165833', endColorstr='#0d2d52',GradientType=1 ); /* IE6-9 */
+}
+
+.navbar-nav navbar-right {
+    color:black;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.dropdown-menu a {
+    font-weight: bold;
+    color: #000000;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover { background-color: rgba(255, 255, 255, 0.31); }
+
+footer {
+  color: #868686;
+  padding-bottom: 200px;
+    text-align: center;
+}
+
+.affix {
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
+.affix + .container {
+  padding-top: 70px;
+}
+
+/* infobox etc */
 
 .info_box{
     background-color: #e2ebf0;
@@ -147,12 +203,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#165833', end
     background-color: hsla(0, 0%, 100%, 0.68);
     padding: 0.5em;
     margin-bottom: 20px;
-}
-
-.edit_box{
-    background-color: #ffffff;
-    padding: 1em;
-    text-align: right;
 }
 
 .population_box{
@@ -171,26 +221,6 @@ matrix_cont{
     background-color: #e2f0e5; 
 }
 
-.navbar-nav navbar-right {
-    color:black;
-}
-
-ul.top-bar a {
-    font-weight: bold;
-    color: #FFFFFF !important;
-}
-
-ul.top-bar a:hover { background-color: rgba(255, 255, 255, 0.31) !important; }
-
-.panel-heading {
-    cursor: pointer;
-}
-
-footer {
-  color: #868686;
-  padding-bottom: 200px;
-    text-align: center;
-}
 
 .panel > .panel-heading {
 
@@ -199,15 +229,16 @@ footer {
     
 }
 
+.panel-heading {
+    cursor: pointer;
+}
+
 .label-default{
     color: black;
     background-color: #ffffff;
     font-weight: normal;
 }
 
-* {
-  border-radius: 0 !important;
-}
 
 .matA
 {
@@ -222,10 +253,15 @@ footer {
 }
 
 #dist_map {
-    height: 500px;
+    height: 260px;
 }
 
 .btn-info {
+    padding:2px;
+    font-size: 13px;
+}
+
+.btn-primary {
     padding:2px;
     font-size: 13px;
 }
@@ -239,14 +275,10 @@ h1 {
     font-size: 40px;
 }
 
+
+
 body {
     font-size: 13px;
-}
-
-#main-nav.affix {
-    position: fixed;
-    top: 0;
-    width: 100%
 }
 
 .btn-block{
@@ -277,18 +309,14 @@ td {
 
 .species-image-container { 
     width: 100%; 
-    height: 500px; 
+    height: 260px; 
     background-size:cover; 
     background-position:center;
     background-repeat:no-repeat;
+    background-color:rgba(173, 173, 173, 0.31);
 
 }
 
-@media (min-width: 1200px) {
-    .container{
-        max-width: 978px;
-    }
-}
 
 #matrix_a_matrixtable {background-color:#FFFFFF;text-align: center;}
 #matrix_u_matrixtable {background-color:#FFFFFF;text-align: center;}

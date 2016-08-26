@@ -5,8 +5,20 @@
 
 {% block page_content %}
 <div class="page-header">
+    {% if species %}
     <a type="button" class="btn btn-default" href="../../species/{{species.id}}/overview">Go back to species overview</a>
+    {% endif %}
+    {% if population %}
+    <a type="button" class="btn btn-default" href="../../publication/{{population.publication_id}}">Go back to publication overview</a>
+    {% endif %}
+    {% if publication %}
+    <a type="button" class="btn btn-default" href="../../publication/{{publication.id}}">Go back to publication overview</a>
+    <h1>Editing infomation for <i>{{publication.authors}}</i></h1>
+    {% endif %}
+    {% if species %}
     <h1>Editing infomation for <i>{{species.species_accepted}}</i></h1>
+    {% endif %}
+    
 </div>
 <div class="info_box">
     {{ wtf.quick_form(form) }}
