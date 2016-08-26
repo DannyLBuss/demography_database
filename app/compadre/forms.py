@@ -58,6 +58,7 @@ def validate_dimension(matrix, classnames):
 
 class SpeciesForm(Form):
     species_accepted = StringField('Species Accepted', validators=[Required()])
+    species_common = StringField('Species Common Name')
     iucn_status = QuerySelectField('IUCN Status',
             query_factory=lambda: IUCNStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {} ({})'.format(a.status_code, a.status_name, a.status_description))
@@ -66,6 +67,7 @@ class SpeciesForm(Form):
                             get_label=lambda a:'{} - {}'.format(a.status_code, a.status_name))
     GBIF_key = IntegerField('GBIF Taxon Key')
     image_path = StringField('Path to image')
+    image_path2 = StringField('Path to image')
     invasive_status = BooleanField('Invasive Status')
     
     submit = SubmitField('Submit')
@@ -117,7 +119,7 @@ class PublicationForm(Form):
                             get_label=lambda a:'{} - {}'.format(a.missing_code, a.missing_description))
     additional_source_string = StringField('Additional Source')
     # author_contacts # Fkey#additional_sources # Fkey
-    colour = StringField('Hex colour', validators=[Length(min=6, max=6, message='Use a 6 character hex code')])
+    submit = SubmitField('Submit')
 
     
     
@@ -129,23 +131,24 @@ class StudyForm(Form):
 	study_end = IntegerField('Study End')
 
 class PopulationForm(Form):
-	name = StringField('Population Name *', validators=[Required()])
-	ecoregion = QuerySelectField('Ecoregion',
+    name = StringField('Population Name *', validators=[Required()])
+    ecoregion = QuerySelectField('Ecoregion',
             query_factory=lambda: Ecoregion.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.ecoregion_code, a.ecoregion_description))
-	country = StringField('Country')
-	continent = QuerySelectField('Continent',
+    country = StringField('Country')
+    continent = QuerySelectField('Continent',
             query_factory=lambda: Continent.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.continent_name)
-	lat_sec = StringField('Lat Sec')
-	lon_we = StringField('Lon WE')
-	lat_ns = StringField('Lat NS')
-	lon_min = StringField('Lon Min')
-	lon_sec = StringField('Lon Sec')
-	altitude = StringField('Altitude')
-	lat_min = StringField('Lat Min')
-	lat_deg = StringField('Lat Deg')
-	lon_deg = StringField('Lon Deg')
+    lat_sec = StringField('Lat Sec')
+    lon_we = StringField('Lon WE')
+    lat_ns = StringField('Lat NS')
+    lon_min = StringField('Lon Min')
+    lon_sec = StringField('Lon Sec')
+    altitude = StringField('Altitude')
+    lat_min = StringField('Lat Min')
+    lat_deg = StringField('Lat Deg')
+    lon_deg = StringField('Lon Deg')
+    submit = SubmitField('Submit')
 
 class PlantTraitForm(Form):
     max_height = FloatField('Max Height')
@@ -178,7 +181,9 @@ class MatrixForm(Form):
     matrix_criteria_size = BooleanField('Matrix Criteria Size')
     matrix_criteria_ontogeny = BooleanField('Matrix Criteria Ontogeny')
     matrix_criteria_age = BooleanField('Matrix Criteria Age')
-    matrix_start = StringField('Matrix Start *', validators=[Required(), Regexp('^(\d{1}[/-]\d{1,4})*$', 0, 'Must be M/YYYY')])
+    matrix_start = StringField('Matrix Start *')
+    #not working
+    #, validators=[Required(), Regexp('^(\d{1}[/-]\d{1,4})*$', 0, 'Must be M/YYYY')])
     matrix_end = StringField('Matrix End')
     matrix_start_season = QuerySelectField('Matrix Start Season',
             query_factory=lambda: Season.query.all(), get_pk=lambda a: a.id,

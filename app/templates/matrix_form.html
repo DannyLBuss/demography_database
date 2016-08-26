@@ -6,6 +6,7 @@
 {% block page_content %}
 <div class="page-header info_box">
     <a type="button" class="btn btn-default" href="../../species/{{species.id}}/overview">Go back to species overview</a>
+    <a type="button" class="btn btn-default" href="../../publication/{{population.publication.id}}">Go back to publication overview</a>
     <h1>Editing matrix #{{matrix.id}} for <i>{{species.species_accepted}}</i></h1>
     <h3><strong>Population:</strong> {{population.name}}</h3>
     <h3><strong>Publication:</strong> {{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.pub_title }}" in <i>{{ population.publication.journal_book_conf }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}</h3>

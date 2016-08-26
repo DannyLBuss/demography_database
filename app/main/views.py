@@ -4,7 +4,7 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
-from ..compadre.forms import SpeciesForm, TaxonomyForm, PlantTraitForm, PopulationForm, MatrixForm
+from ..compadre.forms import SpeciesForm, TaxonomyForm, PlantTraitForm, PopulationForm, MatrixForm, PublicationForm, StudyForm
 from .. import db
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
@@ -86,6 +86,7 @@ def meta_tables_json():
 
     return render_template('meta.html', meta=meta_tables)
 
+# now defunct 'display all data' page
 @main.route('/data/')
 # @login_required
 def data():
@@ -93,6 +94,7 @@ def data():
 
     return render_template('data.html', species=species)
 
+# simon testing out a somewhat pointless id url
 @main.route('/matrix/<species_id>/<pop_id>/<mat_id>')
 def matrix(species_id,pop_id,mat_id):
     species = Species.query.filter_by(id=species_id).first_or_404()
@@ -100,31 +102,38 @@ def matrix(species_id,pop_id,mat_id):
     matrix = Matrix.query.filter_by(id=mat_id).first_or_404()
     return render_template('matrix.html', species=species, population=population, matrix=matrix)
 
+### TABLE PAGES
+# the big table of species
 @main.route('/species-table/')
 # @login_required
 def species_table():
     species = Species.query.all()
     return render_template('species_table_template.html', species=species)
 
+# the big table of publications
 @main.route('/publications-table/')
 # @login_required
 def publications_table():
     publications = Publication.query.all()
     return render_template('publications_table_template.html', publications=publications)
 
+### OVERVIEW PAGES
+# species overview page
 @main.route('/species/<int:id>/overview')
 # @login_required
 def species_page(id):
     species = Species.query.filter_by(id=id).first_or_404()
     return render_template('species_template.html',species = species)
 
+# publication overview page
 @main.route('/publication/<int:id>')
 # @login_required
 def publication_page(id):
     publication = Publication.query.filter_by(id=id).first_or_404()
     return render_template('source_template.html',publication = publication)
 
-# SPECIES/TAXONOMY/TRAIT FORMS
+### SPECIES/TAXONOMY/TRAIT FORMS + VIEW EDIT HISTORY PAGES -------------------------------------------------------------------------
+# editing species information
 @main.route('/species/<int:id>/edit', methods=['GET', 'POST'])
 def species_form(id):
     species = Species.query.get_or_404(id)
@@ -132,26 +141,36 @@ def species_form(id):
 
     if form.validate_on_submit():
         species.species_accepted = form.species_accepted.data
+        species.species_common = form.species_common.data
         species.iucn_status = form.iucn_status.data
         species.esa_status = form.esa_status.data
         species.invasive_status = form.invasive_status.data
         species.GBIF_key = form.GBIF_key.data
         species.image_path = form.image_path.data
+        species.image_path2 = form.image_path2.data
 
         species.save_as_version()
-        species_name = species.species_accepted
         flash('The species infomation has been updated.')
         return redirect(url_for('.species_page',id=id))
     
     form.species_accepted.data = species.species_accepted
-    form.iucn_status.udata = species.iucn_status
+    form.species_common.data = species.species_common
+    form.iucn_status.data = species.iucn_status
     form.esa_status.data = species.esa_status
     form.invasive_status.data = species.invasive_status
     form.GBIF_key.data = species.GBIF_key
     form.image_path.data = species.image_path
+    form.image_path2.data = species.image_path2
     
     return render_template('species_form.html', form=form, species=species)
 
+# species information edit history
+@main.route('/species/<int:id>/edit-history')
+def species_edit_history(id):
+    species = Species.query.get_or_404(id)
+    return render_template('edit_history.html', species=species)
+
+# editing taxonomy
 @main.route('/taxonomy/<int:id>/edit', methods=['GET', 'POST'])
 def taxonomy_form(id):
     taxonomy = Taxonomy.query.get_or_404(id)
@@ -174,7 +193,7 @@ def taxonomy_form(id):
         taxonomy.kingdom = form.kingdom.data
         flash('The taxonomy has been updated.')
         species_name = species.species_accepted
-        return redirect(url_for('.species_page',id=id))
+        return redirect(url_for('.species_page',id=species.id))
     
     form.species_author.data = taxonomy.species_author
     form.authority.data = taxonomy.authority
@@ -192,6 +211,13 @@ def taxonomy_form(id):
 
     return render_template('species_form.html', form=form, taxonomy=taxonomy,species = species)
 
+# taxonomy edit history
+@main.route('/taxonomy/<int:id>/edit-history')
+def taxonomy_edit_history(id):
+    taxonomy = Taxonomy.query.get_or_404(id)
+    return render_template('edit_history.html', taxonomy=taxonomy)
+
+# editing traits
 @main.route('/traits/<int:id>/edit', methods=['GET', 'POST'])
 def trait_form(id):
     planttrait = PlantTrait.query.get_or_404(id)
@@ -206,8 +232,7 @@ def trait_form(id):
         planttrait.dicot_monoc = form.dicot_monoc.data
         planttrait.angio_gymno = form.angio_gymno.data
         flash('The plant trait infomation has been updated.')
-        species_name = species.species_accepted
-        return redirect(url_for('.species_page',species_name=species_name))
+        return redirect(url_for('.species_page',id=species.id))
     
     form.max_height.data = planttrait.max_height
     form.growth_type.data = planttrait.growth_type
@@ -217,14 +242,127 @@ def trait_form(id):
     form.angio_gymno.data = planttrait.angio_gymno
     return render_template('species_form.html', form=form, planttrait=planttrait,species = species)
 
+# traits edit history
+@main.route('/traits/<int:id>/edit-history')
+def planttrait_edit_history(id):
+    planttrait = PlantTrait.query.get_or_404(id)
+    return render_template('edit_history.html', planttrait=planttrait)
+
+# editing publication
+@main.route('/publication/<int:id>/edit', methods=['GET', 'POST'])
+def publication_form(id):
+    publication = Publication.query.get_or_404(id)
+    form = PublicationForm()
+    
+    if form.validate_on_submit():
+        publication.source_type = form.source_type.data
+        publication.authors = form.authors.data 
+        publication.editors = form.editors.data
+        publication.pub_title = form.pub_title.data
+        publication.journal_book_conf = form.journal_book_conf.data
+        publication.year = form.year.data
+        publication.volume = form.volume.data
+        publication.pages = form.pages.data
+        publication.publisher = form.publisher.data
+        publication.city = form.city.data
+        publication.country = form.country.data
+        publication.institution = form.institution.data
+        publication.DOI_ISBN = form.DOI_ISBN.data
+        publication.name = form.pub_name.data
+        publication.corresponding_author = form.corresponding_author.data
+        publication.email = form.email.data
+        publication.purposes_id = form.purposes.data
+        publication.embargo = form.embargo.data
+        publication.missing_data = form.missing_data.data
+        publication.additional_source_string = form.additional_source_string.data   
+        flash('The publication infomation has been updated.')
+        return redirect(url_for('.publication_page',id=id))
+    
+    form.source_type.data = publication.source_type
+    form.authors.data = publication.authors
+    form.editors.data = publication.editors
+    form.pub_title.data = publication.pub_title
+    form.journal_book_conf.data = publication.journal_book_conf
+    form.year.data = publication.year
+    form.volume.data = publication.volume
+    form.pages.data = publication.pages
+    form.publisher.data = publication.publisher
+    form.city.data = publication.city
+    form.country.data = publication.country
+    form.institution.data = publication.institution
+    form.DOI_ISBN.data = publication.DOI_ISBN
+    form.pub_name.data = publication.name
+    form.corresponding_author.data = publication.corresponding_author
+    form.email.data = publication.email
+    form.purposes.data = publication.purposes_id
+    form.embargo.data = publication.embargo
+    form.missing_data.data = publication.missing_data
+    form.additional_source_string.data = publication.additional_source_string
+    
+    return render_template('species_form.html', form=form, publication=publication)
+
+# publication edit history
+@main.route('/publication/<int:id>/edit-history')
+def publication_edit_history(id):
+    publication = Publication.query.get_or_404(id)
+    return render_template('edit_history.html', publication=publication)
+
+# editing population infomation
+# COORDINATES NOT IMPLEMENTED
 @main.route('/population/<int:id>/edit', methods=['GET', 'POST'])
 def population_form(id):
     population = Population.query.get_or_404(id)
     species = Species.query.get_or_404(population.species_id)
     form = PopulationForm(population=population)
     
+    if form.validate_on_submit():
+        population.name = form.name.data
+        population.ecoregion = form.ecoregion.data
+        population.country = form.country.data
+        population.continent = form.continent.data
+        flash('The population infomation has been updated.')
+        return redirect(url_for('.species_page',id=species.id))
+        
+    form.name.data = population.name
+    form.ecoregion.data = population.ecoregion
+    form.country.data = population.country
+    form.continent.data = population.continent
+    
     return render_template('species_form.html', form=form, population=population,species = species)
 
+# population edit history
+@main.route('/population/<int:id>/edit-history')
+def population_edit_history(id):
+    population = Population.query.get_or_404(id)
+    return render_template('edit_history.html', population=population)
+
+# edting study infomation
+@main.route('/study/<int:id>/edit', methods=['GET', 'POST'])
+def study_form(id):
+    study = Study.query.get_or_404(id)
+    publication = study.publication_id
+    form = StudyForm(study=study)
+    
+    if form.validate_on_submit():
+        study.study_duration = form.study_duration.data
+        study.study_start = form.study_start.data
+        study.study_end = form.study_end.data
+        flash('The study infomation has been updated.')
+        return redirect(url_for('.publication_page',id=species.id))
+        
+    form.study_duration.data = study.study_duration
+    form.study_start.data = study.study_start
+    form.study_end.data = study.study_end
+    
+    return render_template('species_form.html', form=form, study=study)
+
+# study edit history
+@main.route('/study/<int:id>/edit-history')
+def study_edit_history(id):
+    study = Study.query.get_or_404(id)
+    return render_template('edit_history.html', study=study)
+
+# editing matrix 
 @main.route('/matrix/<int:id>/edit', methods=['GET', 'POST'])
 def matrix_form(id):
     matrix = Matrix.query.get_or_404(id)
@@ -289,14 +427,23 @@ def matrix_form(id):
     
     return render_template('matrix_form.html', form=form, matrix=matrix,population=population,species = species)
 
-# end of forms
+# matrix edit history
+@main.route('/matrix/<int:id>/edit-history')
+def matrix_edit_history(id):
+    matrix = Matrix.query.get_or_404(id)
+    return render_template('edit_history.html', matrix= matrix)
 
+### END OF EDITING FORMS + EDIT HISTORY ---------------------------------------------------------------------------------
+
+
+# USER + PROFILE PAGES
+# User
 @main.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()    
     return render_template('user.html', user=user)
 
-
+# edit profile
 @main.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -313,7 +460,7 @@ def edit_profile():
     form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', form=form)
 
-
+# edit a different profile as admin
 @main.route('/edit-profile/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required

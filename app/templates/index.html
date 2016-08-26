@@ -6,10 +6,41 @@
 
 {% block page_content %}
 <div class="page-header">
-	<h1>Demography Database</h1>
-	<h2>University of Exeter</h2>
-    <h3>Welcome {% if current_user.is_authenticated %}back, {{ current_user.username }}{% else %}to the database{% endif %}</h3>
-    <p>Welcome to the COMPADRE Plant Matrix Database and COMADRE Animal Matrix Database site! COMPADRE and COMADRE contain matrix population models of hundreds of plant and animal species.</p>
+    <h1 style="text-align:center;">University of Exeter Demography Database</h1>
+    <h2 style="text-align:center;">Incorporating COMPADRE & COMADRE</h2>
+    <br>
+    <div class="info_box">
+        
+        
+        <h3>Welcome {% if current_user.is_authenticated %}back, {{ current_user.username }}!{% else %}to the database!{% endif %}</h3>
+        <p>COMPADRE and COMADRE contain matrix population models of hundreds of plant and animal species...</p>
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Explore</h3>
+                <ul>
+                    <li>Search by Species</li>
+                    <li>Search by Publication</li>
+                    <li>Taxonomic Explorer</li>
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <h3>About</h3>
+                <ul>
+                    <li>What is COMPADRE & COMPADRE</li>
+                    <li>Core comittee</li>
+                    <li>compadre-db.org</li>
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <h3>Collaborate</h3>
+                <ul>
+                    <li>Contribute your data</li>
+                    <li>Become a Compadrino</li>
+                    <li>Help develop this site</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

@@ -1,27 +1,67 @@
-{% extends "bootstrap/base.html" %} {% block title %}Demography Database{% endblock %} {% block head %} {{ super() }}
+{% extends "bootstrap/base.html" %} 
+{% block title %}
+Demography Database
+{% endblock %} 
+
+{% block head %} {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='leaflet.css') }}" />
-{% endblock %} {% block navbar %}
 
-<div class="navbar navbar-inverse navbar-static-top" role="navigation">
+{% endblock %} 
+
+{% block navbar %}
+
+<div class = "top-banner">
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col-xs-3"><img src="http://www.compadre-db.org/images/compadre-logo.png" class="img-responsive"></div>
+            <div class="col-xs-6"></div>
+            <div class="col-xs-3"><img src="http://www.compadre-db.org/images/comadre-logo.png" class="img-responsive"></div>
+        </div>
+    </div>
+    </div>
+
+<nav class="navbar navbar-inverse" data-spy="affix" data-offset-top="100" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <br>
-            <div class="row">
-                <div class="col-md-3"><img src="http://www.compadre-db.org/images/compadre-logo.png" class="img-responsive"></div>
-                <div class="col-md-6"></div>
-                <div class="col-md-3"><img src="http://www.compadre-db.org/images/comadre-logo.png" class="img-responsive"></div>
-            </div> 
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav top-bar">
                 <li><a href="{{ url_for('main.index') }}">Home</a></li> {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li> {% endif %}
-                <li><a href="{{ url_for('main.species_table') }}">Search by Species</a></li>
-                <li><a href="{{ url_for('main.publications_table') }}">Search by Publication</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Explore<b class="caret"></b> </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('main.species_table') }}">Search by Species</a></li>
+                        <li><a href="{{ url_for('main.publications_table') }}">Search by Publication</a></li>
+                        <li class = "disabled"><a href="#">Taxonomic Explorer</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b> </a>
+                    <ul class="dropdown-menu">
+                        <li class = "disabled"><a href="#">What is COM(P)ADRE?</a></li>
+                        <li class = "disabled"><a href="#">Team</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Collaborate<b class="caret"></b> </a>
+                    <ul class="dropdown-menu">
+                        <li class = "disabled"><a href="#">Contribute your data</a></li>
+                        <li class = "disabled"><a href="#">Become a Compadrino</a></li>
+                        <li class = "disabled"><a href="#">Help develop this site</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Education<b class="caret"></b> </a>
+                    <ul class="dropdown-menu">
+                        <li class = "disabled"><a href="#">What is a matrix model?</a></li>
+                    </ul>
+                </li>
                 <li><a href="{{ url_for('api.home') }}">API</a></li>
                 <li><a href="{{ url_for('main.meta_tables_json') }}">Meta Tables</a></li>
             </ul>
@@ -37,13 +77,23 @@
                 <li><a href="{{ url_for('auth.login') }}">Log In</a></li> {% endif %} </ul>
         </div>
     </div>
-</div>
-{% endblock %} {% block content %}
+</nav>
+
+{% endblock %} 
+
+{% block content %}
 <div class="container"> {% for message in get_flashed_messages() %}
     <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message }} </div> {% endfor %} {% block page_content %}{% endblock %} 
-
+        <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message }} </div> {% endfor %}  
+    {% block page_content %}
+    {% endblock %} 
 </div> 
-<footer><hr>
+<footer>
+
     <img class="footer-logo" src="https://upload.wikimedia.org/wikipedia/en/c/cc/University_of_Exeter_new_logo.svg"> </footer>
-{% endblock %} {% block scripts %} {{ super() }} {{ moment.include_moment() }}  {% endblock %}
+{% endblock %}
+
+{% block scripts %} 
+{{ super() }} 
+{{ moment.include_moment() }}  
+{% endblock %}
