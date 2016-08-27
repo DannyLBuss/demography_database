@@ -1,0 +1,108 @@
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
+
+<div id="id01"></div>
+
+<div class="breadcrumb">
+<p>
+    You are at: <a href="../../explorer/life/asweknowit">Life</a>
+    {% if tax_pos > 0 %}
+    > <a href="../../explorer/kingdom/{{ taxon_list[0].kingdom }}">{{ taxon_list[0].kingdom }}</a>
+    {% endif %}
+    {% if tax_pos > 1 %}
+    > <a href="../../explorer/phylum/{{ taxon_list[0].phylum }}">{{ taxon_list[0].phylum }}</a>
+    {% endif %}
+    {% if tax_pos > 2 %}
+    > <a href="../../explorer/class/{{ taxon_list[0].tax_class }}">{{ taxon_list[0].tax_class }}</a>
+    {% endif %}
+    {% if tax_pos > 3 %}
+    > <a href="../../explorer/order/{{ taxon_list[0].tax_order }}">{{ taxon_list[0].tax_order }}</a>
+    {% endif %}
+    {% if tax_pos > 4 %}
+    > <a href="../../explorer/family/{{ taxon_list[0].family }}">{{ taxon_list[0].family }}</a>
+    {% endif %}
+</p></div>{% if taxon == "butnotasweknowit" %}<h2 style="text-align:center;"><small>Hello earthlings 👽</small></h2>{% endif %}
+
+{% for taxons in taxon_list %}
+    
+    {% if taxon_level == "life" %}
+        <div class="remove_duplicates info_box" >
+            <a href="../../explorer/{{next_taxon_level}}/{{ taxons.kingdom }}"><h3>{{ taxons.kingdom }}</h3></a>
+            
+        </div>
+    {% elif taxon_level == "kingdom" %}
+        <div class="remove_duplicates info_box" >
+            <a href="../../explorer/{{next_taxon_level}}/{{ taxons.phylum }}"><h3>{{ taxons.phylum }}</h3></a>
+            
+        </div>
+    {% elif taxon_level == "phylum" %}
+        <div class="remove_duplicates info_box" >
+            <a href="../../explorer/{{next_taxon_level}}/{{ taxons.tax_class }}"><h3>{{ taxons.tax_class }}</h3></a>
+            
+        </div>
+    {% elif taxon_level == "class" %}
+        <div class="remove_duplicates info_box" >
+            <a href="../../explorer/{{next_taxon_level}}/{{ taxons.tax_order }}"><h3>{{ taxons.tax_order }}</h3></a>
+            
+        </div>
+    {% elif taxon_level == "order" %}
+        <div class="remove_duplicates info_box" >
+            <a href="../../explorer/{{next_taxon_level}}/{{ taxons.family }}"><h3>{{ taxons.family }}</h3></a>
+            
+        </div>
+    {% elif taxon_level == "family" %}
+        <div class="remove_duplicates info_box" >
+            <a href="../../species/{{ taxons.species_id }}/overview"><h3><i>{{ taxons.species_accepted }}</i></h3></a>
+            
+        </div>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+
+<script>
+    var temp = $("*").html();
+    var temp = temp.replace(/\s/g, '');
+
+    var seen = {};
+    $('.remove_duplicates').each(function () {
+        var txt = $(this).text();
+        if (seen[txt]) {
+            $(this).remove();
+        } else {
+            seen[txt] = true;
+            {% if taxon_level != "family" %}
+                var txt = $(this).text();
+                var txt = txt.replace(/\s/g, '');
+                var txt = new RegExp(txt, "gi");
+                count = (temp.match(txt).length)/2;
+                $(this).append(count+" species");
+            {% endif %}
+        }
+    });
+    
+    var x = document.getElementsByClassName("remove_duplicates");
+    var i;
+    for (i = 0; i < x.length; i++) {
+        x[i].style.visibility = "visible";
+    }
+      
+    // function to get summary from wikipedia, not working on localhost due to error but will work on server
+    //$('.remove_duplicates').each(function () {
+    //    var txt = $(this).text();
+    //    var txt = txt.replace(/\s/g, '');
+      //$.getJSON("https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&titles="+txt+"&redirects=true", function(data){
+    //      $(this).append(data);
+      //});
+    //});
+            
+    
+
+
+    
+</script>
+
+{% endblock %}

@@ -2,7 +2,9 @@
 {% for taxonomy in species.taxonomies %}
 {% for trait in species.plant_traits %}
 
-<p>{{ taxonomy.kingdom }} > {{ taxonomy.phylum }} > {{ taxonomy.tax_class }} > {{ taxonomy.tax_order }} > {{ taxonomy.family }} > {{ taxonomy.genus }} > <i>{{species.species_accepted}}</i></p>
+<div class="breadcrumb">
+    <p>You are at: <a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> > <i>{{species.species_accepted}}</i></p>
+</div>
 <div class="dropdown pull-right">
     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
     <ul class="dropdown-menu dropdown-menu-right">
@@ -361,6 +363,15 @@
         if (seen[txt]) $(this).remove();
         else seen[txt] = true;
     });
+    
+    
+    
+    var x = document.getElementsByClassName("remove_duplicates");
+    var i;
+    for (i = 0; i < x.length; i++) {
+        x[i].style.visibility = "visible";
+    }
+    
 </script>
 <script>
     // string to colour hash
