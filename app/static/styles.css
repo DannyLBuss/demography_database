@@ -336,3 +336,6 @@ td {
 #matrix_c_smart-input{border-left-color: darksalmon;border-left-style: solid;padding-left: 1em;padding-right: 1em;background-color: #f5e7de;}
 #matrix_class_smart-input{border-left-color: darksalmon;border-left-style: solid;padding-left: 1em;padding-right: 1em;background-color: #f5e7de;}
 
+.remove_duplicates {
+    visibility: hidden;
+}

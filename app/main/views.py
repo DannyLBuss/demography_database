@@ -132,6 +132,38 @@ def publication_page(id):
     publication = Publication.query.filter_by(id=id).first_or_404()
     return render_template('source_template.html',publication = publication)
 
+# explorer
+@main.route('/explorer/<taxon_level>/<taxon>')
+# @login_required
+def explorer(taxon_level,taxon):
+    if taxon_level == "life":
+        taxon_list = Taxonomy.query.all()
+        next_taxon_level = "kingdom"
+        tax_pos = 0
+    elif taxon_level == "kingdom":
+        taxon_list = Taxonomy.query.filter_by(kingdom=taxon)
+        next_taxon_level = "phylum"
+        tax_pos = 1
+    elif taxon_level == "phylum":
+        taxon_list = Taxonomy.query.filter_by(phylum=taxon)
+        next_taxon_level = "class" 
+        tax_pos = 2
+    elif taxon_level == "class":
+        taxon_list = Taxonomy.query.filter_by(tax_class=taxon)
+        next_taxon_level = "order"
+        tax_pos = 3
+    elif taxon_level == "order":
+        taxon_list = Taxonomy.query.filter_by(tax_order=taxon)
+        next_taxon_level = "family"
+        tax_pos = 4
+    elif taxon_level == "family":
+        taxon_list = Taxonomy.query.filter_by(family=taxon)
+        next_taxon_level = "Species"
+        tax_pos = 5
+    
+    
+    return render_template('explorer_template.html',taxon=taxon,taxon_list = taxon_list,taxon_level=taxon_level,next_taxon_level=next_taxon_level, tax_pos = tax_pos)
+
 ### SPECIES/TAXONOMY/TRAIT FORMS + VIEW EDIT HISTORY PAGES -------------------------------------------------------------------------
 # editing species information
 @main.route('/species/<int:id>/edit', methods=['GET', 'POST'])
@@ -397,8 +429,10 @@ def matrix_form(id):
         matrix.captivity_id = form.captivity_id.data
         matrix.matrix_dimension = form.matrix_dimension.data
         matrix.observations = form.observations.data
+        flash('The matrix infomation has been updated.')
+        return redirect(url_for('.species_page',id=species.id))
         
-    form.treatment.data = matrix.treatment
+    form.treatment.data = matrix.treatment.type_name
     form.matrix_split.data = matrix.matrix_split
     form.matrix_composition.data = matrix.matrix_composition
     form.survival_issue.data = matrix.survival_issue
