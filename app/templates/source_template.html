@@ -8,8 +8,9 @@
             <li><a href="../../publication/{{publication.id}}/edit-history">View edits</a></li>
         </ul>
     </div>
-    <h2>{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_book_conf }}</i> {{ publication.volume }}, {{ publication.pages }}.<small> ID: {{publication.id}}</small></h2>
+    <h3>{{ publication.authors }} ({{ publication.year }}). "{{ publication.name }}" in <i>{{ publication.pub_title }}</i> {{ publication.volume }}, {{ publication.pages }}.<small> ID: {{publication.id}}</small></h3>
     <h4><strong>Additional Source:</strong> ({{publication.additional_source_string}}) </h4>
+    <p>Do you have demographic data for this publication? Contribute <a href="{{ url_for('main.contribute_data') }}">here</a></p>
 </div>
 
 {% for population in publication.populations %}

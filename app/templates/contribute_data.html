@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>How to Contribute Data</h1>
+</div>
+<div class = "info_box">
+    <h3>Submitting data</h3>
+    <p>Currently we do not have a way for anyone beyond the compadrino data input team to enter data into the database. However, if you have data that you want to contribute to this open access database you can do the following:</p>
+    <ol>
+        <li>If your data is attached to a scientific publication and this publication cannot be found on the database (check <a href="../../publications-table">here</a>) then please submit you publication data into the database <a href="../../publication/new">here.</a></li>
+        <li>Email data to compadre-contact@whatever.whatever and reference the publication ID or DOI/ISBN</li>
+    </ol>
+</div>
+<div class = "info_box_red">
+    <h3>Data requirements and guidelines</h3>
+    <ul>
+        <li>Present every matrix you have constructed as a grid of numbers, rather than raw demographic data.</li>
+        <li>If possible, present three submatrices that represent the fecundity, survival and clonal transitions of the matrix.</li>
+        <li>meta data etc.</li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

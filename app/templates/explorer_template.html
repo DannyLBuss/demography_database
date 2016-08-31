@@ -2,6 +2,7 @@
 
 <div id="id01"></div>
 
+<div class="page-header">
 <div class="breadcrumb">
 <p>
     You are at: <a href="../../explorer/life/asweknowit">Life</a>
@@ -21,38 +22,48 @@
     > <a href="../../explorer/family/{{ taxon_list[0].family }}">{{ taxon_list[0].family }}</a>
     {% endif %}
 </p></div>{% if taxon == "butnotasweknowit" %}<h2 style="text-align:center;"><small>Hello earthlings 👽</small></h2>{% endif %}
-
+    
+    {% if taxon_level != "life" %}
+    <h1 class="taxon_name">{{taxon}}</h1>
+    <div id="{{ taxon }}info"></div>
+    {% endif %}
+    
+    
+</div>
+<p>Choose a {{next_taxon_level}}:</p>
 {% for taxons in taxon_list %}
     
     {% if taxon_level == "life" %}
         <div class="remove_duplicates info_box" >
-            <a href="../../explorer/{{next_taxon_level}}/{{ taxons.kingdom }}"><h3>{{ taxons.kingdom }}</h3></a>
+            <a class="taxon_name" href="../../explorer/{{next_taxon_level}}/{{ taxons.kingdom }}"><h3>{{ taxons.kingdom }}</h3></a>
+            <div id="{{ taxons.kingdom }}info"></div>
             
         </div>
     {% elif taxon_level == "kingdom" %}
         <div class="remove_duplicates info_box" >
-            <a href="../../explorer/{{next_taxon_level}}/{{ taxons.phylum }}"><h3>{{ taxons.phylum }}</h3></a>
+            <a class="taxon_name" href="../../explorer/{{next_taxon_level}}/{{ taxons.phylum }}"><h3>{{ taxons.phylum }}</h3></a>
+            <div id="{{ taxons.phylum }}info"></div>
             
         </div>
     {% elif taxon_level == "phylum" %}
         <div class="remove_duplicates info_box" >
-            <a href="../../explorer/{{next_taxon_level}}/{{ taxons.tax_class }}"><h3>{{ taxons.tax_class }}</h3></a>
-            
+            <a class="taxon_name" href="../../explorer/{{next_taxon_level}}/{{ taxons.tax_class }}"><h3>{{ taxons.tax_class }}</h3></a>
+            <div id="{{ taxons.tax_class }}info"></div>
         </div>
     {% elif taxon_level == "class" %}
         <div class="remove_duplicates info_box" >
-            <a href="../../explorer/{{next_taxon_level}}/{{ taxons.tax_order }}"><h3>{{ taxons.tax_order }}</h3></a>
-            
+            <a class="taxon_name" href="../../explorer/{{next_taxon_level}}/{{ taxons.tax_order }}"><h3>{{ taxons.tax_order }}</h3></a>
+            <div id="{{ taxons.tax_order }}info"></div>
         </div>
     {% elif taxon_level == "order" %}
         <div class="remove_duplicates info_box" >
-            <a href="../../explorer/{{next_taxon_level}}/{{ taxons.family }}"><h3>{{ taxons.family }}</h3></a>
-            
+            <a class="taxon_name" href="../../explorer/{{next_taxon_level}}/{{ taxons.family }}"><h3>{{ taxons.family }}</h3></a>
+            <div id="{{ taxons.family }}info"></div>
         </div>
     {% elif taxon_level == "family" %}
         <div class="remove_duplicates info_box" >
-            <a href="../../species/{{ taxons.species_id }}/overview"><h3><i>{{ taxons.species_accepted }}</i></h3></a>
-            
+            <a class="taxon_name" href="../../species/{{ taxons.species_id }}/overview"><h3><i>{{ taxons.species_accepted }}</i></h3></a>
+            <div id="{{ taxons.species_accepted }}info"></div>
         </div>
     {% endif %}
 {% endfor %}
@@ -78,8 +89,8 @@
                 var txt = $(this).text();
                 var txt = txt.replace(/\s/g, '');
                 var txt = new RegExp(txt, "gi");
-                count = (temp.match(txt).length)/2;
-                $(this).append(count+" species");
+                count = (temp.match(txt).length)/3;
+                $(this).append("<h4>" + count + " species</h4>");
             {% endif %}
         }
     });
@@ -89,20 +100,38 @@
     for (i = 0; i < x.length; i++) {
         x[i].style.visibility = "visible";
     }
-      
-    // function to get summary from wikipedia, not working on localhost due to error but will work on server
-    //$('.remove_duplicates').each(function () {
-    //    var txt = $(this).text();
-    //    var txt = txt.replace(/\s/g, '');
-      //$.getJSON("https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&titles="+txt+"&redirects=true", function(data){
-    //      $(this).append(data);
-      //});
-    //});
             
-    
-
-
-    
+    function getData(url, successCallback) {
+        
+        $.getJSON(url, function(data) {
+            // Process the data in some way - e.g. extract the section of the response that you want
+            for (const page_id in data["query"]["pages"]) {
+                var wiki_txt = JSON.stringify(data["query"]["pages"][page_id]["extract"]);
+            }
+            successCallback(wiki_txt);
+        });
+    }
+       
+    // function to get summary from wikipedia, not working on localhost due to error but will work on server
+    // chrome extension: https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?utm_source=chrome-app-launcher-info-dialog for development workaround
+            
+    $('.taxon_name').each(function () {
+        var txt = $(this).text();
+        
+        getData("https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&titles="+txt+"&redirects=true", function(data) {
+            var wiki_text = data;
+            if (data != null){
+                var wiki_text = data.replace(/<b>/g, '');
+                var wiki_text = data.replace(/\\"/g, '"');
+                var wiki_text = wiki_text.substring(4,wiki_text.indexOf("\\n"));
+                document.getElementById(txt+"info").innerHTML = wiki_text + "<a target='_blank' href='https://en.wikipedia.org/wiki/"+txt+"'> Read more...</a>";
+            } else {
+                document.getElementById(txt+"info").innerHTML = "No description available";
+            }
+            
+        });
+    });
+            
 </script>
 
 {% endblock %}

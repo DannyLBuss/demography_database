@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Demography Database - Test{% endblock %}
+{% block title %}Demography Database - Data Input{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
+    <h1>Data Input Form</h1>
     {% if species %}
     <a type="button" class="btn btn-default" href="../../species/{{species.id}}/overview">Go back to species overview</a>
     {% endif %}

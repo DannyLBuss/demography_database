@@ -1,7 +1,7 @@
 from flask.ext.wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
     SubmitField, DecimalField, IntegerField, DateField, FloatField, FormField
-from wtforms.validators import Required, Length, Email, Regexp
+from wtforms.validators import Required, Length, Email, Regexp, Optional
 from wtforms import ValidationError
 from flask.ext.pagedown.fields import PageDownField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
@@ -109,14 +109,10 @@ class PublicationForm(Form):
     DOI_ISBN = StringField('DOI/ISBN')
     pub_name = StringField('Publication Title')
     corresponding_author = StringField('Corresponding Author')
-    email = StringField('Email Address', validators=[Email()])
-    purposes = QuerySelectField('Purposes',
-            query_factory=lambda: Purpose.query.all(), get_pk=lambda a: a.id,
-                            get_label=lambda a:'{} - {}'.format(a.purpose_name, a.purpose_description))
-    embargo = DateField('Embargo')
-    missing_data = QuerySelectField('Missing Data',
-            query_factory=lambda: MissingData.query.all(), get_pk=lambda a: a.id,
-                            get_label=lambda a:'{} - {}'.format(a.missing_code, a.missing_description))
+    email = StringField('Email Address', validators=[Email(),Optional()])
+    purposes = QuerySelectField('Purposes',query_factory=lambda: Purpose.query.all(), get_pk=lambda a: a.id,get_label=lambda a:'{} - {}'.format(a.purpose_name, a.purpose_description))
+    embargo = DateField('Embargo',validators=[Optional()])
+    missing_data = QuerySelectField('Missing Data',query_factory=lambda: MissingData.query.all(), get_pk=lambda a: a.id,get_label=lambda a:'{} - {}'.format(a.missing_code, a.missing_description))
     additional_source_string = StringField('Additional Source')
     # author_contacts # Fkey#additional_sources # Fkey
     submit = SubmitField('Submit')
