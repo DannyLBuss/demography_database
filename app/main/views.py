@@ -164,6 +164,12 @@ def explorer(taxon_level,taxon):
     
     return render_template('explorer_template.html',taxon=taxon,taxon_list = taxon_list,taxon_level=taxon_level,next_taxon_level=next_taxon_level, tax_pos = tax_pos)
 
+# contribute
+@main.route('/contribute-data')
+# @login_required
+def contribute_data():
+    return render_template('contribute_data.html')
+
 ### SPECIES/TAXONOMY/TRAIT FORMS + VIEW EDIT HISTORY PAGES -------------------------------------------------------------------------
 # editing species information
 @main.route('/species/<int:id>/edit', methods=['GET', 'POST'])
@@ -331,7 +337,8 @@ def publication_form(id):
     form.missing_data.data = publication.missing_data
     form.additional_source_string.data = publication.additional_source_string
     
-    return render_template('species_form.html', form=form, publication=publication)
+    
+    return render_template('publication_form.html', form=form, publication=publication)
 
 # publication edit history
 @main.route('/publication/<int:id>/edit-history')
@@ -469,6 +476,19 @@ def matrix_edit_history(id):
 
 ### END OF EDITING FORMS + EDIT HISTORY ---------------------------------------------------------------------------------
 
+### NEW DATA INPUT FORMS
+
+@main.route('/publication/new', methods=['GET', 'POST'])
+def new_publication_form():
+    form = PublicationForm()
+    
+    if form.validate_on_submit():
+        return redirect(url_for('.publication_page',id=id))
+    
+    return render_template('publication_form.html',form=form)
+
+
+### END OF NEW DATA FORMS  ---------------------------------------------------------------------------------
 
 # USER + PROFILE PAGES
 # User

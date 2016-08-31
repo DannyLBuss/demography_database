@@ -46,15 +46,15 @@ Demography Database
                     <ul class="dropdown-menu">
                         <li><a href="https://cdn.rawgit.com/jonesor/compadreDB/master/COMPADRE-UserGuide/COMPADRE-UserGuide.html" target="_blank">COMPADRE User Guide</a></li>
                         <li><a href="https://cdn.rawgit.com/jonesor/compadreDB/master/COMADRE-UserGuide/COMADRE-UserGuide.pdf">COMADRE User Guide</a></li>
-                        <li><a href="hthttps://cdn.rawgit.com/jonesor/compadreDB/master/Protocol/COMPADRE_COMADRE_Data_Digitisation_Protocol.html" target="_blank">Data Digitilisation Protocol</a></li>
+                        <li><a href="https://cdn.rawgit.com/jonesor/compadreDB/master/Protocol/COMPADRE_COMADRE_Data_Digitisation_Protocol.html" target="_blank">Data Digitilisation Protocol</a></li>
                         <li class = "disabled"><a href="#">What is COM(P)ADRE?</a></li>
                         <li class = "disabled"><a href="#">Team</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Collaborate<b class="caret"></b> </a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contribute<b class="caret"></b> </a>
                     <ul class="dropdown-menu">
-                        <li class = "disabled"><a href="#">Contribute your data</a></li>
+                        <li ><a href="{{ url_for('main.contribute_data') }}">Contribute your data</a></li>
                         <li class = "disabled"><a href="#">Become a Compadrino</a></li>
                         <li class = "disabled"><a href="#">Help develop this site</a></li>
                     </ul>
@@ -90,8 +90,10 @@ Demography Database
         <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message }} </div> {% endfor %}  
     {% block page_content %}
     {% endblock %} 
+    <hr>
 </div> 
 <footer>
+
 
     <img class="footer-logo" src="https://upload.wikimedia.org/wikipedia/en/c/cc/University_of_Exeter_new_logo.svg"> </footer>
 {% endblock %}

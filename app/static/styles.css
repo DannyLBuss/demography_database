@@ -190,10 +190,23 @@ footer {
   padding-top: 70px;
 }
 
+.breadcrumb {
+    padding: 5px;
+}
+
+.page-header, .page-header h1 {margin-top:0;}
+
 /* infobox etc */
 
 .info_box{
     background-color: #e2ebf0;
+    padding: 1em;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.info_box_red{
+    background-color: #f5e7de;
     padding: 1em;
     margin-bottom: 20px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
