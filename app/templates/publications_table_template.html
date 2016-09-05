@@ -7,6 +7,7 @@
 {% block page_content %}
 <h1>Search COMPADRE by Publications</h1>
 <hr>
+<p>Know of a publication not currently in the database? Submit a publication <a href="../../publication/new">here.</a></p>
 <div id="species-search">
     <div class="form-group">
 
@@ -26,7 +27,7 @@
                 <tr>
                     <td class="authors" >{{ publication.authors }}</td>
                     <td class="name"><a href="../publication/{{ publication.id }}">{{ publication.name }}</a></td>
-                    <td class="journal">{{ publication.journal_book_conf }}</td>
+                    <td class="journal">{{ publication.pub_title }}</td>
                     <td class="year">{{ publication.year }}</td>
                     <td class="doi"><small><a href="https://doi.org/{{ publication.DOI_ISBN }}" target="_blank">{{ publication.DOI_ISBN }}</a></small></td>
 
@@ -91,6 +92,23 @@ $(function() {
 function addTextTag(text){
     document.getElementById('big_search').value = text;
     }
+</script>
+
+<script>
+function htmlreplace(a, b, element) {    
+    if (!element) element = document.body;    
+    var nodes = element.childNodes;
+    for (var n=0; n<nodes.length; n++) {
+        if (nodes[n].nodeType == Node.TEXT_NODE) {
+            var r = new RegExp(a, 'gi');
+            nodes[n].textContent = nodes[n].textContent.replace(r, b);
+        } else {
+            htmlreplace(a, b, nodes[n]);
+        }
+    }
+}
+
+htmlreplace('None', 'Unknown');
 </script>
 
 {% endblock %}
