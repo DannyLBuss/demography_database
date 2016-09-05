@@ -1015,11 +1015,13 @@ class Species(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # subspecies = db.Column(db.String(64))
     species_accepted = db.Column(db.String(64))
+    species_common = db.Column(db.String(64))
     iucn_status_id = db.Column(db.Integer, db.ForeignKey('iucn_status.id'))
     esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id'))
     invasive_status = db.Column(db.Boolean())
     GBIF_key = db.Column(db.Integer())
     image_path = db.Column(db.Text)
+    image_path2 = db.Column(db.Text)
     user_created = db.relationship('User', foreign_keys='Species.user_created_id') # user keys might be a problem.. or might not.. will implement and find out
     user_created_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user_modified = db.relationship('User', foreign_keys='Species.user_modified_id')

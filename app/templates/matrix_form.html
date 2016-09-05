@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Demography Database - Test{% endblock %}
+{% block title %}Demography Database - Matrix Form{% endblock %}
 
 {% block page_content %}
-<div class="page-header info_box">
+<div class="page-header">
+    <h1>Matrix Editing Form</h1>
     <a type="button" class="btn btn-default" href="../../species/{{species.id}}/overview">Go back to species overview</a>
+    <a type="button" class="btn btn-default" href="../../publication/{{population.publication.id}}">Go back to publication overview</a>
     <h1>Editing matrix #{{matrix.id}} for <i>{{species.species_accepted}}</i></h1>
     <h3><strong>Population:</strong> {{population.name}}</h3>
     <h3><strong>Publication:</strong> {{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.pub_title }}" in <i>{{ population.publication.journal_book_conf }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}</h3>
@@ -102,9 +104,15 @@
                 
             </div>
         </div>
-        <div class="info_box">
-            <h3>Submit changes</h3>
-            {{ wtf.form_field(form.submit) }}
+        <div class="info_box_red">
+            <h3><strong>Please check;</strong></h3>
+            <ul>
+                <li>Annual periodicity has been entered</li>
+                <li>Treatments have not been entered into observations and vice-versa</li>
+                <li>Matrix dimensions are consistent</li>
+                <li>Organised class stages are correctly labelled</li>
+            </ul>
+            <h3>Submit changes: {{ wtf.form_field(form.submit) }}</h3>
         </div>
     </form>
     
