@@ -243,10 +243,6 @@ def load_user(user_id):
 
 ''' Start Demog Stuff '''    
 
-''' TODO: Stuff with arbitrary data - use methods to enter data (such as ecoregions), run these when deploying or setting up system '''
-''' We will add a method to the matrix model to generate the unique ID, as designed by Danny, once we have decided the best protocol '''
-''' Talk about enum (meta data within columns) vs meta tables '''
-
 ''' Meta tables '''
 ''' Meta Tables for Species '''
 class IUCNStatus(db.Model):
