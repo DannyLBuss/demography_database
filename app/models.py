@@ -486,6 +486,35 @@ class AngioGymno(db.Model):
     def __repr__(self):
         return str(self.id)
 
+class DavesGrowthType(db.Model):
+    __tablename__ = 'daves_growth_types'
+    id = db.Column(db.Integer, primary_key=True)
+    type_name = db.Column(db.String(64), index=True)
+    type_description = db.Column(db.Text)
+
+    plant_traits = db.relationship("PlantTrait", backref="daves_growth_types")
+
+    @staticmethod
+    def migrate():
+
+        with open('app/data-migrate/plant_traits.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["PlantTrait"]
+            nodes = json_data["DavesGrowthType"]
+
+            for node in nodes:          
+                i = DavesGrowthType.query.filter_by(type_name=node['growth_type_name']).first()
+                if i is None:
+                    i = DavesGrowthType()
+
+                i.type_name = node['growth_type_name']
+                i.type_description = node['growth_type_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return str(self.id)
 ''' End Meta Tables for Plant Traits '''
 
 ''' Meta Tables for Publication/Additional Source '''
@@ -1091,6 +1120,7 @@ class PlantTrait(db.Model):
     reproductive_repetition_id = db.Column(db.Integer, db.ForeignKey('reproductive_repetition.id'))
     dicot_monoc_id = db.Column(db.Integer, db.ForeignKey('dicot_monoc.id'))
     angio_gymno_id = db.Column(db.Integer, db.ForeignKey('angio_gymno.id'))
+    daves_growth_type_id = db.Column(db.Integer, db.ForeignKey('daves_growth_types.id'))
 
     version = db.Column(db.Integer())
     version_of_id = db.Column(db.Integer, db.ForeignKey('plant_traits.id'))
@@ -1103,6 +1133,7 @@ class PlantTrait(db.Model):
         ReproductiveRepetition.migrate()
         DicotMonoc.migrate()
         AngioGymno.migrate()
+        DavesGrowthType.migrate()
 
     def to_json(self, key):
         plant_trait = {

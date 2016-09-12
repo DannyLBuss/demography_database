@@ -24,6 +24,29 @@
 			"type_name": "Tree"
 		}],
 
+		"DavesGrowthType": [{
+            "growth_type_name": "Tree",
+            "growth_type_description": "NA"
+        }, {
+            "growth_type_name": "Shrub",
+            "growth_type_description": "NA"
+        }, {
+            "growth_type_name": "Closed Perennial",
+            "growth_type_description": "NA"
+        }, {
+            "growth_type_name": "Open Perennial",
+            "growth_type_description": "NA"
+        }, {
+            "growth_type_name": "Monocarpic",
+            "growth_type_description": "NA"
+        }, {
+            "growth_type_name": "Algae",
+            "growth_type_description": "NA"
+        }, {
+            "growth_type_name": "NA",
+            "growth_type_description": "NA"
+        }],
+
 		"GrowthFormRaunkiaer": [{
 			"form_name": "Hydrophyte"
 		}, {
