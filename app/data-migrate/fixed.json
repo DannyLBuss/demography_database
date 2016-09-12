@@ -1,14 +1,5 @@
 {
 	"Fixed": {
-		"VectorAvailability": [{
-			"availability_name": "None"
-		}, {
-			"availability_name": "Mean"
-		}, {
-			"availability_name": "Some"
-		}, {
-			"availability_name": "All"
-		}],
 		"StageClassInfo": [{
 			"info_code": "Y",
 			"info_description": "Yes"

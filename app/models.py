@@ -403,6 +403,7 @@ class GrowthFormRaunkiaer(db.Model):
     def __repr__(self):
         return str(self.id)
 
+# comment
 class ReproductiveRepetition(db.Model):
     __tablename__ = 'reproductive_repetition'
     id = db.Column(db.Integer, primary_key=True, index=True)
@@ -923,33 +924,6 @@ stage_class_info_fixed = db.Table('stage_class_info_fixed', db.Model.metadata,
     db.Column('stage_class_info_id', db.Integer, db.ForeignKey('stage_class_infos.id')),
     db.Column('fixed_id', db.Integer, db.ForeignKey('fixed.id'))
 )
-
-class VectorAvailability(db.Model):
-    __tablename__ = 'vector_availabilities'
-    id = db.Column(db.Integer, primary_key=True)
-    availability_name = db.Column(db.String(200), index=True)
-
-    fixed = db.relationship("Fixed", backref="vector_availabilities")
-
-    @staticmethod
-    def migrate():
-        with open('app/data-migrate/fixed.json') as d_file:
-            data = json.load(d_file)
-            json_data = data["Fixed"]
-            nodes = json_data["VectorAvailability"]
-
-            for node in nodes:
-                i = VectorAvailability.query.filter_by(availability_name=node['availability_name']).first()
-                if i is None:
-                    i = VectorAvailability()
-
-                i.availability_name = node['availability_name']
-
-                db.session.add(i)
-                db.session.commit()
-
-    def __repr__(self):
-        return '<Vector Availability %r>' % self.id
 
 class StageClassInfo(db.Model):
     __tablename__ = 'stage_class_infos'
@@ -1842,19 +1816,19 @@ class Fixed(db.Model):
     vector_str = db.Column(db.Text())
     vector_present = db.Column(db.Boolean())
     total_pop_no = db.Column(db.Integer())
-    vector_availablility_id = db.Column(db.Integer, db.ForeignKey('vector_availabilities.id'))
-    stage_class_info = db.relationship('StageClassInfo', secondary=stage_class_info_fixed, backref=db.backref('fixed', lazy='dynamic')) 
-    availability_notes = db.Column(db.Text())
-    population_info = db.Column(db.Text())
-    sampled_entire = db.Column(db.Text())
+    
+    # stage_class_info = db.relationship('StageClassInfo', secondary=stage_class_info_fixed, backref=db.backref('fixed', lazy='dynamic')) 
+    # availability_notes = db.Column(db.Text())
+    # population_info = db.Column(db.Text())
+    # sampled_entire = db.Column(db.Text())
     small_id = db.Column(db.Integer, db.ForeignKey('smalls.id'))
     private = db.Column(db.Boolean(), default=True)
-    matrix_a = db.Column(db.Text())
+    # matrix_a = db.Column(db.Text())
     #version = db.Column(db.Integer())
 
     @staticmethod
     def migrate():
-        VectorAvailability.migrate()
+        
         StageClassInfo.migrate()
         Small.migrate()
 
@@ -1884,6 +1858,7 @@ class Seed(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'), index=True)
     matrix_a = db.Column(db.Text())
+    
     #version = db.Column(db.Integer())
 
     def to_json(self):
