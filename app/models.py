@@ -919,39 +919,6 @@ class Status(db.Model):
 ''' End Meta Tables for Matrix '''
 
 ''' Meta Tables for Fixed '''
-stage_class_info_fixed = db.Table('stage_class_info_fixed', db.Model.metadata,
-    db.Column('id', db.Integer, primary_key=True),
-    db.Column('stage_class_info_id', db.Integer, db.ForeignKey('stage_class_infos.id')),
-    db.Column('fixed_id', db.Integer, db.ForeignKey('fixed.id'))
-)
-
-class StageClassInfo(db.Model):
-    __tablename__ = 'stage_class_infos'
-    id = db.Column(db.Integer, primary_key=True)
-    info_code = db.Column(db.String(200), index=True)
-    info_description = db.Column(db.Text())
-
-    @staticmethod
-    def migrate():
-        with open('app/data-migrate/fixed.json') as d_file:
-            data = json.load(d_file)
-            json_data = data["Fixed"]
-            nodes = json_data["StageClassInfo"]
-
-            for node in nodes:
-                i = StageClassInfo.query.filter_by(info_code=node['info_code']).first()
-                if i is None:
-                    i = StageClassInfo()
-
-                i.info_code = node['info_code']
-                i.info_description = node['info_description']
-
-                db.session.add(i)
-                db.session.commit()
-
-    def __repr__(self):
-        return '<StageClassInfo %r>' % self.id
-
 class Small(db.Model):
     __tablename__ = 'smalls'
     id = db.Column(db.Integer, primary_key=True)
@@ -1817,7 +1784,6 @@ class Fixed(db.Model):
     vector_present = db.Column(db.Boolean())
     total_pop_no = db.Column(db.Integer())
     
-    # stage_class_info = db.relationship('StageClassInfo', secondary=stage_class_info_fixed, backref=db.backref('fixed', lazy='dynamic')) 
     # availability_notes = db.Column(db.Text())
     # population_info = db.Column(db.Text())
     # sampled_entire = db.Column(db.Text())
@@ -1828,8 +1794,7 @@ class Fixed(db.Model):
 
     @staticmethod
     def migrate():
-        
-        StageClassInfo.migrate()
+    
         Small.migrate()
 
     def to_json(self, key):
