@@ -10,7 +10,7 @@ from ..models import Permission, Role, User, \
                     DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
                     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
-                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, VectorAvailability, StageClassInfo, Small, Status
+                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, Status
 from ..decorators import admin_required, permission_required, crossdomain
 
 '''Migration functions, etc.'''
