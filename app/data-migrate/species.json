@@ -58,6 +58,28 @@
         }, {
             "status_code": "NA",
             "status_name": "Not classified"
+        }],
+        "DavesGrowthType": [{
+            "type_name": "Tree",
+            "type_description": ""
+        }, {
+            "type_name": "Shrub",
+            "type_description": ""
+        }, {
+            "type_name": "Closed Perennial",
+            "type_description": ""
+        }, {
+            "type_name": "Open Perennial",
+            "type_description": ""
+        }, {
+            "type_name": "Monocarpic",
+            "type_description": ""
+        }, {
+            "type_name": "Algae",
+            "type_description": ""
+        }, {
+            "type_name": "NA",
+            "type_description": ""
         }]
     }
 

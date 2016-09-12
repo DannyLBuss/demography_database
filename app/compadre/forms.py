@@ -9,7 +9,7 @@ from ..models import IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthF
     DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
-    MatrixStage, MatrixValue, Matrix, Interval, Fixed, VectorAvailability, StageClassInfo, Small
+    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small
 
 def stringFromText(string):
     #Formatting string and separating for use as a list
