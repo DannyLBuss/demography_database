@@ -1783,14 +1783,8 @@ class Fixed(db.Model):
     vector_str = db.Column(db.Text())
     vector_present = db.Column(db.Boolean())
     total_pop_no = db.Column(db.Integer())
-    
-    # availability_notes = db.Column(db.Text())
-    # population_info = db.Column(db.Text())
-    # sampled_entire = db.Column(db.Text())
     small_id = db.Column(db.Integer, db.ForeignKey('smalls.id'))
     private = db.Column(db.Boolean(), default=True)
-    # matrix_a = db.Column(db.Text())
-    #version = db.Column(db.Integer())
 
     @staticmethod
     def migrate():
