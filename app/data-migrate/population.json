@@ -94,7 +94,26 @@
 			"continent_name": "Antartica"
 		}, {
 			"continent_name": "Oceania"
-		}]
+		}],
+
+		"InvasiveStatusStudy":[  
+         {  
+            "status_name":"Native",
+            "status_description":"The species population is studied in its native distribution"
+         },
+         {  
+            "status_name":"Introduced",
+            "status_description":"The species population is studied outside of its native range"
+         },
+         {  
+            "status_name":"Invasive",
+            "status_description":"The species is studied outside of its native range and is invasive"
+         },
+         {  
+            "status_name":"NA",
+            "status_description":"Not Applicable"
+         }
+      ]
 
 	}
 }

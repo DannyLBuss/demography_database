@@ -6,7 +6,7 @@ from wtforms import ValidationError
 from flask.ext.pagedown.fields import PageDownField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from ..models import IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
-    DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
+    DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, StageTypeClass, \
     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small
