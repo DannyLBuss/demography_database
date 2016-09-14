@@ -8,6 +8,8 @@
 			"comp_name": "Pooled"
 		}, {
 			"comp_name": "Seasonal"
+		}, {
+			"comp_name": "C_Mean"
 		}],
 		"Season": [{
 			"season_id" : 1,
