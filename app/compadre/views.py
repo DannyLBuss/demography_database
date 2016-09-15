@@ -7,7 +7,7 @@ from .. import db
 from forms import EntryForm, SpeciesForm, TaxonomyForm, PlantTraitForm, PopulationForm, PublicationForm, StudyForm, MatrixForm
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
-                    DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, StageTypeClass, \
+                    DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
                     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, Status

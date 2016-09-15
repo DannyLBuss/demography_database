@@ -113,6 +113,25 @@
             "status_name":"NA",
             "status_description":"Not Applicable"
          }
+      ],
+
+      "InvasiveStatusElsewhere":[  
+         {  
+            "status_name":"Invasive",
+            "status_description":"The species is classified as invasive on an invasives database"
+         },
+         {  
+            "status_name":"Introduced",
+            "status_description":"The species is classified as introduced on an invasives database"
+         },
+         {  
+            "status_name":"Not introduced",
+            "status_description":"The species is not classified as introduced or invasive on an invasives database"
+         },
+         {  
+            "status_name":"NA",
+            "status_description":"There is not sufficient information as to whether the species is invasive or introduced"
+         }
       ]
 
 	}
