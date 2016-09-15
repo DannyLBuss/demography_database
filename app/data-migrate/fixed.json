@@ -9,6 +9,12 @@
 		}, {
 			"small_name": "Focused",
 			"small_description": "Several fruits or flowers were removed from adult plants and the number of seeds produced were counted"
+		}, {
+			"small_name": "NA",
+			"small_description": "Not Applicable"
+		}, {
+			"small_name": "Expt & Focused",
+			"small_description": "An experiment was done (normally ex situ) and the number of seeds produced counted, and several fruits or flowers were removed from adult plants and the number of seeds produced were counted"
 		}],
 
 		"CensusTiming": [{
