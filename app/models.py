@@ -348,19 +348,19 @@ class TaxonomicStatus(db.Model):
         return str(self.id)
 ''' End Meta Tables for Taxonomy '''
 
-''' Meta Tables for Plant Traits '''
+''' Meta Tables for Traits '''
 class GrowthType(db.Model):
     __tablename__ = 'growth_types'
     id = db.Column(db.Integer, primary_key=True)
     type_name = db.Column(db.String(64), index=True)
 
-    plant_traits = db.relationship("PlantTrait", backref="growth_type")
+    traits = db.relationship("Trait", backref="growth_type")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/plant_traits.json') as taxonomy_file:
+        with open('app/data-migrate/traits.json') as taxonomy_file:
             data = json.load(taxonomy_file)
-            species = data["PlantTrait"]
+            species = data["Trait"]
             growth_types = species["GrowthType"]
 
             for types in growth_types:
@@ -381,13 +381,13 @@ class GrowthFormRaunkiaer(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
     form_name = db.Column(db.Text())
 
-    plant_traits = db.relationship("PlantTrait", backref="growth_form_raunkiaer")
+    traits = db.relationship("Trait", backref="growth_form_raunkiaer")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/plant_traits.json') as taxonomy_file:
+        with open('app/data-migrate/traits.json') as taxonomy_file:
             data = json.load(taxonomy_file)
-            species = data["PlantTrait"]
+            species = data["Trait"]
             growth_forms = species["GrowthFormRaunkiaer"]
 
             for form in growth_forms:
@@ -409,13 +409,13 @@ class ReproductiveRepetition(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
     repetition_name = db.Column(db.Text())
 
-    plant_traits = db.relationship("PlantTrait", backref="reproductive_repetition")
+    traits = db.relationship("Trait", backref="reproductive_repetition")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/plant_traits.json') as d_file:
+        with open('app/data-migrate/traits.json') as d_file:
             data = json.load(d_file)
-            json_data = data["PlantTrait"]
+            json_data = data["Trait"]
             nodes = json_data["ReproductiveRepetition"]
 
             for node in nodes:
@@ -437,13 +437,13 @@ class DicotMonoc(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     dicot_monoc_name = db.Column(db.String(64), index=True)
 
-    plant_traits = db.relationship("PlantTrait", backref="dicot_monoc")
+    traits = db.relationship("Trait", backref="dicot_monoc")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/plant_traits.json') as d_file:
+        with open('app/data-migrate/traits.json') as d_file:
             data = json.load(d_file)
-            json_data = data["PlantTrait"]
+            json_data = data["Trait"]
             nodes = json_data["DicotMonoc"]
 
             for node in nodes:
@@ -464,13 +464,13 @@ class AngioGymno(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     angio_gymno_name = db.Column(db.String(64), index=True)
 
-    plant_traits = db.relationship("PlantTrait", backref="angio_gymno")
+    traits = db.relationship("Trait", backref="angio_gymno")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/plant_traits.json') as d_file:
+        with open('app/data-migrate/traits.json') as d_file:
             data = json.load(d_file)
-            json_data = data["PlantTrait"]
+            json_data = data["Trait"]
             nodes = json_data["AngioGymno"]
 
             for node in nodes:
@@ -492,14 +492,14 @@ class DavesGrowthType(db.Model):
     type_name = db.Column(db.String(64), index=True)
     type_description = db.Column(db.Text)
 
-    plant_traits = db.relationship("PlantTrait", backref="daves_growth_types")
+    traits = db.relationship("Trait", backref="daves_growth_types")
 
     @staticmethod
     def migrate():
 
-        with open('app/data-migrate/plant_traits.json') as d_file:
+        with open('app/data-migrate/traits.json') as d_file:
             data = json.load(d_file)
-            json_data = data["PlantTrait"]
+            json_data = data["Trait"]
             nodes = json_data["DavesGrowthType"]
 
             for node in nodes:          
@@ -515,7 +515,7 @@ class DavesGrowthType(db.Model):
 
     def __repr__(self):
         return str(self.id)
-''' End Meta Tables for Plant Traits '''
+''' End Meta Tables for Traits '''
 
 ''' Meta Tables for Publication/Additional Source '''
 class SourceType(db.Model):
@@ -1086,7 +1086,7 @@ class Species(db.Model):
     timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
     timestamp_modified = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     taxonomies = db.relationship("Taxonomy", backref="species")
-    plant_traits = db.relationship("PlantTrait", backref="species")
+    traits = db.relationship("Trait", backref="species")
     populations = db.relationship("Population", backref="species")
     stages = db.relationship("Stage", backref="species")
 
@@ -1106,7 +1106,7 @@ class Species(db.Model):
         species = {
             'species_accepted': self.species_accepted,
             'taxonomy' : [taxonomy.to_json(key) for taxonomy in self.taxonomies][0],
-            'plant_traits' : [plant_trait.to_json(key) for plant_trait in self.plant_traits][0],
+            'traits' : [trait.to_json(key) for trait in self.traits][0],
             'populations' : url_array(self, 'populations', key),
             'number_populations' : len(url_array(self, 'populations', key))
             # 'stages' : [stage.to_json() for stage in self.stages][0]
@@ -1117,7 +1117,7 @@ class Species(db.Model):
         species = {
             'species_accepted': self.species_accepted,
             'taxonomy' : url_array(self, 'taxonomies', key),
-            'plant_traits' : url_array(self, 'planttraits', key),
+            'traits' : url_array(self, 'traits', key),
             'populations' : url_array(self, 'populations', key)
             # 'stages' : [stage.to_json() for stage in self.stages][0]
         }
@@ -1197,8 +1197,8 @@ class Taxonomy(db.Model):
         return '<Taxonomy %r>' % self.id
 
 
-class PlantTrait(db.Model):
-    __tablename__ = 'plant_traits'
+class Trait(db.Model):
+    __tablename__ = 'traits'
     id = db.Column(db.Integer, primary_key=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
     max_height = db.Column(db.Float()) #This should be a double, eventually
@@ -1210,8 +1210,8 @@ class PlantTrait(db.Model):
     daves_growth_type_id = db.Column(db.Integer, db.ForeignKey('daves_growth_types.id'))
 
     version = db.Column(db.Integer())
-    version_of_id = db.Column(db.Integer, db.ForeignKey('plant_traits.id'))
-    versions = db.relationship("PlantTrait", backref="original", remote_side="PlantTrait.id")
+    version_of_id = db.Column(db.Integer, db.ForeignKey('traits.id'))
+    versions = db.relationship("Trait", backref="original", remote_side="Trait.id")
 
     @staticmethod
     def migrate():
@@ -1223,7 +1223,7 @@ class PlantTrait(db.Model):
         DavesGrowthType.migrate()
 
     def to_json(self, key):
-        plant_trait = {
+        trait = {
             'max_height' : self.max_height,
             'growth_type_id' : self.growth_type.type_name,
             # 'growth_form_raunkiaer' : self.growth_form_raunkiaer.form_name,
@@ -1231,10 +1231,10 @@ class PlantTrait(db.Model):
             'dicot_monoc' : self.dicot_monoc.dicot_monoc_name,
             'angio_gymno' : self.angio_gymno.angio_gymno_name
         }
-        return plant_trait
+        return trait
 
     def __repr__(self):
-        return '<Plant Trait %r>' % self.id
+        return '<Trait %r>' % self.id
 
 class Publication(db.Model):
     __tablename__ = 'publications'
@@ -1984,10 +1984,10 @@ def url_array(self, string, key):
                                   _external=False)
             matrix_urls.append(url)
         return matrix_urls
-    elif string == 'planttraits':
+    elif string == 'traits':
         trait_urls = []
-        for trait in self.plant_traits:
-            url = url_for('api.get_planttrait', id=trait.id, key=key,
+        for trait in self.traits:
+            url = url_for('api.get_trait', id=trait.id, key=key,
                                   _external=False)
             trait_urls.append(url)
         return trait_urls

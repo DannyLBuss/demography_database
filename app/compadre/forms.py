@@ -7,7 +7,7 @@ from flask.ext.pagedown.fields import PageDownField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from ..models import IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
-    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
+    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming
 
@@ -146,7 +146,7 @@ class PopulationForm(Form):
     lon_deg = StringField('Lon Deg')
     submit = SubmitField('Submit')
 
-class PlantTraitForm(Form):
+class TraitForm(Form):
     max_height = FloatField('Max Height')
     growth_type = QuerySelectField('Growth Type',
             query_factory=lambda: GrowthType.query.all(), get_pk=lambda a: a.id,
