@@ -9,6 +9,26 @@
 		}, {
 			"small_name": "Focused",
 			"small_description": "Several fruits or flowers were removed from adult plants and the number of seeds produced were counted"
+		}],
+
+		"CensusTiming": [{
+			"census_name": "Pre",
+			"census_description": "Birth pulse; pre-reproductive census timing"
+		}, {
+			"census_name": "Post",
+			"census_description": "Birth pulse; post-reproductive census timing"
+		}, {
+			"census_name": "Flow",
+			"census_description": "Birth Flow; Non-periodic reproductive events that occur consistently throughout the year"
+		}, {
+			"census_name": "NATS",
+			"census_description": "No access to source"
+		}, {
+			"census_name": "NA",
+			"census_description": "Not Applicable"
+		}, {
+			"census_name": "UTD",
+			"census_description": "Unable to determine census timing from original source"
 		}]
 
 	}
