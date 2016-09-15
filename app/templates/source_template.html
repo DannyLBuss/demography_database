@@ -1,33 +1,51 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
 
 <div class="info_box">
+    {% if current_user.is_authenticated %}
     <div class="dropdown pull-right">
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
         <ul class="dropdown-menu dropdown-menu-right">
             <li><a href="../../publication/{{publication.id}}/edit">Edit publication</a></li>
             <li><a href="../../publication/{{publication.id}}/edit-history">View edits</a></li>
+            <li><a href="../../delete/publication/{{publication.id}}">Delete publication</a></li>
+            <li><a href="../../population/new/publication={{publication.id}}/choose_species">Add new population</a></li>
+            <li><a href="{{ url_for('main.species_new_form') }}">Add new species</a></li>
         </ul>
     </div>
+    {% endif %}
     <h3>{{ publication.authors }} ({{ publication.year }}). "{{ publication.name }}" in <i>{{ publication.pub_title }}</i> {{ publication.volume }}, {{ publication.pages }}.<small> ID: {{publication.id}}</small></h3>
+    
+    {% if publication.DOI_ISBN %}
+    <a class="btn btn-default" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source</a>
+    {% endif %}
+    {% if publication.additional_source_string %}
     <h4><strong>Additional Source:</strong> ({{publication.additional_source_string}}) </h4>
+    {% endif %}
     <p>Do you have demographic data for this publication? Contribute <a href="{{ url_for('main.contribute_data') }}">here</a></p>
 </div>
-
+{% if publication.populations %}
 {% for population in publication.populations %}
 
 <div class="info_box">
+    {% if current_user.is_authenticated %}
     <div class="dropdown pull-right">
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
         <ul class="dropdown-menu dropdown-menu-right">
             <li><a href="/population/{{population.id}}/edit">Edit population</a></li>
             <li><a href="../../population/{{population.id}}/edit-history">View edits</a></li>
+            <li><a href="../../delete/population/{{population.id}}">Delete population</a></li>
             <li class="disabled"><a href="#">Add new matrix</a></li>
         </ul>
     </div>
+    {% endif %}
         <h4><strong>Species:</strong> <a href="../species/{{ population.species.id }}/overview"><em>{{ population.species.species_accepted }}</em></a><small> ID: {{ population.species.id }}</small></h4>
         <h4><strong>Population Name: </strong>{{ population.name }} <small>ID: {{ population.id }}</small> </h4>
     <ul>
+        {% if population.study %}
         <li>Studied for {{ population.study.study_duration }} year(s) from {{ population.study.study_start }} to {{ population.study.study_end }} <small>ID: {{ population.study.id }}</small></li>
+        {% else %}
+        <li><a>Add study duration</a></li>
+        {% endif %}
         <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
         <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}
             <li><strong>Geometries: </strong> {{ population.geometries }}</li>
@@ -53,6 +71,7 @@
                             <li><a data-toggle="pill" href="#menu_{{matrix.id}}_2">Fecundity Matrix</a></li>
                             <li><a data-toggle="pill" href="#menu_{{matrix.id}}_3">Clonal Matrix</a></li>
                             <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li>
+                            {% if current_user.is_authenticated %}
                             <div class="dropdown pull-right">
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
                                 <ul class="dropdown-menu dropdown-menu-right">
@@ -60,6 +79,7 @@
                                     <li><a href="../../matrix/{{matrix.id}}/edit-history">View edits</a></li>
                                 </ul>
                             </div>
+                            {% endif %}
                         </ul>
 
                         <div class="tab-content">
@@ -98,6 +118,13 @@
 </div>
 
 {% endfor %}
+    {% else %}
+    <div class="info_box_empty">
+        <p>There are no populations attatched to this publication</p>
+        <p><a href="../../population/new/publication={{publication.id}}/choose_species">Add new population</a></p>
+    </div>
+    {% endif %}
+
 <script>
     // Change matrix strings into tables
     var divs = document.getElementsByClassName("matA");

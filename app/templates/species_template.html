@@ -1,10 +1,15 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
-{% for taxonomy in species.taxonomies %}
-{% for trait in species.plant_traits %}
 <div class="page-header">
 <div class="breadcrumb">
+    {% if species.taxonomies %}
+    {% for taxonomy in species.taxonomies %}
     <p>You are at: <a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> > <i>{{species.species_accepted}}</i></p>
+    {% endfor %}
+    {% else %}
+    <p>No taxonomy</p>
+    {% endif %}
 </div>
+{% if current_user.is_authenticated %}
 <div class="dropdown pull-right">
     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
     <ul class="dropdown-menu dropdown-menu-right">
@@ -12,13 +17,27 @@
         <li><a href="/species/{{species.id}}/edit">Edit</a></li>
         <li><a href="/species/{{species.id}}/edit-history">View edits</a></li>
         <li class="dropdown-header">Taxonomy</li>
+        {% if species.taxonomies %}
+        {% for taxonomy in species.taxonomies %}
         <li><a href="/taxonomy/{{taxonomy.id}}/edit">Edit</a></li>
         <li><a href="/taxonomy/{{taxonomy.id}}/edit-history">View edits</a></li>
+        {% endfor %}
+        {% else %}
+        <li><a href="/species/{{species.id}}/addtaxonomy">Add taxonomy</a></li>
+        {% endif %}
         <li class="dropdown-header">Species Traits</li>
+        {% if species.plant_traits %}
+        {% for trait in species.plant_traits %}
         <li><a href="/traits/{{trait.id}}/edit">Edit</a></li>
         <li><a href="/traits/{{trait.id}}/edit-history">View edits</a></li>
+        {% endfor %}
+        {% else %}
+        <li><a href="/species/{{species.id}}/addplanttraits">Add plant traits</a></li>
+        <li><a href="/species/{{species.id}}/addanimaltraits">Add animal traits</a></li>
+        {% endif %}
     </ul>
 </div>
+{% endif %}
 <h1><i>{{species.species_accepted}}</i> <small>ID: {{species.id}}</small></h1>
 {% if species.species_common %}
 <p><b>Common name(s):</b> {{species.species_common}}</p>
@@ -52,7 +71,10 @@
     </div>
         </div>
     <div class="col-sm-4">
+        {% if species.taxonomies %}
+        {% for taxonomy in species.taxonomies %}
         <h3>Taxonomy <small>ID: {{taxonomy.id}}</small></h3>
+        
         <table style="width:100%" class="table">
             <tbody>
                 <tr>
@@ -89,8 +111,19 @@
                 </tr>
             </tbody>
         </table>
-
+        {% endfor %}
+        {% else %}
+        <h3>Taxonomy</h3>
+        <div class="info_box_empty">
+            <p>Not entered</p>
+            <a href="../../taxonomy/new/species={{species.id}}">Add taxonomic information</a>
+        </div>
+        {% endif %}
+        
+        {% if species.plant_traits %}
+        {% for trait in species.plant_traits %}
         <h3>Plant Traits <small>ID: {{trait.id}}</small></h3>
+        
         <table style="width:100%" class="table">
             <tr>
                 <td>
@@ -133,12 +166,19 @@
                 </td>
             </tr>
         </table>
+        {% endfor %}
+        {% else %}
+        <h3>Traits</h3>
+        <div class="info_box_empty">
+            <p>Not entered</p>
+            <p><a href="../../traits/new/species={{species.id}}">Add plant traits</a></p>
+            <p><a class="disabled">Add animal traits</a></p>
+        </div>
+        {% endif %}
     </div>
-{% endfor %} 
 
 </div> 
 
-{% endfor %}
             
     <div id="external-sources">
                 Search external Sources: <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://media.eol.org//assets/favicon-9de6ee8ce10b9ad7b2662236411f4539.ico" class="little_logo"> Enyclopedia of Life</a>
@@ -162,6 +202,7 @@
                     <td><h4>Filter</h4></td>
                 </tr>
             </thead>
+            {% if species.populations %}
             <tbody> {% for population in species.populations %}
                 <tr class="remove_duplicates publication_row {{ population.publication.id}}p">
                     <td>
@@ -170,16 +211,34 @@
                     <td>
                         <input type="checkbox" class="filter" data-value="id{{population.publication.id}}"> 
                     </td>
-                </tr> {% endfor %} </tbody>
+                </tr> 
+                {% endfor %} 
+            </tbody>
+            <p>Do you have demographic data for these publications? Contribute <a href="{{ url_for('main.contribute_data') }}">here</a>.</p>
+            {% else %}
+            <tbody>
+                <tr>
+                    <td>
+                        <p>No publications</p>
+                        <p><a href="{{ url_for('main.new_publication_form') }}">Add new publication</a>.</p>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+            {% endif %}
         </table>
-        <p>Do you have demographic data for these publications? Contribute <a href="{{ url_for('main.contribute_data') }}">here</a></p>
+        
         
     </div>
-    
+    {%if species.populations%}
     <div class="list">
     {% for population in species.populations %}
         <div class="population_box {{ population.publication.id}}p">
             <div class="population" data-value="id{{population.publication.id}}"></div>
+            {% if current_user.is_authenticated %}
             <div class="dropdown pull-right">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-right">
@@ -188,6 +247,7 @@
                     <li class="disabled"><a href="#">Add new matrix</a></li>
                 </ul>
             </div>
+            {% endif %}
             <h4><strong>Population Name: </strong>{{ population.name }} <small>ID: {{ population.id }}</small> </h4>
             <ul>
                 <li><strong>Publication: </strong>{{ population.publication.authors }}</li>
@@ -217,6 +277,7 @@
                                 <li><a data-toggle="pill" href="#menu_{{matrix.id}}_2">Fecundity Matrix</a></li>
                                 <li><a data-toggle="pill" href="#menu_{{matrix.id}}_3">Clonal Matrix</a></li>
                                 <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li>
+                                {% if current_user.is_authenticated %}
                                 <div class="dropdown pull-right">
                                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
                                     <ul class="dropdown-menu dropdown-menu-right">
@@ -224,6 +285,7 @@
                                         <li><a href="../../matrix/{{matrix.id}}/edit-history">View edits</a></li>
                                     </ul>
                                 </div>
+                                {% endif %}
                             </ul>
                             <div class="tab-content">
                                 <div id="home_{{matrix.id}}" class="tab-pane in active">
@@ -262,9 +324,15 @@
             {% endfor %} 
             </div>
         </div>
-        {% endfor %} 
-        
+        {% endfor %}
+        </div>
+    {% else %}
+    <div class="info_box_empty">
+        <p>There are no populations attatched to this species, new populations are added via the publication overview:</p>
+        <p><a href="{{ url_for('main.publications_table') }}">Search existing publications</a></p>
+        <p><a href="{{ url_for('main.new_publication_form') }}">Add new publication</a></p>
     </div>
+    {% endif %}
 </div>
 
 {% endblock %}

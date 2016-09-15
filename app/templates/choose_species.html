@@ -5,37 +5,28 @@
 {% block title %}Demography Database{% endblock %}
 
 {% block page_content %}
-<h1>Search COMPADRE by Publications</h1>
+
+<h1>Choose Species</h1>
+<h3>Click on the species for which you want to create a population:</h3>
 <hr>
-<p>Know of a publication not currently in the database? <a href="../../publication/new">Add new publication</a></p>
 <div id="species-search">
     <div class="form-group">
 
-        <input type="text" class="search form-control" placeholder="Search everything" id="big_search">
+        <input type="text" class="search form-control" placeholder="Search" id="big_search">
     </div>
     <hr>
-    <table class="table" style="table-layout: fixed; width: 100%">
+    <table class="table" >
         <thead>
-            <th style="width: 30%;">Author(s) <button type="button" class="sort btn btn-xs" data-sort="authors"> Sort </button></th>
-            <th style="width: 35%;">Publication name <button type="button" class="sort btn btn-xs" data-sort="name"> Sort </button></th>
-            <th style="width: 10%;">Journal <button type="button" class="sort btn btn-xs" data-sort="journal"> Sort </button></th>
-            <th style="width: 10%;">Year <button type="button" class="sort btn btn-xs" data-sort="year"> Sort </button></th>
-            <th style="width: 15%;">DOI / ISBN</th>
+            <th>Species </th>
         </thead>
         <tbody class="list">
-            {% for publication in publications %}
-                <tr>
-                    <td class="authors" >{{ publication.authors }}</td>
-                    <td class="name"><a href="../publication/{{ publication.id }}">{{ publication.name }}</a></td>
-                    <td class="journal">{{ publication.pub_title }}</td>
-                    <td class="year">{{ publication.year }}</td>
-                    <td class="doi"><small><a href="https://doi.org/{{ publication.DOI_ISBN }}" target="_blank">{{ publication.DOI_ISBN }}</a></small></td>
-
-                </tr>
+            {% for s in species %}
+                    <tr>
+                        <td class="species"><a href="../../../../population/new/publication={{publication.id}}/species={{ s.id }}"><em>{{ s.species_accepted }}</em></a></td>
+                    </tr>
             {% endfor %}
         </tbody>
     </table>
-    <ul class="pagination"></ul>
 </div>
 
 
@@ -46,11 +37,7 @@
 <script>
 $(function() {
 	var options = {
-		valueNames: ['authors', 'name', 'journal', 'year', 'doi'],
-        page: 1000,
-        plugins: [
-            ListPagination({})
-        ]
+		valueNames: [ 'species'],
 	};
 
     
@@ -86,12 +73,6 @@ $(function() {
     
 });
        
-</script>
-
-<script>
-function addTextTag(text){
-    document.getElementById('big_search').value = text;
-    }
 </script>
 
 <script>

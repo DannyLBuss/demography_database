@@ -4,7 +4,7 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
-from ..compadre.forms import SpeciesForm, TaxonomyForm, PlantTraitForm, PopulationForm, MatrixForm, PublicationForm, StudyForm
+from ..compadre.forms import SpeciesForm, TaxonomyForm, PlantTraitForm, PopulationForm, MatrixForm, PublicationForm, StudyForm, DeleteForm
 from .. import db
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
@@ -95,6 +95,7 @@ def data():
     return render_template('data.html', species=species)
 
 # simon testing out a somewhat pointless id url
+
 @main.route('/matrix/<species_id>/<pop_id>/<mat_id>')
 def matrix(species_id,pop_id,mat_id):
     species = Species.query.filter_by(id=species_id).first_or_404()
@@ -478,17 +479,186 @@ def matrix_edit_history(id):
 
 ### NEW DATA INPUT FORMS
 
+@main.route('/species/new', methods=['GET', 'POST'])
+def species_new_form():
+    form = SpeciesForm()
+    if form.validate_on_submit():
+        species = Species()
+        
+        species.species_accepted = form.species_accepted.data
+        species.species_common = form.species_common.data
+        species.iucn_status = form.iucn_status.data
+        species.esa_status = form.esa_status.data
+        species.invasive_status = form.invasive_status.data
+        species.GBIF_key = form.GBIF_key.data
+        species.image_path = form.image_path.data
+        species.image_path2 = form.image_path2.data
+        
+        db.session.add(species)
+        db.session.commit()
+
+        return redirect(url_for('.species_page',id=species.id))
+    
+    return render_template('species_form.html', form=form)
+
+@main.route('/taxonomy/new/species=<int:id_sp>', methods=['GET', 'POST'])
+def taxonomy_new_form(id_sp):
+    species = Species.query.get_or_404(id_sp)
+    form = TaxonomyForm()
+    
+    if form.validate_on_submit():
+        taxonomy = Taxonomy()
+        taxonomy.species_id = species.id
+        taxonomy.species_author = form.species_author.data
+        taxonomy.authority = form.authority.data
+        taxonomy.taxonomic_status = form.taxonomic_status.data
+        taxonomy.tpl_version = form.tpl_version.data
+        taxonomy.infraspecies_accepted = form.infraspecies_accepted.data
+        taxonomy.species_epithet_accepted = form.species_epithet_accepted.data 
+        taxonomy.genus_accepted = form.genus_accepted.data
+        taxonomy.genus = form.genus.data
+        taxonomy.family = form.family.data
+        taxonomy.tax_order = form.tax_order.data
+        taxonomy.tax_class = form.tax_class.data
+        taxonomy.phylum = form.phylum.data
+        taxonomy.kingdom = form.kingdom.data
+        
+        db.session.add(taxonomy)
+        db.session.commit()
+        
+        return redirect(url_for('.species_page',id=id_sp))
+    
+    return render_template('species_form.html', form=form,species = species)
+
+@main.route('/traits/new/species=<int:id_sp>', methods=['GET', 'POST'])
+def trait_new_form(id_sp):
+    species = Species.query.get_or_404(id_sp)
+    form = PlantTraitForm()
+    
+    if form.validate_on_submit():
+        planttrait = PlantTrait()
+        planttrait.species_id = species.id
+        
+        planttrait.max_height = form.max_height.data
+        planttrait.growth_type = form.growth_type.data
+        planttrait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
+        planttrait.reproductive_repetition = form.reproductive_repetition.data
+        planttrait.dicot_monoc = form.dicot_monoc.data
+        planttrait.angio_gymno = form.angio_gymno.data
+        return redirect(url_for('.species_page',id=id_sp))
+    
+    return render_template('species_form.html', form=form,species = species)
+
 @main.route('/publication/new', methods=['GET', 'POST'])
 def new_publication_form():
     form = PublicationForm()
     
     if form.validate_on_submit():
-        return redirect(url_for('.publication_page',id=id))
+        publication = Publication()
+        
+        publication.source_type = form.source_type.data
+        publication.authors = form.authors.data 
+        publication.editors = form.editors.data
+        publication.pub_title = form.pub_title.data
+        publication.journal_book_conf = form.journal_book_conf.data
+        publication.year = form.year.data
+        publication.volume = form.volume.data
+        publication.pages = form.pages.data
+        publication.publisher = form.publisher.data
+        publication.city = form.city.data
+        publication.country = form.country.data
+        publication.institution = form.institution.data
+        publication.DOI_ISBN = form.DOI_ISBN.data
+        publication.name = form.pub_name.data
+        publication.corresponding_author = form.corresponding_author.data
+        publication.email = form.email.data
+        publication.purposes_id = form.purposes.data
+        publication.embargo = form.embargo.data
+        publication.missing_data = form.missing_data.data
+        publication.additional_source_string = form.additional_source_string.data  
+        
+        db.session.add(publication)
+        db.session.commit()
+        
+        return redirect(url_for('.publication_page',id=publication.id))
     
     return render_template('publication_form.html',form=form)
 
+@main.route('/population/new/publication=<int:id_pub>/choose_species', methods=['GET'])
+def choose_species(id_pub):
+    publication = Publication.query.get_or_404(id_pub)
+    species = Species.query.all()
+    
+    return render_template('choose_species.html',publication=publication,species=species)
+    
+@main.route('/population/new/publication=<int:id_pub>/species=<int:id_sp>', methods=['GET', 'POST'])
+def population_new_form(id_pub,id_sp):
+    publication = Publication.query.get_or_404(id_pub)
+    species = Species.query.get_or_404(id_sp)
+    form = PopulationForm()
+    
+    if form.validate_on_submit():
+        population = Population()
+        population.publication_id = id_pub
+        population.species_id = id_sp
+        
+        population.name = form.name.data
+        population.ecoregion = form.ecoregion.data
+        population.country = form.country.data
+        population.continent = form.continent.data
+        
+        db.session.add(population)
+        db.session.commit()
+        
+        return redirect(url_for('.publication_page',id=id_pub))
+    
+    return render_template('species_form.html', form=form, publication=publication, species=species)
+
 
 ### END OF NEW DATA FORMS  ---------------------------------------------------------------------------------
+
+### Delete stuff
+
+@main.route('/delete/<thing_to_delete>/<int:id_obj>', methods=['GET', 'POST'])
+def delete_object(thing_to_delete,id_obj):
+    form = DeleteForm()
+    
+    if thing_to_delete == "population":
+        population = Population.query.get_or_404(id_obj)
+        
+    if thing_to_delete == "species":
+        species = Species.query.get_or_404(id_obj)
+        populations = Population.query.filter_by(species_id=id_obj)
+        taxonomy = Taxonomy(species_id=id_obj)
+        traits = PlantTraits(species_id=id_obj)
+    
+    if thing_to_delete == "publication":
+        publication = Publication.query.get_or_404(id_obj)
+        populations = Population.query.filter_by(publication_id=id_obj)
+        
+    if form.validate_on_submit() and thing_to_delete == "population":
+        db.session.delete(population)
+        db.session.commit()
+        flash('The population has been deleted')
+        return redirect(url_for('.publication_page',id=population.publication_id))
+    
+    if form.validate_on_submit() and thing_to_delete == "species":
+        db.session.delete(species)
+        for p in populations:
+            db.session.delete(p)
+        db.session.commit()
+        flash('The species has been deleted')
+        return redirect(url_for('.species_table'))
+    
+    if form.validate_on_submit() and thing_to_delete == "publication":
+        db.session.delete(publication)
+        for p in populations:
+            db.session.delete(p)
+        db.session.commit()
+        flash('The publication has been deleted')
+        return redirect(url_for('.publications_table'))
+    
+    return render_template('delete_confirm.html', form=form)
 
 # USER + PROFILE PAGES
 # User
