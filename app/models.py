@@ -767,6 +767,35 @@ class InvasiveStatusStudy(db.Model):
 
     def __repr__(self):
         return str(self.id)
+
+class InvasiveStatusElsewhere(db.Model):
+    __tablename__ = 'invasive_status_elsewhere'
+    id = db.Column(db.Integer, primary_key=True)
+    status_name = db.Column(db.String(64), index=True)
+    status_description = db.Column(db.Text)
+
+    populations = db.relationship("Population", backref="invasive_status_elsewhere")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/populations.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Population"]
+            nodes = json_data["InvasiveStatusElsewhere"]
+
+            for node in nodes:
+                i = InvasiveStatusElsewhere.query.filter_by(status_name=node['status_name']).first()
+                if i is None:
+                    i = InvasiveStatusElsewhere()
+
+                i.status_name = node['status_name']
+                i.status_description = node['status_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return str(self.id)
 ''' End Meta Tables for Population '''
 
 ''' Meta Tables for Stage Type '''
@@ -1389,6 +1418,7 @@ class Population(db.Model):
     name = db.Column(db.Text())
     ecoregion_id = db.Column(db.Integer, db.ForeignKey('ecoregions.id'))
     invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasivestatusstudies.id'))
+    invasive_status_selsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id'))
     #Django plugin for country, and generic python package too - we'll be just fine. Unfortunately, unless we download a CSV of this and enter into sep table, will probably be more efficient to do this outside of the database. Further thought reqd!
     country = db.Column(db.Text())
     continent_id = db.Column(db.Integer, db.ForeignKey('continents.id'))
@@ -1469,6 +1499,7 @@ class Population(db.Model):
         Ecoregion.migrate()
         Continent.migrate()
         InvasiveStatusStudy.migrate()
+        InvasiveStatusElsewhere.migrate()
 
     def __repr__(self):
         return '<Population %r>' % self.id
