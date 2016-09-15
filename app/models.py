@@ -1033,6 +1033,35 @@ class Small(db.Model):
                 db.session.commit()
 
     def __repr__(self):
+        return '<Small %r>' % self.id
+
+class CensusTiming(db.Model):
+    __tablename__ = 'census_timings'
+    id = db.Column(db.Integer, primary_key=True)
+    census_name = db.Column(db.String(200), index=True)
+    census_description = db.Column(db.Text())
+
+    fixed = db.relationship("Fixed", backref="census_timings")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/fixed.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Fixed"]
+            nodes = json_data["CensusTiming"]
+
+            for node in nodes:
+                i = CensusTiming.query.filter_by(census_name=node['census_name']).first()
+                if i is None:
+                    i = CensusTiming()
+
+                i.census_name = node['census_name']
+                i.census_description = node['census_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
         return '<StageClassInfo %r>' % self.id
 ''' End Meta Tables for Fixed '''
 
@@ -1877,11 +1906,12 @@ class Fixed(db.Model):
     vector_present = db.Column(db.Boolean())
     total_pop_no = db.Column(db.Integer())
     small_id = db.Column(db.Integer, db.ForeignKey('smalls.id'))
+    census_timing_id = db.Column(db.Integer, db.ForeignKey('census_timings.id'))
     private = db.Column(db.Boolean(), default=True)
 
     @staticmethod
     def migrate():
-    
+        CensusTiming.migrate()
         Small.migrate()
 
     def to_json(self, key):
