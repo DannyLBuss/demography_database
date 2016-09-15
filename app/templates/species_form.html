@@ -6,18 +6,16 @@
 {% block page_content %}
 <div class="page-header">
     <h1>Data Input Form</h1>
-    {% if species %}
-    <a type="button" class="btn btn-default" href="../../species/{{species.id}}/overview">Go back to species overview</a>
-    {% endif %}
     {% if population %}
-    <a type="button" class="btn btn-default" href="../../publication/{{population.publication_id}}">Go back to publication overview</a>
+    <a type="button" class="btn btn-default" href="../../../publication/{{population.publication_id}}">Go back to publication overview</a>
     {% endif %}
     {% if publication %}
-    <a type="button" class="btn btn-default" href="../../publication/{{publication.id}}">Go back to publication overview</a>
-    <h1>Editing infomation for <i>{{publication.authors}}</i></h1>
+    <h3><strong>Publication:</strong> {{publication.authors}} <small><a href="../../../publication/{{publication.id}}">Go back to publication overview</a></small></h3>
     {% endif %}
     {% if species %}
-    <h1>Editing infomation for <i>{{species.species_accepted}}</i></h1>
+    <h3><strong>Species:</strong> <i>{{species.species_accepted}}</i> <small><a href="../../../species/{{species.id}}/overview">Go back to species overview</a></small></h3>
+    {% else %}
+    <h3>Species: new</h3>
     {% endif %}
     
 </div>

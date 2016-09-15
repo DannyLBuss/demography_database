@@ -92,18 +92,34 @@
         console.log("Getting data...")
         getData('http://api.crossref.org/works/'+doi_given, function(data) {
             document.getElementById("authors").value = "";
-            var author_length = data.message.author.length
-            for (var i = 0; i < author_length; i++) {
-                document.getElementById("authors").value = document.getElementById("authors").value + data.message.author[0,i].family;
-                if (i != author_length - 1) {
-                    document.getElementById("authors").value = document.getElementById("authors").value + ", "
+            if (data.message.author){
+                var author_length = data.message.author.length
+                for (var i = 0; i < author_length; i++) {
+                    document.getElementById("authors").value = document.getElementById("authors").value + toTitleCase(data.message.author[0,i].family);
+                    if (i != author_length - 1) {
+                        document.getElementById("authors").value = document.getElementById("authors").value + ", "
+                    }
                 }
             }
+            
             document.getElementById("editors").value = "NA";
             document.getElementById("pub_title").value = data.message["container-title"][0];
-            document.getElementById("year").value = data.message["published-print"]["date-parts"][0];
+            
+            if (data.message["issued"]){
+                document.getElementById("year").value = data.message["issued"]["date-parts"][0];
+            }else{
+                document.getElementById("year").value = "NA"
+            }
+            
+            document.getElementById("year").value = data.message["issued"]["date-parts"][0];
             document.getElementById("year").value = document.getElementById("year").value.substring(0,4)
-            document.getElementById("volume").value = data.message["volume"];
+            
+            if (data.message["volume"]){
+                document.getElementById("volume").value = data.message["volume"];
+            }else{
+                document.getElementById("volume").value = "NA"
+            }
+            
             document.getElementById("pages").value = data.message.page;
             document.getElementById("publisher").value = data.message.publisher;
             document.getElementById("city").value = "NA";

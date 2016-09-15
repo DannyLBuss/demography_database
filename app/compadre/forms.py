@@ -79,15 +79,15 @@ class TaxonomyForm(Form):
             query_factory=lambda: TaxonomicStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.status_name, a.status_description))
 	tpl_version = StringField('TPL Version')
-	infraspecies_accepted = StringField('Infraspecies Accepted', validators=[])
-	species_epithet_accepted = StringField('Species Epithet Accepted', validators=[])
-	genus_accepted = StringField('Genus Accepted', validators=[])
-	genus = StringField('Genus', validators=[])
-	family = StringField('Family', validators=[])
-	tax_order = StringField('Order', validators=[])
-	tax_class = StringField('Class', validators=[])
-	phylum = StringField('Phylum', validators=[])
-	kingdom = StringField('Kingdom', validators=[])
+	infraspecies_accepted = StringField('Infraspecies Accepted')
+	species_epithet_accepted = StringField('Species Epithet Accepted', validators=[Required()])
+	genus_accepted = StringField('Genus Accepted', validators=[Required()])
+	genus = StringField('Genus', validators=[Required()])
+	family = StringField('Family', validators=[Required()])
+	tax_order = StringField('Order', validators=[Required()])
+	tax_class = StringField('Class', validators=[Required()])
+	phylum = StringField('Phylum', validators=[Required()])
+	kingdom = StringField('Kingdom', validators=[Required()])
 
 	submit = SubmitField('Submit')
     
@@ -205,6 +205,9 @@ class MatrixForm(Form):
                             get_label=lambda a:'{} - {}'.format(a.cap_code, a.cap_description))
 
     observations = TextAreaField('Observations *', validators=[Required()])
+    submit = SubmitField('Submit')
+    
+class DeleteForm(Form):
     submit = SubmitField('Submit')
 
 class EntryForm(Form):
