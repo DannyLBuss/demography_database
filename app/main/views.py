@@ -4,12 +4,12 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
-from ..compadre.forms import SpeciesForm, TaxonomyForm, PlantTraitForm, PopulationForm, MatrixForm, PublicationForm, StudyForm
+from ..compadre.forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, MatrixForm, PublicationForm, StudyForm
 from .. import db
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
-                    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
+                    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming
 from ..decorators import admin_required, permission_required, crossdomain
@@ -48,7 +48,7 @@ def index():
 def meta_tables_json():
 
     # Constructing dict for meta tables, ordering by main Class
-    meta_tables = {"Species" : {"IUCNStatus" : [], "ESAStatus" : []}, "Taxonomy" : {"TaxonomicStatus" : []}, "PlantTrait" : {"GrowthType" : [], \
+    meta_tables = {"Species" : {"IUCNStatus" : [], "ESAStatus" : []}, "Taxonomy" : {"TaxonomicStatus" : []}, "Trait" : {"GrowthType" : [], \
                    "GrowthFormRaunkiaer" : [], "ReproductiveRepetition" : [], "DicotMonoc" : [], "AngioGymno" : [] }, \
                    "Publication" : {"SourceType" : [], "Database" : [], "Purpose" : [], "MissingData" : [] }, \
                    "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] }, \
@@ -59,11 +59,11 @@ def meta_tables_json():
     meta_tables["Species"]["IUCNStatus"].extend(IUCNStatus.query.all())
     meta_tables["Species"]["ESAStatus"].extend(ESAStatus.query.all())
     meta_tables["Taxonomy"]["TaxonomicStatus"].extend(TaxonomicStatus.query.all())
-    meta_tables["PlantTrait"]["GrowthType"].extend(GrowthType.query.all())
-    meta_tables["PlantTrait"]["GrowthFormRaunkiaer"].extend(GrowthFormRaunkiaer.query.all())
-    meta_tables["PlantTrait"]["ReproductiveRepetition"].extend(ReproductiveRepetition.query.all())
-    meta_tables["PlantTrait"]["DicotMonoc"].extend(DicotMonoc.query.all())
-    meta_tables["PlantTrait"]["AngioGymno"].extend(AngioGymno.query.all())
+    meta_tables["Trait"]["GrowthType"].extend(GrowthType.query.all())
+    meta_tables["Trait"]["GrowthFormRaunkiaer"].extend(GrowthFormRaunkiaer.query.all())
+    meta_tables["Trait"]["ReproductiveRepetition"].extend(ReproductiveRepetition.query.all())
+    meta_tables["Trait"]["DicotMonoc"].extend(DicotMonoc.query.all())
+    meta_tables["Trait"]["AngioGymno"].extend(AngioGymno.query.all())
     meta_tables["Publication"]["SourceType"].extend(SourceType.query.all())
     meta_tables["Publication"]["Database"].extend(Database.query.all())
     meta_tables["Publication"]["Purpose"].extend(Purpose.query.all())
@@ -258,33 +258,33 @@ def taxonomy_edit_history(id):
 # editing traits
 @main.route('/traits/<int:id>/edit', methods=['GET', 'POST'])
 def trait_form(id):
-    planttrait = PlantTrait.query.get_or_404(id)
-    species = Species.query.get_or_404(planttrait.species_id)
-    form = PlantTraitForm(planttrait=planttrait)
+    trait = Trait.query.get_or_404(id)
+    species = Species.query.get_or_404(trait.species_id)
+    form = TraitForm(trait=trait)
     
     if form.validate_on_submit():
-        planttrait.max_height = form.max_height.data
-        planttrait.growth_type = form.growth_type.data
-        planttrait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
-        planttrait.reproductive_repetition = form.reproductive_repetition.data
-        planttrait.dicot_monoc = form.dicot_monoc.data
-        planttrait.angio_gymno = form.angio_gymno.data
-        flash('The plant trait infomation has been updated.')
+        trait.max_height = form.max_height.data
+        trait.growth_type = form.growth_type.data
+        trait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
+        trait.reproductive_repetition = form.reproductive_repetition.data
+        trait.dicot_monoc = form.dicot_monoc.data
+        trait.angio_gymno = form.angio_gymno.data
+        flash('The trait infomation has been updated.')
         return redirect(url_for('.species_page',id=species.id))
     
-    form.max_height.data = planttrait.max_height
-    form.growth_type.data = planttrait.growth_type
-    form.growth_form_raunkiaer.data = planttrait.growth_form_raunkiaer
-    form.reproductive_repetition.data = planttrait.reproductive_repetition
-    form.dicot_monoc.data = planttrait.dicot_monoc
-    form.angio_gymno.data = planttrait.angio_gymno
-    return render_template('species_form.html', form=form, planttrait=planttrait,species = species)
+    form.max_height.data = trait.max_height
+    form.growth_type.data = trait.growth_type
+    form.growth_form_raunkiaer.data = trait.growth_form_raunkiaer
+    form.reproductive_repetition.data = trait.reproductive_repetition
+    form.dicot_monoc.data = trait.dicot_monoc
+    form.angio_gymno.data = trait.angio_gymno
+    return render_template('species_form.html', form=form, trait=trait,species = species)
 
 # traits edit history
 @main.route('/traits/<int:id>/edit-history')
-def planttrait_edit_history(id):
-    planttrait = PlantTrait.query.get_or_404(id)
-    return render_template('edit_history.html', planttrait=planttrait)
+def trait_edit_history(id):
+    trait = Trait.query.get_or_404(id)
+    return render_template('edit_history.html', trait=trait)
 
 # editing publication
 @main.route('/publication/<int:id>/edit', methods=['GET', 'POST'])

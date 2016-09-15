@@ -4,11 +4,11 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import compadre
 from .. import db
-from forms import EntryForm, SpeciesForm, TaxonomyForm, PlantTraitForm, PopulationForm, PublicationForm, StudyForm, MatrixForm
+from forms import EntryForm, SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, StudyForm, MatrixForm
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
-                    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
+                    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status
 from ..decorators import admin_required, permission_required, crossdomain
@@ -148,7 +148,7 @@ def check_for_duplicate_single(obj):
 
 # build an Entry using the data from the sanitised object, submitting to database
 def add_to_classes(data):
-    from ..conversion.models import Taxonomy, Publication, Population, PlantTrait, Matrix, Study, Entry
+    from ..conversion.models import Taxonomy, Publication, Population, Trait, Matrix, Study, Entry
     
     matrix = Matrix(data['treatment_id'], data['matrix_split'], data['matrix_composition_id'], data['survival_issue'], data['periodicity'], data['matrix_criteria_size'], \
         data['matrix_criteria_ontogeny'], data['matrix_criteria_age'], data['matrix_start_month'], data['matrix_start_year'], data['matrix_end_month'], data['matrix_end_year'], \
@@ -160,7 +160,7 @@ def add_to_classes(data):
     pop = Population(data['species_author'], data['name'], data['geometries_lat_min'], data['geometries_lon_deg'], data['geometries_lat_ns'], data['geometries_lat_we'], \
         data['geometries_lat_sec'], data['geometries_lon_sec'], data['geometries_lon_min'], data['geometries_lat_deg'], data['geometries_altitude'], data['ecoregion_id'], \
         data['country'], data['continent_id'], matrix)
-    trait = PlantTrait(data['growth_type_id'], data['dicot_monoc_id'], data['angio_gymno_id'])
+    trait = Trait(data['growth_type_id'], data['dicot_monoc_id'], data['angio_gymno_id'])
     pub = Publication(data['authors'], data['year'], data['DOI_ISBN'], data['additional_source_string'], tax, pop, trait, study, data['pub_name'])
 
     entry = Entry(pub, study, pop, tax, trait, matrix)

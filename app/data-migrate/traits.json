@@ -1,0 +1,97 @@
+{
+	"Trait": {
+		"GrowthType": [{
+			"type_name": "Algae"
+		}, {
+			"type_name": "Annual"
+		}, {
+			"type_name": "Bryophyte"
+		}, {
+			"type_name": "Epiphyte"
+		}, {
+			"type_name": "Fern"
+		}, {
+			"type_name": "Herbaceous perennial"
+		}, {
+			"type_name": "Liana"
+		}, {
+			"type_name": "Palm"
+		}, {
+			"type_name": "Shrub"
+		}, {
+			"type_name": "Succulent"
+		}, {
+			"type_name": "Tree"
+		}],
+
+		"DavesGrowthType": [{
+            "growth_type_name": "Tree",
+            "growth_type_description": "Large woody plant with a trunk and supporting branches."
+        }, {
+            "growth_type_name": "Shrub",
+            "growth_type_description": "Small to medium-sized woody plant, distinguished from trees by shorter height and multiple stems."
+        }, {
+            "growth_type_name": "Closed Perennial",
+            "growth_type_description": "Non-woody plants with multiple reproductive events in their lifetime and occurs primarily in shaded habitats such as forests."
+        }, {
+            "growth_type_name": "Open Perennial",
+            "growth_type_description": "Non-woody plants with multiple reproductive events in their lifetime and occurs primarily in unshaded habitats such as grassland."
+        }, {
+            "growth_type_name": "Monocarpic",
+            "growth_type_description": "Plants with a single reproductive event in their lifetime. This includes biennials."
+        }, {
+            "growth_type_name": "Algae",
+            "growth_type_description": "Organisms with chlorophyll as their primary photosynthetic pigment and lack a sterile covering of cells around their reproductive cells."
+        }, {
+            "growth_type_name": "NA",
+            "growth_type_description": "Does not fit into growth type category."
+        }],
+
+		"GrowthFormRaunkiaer": [{
+			"form_name": "Hydrophyte"
+		}, {
+			"form_name": "Therophyte"
+		}, {
+			"form_name": "Hemicryptophyte"
+		}, {
+			"form_name": "Epiphyte"
+		}, {
+			"form_name": "Geophyte"
+		}, {
+			"form_name": "Aerophyte"
+		}, {
+			"form_name": "Helophyte"
+		}, {
+			"form_name": "Nanophanerophyte"
+		}, {
+			"form_name": "Chamaephyte"
+		}, {
+			"form_name": "Mesophanerophyte"
+		}, {
+			"form_name": "Megaphanerophyte"
+		}],
+
+		"ReproductiveRepetition": [{
+			"repetition_name": "Monocarpic"
+		}, {
+			"repetition_name": "Polycarpic"
+		}],
+
+		"DicotMonoc": [{
+			"dicot_monoc_name": "Eudicot"
+		}, {
+			"dicot_monoc_name": "Monocot"
+		}, {
+			"dicot_monoc_name": "NA"
+		}],
+
+		"AngioGymno": [{
+			"angio_gymno_name": "Angiosperm"
+		}, {
+			"angio_gymno_name": "Gymnosperm"
+		}, {
+			"angio_gymno_name": "NA"
+		}]
+
+	}
+}
