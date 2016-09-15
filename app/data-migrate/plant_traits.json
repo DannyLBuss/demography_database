@@ -26,25 +26,25 @@
 
 		"DavesGrowthType": [{
             "growth_type_name": "Tree",
-            "growth_type_description": "NA"
+            "growth_type_description": "Large woody plant with a trunk and supporting branches."
         }, {
             "growth_type_name": "Shrub",
-            "growth_type_description": "NA"
+            "growth_type_description": "Small to medium-sized woody plant, distinguished from trees by shorter height and multiple stems."
         }, {
             "growth_type_name": "Closed Perennial",
-            "growth_type_description": "NA"
+            "growth_type_description": "Non-woody plants with multiple reproductive events in their lifetime and occurs primarily in shaded habitats such as forests."
         }, {
             "growth_type_name": "Open Perennial",
-            "growth_type_description": "NA"
+            "growth_type_description": "Non-woody plants with multiple reproductive events in their lifetime and occurs primarily in unshaded habitats such as grassland."
         }, {
             "growth_type_name": "Monocarpic",
-            "growth_type_description": "NA"
+            "growth_type_description": "Plants with a single reproductive event in their lifetime. This includes biennials."
         }, {
             "growth_type_name": "Algae",
-            "growth_type_description": "NA"
+            "growth_type_description": "Organisms with chlorophyll as their primary photosynthetic pigment and lack a sterile covering of cells around their reproductive cells."
         }, {
             "growth_type_name": "NA",
-            "growth_type_description": "NA"
+            "growth_type_description": "Does not fit into growth type category."
         }],
 
 		"GrowthFormRaunkiaer": [{
