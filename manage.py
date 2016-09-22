@@ -17,7 +17,7 @@ if os.path.exists('.env'):
 
 from app import create_app, db
 from app.models import User, Role, Permission, \
-    IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
+    IUCNStatus, ESAStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
@@ -33,7 +33,7 @@ migrate = Migrate(app, db)
 def make_shell_context():
     return dict(app=app, db=db, User=User, Role=Role,
                 Permission=Permission, IUCNStatus=IUCNStatus, ESAStatus=ESAStatus, Species=Species, \
-                TaxonomicStatus=TaxonomicStatus, Taxonomy=Taxonomy, GrowthType=GrowthType, GrowthFormRaunkiaer=GrowthFormRaunkiaer, \
+                Taxonomy=Taxonomy, GrowthType=GrowthType, GrowthFormRaunkiaer=GrowthFormRaunkiaer, \
                 ReproductiveRepetition=ReproductiveRepetition, DicotMonoc=DicotMonoc, AngioGymno=AngioGymno, DavesGrowthType=DavesGrowthType, Trait=Trait, \
                 Publication=Publication, SourceType=SourceType, Database=Database, Purpose=Purpose, MissingData=MissingData, \
                 AuthorContact=AuthorContact, ContentEmail=ContentEmail, Population=Population, Ecoregion=Ecoregion, Continent=Continent, \
@@ -274,10 +274,7 @@ def submit(entry):
         tax.species_author = entry.taxonomy.species_author
         tax.species_accepted = entry.taxonomy.species_accepted
         tax.authority = entry.taxonomy.authority
-        tax.tpl_version = entry.taxonomy.tpl_version    
-        tax_status = TaxonomicStatus.query.filter_by(status_name=entry.taxonomy.taxonomic_status_id).first()
-        if tax_status != None:
-            tax.taxonomic_status_id = tax_status.id
+        tax.tpl_version = entry.taxonomy.tpl_version
         tax.infraspecies_accepted = entry.taxonomy.infraspecies_accepted
         tax.species_epithet_accepted = entry.taxonomy.species_epithet_accepted
         tax.genus_accepted = entry.taxonomy.genus_accepted
@@ -525,7 +522,6 @@ def convert_all_headers(dict):
     new_dict['matrix_start_month'] = dict['MatrixStartMonth']
     new_dict['authors'] = dict['Authors']
     new_dict['geometries_lon_sec'] = dict['LonSec']
-    new_dict['taxonomic_status_id'] = dict['TaxonomicStatus']
     new_dict['matrix_dimension'] = dict['MatrixDimension']
     new_dict['geometries_altitude'] = dict['Altitude']
     new_dict['geometries_lat_min'] = dict['LatMin']
@@ -573,7 +569,7 @@ def convert_all_headers(dict):
 @manager.command
 def migrate_meta():
     from app.models import User, Role, Permission, \
-    IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
+    IUCNStatus, ESAStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
