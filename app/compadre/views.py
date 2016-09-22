@@ -6,7 +6,7 @@ from . import compadre
 from .. import db
 from forms import EntryForm, SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, StudyForm, MatrixForm
 from ..models import Permission, Role, User, \
-                    IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
+                    IUCNStatus, ESAStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
                     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
@@ -195,7 +195,6 @@ def convert_all_headers(dict):
     new_dict['matrix_start_month'] = dict['MatrixStartMonth']
     new_dict['authors'] = dict['Authors']
     new_dict['geometries_lon_sec'] = dict['LonSec']
-    new_dict['taxonomic_status_id'] = dict['TaxonomicStatus']
     new_dict['matrix_dimension'] = dict['MatrixDimension']
     new_dict['geometries_altitude'] = dict['Altitude']
     new_dict['geometries_lat_min'] = dict['LatMin']

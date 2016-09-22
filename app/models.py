@@ -315,37 +315,7 @@ class ESAStatus(db.Model):
 ''' End Meta Tables for Species '''
 
 ''' Meta Tables for Taxonomy '''
-class TaxonomicStatus(db.Model):
-    __tablename__ = 'taxonomic_statuses'
-    id = db.Column(db.Integer, primary_key=True)
-    status_name = db.Column(db.String(64), index=True)
-    status_description = db.Column(db.Text())
 
-    taxonomies = db.relationship("Taxonomy", backref="taxonomic_status")
-
-    def __getitem__(self, key):
-        return getattr(self, key)
-
-    @staticmethod
-    def migrate():
-        with open('app/data-migrate/taxonomy.json') as taxonomy_file:
-            data = json.load(taxonomy_file)
-            species = data["Taxonomy"]
-            taxonomic_status = species["TaxonomicStatus"]
-
-            for tax in taxonomic_status:
-                i = TaxonomicStatus.query.filter_by(status_name=tax['status_name']).first()
-                if i is None:
-                    i = TaxonomicStatus()
-
-                i.status_name = tax['status_name']
-                i.status_description = tax['status_description']
-
-                db.session.add(i)
-                db.session.commit()
-
-    def __repr__(self):
-        return str(self.id)
 ''' End Meta Tables for Taxonomy '''
 
 ''' Meta Tables for Traits '''
@@ -1135,7 +1105,6 @@ class Taxonomy(db.Model):
     species_author = db.Column(db.String(64), index=True)
     species_accepted = db.Column(db.String(64))
     authority = db.Column(db.Text())
-    taxonomic_status_id = db.Column(db.Integer, db.ForeignKey('taxonomic_statuses.id'))
     tpl_version = db.Column(db.String(64)) # Currently at 1.0, which could be float, but sometimes releases are 1.0.1 etc, best as string for now?
     infraspecies_accepted = db.Column(db.String(64))
     species_epithet_accepted = db.Column(db.String(64))
@@ -1153,7 +1122,7 @@ class Taxonomy(db.Model):
 
     @staticmethod
     def migrate():
-        TaxonomicStatus.migrate()
+        pass
 
     def to_json(self, key):
         try:
