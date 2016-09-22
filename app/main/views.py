@@ -51,7 +51,7 @@ def meta_tables_json():
     meta_tables = {"Species" : {"IUCNStatus" : [], "ESAStatus" : []}, "Taxonomy" : {"TaxonomicStatus" : []}, "Trait" : {"GrowthType" : [], \
                    "GrowthFormRaunkiaer" : [], "ReproductiveRepetition" : [], "DicotMonoc" : [], "AngioGymno" : [] }, \
                    "Publication" : {"SourceType" : [], "Database" : [], "Purpose" : [], "MissingData" : [] }, \
-                   "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] }, \
+                   "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] , "InvasiveStatusStudy" : [], "InvasiveStatusElsewhere" : []}, \
                    "StageType" : { "StageTypeClass" : [] }, "MatrixValue" : { "TransitionType" : [] }, \
                    "Matrix" : {"MatrixComposition" : [], "Season" : [], "StudiedSex" : [], "Captivity" : []}, \
                    "Fixed" : { "VectorAvailability" : [],  "StageClassInfo": [], "Small": [] }}
@@ -71,14 +71,14 @@ def meta_tables_json():
     meta_tables["AuthorContact"]["ContentEmail"].extend(ContentEmail.query.all())
     meta_tables["Population"]["Ecoregion"].extend(Ecoregion.query.all())
     meta_tables["Population"]["Continent"].extend(Continent.query.all())
+    meta_tables["Population"]["InvasiveStatusStudy"].extend(InvasiveStatusStudy.query.all())
+    meta_tables["Population"]["InvasiveStatusElsewhere"].extend(InvasiveStatusElsewhere.query.all())
     meta_tables["StageType"]["StageTypeClass"].extend(StageTypeClass.query.all())
     meta_tables["MatrixValue"]["TransitionType"].extend(TransitionType.query.all())
     meta_tables["Matrix"]["MatrixComposition"].extend(MatrixComposition.query.all())
     meta_tables["Matrix"]["Season"].extend(Season.query.all())
     meta_tables["Matrix"]["StudiedSex"].extend(StudiedSex.query.all())
     meta_tables["Matrix"]["Captivity"].extend(Captivity.query.all())
-    meta_tables["Fixed"]["VectorAvailability"].extend(VectorAvailability.query.all())
-    meta_tables["Fixed"]["StageClassInfo"].extend(StageClassInfo.query.all())
     meta_tables["Fixed"]["Small"].extend(Small.query.all())
 
 
