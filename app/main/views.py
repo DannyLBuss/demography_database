@@ -54,7 +54,7 @@ def meta_tables_json():
                    "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] , "InvasiveStatusStudy" : [], "InvasiveStatusElsewhere" : []}, \
                    "StageType" : { "StageTypeClass" : [] }, "MatrixValue" : { "TransitionType" : [] }, \
                    "Matrix" : {"MatrixComposition" : [], "Season" : [], "StudiedSex" : [], "Captivity" : []}, \
-                   "Fixed" : { "VectorAvailability" : [],  "StageClassInfo": [], "Small": [] }}
+                   "Fixed" : { "Small": [], "CensusTiming" : [] }}
 
     meta_tables["Species"]["IUCNStatus"].extend(IUCNStatus.query.all())
     meta_tables["Species"]["ESAStatus"].extend(ESAStatus.query.all())
@@ -80,7 +80,7 @@ def meta_tables_json():
     meta_tables["Matrix"]["StudiedSex"].extend(StudiedSex.query.all())
     meta_tables["Matrix"]["Captivity"].extend(Captivity.query.all())
     meta_tables["Fixed"]["Small"].extend(Small.query.all())
-
+    meta_tables["Fixed"]["CensusTiming"].extend(CensusTiming.query.all())
 
     print meta_tables
 
