@@ -28,29 +28,29 @@
 
     <hr/>
 
-    <h2>Plant Traits</h2>
+    <h2>Traits</h2>
     <h3>Growth Types</h3>
-	{% for type in meta.PlantTrait.GrowthType %}
+	{% for type in meta.Trait.GrowthType %}
     	<code>{{ type.type_name }}</code><br/>
     {% endfor %}
 
     <h3>Growth Form Raunkiaer</h3>
-	{% for type in meta.PlantTrait.GrowthFormRaunkiaer %}
+	{% for type in meta.Trait.GrowthFormRaunkiaer %}
     	<code>{{ type.form_name }}</code><br/>
     {% endfor %}
 
     <h3>Reproductive Repetition</h3>
-	{% for rep in meta.PlantTrait.ReproductiveRepetition %}
+	{% for rep in meta.Trait.ReproductiveRepetition %}
     	<code>{{ rep.repetition_name }}</code><br/>
     {% endfor %}
 
     <h3>Dicot/Monoc</h3>
-	{% for dic in meta.PlantTrait.DicotMonoc %}
+	{% for dic in meta.Trait.DicotMonoc %}
     	<code>{{ dic.dicot_monoc_name }}</code><br/>
     {% endfor %}
 
     <h3>Angio/Gymno</h3>
-	{% for ang in meta.PlantTrait.AngioGymno %}
+	{% for ang in meta.Trait.AngioGymno %}
     	<code>{{ ang.angio_gymno_name }}</code><br/>
     {% endfor %}
 
@@ -98,6 +98,17 @@
     	<code>{{ con.continent_name }}</code><br/>
     {% endfor %}
 
+    <h3>Invasive Status Study</h3>
+    {% for inv in meta.Population.InvasiveStatusStudy %}
+        <code>{{ inv.status_name }}</code> : {{ inv.status_description }}<br/>
+    {% endfor %}
+
+
+    <h3>Invasive Status Elsewhere</h3>
+    {% for inv in meta.Population.InvasiveStatusElsewhere %}
+        <code>{{ inv.status_name }}</code> : {{ inv.status_description }}<br/>
+    {% endfor %}
+
     <hr/>
 
     <h2>Stage Types</h2>
@@ -140,16 +151,6 @@
     <hr/>
 
     <h2>Fixed</h2>
-    <h3>Vector Availabilities</h3>
-    {% for vec in meta.Fixed.VectorAvailability %}
-        <code>{{ vec.availability_name }}</code><br/>
-    {% endfor %}
-
-    <h3>Stage Class Info</h3>
-    {% for class in meta.Fixed.StageClassInfo %}
-        <code>{{ class.info_code }}</code> : {{ class.info_description }}<br/>
-    {% endfor %}
-
     <h3>Smalls</h3>
     {% for small in meta.Fixed.Small %}
         <code>{{ small.small_name }}</code> : {{ small.small_description }}<br/>
