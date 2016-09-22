@@ -156,6 +156,11 @@
         <code>{{ small.small_name }}</code> : {{ small.small_description }}<br/>
     {% endfor %}
 
+    <h3>Census Timings</h3>
+    {% for cen in meta.Fixed.CensusTiming %}
+        <code>{{ cen.census_name }}</code> : {{ cen.census_description }}<br/>
+    {% endfor %}
+
 
 
 </div>
