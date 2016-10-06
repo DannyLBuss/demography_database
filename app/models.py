@@ -243,10 +243,6 @@ def load_user(user_id):
 
 ''' Start Demog Stuff '''    
 
-''' TODO: Stuff with arbitrary data - use methods to enter data (such as ecoregions), run these when deploying or setting up system '''
-''' We will add a method to the matrix model to generate the unique ID, as designed by Danny, once we have decided the best protocol '''
-''' Talk about enum (meta data within columns) vs meta tables '''
-
 ''' Meta tables '''
 ''' Meta Tables for Species '''
 class IUCNStatus(db.Model):
@@ -319,52 +315,22 @@ class ESAStatus(db.Model):
 ''' End Meta Tables for Species '''
 
 ''' Meta Tables for Taxonomy '''
-class TaxonomicStatus(db.Model):
-    __tablename__ = 'taxonomic_statuses'
-    id = db.Column(db.Integer, primary_key=True)
-    status_name = db.Column(db.String(64), index=True)
-    status_description = db.Column(db.Text())
 
-    taxonomies = db.relationship("Taxonomy", backref="taxonomic_status")
-
-    def __getitem__(self, key):
-        return getattr(self, key)
-
-    @staticmethod
-    def migrate():
-        with open('app/data-migrate/taxonomy.json') as taxonomy_file:
-            data = json.load(taxonomy_file)
-            species = data["Taxonomy"]
-            taxonomic_status = species["TaxonomicStatus"]
-
-            for tax in taxonomic_status:
-                i = TaxonomicStatus.query.filter_by(status_name=tax['status_name']).first()
-                if i is None:
-                    i = TaxonomicStatus()
-
-                i.status_name = tax['status_name']
-                i.status_description = tax['status_description']
-
-                db.session.add(i)
-                db.session.commit()
-
-    def __repr__(self):
-        return str(self.id)
 ''' End Meta Tables for Taxonomy '''
 
-''' Meta Tables for Plant Traits '''
+''' Meta Tables for Traits '''
 class GrowthType(db.Model):
     __tablename__ = 'growth_types'
     id = db.Column(db.Integer, primary_key=True)
     type_name = db.Column(db.String(64), index=True)
 
-    plant_traits = db.relationship("PlantTrait", backref="growth_type")
+    traits = db.relationship("Trait", backref="growth_type")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/plant_traits.json') as taxonomy_file:
+        with open('app/data-migrate/traits.json') as taxonomy_file:
             data = json.load(taxonomy_file)
-            species = data["PlantTrait"]
+            species = data["Trait"]
             growth_types = species["GrowthType"]
 
             for types in growth_types:
@@ -385,13 +351,13 @@ class GrowthFormRaunkiaer(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
     form_name = db.Column(db.Text())
 
-    plant_traits = db.relationship("PlantTrait", backref="growth_form_raunkiaer")
+    traits = db.relationship("Trait", backref="growth_form_raunkiaer")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/plant_traits.json') as taxonomy_file:
+        with open('app/data-migrate/traits.json') as taxonomy_file:
             data = json.load(taxonomy_file)
-            species = data["PlantTrait"]
+            species = data["Trait"]
             growth_forms = species["GrowthFormRaunkiaer"]
 
             for form in growth_forms:
@@ -407,18 +373,19 @@ class GrowthFormRaunkiaer(db.Model):
     def __repr__(self):
         return str(self.id)
 
+# comment
 class ReproductiveRepetition(db.Model):
     __tablename__ = 'reproductive_repetition'
     id = db.Column(db.Integer, primary_key=True, index=True)
     repetition_name = db.Column(db.Text())
 
-    plant_traits = db.relationship("PlantTrait", backref="reproductive_repetition")
+    traits = db.relationship("Trait", backref="reproductive_repetition")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/plant_traits.json') as d_file:
+        with open('app/data-migrate/traits.json') as d_file:
             data = json.load(d_file)
-            json_data = data["PlantTrait"]
+            json_data = data["Trait"]
             nodes = json_data["ReproductiveRepetition"]
 
             for node in nodes:
@@ -440,13 +407,13 @@ class DicotMonoc(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     dicot_monoc_name = db.Column(db.String(64), index=True)
 
-    plant_traits = db.relationship("PlantTrait", backref="dicot_monoc")
+    traits = db.relationship("Trait", backref="dicot_monoc")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/plant_traits.json') as d_file:
+        with open('app/data-migrate/traits.json') as d_file:
             data = json.load(d_file)
-            json_data = data["PlantTrait"]
+            json_data = data["Trait"]
             nodes = json_data["DicotMonoc"]
 
             for node in nodes:
@@ -467,13 +434,13 @@ class AngioGymno(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     angio_gymno_name = db.Column(db.String(64), index=True)
 
-    plant_traits = db.relationship("PlantTrait", backref="angio_gymno")
+    traits = db.relationship("Trait", backref="angio_gymno")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/plant_traits.json') as d_file:
+        with open('app/data-migrate/traits.json') as d_file:
             data = json.load(d_file)
-            json_data = data["PlantTrait"]
+            json_data = data["Trait"]
             nodes = json_data["AngioGymno"]
 
             for node in nodes:
@@ -489,7 +456,36 @@ class AngioGymno(db.Model):
     def __repr__(self):
         return str(self.id)
 
-''' End Meta Tables for Plant Traits '''
+class DavesGrowthType(db.Model):
+    __tablename__ = 'daves_growth_types'
+    id = db.Column(db.Integer, primary_key=True)
+    type_name = db.Column(db.String(64), index=True)
+    type_description = db.Column(db.Text)
+
+    traits = db.relationship("Trait", backref="daves_growth_types")
+
+    @staticmethod
+    def migrate():
+
+        with open('app/data-migrate/traits.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Trait"]
+            nodes = json_data["DavesGrowthType"]
+
+            for node in nodes:          
+                i = DavesGrowthType.query.filter_by(type_name=node['growth_type_name']).first()
+                if i is None:
+                    i = DavesGrowthType()
+
+                i.type_name = node['growth_type_name']
+                i.type_description = node['growth_type_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return str(self.id)
+''' End Meta Tables for Traits '''
 
 ''' Meta Tables for Publication/Additional Source '''
 class SourceType(db.Model):
@@ -712,6 +708,64 @@ class Continent(db.Model):
 
     def __repr__(self):
         return str(self.id)
+
+class InvasiveStatusStudy(db.Model):
+    __tablename__ = 'invasivestatusstudies'
+    id = db.Column(db.Integer, primary_key=True)
+    status_name = db.Column(db.String(64), index=True)
+    status_description = db.Column(db.Text)
+
+    populations = db.relationship("Population", backref="invasivestatusstudies")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/populations.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Population"]
+            nodes = json_data["InvasiveStatusStudy"]
+
+            for node in nodes:
+                i = InvasiveStatusStudy.query.filter_by(status_name=node['status_name']).first()
+                if i is None:
+                    i = InvasiveStatusStudy()
+
+                i.status_name = node['status_name']
+                i.status_description = node['status_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return str(self.id)
+
+class InvasiveStatusElsewhere(db.Model):
+    __tablename__ = 'invasive_status_elsewhere'
+    id = db.Column(db.Integer, primary_key=True)
+    status_name = db.Column(db.String(64), index=True)
+    status_description = db.Column(db.Text)
+
+    populations = db.relationship("Population", backref="invasive_status_elsewhere")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/populations.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Population"]
+            nodes = json_data["InvasiveStatusElsewhere"]
+
+            for node in nodes:
+                i = InvasiveStatusElsewhere.query.filter_by(status_name=node['status_name']).first()
+                if i is None:
+                    i = InvasiveStatusElsewhere()
+
+                i.status_name = node['status_name']
+                i.status_description = node['status_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return str(self.id)
 ''' End Meta Tables for Population '''
 
 ''' Meta Tables for Stage Type '''
@@ -922,66 +976,6 @@ class Status(db.Model):
 ''' End Meta Tables for Matrix '''
 
 ''' Meta Tables for Fixed '''
-stage_class_info_fixed = db.Table('stage_class_info_fixed', db.Model.metadata,
-    db.Column('id', db.Integer, primary_key=True),
-    db.Column('stage_class_info_id', db.Integer, db.ForeignKey('stage_class_infos.id')),
-    db.Column('fixed_id', db.Integer, db.ForeignKey('fixed.id'))
-)
-
-class VectorAvailability(db.Model):
-    __tablename__ = 'vector_availabilities'
-    id = db.Column(db.Integer, primary_key=True)
-    availability_name = db.Column(db.String(200), index=True)
-
-    fixed = db.relationship("Fixed", backref="vector_availabilities")
-
-    @staticmethod
-    def migrate():
-        with open('app/data-migrate/fixed.json') as d_file:
-            data = json.load(d_file)
-            json_data = data["Fixed"]
-            nodes = json_data["VectorAvailability"]
-
-            for node in nodes:
-                i = VectorAvailability.query.filter_by(availability_name=node['availability_name']).first()
-                if i is None:
-                    i = VectorAvailability()
-
-                i.availability_name = node['availability_name']
-
-                db.session.add(i)
-                db.session.commit()
-
-    def __repr__(self):
-        return '<Vector Availability %r>' % self.id
-
-class StageClassInfo(db.Model):
-    __tablename__ = 'stage_class_infos'
-    id = db.Column(db.Integer, primary_key=True)
-    info_code = db.Column(db.String(200), index=True)
-    info_description = db.Column(db.Text())
-
-    @staticmethod
-    def migrate():
-        with open('app/data-migrate/fixed.json') as d_file:
-            data = json.load(d_file)
-            json_data = data["Fixed"]
-            nodes = json_data["StageClassInfo"]
-
-            for node in nodes:
-                i = StageClassInfo.query.filter_by(info_code=node['info_code']).first()
-                if i is None:
-                    i = StageClassInfo()
-
-                i.info_code = node['info_code']
-                i.info_description = node['info_description']
-
-                db.session.add(i)
-                db.session.commit()
-
-    def __repr__(self):
-        return '<StageClassInfo %r>' % self.id
-
 class Small(db.Model):
     __tablename__ = 'smalls'
     id = db.Column(db.Integer, primary_key=True)
@@ -1004,6 +998,35 @@ class Small(db.Model):
 
                 i.small_name = node['small_name']
                 i.small_description = node['small_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return '<Small %r>' % self.id
+
+class CensusTiming(db.Model):
+    __tablename__ = 'census_timings'
+    id = db.Column(db.Integer, primary_key=True)
+    census_name = db.Column(db.String(200), index=True)
+    census_description = db.Column(db.Text())
+
+    fixed = db.relationship("Fixed", backref="census_timings")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/fixed.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Fixed"]
+            nodes = json_data["CensusTiming"]
+
+            for node in nodes:
+                i = CensusTiming.query.filter_by(census_name=node['census_name']).first()
+                if i is None:
+                    i = CensusTiming()
+
+                i.census_name = node['census_name']
+                i.census_description = node['census_description']
 
                 db.session.add(i)
                 db.session.commit()
@@ -1033,7 +1056,7 @@ class Species(db.Model):
     timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
     timestamp_modified = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     taxonomies = db.relationship("Taxonomy", backref="species")
-    plant_traits = db.relationship("PlantTrait", backref="species")
+    traits = db.relationship("Trait", backref="species")
     populations = db.relationship("Population", backref="species")
     stages = db.relationship("Stage", backref="species")
 
@@ -1053,7 +1076,7 @@ class Species(db.Model):
         species = {
             'species_accepted': self.species_accepted,
             'taxonomy' : [taxonomy.to_json(key) for taxonomy in self.taxonomies][0],
-            'plant_traits' : [plant_trait.to_json(key) for plant_trait in self.plant_traits][0],
+            'traits' : [trait.to_json(key) for trait in self.traits][0],
             'populations' : url_array(self, 'populations', key),
             'number_populations' : len(url_array(self, 'populations', key))
             # 'stages' : [stage.to_json() for stage in self.stages][0]
@@ -1064,7 +1087,7 @@ class Species(db.Model):
         species = {
             'species_accepted': self.species_accepted,
             'taxonomy' : url_array(self, 'taxonomies', key),
-            'plant_traits' : url_array(self, 'planttraits', key),
+            'traits' : url_array(self, 'traits', key),
             'populations' : url_array(self, 'populations', key)
             # 'stages' : [stage.to_json() for stage in self.stages][0]
         }
@@ -1082,7 +1105,6 @@ class Taxonomy(db.Model):
     species_author = db.Column(db.String(64), index=True)
     species_accepted = db.Column(db.String(64))
     authority = db.Column(db.Text())
-    taxonomic_status_id = db.Column(db.Integer, db.ForeignKey('taxonomic_statuses.id'))
     tpl_version = db.Column(db.String(64)) # Currently at 1.0, which could be float, but sometimes releases are 1.0.1 etc, best as string for now?
     infraspecies_accepted = db.Column(db.String(64))
     species_epithet_accepted = db.Column(db.String(64))
@@ -1100,7 +1122,7 @@ class Taxonomy(db.Model):
 
     @staticmethod
     def migrate():
-        TaxonomicStatus.migrate()
+        pass
 
     def to_json(self, key):
         try:
@@ -1144,8 +1166,8 @@ class Taxonomy(db.Model):
         return '<Taxonomy %r>' % self.id
 
 
-class PlantTrait(db.Model):
-    __tablename__ = 'plant_traits'
+class Trait(db.Model):
+    __tablename__ = 'traits'
     id = db.Column(db.Integer, primary_key=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
     max_height = db.Column(db.Float()) #This should be a double, eventually
@@ -1154,10 +1176,11 @@ class PlantTrait(db.Model):
     reproductive_repetition_id = db.Column(db.Integer, db.ForeignKey('reproductive_repetition.id'))
     dicot_monoc_id = db.Column(db.Integer, db.ForeignKey('dicot_monoc.id'))
     angio_gymno_id = db.Column(db.Integer, db.ForeignKey('angio_gymno.id'))
+    daves_growth_type_id = db.Column(db.Integer, db.ForeignKey('daves_growth_types.id'))
 
     version = db.Column(db.Integer())
-    version_of_id = db.Column(db.Integer, db.ForeignKey('plant_traits.id'))
-    versions = db.relationship("PlantTrait", backref="original", remote_side="PlantTrait.id")
+    version_of_id = db.Column(db.Integer, db.ForeignKey('traits.id'))
+    versions = db.relationship("Trait", backref="original", remote_side="Trait.id")
 
     @staticmethod
     def migrate():
@@ -1166,9 +1189,10 @@ class PlantTrait(db.Model):
         ReproductiveRepetition.migrate()
         DicotMonoc.migrate()
         AngioGymno.migrate()
+        DavesGrowthType.migrate()
 
     def to_json(self, key):
-        plant_trait = {
+        trait = {
             'max_height' : self.max_height,
             'growth_type_id' : self.growth_type.type_name,
             # 'growth_form_raunkiaer' : self.growth_form_raunkiaer.form_name,
@@ -1176,10 +1200,10 @@ class PlantTrait(db.Model):
             'dicot_monoc' : self.dicot_monoc.dicot_monoc_name,
             'angio_gymno' : self.angio_gymno.angio_gymno_name
         }
-        return plant_trait
+        return trait
 
     def __repr__(self):
-        return '<Plant Trait %r>' % self.id
+        return '<Trait %r>' % self.id
 
 class Publication(db.Model):
     __tablename__ = 'publications'
@@ -1391,6 +1415,8 @@ class Population(db.Model):
     species_author = db.Column(db.String(64))
     name = db.Column(db.Text())
     ecoregion_id = db.Column(db.Integer, db.ForeignKey('ecoregions.id'))
+    invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasivestatusstudies.id'))
+    invasive_status_selsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id'))
     #Django plugin for country, and generic python package too - we'll be just fine. Unfortunately, unless we download a CSV of this and enter into sep table, will probably be more efficient to do this outside of the database. Further thought reqd!
     country = db.Column(db.Text())
     continent_id = db.Column(db.Integer, db.ForeignKey('continents.id'))
@@ -1470,6 +1496,8 @@ class Population(db.Model):
     def migrate():
         Ecoregion.migrate()
         Continent.migrate()
+        InvasiveStatusStudy.migrate()
+        InvasiveStatusElsewhere.migrate()
 
     def __repr__(self):
         return '<Population %r>' % self.id
@@ -1846,20 +1874,13 @@ class Fixed(db.Model):
     vector_str = db.Column(db.Text())
     vector_present = db.Column(db.Boolean())
     total_pop_no = db.Column(db.Integer())
-    vector_availablility_id = db.Column(db.Integer, db.ForeignKey('vector_availabilities.id'))
-    stage_class_info = db.relationship('StageClassInfo', secondary=stage_class_info_fixed, backref=db.backref('fixed', lazy='dynamic')) 
-    availability_notes = db.Column(db.Text())
-    population_info = db.Column(db.Text())
-    sampled_entire = db.Column(db.Text())
     small_id = db.Column(db.Integer, db.ForeignKey('smalls.id'))
+    census_timing_id = db.Column(db.Integer, db.ForeignKey('census_timings.id'))
     private = db.Column(db.Boolean(), default=True)
-    matrix_a = db.Column(db.Text())
-    #version = db.Column(db.Integer())
 
     @staticmethod
     def migrate():
-        VectorAvailability.migrate()
-        StageClassInfo.migrate()
+        CensusTiming.migrate()
         Small.migrate()
 
     def to_json(self, key):
@@ -1888,6 +1909,7 @@ class Seed(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'), index=True)
     matrix_a = db.Column(db.Text())
+    
     #version = db.Column(db.Integer())
 
     def to_json(self):
@@ -1931,10 +1953,10 @@ def url_array(self, string, key):
                                   _external=False)
             matrix_urls.append(url)
         return matrix_urls
-    elif string == 'planttraits':
+    elif string == 'traits':
         trait_urls = []
-        for trait in self.plant_traits:
-            url = url_for('api.get_planttrait', id=trait.id, key=key,
+        for trait in self.traits:
+            url = url_for('api.get_trait', id=trait.id, key=key,
                                   _external=False)
             trait_urls.append(url)
         return trait_urls

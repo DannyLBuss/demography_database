@@ -17,11 +17,11 @@ if os.path.exists('.env'):
 
 from app import create_app, db
 from app.models import User, Role, Permission, \
-    IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
-    DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
-    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
+    IUCNStatus, ESAStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
+    DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
+    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
-    MatrixStage, MatrixValue, Matrix, Interval, Fixed, VectorAvailability, StageClassInfo, Small, Status
+    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -33,14 +33,14 @@ migrate = Migrate(app, db)
 def make_shell_context():
     return dict(app=app, db=db, User=User, Role=Role,
                 Permission=Permission, IUCNStatus=IUCNStatus, ESAStatus=ESAStatus, Species=Species, \
-                TaxonomicStatus=TaxonomicStatus, Taxonomy=Taxonomy, GrowthType=GrowthType, GrowthFormRaunkiaer=GrowthFormRaunkiaer, \
-                ReproductiveRepetition=ReproductiveRepetition, DicotMonoc=DicotMonoc, AngioGymno=AngioGymno, PlantTrait=PlantTrait, \
+                Taxonomy=Taxonomy, GrowthType=GrowthType, GrowthFormRaunkiaer=GrowthFormRaunkiaer, \
+                ReproductiveRepetition=ReproductiveRepetition, DicotMonoc=DicotMonoc, AngioGymno=AngioGymno, DavesGrowthType=DavesGrowthType, Trait=Trait, \
                 Publication=Publication, SourceType=SourceType, Database=Database, Purpose=Purpose, MissingData=MissingData, \
                 AuthorContact=AuthorContact, ContentEmail=ContentEmail, Population=Population, Ecoregion=Ecoregion, Continent=Continent, \
                 StageType=StageType, StageTypeClass=StageTypeClass, TransitionType=TransitionType, MatrixValue=MatrixValue, \
                 MatrixComposition=MatrixComposition, Season=Season, StudiedSex=StudiedSex, Captivity=Captivity, MatrixStage=MatrixStage,\
-                Matrix=Matrix, Interval=Interval, Fixed=Fixed, VectorAvailability=VectorAvailability, StageClassInfo=StageClassInfo, Small=Small, \
-                TreatmentType=TreatmentType, Study=Study, Status=Status)
+                Matrix=Matrix, Interval=Interval, Fixed=Fixed, Small=Small, CensusTiming=CensusTiming, \
+                TreatmentType=TreatmentType, Study=Study, Status=Status, InvasiveStatusStudy=InvasiveStatusStudy, InvasiveStatusElsewhere=InvasiveStatusElsewhere)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
@@ -126,8 +126,8 @@ def version_null_to_0():
     print "Resetting Publication..."
     versions_to_nil(Publication.query.all())
 
-    print "Resetting PlantTrait..."
-    versions_to_nil(PlantTrait.query.all())
+    print "Resetting Trait..."
+    versions_to_nil(Trait.query.all())
 
     print "Resetting Population..."
     versions_to_nil(Population.query.all())
@@ -156,7 +156,7 @@ def delete_table_data():
         Population.query.delete()
         Study.query.delete()    
         Publication.query.delete()    
-        PlantTrait.query.delete()
+        Trait.query.delete()
         Species.query.delete()
         db.session.commit()
         print "All data has been removed"
@@ -168,7 +168,7 @@ def delete_table_data():
     return    
 
 def add_to_classes(data):
-    from app.conversion.models import Taxonomy, Publication, Population, PlantTrait, Matrix, Study, Entry
+    from app.conversion.models import Taxonomy, Publication, Population, Trait, Matrix, Study, Entry
     
     matrix = Matrix(data['treatment_id'], data['matrix_split'], data['matrix_composition_id'], data['survival_issue'], data['periodicity'], data['matrix_criteria_size'], \
         data['matrix_criteria_ontogeny'], data['matrix_criteria_age'], data['matrix_start_month'], data['matrix_start_year'], data['matrix_end_month'], data['matrix_end_year'], \
@@ -180,7 +180,7 @@ def add_to_classes(data):
     pop = Population(data['species_author'], data['name'], data['geometries_lat_min'], data['geometries_lon_deg'], data['geometries_lat_ns'], data['geometries_lat_we'], \
         data['geometries_lat_sec'], data['geometries_lon_sec'], data['geometries_lon_min'], data['geometries_lat_deg'], data['geometries_altitude'], data['ecoregion_id'], \
         data['country'], data['continent_id'], matrix)
-    trait = PlantTrait(data['growth_type_id'], data['dicot_monoc_id'], data['angio_gymno_id'])
+    trait = Trait(data['growth_type_id'], data['dicot_monoc_id'], data['angio_gymno_id'])
     pub = Publication(data['authors'], data['year'], data['DOI_ISBN'], data['additional_source_string'], tax, pop, trait, study, data['pub_name'])
 
     entry = Entry(pub, study, pop, tax, trait, matrix)
@@ -214,16 +214,16 @@ def submit(entry):
 
 
     ''' Plant Trait '''
-    trait = PlantTrait.query.filter_by(species_id=species.id).first()
+    trait = Trait.query.filter_by(species_id=species.id).first()
     if trait == None:
-        trait = PlantTrait()
-        growth_type = GrowthType.query.filter_by(type_name=entry.plant_trait.growth_type_id).first()
+        trait = Trait()
+        growth_type = GrowthType.query.filter_by(type_name=entry.trait.growth_type_id).first()
         if growth_type != None:
             trait.growth_type_id = growth_type.id
-        dicot_monoc = DicotMonoc.query.filter_by(dicot_monoc_name=entry.plant_trait.dicot_monoc_id).first()
+        dicot_monoc = DicotMonoc.query.filter_by(dicot_monoc_name=entry.trait.dicot_monoc_id).first()
         if dicot_monoc != None:
             trait.dicot_monoc_id = dicot_monoc.id
-        angio_gymno = AngioGymno.query.filter_by(angio_gymno_name=entry.plant_trait.angio_gymno_id).first()
+        angio_gymno = AngioGymno.query.filter_by(angio_gymno_name=entry.trait.angio_gymno_id).first()
         if angio_gymno != None:
             trait.angio_gymno_id = angio_gymno.id
         trait.species_id = species.id
@@ -274,10 +274,7 @@ def submit(entry):
         tax.species_author = entry.taxonomy.species_author
         tax.species_accepted = entry.taxonomy.species_accepted
         tax.authority = entry.taxonomy.authority
-        tax.tpl_version = entry.taxonomy.tpl_version    
-        tax_status = TaxonomicStatus.query.filter_by(status_name=entry.taxonomy.taxonomic_status_id).first()
-        if tax_status != None:
-            tax.taxonomic_status_id = tax_status.id
+        tax.tpl_version = entry.taxonomy.tpl_version
         tax.infraspecies_accepted = entry.taxonomy.infraspecies_accepted
         tax.species_epithet_accepted = entry.taxonomy.species_epithet_accepted
         tax.genus_accepted = entry.taxonomy.genus_accepted
@@ -525,7 +522,6 @@ def convert_all_headers(dict):
     new_dict['matrix_start_month'] = dict['MatrixStartMonth']
     new_dict['authors'] = dict['Authors']
     new_dict['geometries_lon_sec'] = dict['LonSec']
-    new_dict['taxonomic_status_id'] = dict['TaxonomicStatus']
     new_dict['matrix_dimension'] = dict['MatrixDimension']
     new_dict['geometries_altitude'] = dict['Altitude']
     new_dict['geometries_lat_min'] = dict['LatMin']
@@ -573,17 +569,17 @@ def convert_all_headers(dict):
 @manager.command
 def migrate_meta():
     from app.models import User, Role, Permission, \
-    IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
-    DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
-    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
+    IUCNStatus, ESAStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
+    DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
+    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
-    MatrixStage, MatrixValue, Matrix, Interval, Fixed, VectorAvailability, StageClassInfo, Small
+    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming
 
     print "Migrating Meta Tables..."
     try:
         Species.migrate()
         Taxonomy.migrate()
-        PlantTrait.migrate()
+        Trait.migrate()
         Publication.migrate()
         AuthorContact.migrate()
         Population.migrate()
