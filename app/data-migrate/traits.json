@@ -1,5 +1,5 @@
 {
-	"PlantTrait": {
+	"Trait": {
 		"GrowthType": [{
 			"type_name": "Algae"
 		}, {

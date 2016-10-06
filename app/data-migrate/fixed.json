@@ -1,40 +1,5 @@
 {
 	"Fixed": {
-		"VectorAvailability": [{
-			"availability_name": "None"
-		}, {
-			"availability_name": "Mean"
-		}, {
-			"availability_name": "Some"
-		}, {
-			"availability_name": "All"
-		}],
-		"StageClassInfo": [{
-			"info_code": "Y",
-			"info_description": "Yes"
-		}, {
-			"info_code": "N",
-			"info_description": "No"
-		}, {
-			"info_code": "NS",
-			"info_description": "No seed stage"
-		}, {
-			"info_code": "GA",
-			"info_description": "Grouped adult stages"
-		}, {
-			"info_code": "GR",
-			"info_description": "Grouped all bar final stage"
-		}, {
-			"info_code": "NA",
-			"info_description": "Missing final stage"
-		}, {
-			"info_code": "SN",
-			"info_description": "See notes"
-		}, {
-			"info_code": "M",
-			"info_description": "Mean"
-		}],
-
 		"Small": [{
 			"small_name": "None",
 			"small_description": "Number of seeds were sampled within a population and divided by the number of adults"
@@ -44,6 +9,32 @@
 		}, {
 			"small_name": "Focused",
 			"small_description": "Several fruits or flowers were removed from adult plants and the number of seeds produced were counted"
+		}, {
+			"small_name": "NA",
+			"small_description": "Not Applicable"
+		}, {
+			"small_name": "Expt & Focused",
+			"small_description": "An experiment was done (normally ex situ) and the number of seeds produced counted, and several fruits or flowers were removed from adult plants and the number of seeds produced were counted"
+		}],
+
+		"CensusTiming": [{
+			"census_name": "Pre",
+			"census_description": "Birth pulse; pre-reproductive census timing"
+		}, {
+			"census_name": "Post",
+			"census_description": "Birth pulse; post-reproductive census timing"
+		}, {
+			"census_name": "Flow",
+			"census_description": "Birth Flow; Non-periodic reproductive events that occur consistently throughout the year"
+		}, {
+			"census_name": "NATS",
+			"census_description": "No access to source"
+		}, {
+			"census_name": "NA",
+			"census_description": "Not Applicable"
+		}, {
+			"census_name": "UTD",
+			"census_description": "Unable to determine census timing from original source"
 		}]
 
 	}

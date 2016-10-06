@@ -5,11 +5,11 @@ from wtforms.validators import Required, Length, Email, Regexp, Optional
 from wtforms import ValidationError
 from flask.ext.pagedown.fields import PageDownField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from ..models import IUCNStatus, ESAStatus, TaxonomicStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
-    DicotMonoc, AngioGymno, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, StageTypeClass, \
-    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PlantTrait, \
+from ..models import IUCNStatus, ESAStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
+    DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
+    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
-    MatrixStage, MatrixValue, Matrix, Interval, Fixed, VectorAvailability, StageClassInfo, Small
+    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming
 
 def stringFromText(string):
     #Formatting string and separating for use as a list
@@ -75,9 +75,6 @@ class SpeciesForm(Form):
 class TaxonomyForm(Form):
 	species_author = StringField('Species Author *', validators=[Required(), ])
 	authority = StringField('Authority', validators=[])
-	taxonomic_status = QuerySelectField('Taxonomic Status',
-            query_factory=lambda: TaxonomicStatus.query.all(), get_pk=lambda a: a.id,
-                            get_label=lambda a:'{} - {}'.format(a.status_name, a.status_description))
 	tpl_version = StringField('TPL Version')
 	infraspecies_accepted = StringField('Infraspecies Accepted')
 	species_epithet_accepted = StringField('Species Epithet Accepted', validators=[Required()])
@@ -146,7 +143,7 @@ class PopulationForm(Form):
     lon_deg = StringField('Lon Deg')
     submit = SubmitField('Submit')
 
-class PlantTraitForm(Form):
+class TraitForm(Form):
     max_height = FloatField('Max Height')
     growth_type = QuerySelectField('Growth Type',
             query_factory=lambda: GrowthType.query.all(), get_pk=lambda a: a.id,
@@ -224,9 +221,6 @@ class EntryForm(Form):
 	# Taxonomy
 	species_author = StringField('Species Author *', validators=[Required()], default="Cytisus_scoparius")
 	authority = StringField('Authority', validators=[])
-	taxonomic_status = QuerySelectField('Taxonomic Status',
-            query_factory=lambda: TaxonomicStatus.query.all(), get_pk=lambda a: a.id,
-                            get_label=lambda a:'{} - {}'.format(a.status_name, a.status_description))
 	tpl_version = DecimalField('TPL Version')
 	infraspecies_accepted = StringField('Infraspecies Accepted', validators=[])
 	species_epithet_accepted = StringField('Species Epithet Accepted', validators=[])

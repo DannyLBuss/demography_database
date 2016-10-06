@@ -2,7 +2,7 @@ from flask import render_template, jsonify, request, current_app, url_for, abort
 from . import api
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user
-from ..models import User, Species, Population, Taxonomy, PlantTrait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, TreatmentType, MatrixStage, MatrixValue, Matrix, Interval, Fixed
+from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, TreatmentType, MatrixStage, MatrixValue, Matrix, Interval, Fixed
 from ..decorators import admin_required, permission_required, crossdomain
 from .errors import unauthorized
 
@@ -91,12 +91,12 @@ def get_species_taxonomy(key, name):
     else:
         return unauthorized('Invalid credentials')
 
-@api.route('/<key>/query/species/name=<name>/plant-traits')
+@api.route('/<key>/query/species/name=<name>/traits')
 @crossdomain(origin='*')
 def get_species_traits(key, name):
     name = fix_string(name)
     species = Species.query.filter_by(species_accepted=name).first()
-    traits = species.plant_traits[0]
+    traits = species.traitss[0]
     if key_valid(key):
         return jsonify(traits.to_json(key))
     else:
@@ -162,12 +162,12 @@ def get_taxonomy(key, id):
         return unauthorized('Invalid credentials')
 
 
-@api.route('/<key>/query/planttrait/<int:id>')
+@api.route('/<key>/query/trait/<int:id>')
 @crossdomain(origin='*')
-def get_planttrait(key, id):
-    planttrait = PlantTrait.query.get_or_404(id)    
+def get_trait(key, id):
+    trait = Trait.query.get_or_404(id)    
     if key_valid(key):
-        return jsonify(planttrait.to_json(key))
+        return jsonify(trait.to_json(key))
     else:
         return unauthorized('Invalid credentials')
 

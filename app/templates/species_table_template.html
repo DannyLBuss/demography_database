@@ -53,7 +53,7 @@
             {% for s in species %}
                 {% for taxonomy in s.taxonomies %}
                     <tr>
-                        {% for trait in s.plant_traits %}
+                        {% for trait in s.traits %}
                         <td class="growthtype">{{ trait.growth_type.type_name }}</td>
                         {% endfor %}
                         <td class="kingdom" onClick="addTextTag('{{ taxonomy.kingdom }}');">{{ taxonomy.kingdom }}</td>
