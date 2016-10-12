@@ -9,7 +9,7 @@ from .. import db
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
-                    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
+                    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PurposeEndangered, PurposeWeed, Trait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming
 from ..decorators import admin_required, permission_required, crossdomain
@@ -54,7 +54,8 @@ def meta_tables_json():
                    "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] , "InvasiveStatusStudy" : [], "InvasiveStatusElsewhere" : []}, \
                    "StageType" : { "StageTypeClass" : [] }, "MatrixValue" : { "TransitionType" : [] }, \
                    "Matrix" : {"MatrixComposition" : [], "Season" : [], "StudiedSex" : [], "Captivity" : []}, \
-                   "Fixed" : { "Small": [], "CensusTiming" : [] }}
+                   "Fixed" : { "Small": [], "CensusTiming" : [] },
+                   "Study" : { "PurposeEndangered": []}}
 
     meta_tables["Species"]["IUCNStatus"].extend(IUCNStatus.query.all())
     meta_tables["Species"]["ESAStatus"].extend(ESAStatus.query.all())
@@ -80,6 +81,7 @@ def meta_tables_json():
     meta_tables["Matrix"]["Captivity"].extend(Captivity.query.all())
     meta_tables["Fixed"]["Small"].extend(Small.query.all())
     meta_tables["Fixed"]["CensusTiming"].extend(CensusTiming.query.all())
+    meta_tables["Study"]["PurposeEndangered"].extend(PurposeEndangered.query.all())
 
     print meta_tables
 
