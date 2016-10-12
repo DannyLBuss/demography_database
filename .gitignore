@@ -48,3 +48,7 @@ ext/mysql-connector-java-5.1.38-bin.jar
 
 migrations/*
 
+database_schema/
+database_schema/*
+*.jar
+
