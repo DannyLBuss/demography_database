@@ -652,6 +652,75 @@ class ContentEmail(db.Model):
         return str(self.id)
 ''' End Meta Tables for Author Contact '''
 
+''' Meta Tables for Study'''
+class PurposeEndangered(db.Model):
+    __tablename__ = 'purposes_endangered'
+    id = db.Column(db.Integer, primary_key=True)
+    purpose_name = db.Column(db.String(64), index=True)
+    purpose_description = db.Column(db.Text())
+
+    studies = db.relationship("Study", backref="purpose_endangered")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/studies.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Study"]
+            nodes = json_data["PurposeEndangered"]
+
+            for node in nodes:
+
+                i = PurposeEndangered.query.filter_by(purpose_name=node['purpose_name']).first()
+
+                if i is None:
+                    i = PurposeEndangered()
+
+                i.purpose_name = node['purpose_name']
+                i.purpose_description = node['purpose_description']
+
+                print i.purpose_name
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return str(self.id)
+
+class PurposeWeed(db.Model):
+    __tablename__ = 'purposes_weed'
+    id = db.Column(db.Integer, primary_key=True)
+    purpose_name = db.Column(db.String(64), index=True)
+    purpose_description = db.Column(db.Text())
+
+    studies = db.relationship("Study", backref="purpose_weed")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/studies.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Study"]
+            nodes = json_data["PurposeWeed"]
+
+            for node in nodes:
+
+                i = PurposeWeed.query.filter_by(purpose_name=node['purpose_name']).first()
+
+                if i is None:
+                    i = PurposeWeed()
+
+                i.purpose_name = node['purpose_name']
+                i.purpose_description = node['purpose_description']
+
+                print i.purpose_name
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return str(self.id)
+
+''' End Meta Tables for Study '''
+
 ''' Meta Tables for Population '''
 class Ecoregion(db.Model):
     __tablename__ = 'ecoregions'
@@ -1302,6 +1371,9 @@ class Study(db.Model):
     study_start = db.Column(db.Integer())
     study_end = db.Column(db.Integer())
 
+    purpose_endangered_id = db.Column(db.Integer, db.ForeignKey('purposes_endangered.id'))
+    purpose_weed_id = db.Column(db.Integer, db.ForeignKey('purposes_weed.id'))
+
     matrices = db.relationship("Matrix", backref="study")
     populations = db.relationship("Population", backref="study")
     number_populations = db.Column(db.Integer()) #could verify with populations.count()
@@ -1309,6 +1381,11 @@ class Study(db.Model):
     version = db.Column(db.Integer())
     version_of_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
     versions = db.relationship("Study", backref="original", remote_side="Study.id")
+
+    @staticmethod
+    def migrate():
+        PurposeEndangered.migrate()
+        PurposeWeed.migrate()
 
     def to_json(self, key):
         study = {
