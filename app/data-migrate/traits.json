@@ -22,6 +22,8 @@
 			"type_name": "Succulent"
 		}, {
 			"type_name": "Tree"
+		}, {
+			"type_name": "NA"
 		}],
 
 		"DavesGrowthType": [{
@@ -69,12 +71,16 @@
 			"form_name": "Mesophanerophyte"
 		}, {
 			"form_name": "Megaphanerophyte"
+		}, {
+			"form_name": "NA"
 		}],
 
 		"ReproductiveRepetition": [{
 			"repetition_name": "Monocarpic"
 		}, {
 			"repetition_name": "Polycarpic"
+		}, {
+			"repetition_name": "NA"
 		}],
 
 		"DicotMonoc": [{

@@ -53,6 +53,19 @@
 
     <hr/>
 
+    <h2>Study</h2>
+    <h3>Purpose Endangered</h3>
+    {% for endangered in meta.Study.PurposeEndangered %}
+        <code>{{ endangered.purpose_name }}</code> : {{ endangered.purpose_description }}<br/>
+    {% endfor %}
+
+    <h3>Purpose Weed</h3>
+    {% for weed in meta.Study.PurposeWeed %}
+        <code>{{ weed.purpose_name }}</code> : {{ weed.purpose_description }}<br/>
+    {% endfor %}
+
+    <hr/>
+
     <h2>Publications</h2>
     <h3>Source Types</h3>
 	{% for st in meta.Publication.SourceType %}
