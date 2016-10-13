@@ -55,7 +55,7 @@ def meta_tables_json():
                    "StageType" : { "StageTypeClass" : [] }, "MatrixValue" : { "TransitionType" : [] }, \
                    "Matrix" : {"MatrixComposition" : [], "Season" : [], "StudiedSex" : [], "Captivity" : []}, \
                    "Fixed" : { "Small": [], "CensusTiming" : [] },
-                   "Study" : { "PurposeEndangered": []}}
+                   "Study" : { "PurposeEndangered": [], "PurposeWeed" : []}}
 
     meta_tables["Species"]["IUCNStatus"].extend(IUCNStatus.query.all())
     meta_tables["Species"]["ESAStatus"].extend(ESAStatus.query.all())
@@ -82,6 +82,7 @@ def meta_tables_json():
     meta_tables["Fixed"]["Small"].extend(Small.query.all())
     meta_tables["Fixed"]["CensusTiming"].extend(CensusTiming.query.all())
     meta_tables["Study"]["PurposeEndangered"].extend(PurposeEndangered.query.all())
+    meta_tables["Study"]["PurposeWeed"].extend(PurposeWeed.query.all())
 
     print meta_tables
 
