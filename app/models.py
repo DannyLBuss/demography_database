@@ -1499,6 +1499,7 @@ class Population(db.Model):
     country = db.Column(db.Text())
     continent_id = db.Column(db.Integer, db.ForeignKey('continents.id'))
     geometries = db.Column(db.Text()) #This needs work once i've decided wether to use Flask or Django - such good cases for both. Databases support point geometry, including altitude.
+    pop_size = db.Column(db.Text())
 
     matrices = db.relationship("Matrix", backref="population")
 
@@ -1779,6 +1780,15 @@ class Matrix(db.Model):
     captivity_id = db.Column(db.Integer, db.ForeignKey('captivities.id'))
     matrix_dimension = db.Column(db.Integer()) # dimension of matrix population A   
     observations = db.Column(db.Text())
+
+    class_organized = db.Column(db.Text())
+    class_author = db.Column(db.Text())
+    class_number = db.Column(db.Text())
+
+    vectors_includes_na = db.Column(db.Boolean())
+
+    seed_stage_error = db.Column(db.Text())
+
     
     independent = db.Column(db.Boolean())
     non_independence = db.Column(db.Text())
