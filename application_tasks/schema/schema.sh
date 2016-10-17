@@ -6,7 +6,7 @@ system=`uname`
 if [[ $system == 'Linux' ]]; then
    echo "Checking for and installing graphviz, wget and java - requires sudo"
    sudo apt-get install graphviz
-   sudo apt-get install sun-java6-jdk sun-java6-jre
+   sudo apt-get install default-jre
    sudo apt-get install wget
    echo "Setting home variable for Java"
    export JAVA_HOME="/usr/lib/jvm/java-6-sun-1.6.0.06"

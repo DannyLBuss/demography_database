@@ -101,7 +101,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='even'>
+<tr class='odd'>
  <td class='primaryKey' title='Primary Key'>id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -112,7 +112,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>stage_order</td>
  <td class='detail'>smallint</td>
  <td class='detail' align='right'>5</td>
@@ -123,7 +123,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='indexedColumn' title='Indexed'>stage_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -133,7 +133,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="matrix_stages.stage_id refs stages.id via matrix_stages_ibfk_2"><a href='stages.html'>stages</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>matrix_stages_ibfk_2<span title='Restrict delete:
@@ -143,7 +143,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='indexedColumn' title='Indexed'>matrix_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -153,7 +153,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="matrix_stages.matrix_id refs matrices.id via matrix_stages_ibfk_1"><a href='matrices.html'>matrices</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>matrix_stages_ibfk_1<span title='Restrict delete:
@@ -163,7 +163,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>version</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -174,7 +174,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>version_of_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -186,7 +186,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='6 columns'>Table contained 0 rows at Mon Oct 17 15:18 BST 2016<p/>
+<p title='6 columns'>Table contained 0 rows at Mon Oct 17 19:58 CEST 2016<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -224,28 +224,28 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from matrix_stages'>
 &nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
 <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="matrix_stages.html" title="matrix_stages" alt="" coords="252,62,447,259">
-<area shape="rect" id="node2" href="matrices.html" title="matrices" alt="" coords="5,237,208,1177">
-<area shape="rect" id="node3" href="stages.html" title="stages" alt="" coords="43,5,171,220">
+<area shape="rect" id="node1" href="matrix_stages.html" title="matrix_stages" alt="" coords="251,65,444,273">
+<area shape="rect" id="node2" href="matrices.html" title="matrices" alt="" coords="5,249,207,1244">
+<area shape="rect" id="node3" href="stages.html" title="stages" alt="" coords="40,5,172,232">
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/matrix_stages.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="fixed.html" title="fixed" alt="" coords="874,293,990,372">
-<area shape="rect" id="node2" href="matrices.html" title="matrices" alt="" coords="588,151,791,1091">
-<area shape="rect" id="node4" href="captivities.html" title="captivities" alt="" coords="405,636,521,715">
-<area shape="rect" id="node5" href="matrix_compositions.html" title="matrix_compositions" alt="" coords="381,289,544,368">
-<area shape="rect" id="node6" href="seasons.html" title="seasons" alt="" coords="405,444,521,523">
-<area shape="rect" id="node7" href="populations.html" title="populations" alt="" coords="385,193,541,272">
-<area shape="rect" id="node8" href="studied_sex.html" title="studied_sex" alt="" coords="405,540,521,619">
-<area shape="rect" id="node9" href="studies.html" title="studies" alt="" coords="193,376,337,455">
-<area shape="rect" id="node3" href="intervals.html" title="intervals" alt="" coords="874,5,990,84">
-<area shape="rect" id="node13" href="species.html" title="species" alt="" coords="199,520,331,599">
-<area shape="rect" id="node15" href="publications.html" title="publications" alt="" coords="5,529,149,608">
-<area shape="rect" id="node10" href="matrix_stages.html" title="matrix_stages" alt="" coords="835,711,1029,909">
-<area shape="rect" id="node11" href="stages.html" title="stages" alt="" coords="399,732,527,947">
-<area shape="rect" id="node16" href="stage_types.html" title="stage_types" alt="" coords="201,800,329,879">
-<area shape="rect" id="node12" href="matrix_values.html" title="matrix_values" alt="" coords="873,101,991,180">
-<area shape="rect" id="node14" href="seeds.html" title="seeds" alt="" coords="874,197,990,276">
+<area shape="rect" id="node1" href="fixed.html" title="fixed" alt="" coords="875,305,995,388">
+<area shape="rect" id="node2" href="matrices.html" title="matrices" alt="" coords="593,155,795,1149">
+<area shape="rect" id="node4" href="captivities.html" title="captivities" alt="" coords="409,667,529,749">
+<area shape="rect" id="node5" href="matrix_compositions.html" title="matrix_compositions" alt="" coords="389,303,549,385">
+<area shape="rect" id="node6" href="seasons.html" title="seasons" alt="" coords="409,467,529,549">
+<area shape="rect" id="node7" href="populations.html" title="populations" alt="" coords="389,203,549,285">
+<area shape="rect" id="node8" href="studied_sex.html" title="studied_sex" alt="" coords="409,567,529,649">
+<area shape="rect" id="node9" href="studies.html" title="studies" alt="" coords="197,395,345,477">
+<area shape="rect" id="node3" href="intervals.html" title="intervals" alt="" coords="875,5,995,88">
+<area shape="rect" id="node13" href="species.html" title="species" alt="" coords="203,547,339,629">
+<area shape="rect" id="node15" href="publications.html" title="publications" alt="" coords="5,557,153,640">
+<area shape="rect" id="node10" href="matrix_stages.html" title="matrix_stages" alt="" coords="839,745,1032,953">
+<area shape="rect" id="node11" href="stages.html" title="stages" alt="" coords="403,767,535,993">
+<area shape="rect" id="node16" href="stage_types.html" title="stage_types" alt="" coords="205,839,337,921">
+<area shape="rect" id="node12" href="matrix_values.html" title="matrix_values" alt="" coords="875,105,995,188">
+<area shape="rect" id="node14" href="seeds.html" title="seeds" alt="" coords="875,205,995,288">
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/matrix_stages.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>

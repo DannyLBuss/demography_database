@@ -262,16 +262,24 @@ matrix_cont{
 }
 
 
-.matA
+.matA > table
 {
     text-align:center; 
+    table-layout: fixed;
     vertical-align:middle;
+    width: 100%;
+    
 }
 
-.matClasses
+.matClasses > table
 {
-    text-align:center; 
+    text-align:center;
+    table-layout: fixed;
     vertical-align:middle;
+    width: 100%;
+    margin-bottom: 0px;
+    background-color: beige;
+    font-weight: bold;
 }
 
 #dist_map {
@@ -336,7 +344,15 @@ td {
     background-position:center;
     background-repeat:no-repeat;
     background-color:rgba(173, 173, 173, 0.31);
+}
 
+.species-image-container-index { 
+    width: 100%; 
+    height: 260px; 
+    background-size:cover; 
+    background-position:center;
+    background-repeat:no-repeat;
+    background-color:rgba(173, 173, 173, 0.31);
 }
 
 
@@ -360,4 +376,26 @@ td {
 
 .remove_duplicates {
     visibility: hidden;
+}
+
+/* Tree stuff */
+
+.node {
+    cursor: pointer;
+}
+
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 3px;
+}
+
+.node text {
+  font: 12px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
 }

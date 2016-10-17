@@ -169,6 +169,11 @@ def explorer(taxon_level,taxon):
     
     return render_template('explorer_template.html',taxon=taxon,taxon_list = taxon_list,taxon_level=taxon_level,next_taxon_level=next_taxon_level, tax_pos = tax_pos)
 
+@main.route('/tree')
+# @login_required
+def tree():
+    return render_template('tree_of_life.html')
+
 # contribute
 @main.route('/contribute-data')
 # @login_required
@@ -537,18 +542,18 @@ def taxonomy_new_form(id_sp):
 @main.route('/traits/new/species=<int:id_sp>', methods=['GET', 'POST'])
 def trait_new_form(id_sp):
     species = Species.query.get_or_404(id_sp)
-    form = PlantTraitForm()
+    form = TraitForm()
     
     if form.validate_on_submit():
-        planttrait = PlantTrait()
-        planttrait.species_id = species.id
+        Trait = Trait()
+        trait.species_id = species.id
         
-        planttrait.max_height = form.max_height.data
-        planttrait.growth_type = form.growth_type.data
-        planttrait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
-        planttrait.reproductive_repetition = form.reproductive_repetition.data
-        planttrait.dicot_monoc = form.dicot_monoc.data
-        planttrait.angio_gymno = form.angio_gymno.data
+        trait.max_height = form.max_height.data
+        trait.growth_type = form.growth_type.data
+        trait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
+        trait.reproductive_repetition = form.reproductive_repetition.data
+        trait.dicot_monoc = form.dicot_monoc.data
+        trait.angio_gymno = form.angio_gymno.data
         return redirect(url_for('.species_page',id=id_sp))
     
     return render_template('species_form.html', form=form,species = species)
@@ -634,11 +639,15 @@ def delete_object(thing_to_delete,id_obj):
         species = Species.query.get_or_404(id_obj)
         populations = Population.query.filter_by(species_id=id_obj)
         taxonomy = Taxonomy(species_id=id_obj)
-        traits = PlantTraits(species_id=id_obj)
+        traits = Traits(species_id=id_obj)
     
     if thing_to_delete == "publication":
         publication = Publication.query.get_or_404(id_obj)
         populations = Population.query.filter_by(publication_id=id_obj)
+        
+    if thing_to_delete == "matrix":
+        matrix = Matrix.query.get_or_404(id_obj)
+        
         
     if form.validate_on_submit() and thing_to_delete == "population":
         db.session.delete(population)
@@ -661,6 +670,12 @@ def delete_object(thing_to_delete,id_obj):
         db.session.commit()
         flash('The publication has been deleted')
         return redirect(url_for('.publications_table'))
+    
+    if form.validate_on_submit() and thing_to_delete == "matrix":
+        db.session.delete(matrix)
+        db.session.commit()
+        flash('The matrix has been deleted')
+        return redirect(url_for('.publication_page',id=matrix.publication_id))
     
     return render_template('delete_confirm.html', form=form)
 
