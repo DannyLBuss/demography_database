@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir ../../requirements/non_python
 
 system=`uname`
 # Checking operating system to install dependencies
