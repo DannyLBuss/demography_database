@@ -53,6 +53,6 @@ database_schema/
 
 requirements/non_python
 
-application_tasks/schema/*
+application_tasks/schema/
 !application_tasks/schema/schema.sh
 
