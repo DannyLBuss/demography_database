@@ -1,5 +1,4 @@
 statuses
-purposes_weed
 purposes_endangered
 iucn_status
 invasivestatusstudies

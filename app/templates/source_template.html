@@ -18,6 +18,7 @@
     {% if publication.DOI_ISBN %}
     <a class="btn btn-default" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source</a>
     {% endif %}
+    <a class="btn btn-default" href="javascript:document.getElementsByTagName('body')[0].appendChild(document.createElement('script')).setAttribute('src','https://www.mendeley.com/minified/bookmarklet.js');">Save to Mendeley <img src="//d3fildg3jlcvty.cloudfront.net/273b3f99fbfd7a56253b4db5b9ad7df6765384b7/graphics/favicon.ico" class="little_logo"></a>
     {% if publication.additional_source_string %}
     <h4><strong>Additional Source:</strong> ({{publication.additional_source_string}}) </h4>
     {% endif %}

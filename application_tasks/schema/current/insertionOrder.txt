@@ -47,5 +47,4 @@ invasive_status_elsewhere
 invasivestatusstudies
 iucn_status
 purposes_endangered
-purposes_weed
 statuses

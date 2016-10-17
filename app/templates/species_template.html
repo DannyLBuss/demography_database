@@ -1,9 +1,5 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
-<<<<<<< HEAD
-=======
-{% for taxonomy in species.taxonomies %}
-{% for trait in species.traits %}
->>>>>>> 561ab5ac45ea53e2b51c787171be77d6d9aa41a5
+
 <div class="page-header">
 <div class="breadcrumb">
     {% if species.taxonomies %}
@@ -18,27 +14,29 @@
 <div class="dropdown pull-right">
     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
     <ul class="dropdown-menu dropdown-menu-right">
-        <li class="dropdown-header">Species infomation</li>
+        <li class="dropdown-header">Species information</li>
         <li><a href="/species/{{species.id}}/edit">Edit</a></li>
         <li><a href="/species/{{species.id}}/edit-history">View edits</a></li>
+        <li><a href="/delete/taxonomy/{{species.id}}">Delete Species</a></li>
         <li class="dropdown-header">Taxonomy</li>
         {% if species.taxonomies %}
         {% for taxonomy in species.taxonomies %}
         <li><a href="/taxonomy/{{taxonomy.id}}/edit">Edit</a></li>
         <li><a href="/taxonomy/{{taxonomy.id}}/edit-history">View edits</a></li>
+        <li><a href="/delete/taxonomy/{{taxonomy.id}}">Delete taxonomy</a></li>
         {% endfor %}
         {% else %}
-        <li><a href="/species/{{species.id}}/addtaxonomy">Add taxonomy</a></li>
+        <li><a href="/taxonomy/new/species={{species.id}}">Add taxonomy</a></li>
         {% endif %}
         <li class="dropdown-header">Species Traits</li>
-        {% if species.plant_traits %}
-        {% for trait in species.plant_traits %}
+        {% if species.traits %}
+        {% for trait in species.traits %}
         <li><a href="/traits/{{trait.id}}/edit">Edit</a></li>
         <li><a href="/traits/{{trait.id}}/edit-history">View edits</a></li>
+        <li><a href="/delete/traits/{{trait.id}}">Delete taxonomy</a></li>
         {% endfor %}
         {% else %}
-        <li><a href="/species/{{species.id}}/addplanttraits">Add plant traits</a></li>
-        <li><a href="/species/{{species.id}}/addanimaltraits">Add animal traits</a></li>
+        <li><a href="/traits/new/species={{species.id}}">Add traits</a></li>
         {% endif %}
     </ul>
 </div>
@@ -125,9 +123,9 @@
         </div>
         {% endif %}
         
-        {% if species.plant_traits %}
-        {% for trait in species.plant_traits %}
-        <h3>Plant Traits <small>ID: {{trait.id}}</small></h3>
+        {% if species.traits %}
+        {% for trait in species.traits %}
+        <h3>Traits <small>ID: {{trait.id}}</small></h3>
         
         <table style="width:100%" class="table">
             <tr>
@@ -176,8 +174,7 @@
         <h3>Traits</h3>
         <div class="info_box_empty">
             <p>Not entered</p>
-            <p><a href="../../traits/new/species={{species.id}}">Add plant traits</a></p>
-            <p><a class="disabled">Add animal traits</a></p>
+            <p><a href="../../traits/new/species={{species.id}}">Add traits</a></p>
         </div>
         {% endif %}
     </div>
@@ -211,7 +208,7 @@
             <tbody> {% for population in species.populations %}
                 <tr class="remove_duplicates publication_row {{ population.publication.id}}p">
                     <td>
-                        <a href="../../publication/{{ population.publication.id }}">{{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.pub_title }}" in <i>{{ population.publication.journal_book_conf }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}.  </a> <small>ID: {{population.publication.id}}</small> </td>
+                        <a href="../../publication/{{ population.publication.id }}">{{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.name }}" in <i>{{ population.publication.pub_title }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}.  </a> <small>ID: {{population.publication.id}}</small> </td>
                     <td> <a href="https://doi.org/{{ population.publication.DOI_ISBN }}" target="_blank" >{{ population.publication.DOI_ISBN }}</a></td>
                     <td>
                         <input type="checkbox" class="filter" data-value="id{{population.publication.id}}"> 
@@ -249,6 +246,7 @@
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li><a href="../../population/{{population.id}}/edit">Edit population</a></li>
                     <li><a href="../../population/{{population.id}}/edit-history">View edits</a></li>
+                    <li><a href="../../delete/population/{{population.id}}">Delete population</a></li>
                     <li class="disabled"><a href="#">Add new matrix</a></li>
                 </ul>
             </div>
@@ -288,6 +286,7 @@
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li><a href="../../matrix/{{matrix.id}}/edit">Edit matrix</a></li>
                                         <li><a href="../../matrix/{{matrix.id}}/edit-history">View edits</a></li>
+                                        <li><a href="../../delete/matrix/{{matrix.id}}">Delete matrix</a></li>
                                     </ul>
                                 </div>
                                 {% endif %}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="demog_compadre" type="MySQL - 5.6.24">
+<database name="demog_compadre" type="MySQL - 5.7.15-0ubuntu0.16.04.1">
    <tables>
       <table name="additional_sources" numRows="0" remarks="" type="TABLE">
          <column autoUpdated="true" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="INT"/>
@@ -306,7 +306,7 @@
             <column ascending="true" name="status_code"/>
          </index>
       </table>
-      <table name="matrices" numRows="6387" remarks="" type="TABLE">
+      <table name="matrices" numRows="6897" remarks="" type="TABLE">
          <column autoUpdated="true" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="INT">
             <child column="matrix_id" foreignKey="fixed_ibfk_1" implied="false" onDeleteCascade="false" table="fixed"/>
             <child column="matrix_id" foreignKey="intervals_ibfk_1" implied="false" onDeleteCascade="false" table="intervals"/>
@@ -392,7 +392,7 @@
             <column ascending="true" name="study_id"/>
          </index>
       </table>
-      <table name="matrix_compositions" numRows="4" remarks="" type="TABLE">
+      <table name="matrix_compositions" numRows="5" remarks="" type="TABLE">
          <column autoUpdated="true" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="INT">
             <child column="matrix_composition_id" foreignKey="matrices_ibfk_2" implied="false" onDeleteCascade="false" table="matrices"/>
          </column>
@@ -637,18 +637,6 @@
             <column ascending="true" name="purpose_name"/>
          </index>
       </table>
-      <table name="purposes_weed" numRows="4" remarks="" type="TABLE">
-         <column autoUpdated="true" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="INT"/>
-         <column autoUpdated="false" digits="0" id="1" name="purpose_name" nullable="true" remarks="" size="64" type="VARCHAR"/>
-         <column autoUpdated="false" digits="0" id="2" name="purpose_description" nullable="true" remarks="" size="65535" type="TEXT"/>
-         <primaryKey column="id" sequenceNumberInPK="1"/>
-         <index name="PRIMARY" unique="true">
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="ix_purposes_weed_purpose_name" unique="false">
-            <column ascending="true" name="purpose_name"/>
-         </index>
-      </table>
       <table name="reproductive_repetition" numRows="2" remarks="" type="TABLE">
          <column autoUpdated="true" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="INT">
             <child column="reproductive_repetition_id" foreignKey="traits_ibfk_6" implied="false" onDeleteCascade="false" table="traits"/>
@@ -876,7 +864,6 @@
          <column autoUpdated="false" digits="0" id="6" name="version" nullable="true" remarks="" size="10" type="INT"/>
          <column autoUpdated="false" digits="0" id="7" name="version_of_id" nullable="true" remarks="" size="10" type="INT"/>
          <column autoUpdated="false" digits="0" id="8" name="purpose_endangered_id" nullable="true" remarks="" size="10" type="INT"/>
-         <column autoUpdated="false" digits="0" id="9" name="purpose_weed_id" nullable="true" remarks="" size="10" type="INT"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="PRIMARY" unique="true">
             <column ascending="true" name="id"/>

@@ -101,7 +101,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='even'>
+<tr class='odd'>
  <td class='primaryKey' title='Primary Key'>id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -110,19 +110,19 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="author_contacts.contacting_user_id refs users.id via author_contacts_ibfk_1"><a href='author_contacts.html'>author_contacts</a><span class='relatedKey'>.contacting_user_id</span>
     </td>
     <td class='constraint detail'>author_contacts_ibfk_1<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="publications.user_created refs users.id via publications_ibfk_4"><a href='publications.html'>publications</a><span class='relatedKey'>.user_created</span>
     </td>
     <td class='constraint detail'>publications_ibfk_4<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="publications.user_modified refs users.id via publications_ibfk_5"><a href='publications.html'>publications</a><span class='relatedKey'>.user_modified</span>
     </td>
     <td class='constraint detail'>publications_ibfk_5<span title='Restrict delete:
@@ -133,7 +133,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='indexedColumn' title='Indexed'>username</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>64</td>
@@ -144,7 +144,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='indexedColumn' title='Indexed'>role_id</td>
  <td class='detail'>int</td>
  <td class='detail' align='right'>10</td>
@@ -154,7 +154,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="users.role_id refs roles.id via users_ibfk_1"><a href='roles.html'>roles</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>users_ibfk_1<span title='Restrict delete:
@@ -164,7 +164,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='indexedColumn' title='Indexed'>email</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>64</td>
@@ -175,7 +175,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>password_hash</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>128</td>
@@ -186,7 +186,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>confirmed</td>
  <td class='detail'>bit</td>
  <td class='detail' align='right'>0</td>
@@ -197,7 +197,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>about_me</td>
  <td class='detail'>text</td>
  <td class='detail' align='right'>65535</td>
@@ -208,7 +208,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>last_seen</td>
  <td class='detail'>datetime</td>
  <td class='detail' align='right'>19</td>
@@ -219,7 +219,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>location</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>64</td>
@@ -230,7 +230,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>member_since</td>
  <td class='detail'>datetime</td>
  <td class='detail' align='right'>19</td>
@@ -241,7 +241,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>name</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>64</td>
@@ -252,7 +252,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>avatar_hash</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>32</td>
@@ -263,7 +263,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>api_hash</td>
  <td class='detail'>text</td>
  <td class='detail' align='right'>65535</td>
@@ -275,7 +275,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='13 columns'>Table contained 2 rows at Mon Oct 17 15:18 BST 2016<p/>
+<p title='13 columns'>Table contained 2 rows at Mon Oct 17 19:58 CEST 2016<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -324,27 +324,27 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from users'>
 &nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
 <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="author_contacts.html" title="author_contacts" alt="" coords="668,311,820,549">
-<area shape="rect" id="node2" href="users.html" title="users" alt="" coords="165,503,392,859">
-<area shape="rect" id="node3" href="publications.html" title="publications" alt="" coords="436,5,624,719">
-<area shape="rect" id="node4" href="roles.html" title="roles" alt="" coords="5,551,121,698">
+<area shape="rect" id="node1" href="author_contacts.html" title="author_contacts" alt="" coords="668,328,819,579">
+<area shape="rect" id="node2" href="users.html" title="users" alt="" coords="169,531,395,907">
+<area shape="rect" id="node3" href="publications.html" title="publications" alt="" coords="439,5,624,760">
+<area shape="rect" id="node4" href="roles.html" title="roles" alt="" coords="5,581,125,736">
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/users.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="additional_sources.html" title="additional_sources" alt="" coords="689,581,840,660">
-<area shape="rect" id="node2" href="publications.html" title="publications" alt="" coords="436,199,624,912">
-<area shape="rect" id="node4" href="users.html" title="users" alt="" coords="165,696,392,1052">
-<area shape="rect" id="node7" href="missing_data.html" title="missing_data" alt="" coords="221,369,337,448">
-<area shape="rect" id="node9" href="purposes.html" title="purposes" alt="" coords="221,159,337,237">
-<area shape="rect" id="node3" href="author_contacts.html" title="author_contacts" alt="" coords="689,833,841,1070">
-<area shape="rect" id="node5" href="content_email.html" title="content_email" alt="" coords="470,967,590,1045">
-<area shape="rect" id="node14" href="roles.html" title="roles" alt="" coords="5,745,121,891">
-<area shape="rect" id="node6" href="publication_missing_data.html" title="publication_missing_data" alt="" coords="668,101,861,180">
-<area shape="rect" id="node8" href="publication_purposes.html" title="publication_purposes" alt="" coords="681,5,848,84">
-<area shape="rect" id="node10" href="stages.html" title="stages" alt="" coords="701,197,829,276">
-<area shape="rect" id="node11" href="studies.html" title="studies" alt="" coords="693,293,837,372">
-<area shape="rect" id="node12" href="taxonomies.html" title="taxonomies" alt="" coords="699,389,831,468">
-<area shape="rect" id="node13" href="treatments.html" title="treatments" alt="" coords="707,485,823,564">
+<area shape="rect" id="node1" href="additional_sources.html" title="additional_sources" alt="" coords="689,605,838,688">
+<area shape="rect" id="node2" href="publications.html" title="publications" alt="" coords="439,205,624,960">
+<area shape="rect" id="node4" href="users.html" title="users" alt="" coords="169,731,395,1107">
+<area shape="rect" id="node7" href="missing_data.html" title="missing_data" alt="" coords="222,509,342,592">
+<area shape="rect" id="node9" href="purposes.html" title="purposes" alt="" coords="222,167,342,249">
+<area shape="rect" id="node3" href="author_contacts.html" title="author_contacts" alt="" coords="688,873,839,1124">
+<area shape="rect" id="node5" href="content_email.html" title="content_email" alt="" coords="471,1013,591,1096">
+<area shape="rect" id="node14" href="roles.html" title="roles" alt="" coords="5,781,125,936">
+<area shape="rect" id="node6" href="publication_missing_data.html" title="publication_missing_data" alt="" coords="668,105,859,188">
+<area shape="rect" id="node8" href="publication_purposes.html" title="publication_purposes" alt="" coords="681,5,846,88">
+<area shape="rect" id="node10" href="stages.html" title="stages" alt="" coords="697,205,829,288">
+<area shape="rect" id="node11" href="studies.html" title="studies" alt="" coords="689,305,837,388">
+<area shape="rect" id="node12" href="taxonomies.html" title="taxonomies" alt="" coords="695,405,831,488">
+<area shape="rect" id="node13" href="treatments.html" title="treatments" alt="" coords="703,505,823,588">
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/users.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
