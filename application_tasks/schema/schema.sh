@@ -3,8 +3,10 @@
 system=`uname`
 # Checking operating system to install dependencies
 if [[ $system == 'Linux' ]]; then
+   echo "Checking for and installing graphviz and java"
    sudo apt-get install graphviz
    apt-get install sun-java6-jdk sun-java6-jre
+   echo "Setting home variable for Java"
    export JAVA_HOME="/usr/lib/jvm/java-6-sun-1.6.0.06"
 elif [[ $system == 'Darwin' ]]; then
    echo "Mac"
