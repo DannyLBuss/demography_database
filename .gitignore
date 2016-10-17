@@ -49,6 +49,10 @@ ext/mysql-connector-java-5.1.38-bin.jar
 migrations/*
 
 database_schema/
-database_schema/*
 *.jar
+
+requirements/non_python
+
+application_tasks/schema/*
+!application_tasks/schema/schema.sh
 
