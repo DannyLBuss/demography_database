@@ -1116,7 +1116,6 @@ class Species(db.Model):
     esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id'))
     invasive_status = db.Column(db.Boolean())
     gbif_key = db.Column(db.Integer())
-    gbif_id = db.Column(db.Integer())
     image_path = db.Column(db.Text)
     image_path2 = db.Column(db.Text)
     user_created = db.relationship('User', foreign_keys='Species.user_created_id') # user keys might be a problem.. or might not.. will implement and find out
