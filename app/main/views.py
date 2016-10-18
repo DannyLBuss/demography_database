@@ -10,7 +10,7 @@ from ..compadre.forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationFor
 from .. import db
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
-                    DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
+                    DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
                     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PurposeEndangered, PurposeWeed, Trait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming
@@ -51,7 +51,7 @@ def meta_tables_json():
 
     # Constructing dict for meta tables, ordering by main Class
     meta_tables = {"Species" : {"IUCNStatus" : [], "ESAStatus" : []}, "Taxonomy" : {}, "Trait" : {"OrganismType" : [], \
-                   "GrowthFormRaunkiaer" : [], "ReproductiveRepetition" : [], "DicotMonoc" : [], "AngioGymno" : [] }, \
+                   "GrowthFormRaunkiaer" : [], "ReproductiveRepetition" : [], "DicotMonoc" : [], "AngioGymno" : [], "SpandExGrowthType" : [] }, \
                    "Publication" : {"SourceType" : [], "Database" : [], "Purpose" : [], "MissingData" : [] }, \
                    "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] , "InvasiveStatusStudy" : [], "InvasiveStatusElsewhere" : []}, \
                    "StageType" : { "StageTypeClass" : [] }, "MatrixValue" : { "TransitionType" : [] }, \
@@ -66,6 +66,7 @@ def meta_tables_json():
     meta_tables["Trait"]["ReproductiveRepetition"].extend(ReproductiveRepetition.query.all())
     meta_tables["Trait"]["DicotMonoc"].extend(DicotMonoc.query.all())
     meta_tables["Trait"]["AngioGymno"].extend(AngioGymno.query.all())
+    meta_tables["Trait"]["SpandExGrowthType"].extend(SpandExGrowthType.query.all())
     meta_tables["Publication"]["SourceType"].extend(SourceType.query.all())
     meta_tables["Publication"]["Database"].extend(Database.query.all())
     meta_tables["Publication"]["Purpose"].extend(Purpose.query.all())

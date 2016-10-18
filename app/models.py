@@ -456,13 +456,13 @@ class AngioGymno(db.Model):
     def __repr__(self):
         return str(self.id)
 
-class DavesGrowthType(db.Model):
-    __tablename__ = 'daves_growth_types'
+class SpandExGrowthType(db.Model):
+    __tablename__ = 'spand_ex_growth_types'
     id = db.Column(db.Integer, primary_key=True)
     type_name = db.Column(db.String(64), index=True)
     type_description = db.Column(db.Text)
 
-    traits = db.relationship("Trait", backref="daves_growth_types")
+    traits = db.relationship("Trait", backref="spand_ex_growth_types")
 
     @staticmethod
     def migrate():
@@ -470,12 +470,12 @@ class DavesGrowthType(db.Model):
         with open('app/data-migrate/traits.json') as d_file:
             data = json.load(d_file)
             json_data = data["Trait"]
-            nodes = json_data["DavesGrowthType"]
+            nodes = json_data["SpandExGrowthType"]
 
             for node in nodes:          
-                i = DavesGrowthType.query.filter_by(type_name=node['growth_type_name']).first()
+                i = SpandExGrowthType.query.filter_by(type_name=node['growth_type_name']).first()
                 if i is None:
-                    i = DavesGrowthType()
+                    i = SpandExGrowthType()
 
                 i.type_name = node['growth_type_name']
                 i.type_description = node['growth_type_description']
@@ -1246,7 +1246,7 @@ class Trait(db.Model):
     reproductive_repetition_id = db.Column(db.Integer, db.ForeignKey('reproductive_repetition.id'))
     dicot_monoc_id = db.Column(db.Integer, db.ForeignKey('dicot_monoc.id'))
     angio_gymno_id = db.Column(db.Integer, db.ForeignKey('angio_gymno.id'))
-    daves_growth_type_id = db.Column(db.Integer, db.ForeignKey('daves_growth_types.id'))
+    spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id'))
 
     version = db.Column(db.Integer())
     version_of_id = db.Column(db.Integer, db.ForeignKey('traits.id'))
@@ -1259,7 +1259,7 @@ class Trait(db.Model):
         ReproductiveRepetition.migrate()
         DicotMonoc.migrate()
         AngioGymno.migrate()
-        DavesGrowthType.migrate()
+        SpandExGrowthType.migrate()
 
     def to_json(self, key):
         trait = {
