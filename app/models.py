@@ -1796,7 +1796,7 @@ class Matrix(db.Model):
 
     vectors_includes_na = db.Column(db.Boolean())
 
-    seed_stage_error = db.Column(db.Text())
+    
 
     
     independent = db.Column(db.Boolean())
@@ -1973,6 +1973,7 @@ class Fixed(db.Model):
     total_pop_no = db.Column(db.Integer())
     small_id = db.Column(db.Integer, db.ForeignKey('smalls.id'))
     census_timing_id = db.Column(db.Integer, db.ForeignKey('census_timings.id'))
+    seed_stage_error = db.Column(db.Boolean())
     private = db.Column(db.Boolean(), default=True)
 
     @staticmethod
