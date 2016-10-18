@@ -26,7 +26,7 @@
 			"type_name": "NA"
 		}],
 
-		"DavesGrowthType": [{
+		"SpandExGrowthType": [{
             "growth_type_name": "Tree",
             "growth_type_description": "Large woody plant with a trunk and supporting branches."
         }, {
