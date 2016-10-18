@@ -1,6 +1,6 @@
 {
 	"Trait": {
-		"GrowthType": [{
+		"OrganismType": [{
 			"type_name": "Algae"
 		}, {
 			"type_name": "Annual"

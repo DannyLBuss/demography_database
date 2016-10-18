@@ -319,24 +319,24 @@ class ESAStatus(db.Model):
 ''' End Meta Tables for Taxonomy '''
 
 ''' Meta Tables for Traits '''
-class GrowthType(db.Model):
-    __tablename__ = 'growth_types'
+class OrganismType(db.Model):
+    __tablename__ = 'organism_types'
     id = db.Column(db.Integer, primary_key=True)
     type_name = db.Column(db.String(64), index=True)
 
-    traits = db.relationship("Trait", backref="growth_type")
+    traits = db.relationship("Trait", backref="organism_type")
 
     @staticmethod
     def migrate():
         with open('app/data-migrate/traits.json') as taxonomy_file:
             data = json.load(taxonomy_file)
             species = data["Trait"]
-            growth_types = species["GrowthType"]
+            growth_types = species["OrganismType"]
 
             for types in growth_types:
-                i = GrowthType.query.filter_by(type_name=types['type_name']).first()
+                i = OrganismType.query.filter_by(type_name=types['type_name']).first()
                 if i is None:
-                    i = GrowthType()
+                    i = OrganismType()
 
                 i.type_name = types['type_name']
 
@@ -1241,7 +1241,7 @@ class Trait(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
     max_height = db.Column(db.Float()) #This should be a double, eventually
-    growth_type_id = db.Column(db.Integer, db.ForeignKey('growth_types.id'))
+    organism_type_id = db.Column(db.Integer, db.ForeignKey('organism_types.id'))
     growth_form_raunkiaer_id = db.Column(db.Integer, db.ForeignKey('growth_forms_raunkiaer.id'))
     reproductive_repetition_id = db.Column(db.Integer, db.ForeignKey('reproductive_repetition.id'))
     dicot_monoc_id = db.Column(db.Integer, db.ForeignKey('dicot_monoc.id'))
@@ -1254,7 +1254,7 @@ class Trait(db.Model):
 
     @staticmethod
     def migrate():
-        GrowthType.migrate()
+        OrganismType.migrate()
         GrowthFormRaunkiaer.migrate()
         ReproductiveRepetition.migrate()
         DicotMonoc.migrate()
@@ -1264,7 +1264,7 @@ class Trait(db.Model):
     def to_json(self, key):
         trait = {
             'max_height' : self.max_height,
-            'growth_type_id' : self.growth_type.type_name,
+            'organism_type_id' : self.organism_type.type_name,
             # 'growth_form_raunkiaer' : self.growth_form_raunkiaer.form_name,
             # 'reproductive_repetition' : self.reproductive_repetition.repetition_name,
             'dicot_monoc' : self.dicot_monoc.dicot_monoc_name,

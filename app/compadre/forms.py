@@ -5,7 +5,7 @@ from wtforms.validators import Required, Length, Email, Regexp, Optional
 from wtforms import ValidationError
 from flask.ext.pagedown.fields import PageDownField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from ..models import IUCNStatus, ESAStatus, GrowthType, GrowthFormRaunkiaer, ReproductiveRepetition, \
+from ..models import IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, DavesGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
@@ -146,7 +146,7 @@ class PopulationForm(Form):
 class TraitForm(Form):
     max_height = FloatField('Max Height')
     growth_type = QuerySelectField('Growth Type',
-            query_factory=lambda: GrowthType.query.all(), get_pk=lambda a: a.id,
+            query_factory=lambda: OrganismType.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.type_name)
     growth_form_raunkiaer = QuerySelectField('Growth Form Raunkiaer',
             query_factory=lambda: GrowthFormRaunkiaer.query.all(), get_pk=lambda a: a.id,
@@ -235,7 +235,7 @@ class EntryForm(Form):
 	# Plant Traits
 	max_height = StringField('Max Height')
 	growth_type = QuerySelectField('Growth Type',
-            query_factory=lambda: GrowthType.query.all(), get_pk=lambda a: a.id,
+            query_factory=lambda: OrganismType.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.type_name)
 	growth_form_raunkiaer = QuerySelectField('Growth Form Raunkiaer',
             query_factory=lambda: GrowthFormRaunkiaer.query.all(), get_pk=lambda a: a.id,
