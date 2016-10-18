@@ -72,6 +72,8 @@ class User(UserMixin, db.Model):
     avatar_hash = db.Column(db.String(32))
     api_hash = db.Column(db.Text())
 
+    versions = db.relationship("Version", backref="user")  
+
     species = db.relationship("Species", backref="Species.user_created_id",primaryjoin="User.id==Species.user_modified_id", lazy="dynamic")
 
     @staticmethod
@@ -529,6 +531,8 @@ class Database(db.Model):
     database_number_studies = db.Column(db.Integer())
     database_number_matrices = db.Column(db.Integer())
     database_agreement = db.Column(db.String(64))
+
+    versions = db.relationship("Version", backref="database")  
 
     @staticmethod
     def migrate():
@@ -2025,6 +2029,23 @@ class Seed(db.Model):
 
     def __repr__(self, key):
         return '<Seed %r>' % self.id
+
+
+class Version(db.Model):
+    __tablename__ = 'versions'
+    id = db.Column(db.Integer, primary_key=True)
+    version = db.Column(db.Integer())
+    version_of_id = db.Column(db.Integer, db.ForeignKey('taxonomies.id')) 
+    version_date_added = db.Column(db.Date())
+    version_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    version_uid = db.Column(db.Text())
+    database_id = db.Column(db.Integer, db.ForeignKey('databases.id'))
+
+    # Many to Many
+    versions = db.relationship("Version", backref="original_version", remote_side="Version.id")  
+
+    def __repr__(self, key):
+        return '<Version %r>' % self.id
 
 
 def url_array(self, string, key):
