@@ -57,5 +57,7 @@ requirements/non_python
 application_tasks/schema/*
 !application_tasks/schema/schema.sh
 
+application_tasks/mysql_dump/archives/*
+
 
 
