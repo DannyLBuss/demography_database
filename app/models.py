@@ -493,7 +493,6 @@ class SourceType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     source_name = db.Column(db.String(64), index=True)
     source_description = db.Column(db.Text())
-    database_id = db.Column(db.Integer, db.ForeignKey('databases.id'))
 
     publications = db.relationship("Publication", backref="source_type")
     additional_sources = db.relationship("AdditionalSource", backref="source_type")
@@ -524,8 +523,12 @@ class Database(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     database_name = db.Column(db.String(64), index=True)
     database_description = db.Column(db.Text())
-
-    sources = db.relationship("SourceType", backref="database")
+    database_master_version = db.Column(db.String(64))
+    database_date_created = db.Column(db.Date())
+    database_number_species_accepted = db.Column(db.Integer())
+    database_number_studies = db.Column(db.Integer())
+    database_number_matrices = db.Column(db.Integer())
+    database_agreement = db.Column(db.String(64))
 
     @staticmethod
     def migrate():
