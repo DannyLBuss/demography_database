@@ -1494,11 +1494,13 @@ class Population(db.Model):
     name = db.Column(db.Text())
     ecoregion_id = db.Column(db.Integer, db.ForeignKey('ecoregions.id'))
     invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasivestatusstudies.id'))
-    invasive_status_selsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id'))
-    #Django plugin for country, and generic python package too - we'll be just fine. Unfortunately, unless we download a CSV of this and enter into sep table, will probably be more efficient to do this outside of the database. Further thought reqd!
+    invasive_status_elsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id'))
     country = db.Column(db.Text())
     continent_id = db.Column(db.Integer, db.ForeignKey('continents.id'))
-    geometries = db.Column(db.Text()) #This needs work once i've decided wether to use Flask or Django - such good cases for both. Databases support point geometry, including altitude.
+    geometries = db.Column(db.Text())
+    latitude = db.Column(db.Float())
+    longitude = db.Column(db.Float())
+    altitude = db.Column(db.Float())
     pop_size = db.Column(db.Text())
 
     matrices = db.relationship("Matrix", backref="population")
