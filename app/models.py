@@ -1764,6 +1764,10 @@ class Matrix(db.Model):
     matrix_criteria_age = db.Column(db.Boolean())
     study_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
     matrix_start = db.Column(db.String(64)) # These will include month, day, etc. Create method to return these - matrix_start.day() matrix_start.year() etc
+    matrix_start_year = db.Column(db.Integer)
+    matrix_start_month = db.Column(db.String(12))
+    matrix_end_year = db.Column(db.Integer)
+    matrix_end_month = db.Column(db.String(12))
     matrix_end = db.Column(db.String(64)) # These will include month, day, etc. Create method to return these - matrix_start.day() matrix_start.year() etc
     matrix_start_season_id = db.Column(db.Integer, db.ForeignKey('seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
     matrix_start_season = db.relationship('Season', foreign_keys='Matrix.matrix_start_season_id')
@@ -1775,6 +1779,9 @@ class Matrix(db.Model):
     matrix_f_string = db.Column(db.Text())
     matrix_c_string = db.Column(db.Text())
     matrix_class_string = db.Column(db.Text())
+    matrix_difficulty = db.Column(db.String(64))
+    matrix_complete = db.Column(db.Boolean())
+    independence_origin = db.Column(db.Text())
     n_plots = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, will need your help with plots too - not quite sure what they are.
     plot_size = db.Column(db.Float()) # Schema states, 'R convert to m^2'
     n_individuals = db.Column(db.Integer()) # Schema states, 'total number of individuals observed'
