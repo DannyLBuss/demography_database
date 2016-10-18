@@ -1186,6 +1186,9 @@ class Taxonomy(db.Model):
     phylum = db.Column(db.String(64))
     kingdom = db.Column(db.String(64))
 
+    col_check_ok = db.Column(db.Boolean())
+    col_check_date = db.Column(db.Date())
+
     version = db.Column(db.Integer())
     version_of_id = db.Column(db.Integer, db.ForeignKey('taxonomies.id'))
     versions = db.relationship("Taxonomy", backref="original", remote_side="Taxonomy.id")
