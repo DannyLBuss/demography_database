@@ -1,0 +1,59 @@
+{
+	"Version": {
+	    "Database": [{
+            "database_name": "Exeter",
+            "database_description": "David Hodgson",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "COMPADRE I",
+            "database_description": "Miguel Franco & Jonathan Silvertown",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "COMADRE I",
+            "database_description": "Rob Salguero-Gomez, Owen Jones & Collaborators",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "Ramula",
+            "database_description": "Satu Ramula",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "NCEAS",
+            "database_description": "Jennifer Williams et al.",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "UQ",
+            "database_description": "Yvonne Buckley and collaborators",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }]
+	}
+}

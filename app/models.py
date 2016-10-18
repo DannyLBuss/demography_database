@@ -536,9 +536,9 @@ class Database(db.Model):
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/publications.json') as d_file:
+        with open('app/data-migrate/versions.json') as d_file:
             data = json.load(d_file)
-            json_data = data["Publication"]
+            json_data = data["Version"]
             nodes = json_data["Database"]
 
             for node in nodes:
@@ -548,6 +548,12 @@ class Database(db.Model):
 
                 i.database_name = node['database_name']
                 i.database_description = node['database_description']
+                i.database_master_version = None
+                i.database_date_created = None
+                i.database_number_species_accepted = None
+                i.database_number_studies = None
+                i.database_number_matrices = None
+                i.database_agreement = None
 
                 db.session.add(i)
                 db.session.commit()
@@ -1333,7 +1339,6 @@ class Publication(db.Model):
     @staticmethod
     def migrate():
         SourceType.migrate()
-        Database.migrate()
         Purpose.migrate()
         MissingData.migrate()
 
@@ -2035,14 +2040,18 @@ class Version(db.Model):
     __tablename__ = 'versions'
     id = db.Column(db.Integer, primary_key=True)
     version = db.Column(db.Integer())
-    version_of_id = db.Column(db.Integer, db.ForeignKey('taxonomies.id')) 
+    version_of_id = db.Column(db.Integer, db.ForeignKey('versions.id')) 
     version_date_added = db.Column(db.Date())
     version_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     version_uid = db.Column(db.Text())
     database_id = db.Column(db.Integer, db.ForeignKey('databases.id'))
 
     # Many to Many
-    versions = db.relationship("Version", backref="original_version", remote_side="Version.id")  
+    versions = db.relationship("Version", backref="original_version", remote_side="Version.id")
+
+    @staticmethod
+    def migrate():
+        Database.migrate()
 
     def __repr__(self, key):
         return '<Version %r>' % self.id
