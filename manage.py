@@ -20,7 +20,7 @@ from app.models import User, Role, Permission, \
     IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
-    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
+    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Version
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
@@ -39,8 +39,7 @@ def make_shell_context():
                 AuthorContact=AuthorContact, ContentEmail=ContentEmail, Population=Population, Ecoregion=Ecoregion, Continent=Continent, \
                 StageType=StageType, StageTypeClass=StageTypeClass, TransitionType=TransitionType, MatrixValue=MatrixValue, \
                 MatrixComposition=MatrixComposition, Season=Season, StudiedSex=StudiedSex, Captivity=Captivity, MatrixStage=MatrixStage,\
-                Matrix=Matrix, Interval=Interval, Fixed=Fixed, Small=Small, CensusTiming=CensusTiming, \
-                TreatmentType=TreatmentType, Study=Study, Status=Status, InvasiveStatusStudy=InvasiveStatusStudy, InvasiveStatusElsewhere=InvasiveStatusElsewhere, \
+                Matrix=Matrix, Interval=Interval, Fixed=Fixed, Small=Small, CensusTiming=CensusTiming, Study=Study, Status=Status, InvasiveStatusStudy=InvasiveStatusStudy, InvasiveStatusElsewhere=InvasiveStatusElsewhere, \
                 PurposeEndangered=PurposeEndangered, PurposeWeed=PurposeWeed, Version=Version)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
@@ -293,13 +292,12 @@ def submit(entry):
 
     ''' Matrix '''
     matrix = Matrix()
-    treatment_type = TreatmentType.query.filter_by(type_name=entry.matrix.treatment_id).first()
-    if treatment_type == None:
-        treatment_type = TreatmentType(type_name=entry.matrix.treatment_id)
-        db.session.add(treatment_type)
+    treatment = Treatment.query.filter_by(treatment_name=entry.matrix.treatment_id).first()
+    if treatment == None:
+        treatment = Treatment(treatment_name=entry.matrix.treatment_id)
+        db.session.add(treatment)
         db.session.commit()
-    matrix.treatment_id = treatment_type.id
-    matrix.treatment_type_id = treatment_type.id
+    matrix.treatment_id = treatment.id
     matrix.matrix_split = coerce_boolean(entry.matrix.matrix_split)
     comp_id = MatrixComposition.query.filter_by(comp_name=entry.matrix.matrix_composition_id).first()
     if comp_id != None:
@@ -574,7 +572,7 @@ def migrate_meta():
     IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
-    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, TreatmentType, \
+    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed
 
     print "Migrating Meta Tables..."
