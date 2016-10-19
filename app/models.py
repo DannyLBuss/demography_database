@@ -1322,7 +1322,6 @@ class Publication(db.Model):
     additional_sources = db.relationship("AdditionalSource", backref="publication")
     populations = db.relationship("Population", backref="publication")
     stages = db.relationship("Stage", backref="publication")
-    treatments = db.relationship("Treatment", backref="publication")
     taxonomies = db.relationship("Taxonomy", backref="publication")
     studies = db.relationship("Study", backref="publication")
 
@@ -1635,27 +1634,12 @@ class StageType(db.Model):
         return '<Stage Type %r>' % self.id
 
 
-#Ignore this one for a while, not enough data just yet
 class Treatment(db.Model):
     __tablename__ = 'treatments'
     id = db.Column(db.Integer, primary_key=True, index=True)
-    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
-    treatment_type_id = db.Column(db.Integer, db.ForeignKey('treatment_types.id'))
-    name = db.Column(db.Text()) #Schema says 'author's', need clarification - author's name possibly, according to protocol?
-    description = db.Column(db.Text())
-
-    # matrices = db.relationship("Matrix", backref="treatment")
-
-    def __repr__(self):
-        return '<Treatment %r>' % self.id
-
-class TreatmentType(db.Model):
-    __tablename__ = 'treatment_types'
-    id = db.Column(db.Integer, primary_key=True, index=True)
-    type_name = db.Column(db.Text())
+    treatment_name = db.Column(db.Text())
     
     matrices = db.relationship("Matrix", backref="treatment")
-    # treatments = db.relationship("Treatment", backref="treatment_types")
     
 
     @staticmethod
@@ -1663,20 +1647,20 @@ class TreatmentType(db.Model):
         with open('app/data-migrate/matrices.json') as d_file:
             data = json.load(d_file)
             json_data = data["Matrix"]
-            nodes = json_data["TreatmentType"]
+            nodes = json_data["Treatment"]
 
             for node in nodes:
-                i = TreatmentType.query.filter_by(type_name=node['type_name']).first()
+                i = Treatment.query.filter_by(treatment_name=node['type_name']).first()
                 if i is None:
-                    i = TreatmentType()
+                    i = Treatment()
 
-                i.type_name = node['type_name']
+                i.type_name = node['treatment_name']
 
                 db.session.add(i)
                 db.session.commit()
 
     def to_json(self, key):
-        treatment_type = {
+        treatment= {
             'type_name' : self.type_name,
 
             # Matrices?
@@ -1685,7 +1669,7 @@ class TreatmentType(db.Model):
 
 
     def __repr__(self):
-        return '<Treatment Type %r>' % self.id
+        return '<Treatment %r>' % self.id
 
 class MatrixStage(db.Model):
     __tablename__ = 'matrix_stages'
@@ -1742,7 +1726,7 @@ class Matrix(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Text())
     population_id = db.Column(db.Integer, db.ForeignKey('populations.id'))
-    treatment_id = db.Column(db.Integer, db.ForeignKey('treatment_types.id'))
+    treatment_id = db.Column(db.Integer, db.ForeignKey('treatments.id'))
     matrix_split = db.Column(db.Boolean())
     matrix_composition_id = db.Column(db.Integer, db.ForeignKey('matrix_compositions.id'))
     seasonal = db.Column(db.Boolean())
@@ -1831,7 +1815,7 @@ class Matrix(db.Model):
         except AttributeError:
             composite = ''
 
-        treatment = self.treatment.type_name
+        treatment = self.treatment.treatment_name
         try:
             start_year = self.matrix_start[-4:]
         except TypeError:
@@ -1861,7 +1845,7 @@ class Matrix(db.Model):
                                   _external=False),
                 'study' : url_for('api.get_study', id=self.study.id, key=key,
                                   _external=False),
-                'treatment' : self.treatment.type_name,
+                'treatment' : self.treatment.treatment_name,
                 'matrix_split' : self.matrix_split,
                 'matrix_composition' : self.matrix_composition.comp_name,
                 'survival_issue' : self.survival_issue,
@@ -1897,7 +1881,7 @@ class Matrix(db.Model):
                                   _external=False),
                 'study' : url_for('api.get_study', id=self.study.id, key=key,
                                   _external=False),
-                'treatment' : self.treatment.type_name,
+                'treatment' : self.treatment.treatment_name,
                 'matrix_split' : self.matrix_split,
                 'matrix_composition' : self.matrix_composition.comp_name,
                 'survival_issue' : self.survival_issue,

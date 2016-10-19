@@ -56,8 +56,8 @@
 			"cap_description": "Captured from Wild: If the species was taken from a wild population but studied in labs or gardens etc"
 		}],
 
-		"TreatmentType": [{
-			"type_name" : "Unmanipulated"
+		"Treatment": [{
+			"treatment_name" : "Unmanipulated"
 			}],
 		
 		"Status": [{
