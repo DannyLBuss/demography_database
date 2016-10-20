@@ -17,6 +17,7 @@ class Permission:
     COMMENT = 0x02
     WRITE_ARTICLES = 0x04
     MODERATE_COMMENTS = 0x08
+    VALIDATION = 0x08
     ADMINISTER = 0x80
 
 
@@ -33,14 +34,26 @@ class Role(db.Model):
         roles = {
             'User': (Permission.FOLLOW |
                      Permission.COMMENT |
-                     Permission.WRITE_ARTICLES, False),
+                     Permission.WRITE_ARTICLES, True),
             'Developer': (Permission.FOLLOW |
                      Permission.COMMENT |
-                     Permission.WRITE_ARTICLES, True),
+                     Permission.WRITE_ARTICLES, False),
+            'Researcher': (Permission.FOLLOW |
+                     Permission.COMMENT |
+                     Permission.WRITE_ARTICLES, False),
+            'Compadrino': (Permission.FOLLOW |
+                     Permission.COMMENT |
+                     Permission.WRITE_ARTICLES, False),
+            'Committee': (Permission.FOLLOW |
+                          Permission.COMMENT |
+                          Permission.WRITE_ARTICLES |
+                          Permission.MODERATE_COMMENTS |
+                          Permission.VALIDATION, False),
             'Moderator': (Permission.FOLLOW |
                           Permission.COMMENT |
                           Permission.WRITE_ARTICLES |
-                          Permission.MODERATE_COMMENTS, False),
+                          Permission.MODERATE_COMMENTS |
+                          Permission.VALIDATION, False),
             'Administrator': (0xff, False)
         }
         for r in roles:
