@@ -54,6 +54,20 @@
             "database_number_studies" : "NA",
             "database_number_matrices" : "NA",
             "database_agreement" : "NA"
+        }],
+
+    "Status": [{
+            "status_name": "Red",
+            "status_description": "Checked, rejected"
+        }, {
+            "status_name": "Amber",
+            "status_description": "Checked, requires amendments"
+        }, {
+            "status_name": "Green",
+            "status_description": "Checked, accepted"
+        }, {
+            "status_name": "Pending",
+            "status_description": "Unchecked"
         }]
 	}
 }
