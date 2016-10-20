@@ -1796,9 +1796,9 @@ class Matrix(db.Model):
     study_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
     matrix_start = db.Column(db.String(64)) # These will include month, day, etc. Create method to return these - matrix_start.day() matrix_start.year() etc
     matrix_start_year = db.Column(db.Integer)
-    matrix_start_month = db.Column(db.String(12))
+    matrix_start_month = db.Column(db.Integer())
     matrix_end_year = db.Column(db.Integer)
-    matrix_end_month = db.Column(db.String(12))
+    matrix_end_month = db.Column(db.Integer())
     matrix_end = db.Column(db.String(64)) # These will include month, day, etc. Create method to return these - matrix_start.day() matrix_start.year() etc
     matrix_start_season_id = db.Column(db.Integer, db.ForeignKey('seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
     matrix_start_season = db.relationship('Season', foreign_keys='Matrix.matrix_start_season_id')
@@ -2049,15 +2049,16 @@ class Seed(db.Model):
 class Version(db.Model):
     __tablename__ = 'versions'
     id = db.Column(db.Integer, primary_key=True)
-    version_number = db.Column(db.Integer())
+    version_number = db.Column(db.Integer(), default=0)
     version_of_id = db.Column(db.Integer, db.ForeignKey('versions.id')) 
     version_date_added = db.Column(db.Date())
     version_timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # This is as if treating as a whole row, but we are trying to get away from that
     version_uid = db.Column(db.Text())
     
     versions = db.relationship("Version", backref="original_version", remote_side="Version.id")
-
-    checked = db.Column(db.Boolean()) #Is this needed?
+    checked = db.Column(db.Boolean())
     
     status_id = db.Column(db.Integer, db.ForeignKey('statuses.id'))
     checked_count = db.Column(db.Integer(), default=0)
@@ -2086,6 +2087,7 @@ class Version(db.Model):
     additional_source_id = db.Column(db.Integer, db.ForeignKey('additional_sources.id'))
 
     
+
 
     @staticmethod
     def migrate():
