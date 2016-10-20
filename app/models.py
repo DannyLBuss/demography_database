@@ -85,11 +85,14 @@ class User(UserMixin, db.Model):
     avatar_hash = db.Column(db.String(32))
     api_hash = db.Column(db.Text())
 
-    # institution
-    # institution_confirmed = db.Column(db.Boolean)
+    institute_id = db.Column(db.Integer, db.ForeignKey('institutes.id'))
+    institute_confirmed = db.Column(db.Boolean, default=False)
 
     versions = db.relationship("Version", backref="user")  
 
+    @staticmethod
+    def migrate():
+        Institute.migrate()
 
     @staticmethod
     def generate_fake(count=100):
@@ -261,6 +264,55 @@ def load_user(user_id):
 ''' Start Demog Stuff '''    
 
 ''' Meta tables '''
+
+''' Meta Tables for Users '''
+class Institute(db.Model):
+    __tablename__ = 'institutes'
+    id = db.Column(db.Integer, primary_key=True)
+    institution_name = db.Column(db.String(200))
+    institution_short = db.Column(db.String(64))
+    main_contact_email = db.Column(db.String(64))
+    main_contact_name = db.Column(db.String(64))
+    institution_address = db.Column(db.String(200))
+    research_group = db.Column(db.String(64))
+    date_joined = db.Column(db.Date(), default=datetime.now().date())
+    department = db.Column(db.String(64))
+    country = db.Column(db.String(64))
+    website = db.Column(db.String(200))
+
+
+    users = db.relationship("User", backref="institute")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/users.json') as user_file:
+            data = json.load(user_file)
+            user = data["User"]
+            institute = user["Institute"]
+
+            for ins in institute:
+                i = Institute.query.filter_by(institution_name=ins['institution_name']).first()
+                if i is None:
+                    i = Institute()
+                
+                i.institution_name = ins['institution_name']
+                i.institution_short = ins['institution_short']
+                i.main_contact_email = ins['main_contact_email']
+                i.main_contact_name = ins['main_contact_name']
+                i.institution_address = ins['institution_address']
+                i.research_group = ins['research_group']
+                i.department = ins['department']
+                i.country = ins['country']
+                i.website = ins['website']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return str(self.id)
+
+''' End Meta Tables for Users '''
+
 ''' Meta Tables for Species '''
 class IUCNStatus(db.Model):
     __tablename__ = 'iucn_status'
@@ -289,11 +341,6 @@ class IUCNStatus(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
-
-    def inspects(self):
-        i = inspect(self)
-        class_name = i.class_.__name__
-        return class_name
             
 
     def __repr__(self):
