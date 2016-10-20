@@ -13,7 +13,7 @@ from ..models import Permission, Role, User, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
                     TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PurposeEndangered, PurposeWeed, Trait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming
+                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Institute
 from ..decorators import admin_required, permission_required, crossdomain
 
 
@@ -50,7 +50,8 @@ def index():
 def meta_tables_json():
 
     # Constructing dict for meta tables, ordering by main Class
-    meta_tables = {"Species" : {"IUCNStatus" : [], "ESAStatus" : []}, "Taxonomy" : {}, "Trait" : {"OrganismType" : [], \
+    meta_tables = {"User" : {"Institute" : []},
+                   "Species" : {"IUCNStatus" : [], "ESAStatus" : []}, "Taxonomy" : {}, "Trait" : {"OrganismType" : [], \
                    "GrowthFormRaunkiaer" : [], "ReproductiveRepetition" : [], "DicotMonoc" : [], "AngioGymno" : [], "SpandExGrowthType" : [] }, \
                    "Publication" : {"SourceType" : [], "Database" : [], "Purpose" : [], "MissingData" : [] }, \
                    "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] , "InvasiveStatusStudy" : [], "InvasiveStatusElsewhere" : []}, \
@@ -59,6 +60,7 @@ def meta_tables_json():
                    "Fixed" : { "Small": [], "CensusTiming" : [] },
                    "Study" : { "PurposeEndangered": [], "PurposeWeed" : []}}
 
+    meta_tables["User"]["Institute"].extend(Institute.query.all())
     meta_tables["Species"]["IUCNStatus"].extend(IUCNStatus.query.all())
     meta_tables["Species"]["ESAStatus"].extend(ESAStatus.query.all())
     meta_tables["Trait"]["OrganismType"].extend(OrganismType.query.all())
