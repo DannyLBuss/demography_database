@@ -85,6 +85,9 @@ class User(UserMixin, db.Model):
     avatar_hash = db.Column(db.String(32))
     api_hash = db.Column(db.Text())
 
+    # institution
+    # institution_confirmed = db.Column(db.Boolean)
+
     versions = db.relationship("Version", backref="user")  
 
 
@@ -1045,13 +1048,13 @@ class Status(db.Model):
     status_description = db.Column(db.Text())
     notes = db.Column(db.Text())
 
-    matrices = db.relationship("Matrix", backref="statuses")
+    versions = db.relationship("Version", backref="statuses")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/matrices.json') as d_file:
+        with open('app/data-migrate/versions.json') as d_file:
             data = json.load(d_file)
-            json_data = data["Matrix"]
+            json_data = data["Version"]
             nodes = json_data["Status"]
 
             for node in nodes:
@@ -1784,11 +1787,6 @@ class Matrix(db.Model):
     non_independence = db.Column(db.Text())
     non_independence_author = db.Column(db.Text())
 
-    checked = db.Column(db.Boolean()) #Is this needed?
-    
-    status_id = db.Column(db.Integer, db.ForeignKey('statuses.id'))
-    checked_count = db.Column(db.Integer(), default=0)
-
     intervals = db.relationship("Interval", backref="matrix")
     matrix_values = db.relationship("MatrixValue", backref="matrix")
     matrix_stages = db.relationship("MatrixStage", backref="matrix")
@@ -2011,6 +2009,11 @@ class Version(db.Model):
     version_uid = db.Column(db.Text())
     
     versions = db.relationship("Version", backref="original_version", remote_side="Version.id")
+
+    checked = db.Column(db.Boolean()) #Is this needed?
+    
+    status_id = db.Column(db.Integer, db.ForeignKey('statuses.id'))
+    checked_count = db.Column(db.Integer(), default=0)
 
     # Utility relationships
     version_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
