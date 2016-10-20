@@ -74,7 +74,6 @@ class User(UserMixin, db.Model):
 
     versions = db.relationship("Version", backref="user")  
 
-    species = db.relationship("Species", backref="Species.user_created_id",primaryjoin="User.id==Species.user_modified_id", lazy="dynamic")
 
     @staticmethod
     def generate_fake(count=100):
@@ -1131,12 +1130,6 @@ class Species(db.Model):
     gbif_taxon_key = db.Column(db.Integer)
     image_path = db.Column(db.Text)
     image_path2 = db.Column(db.Text)
-    user_created = db.relationship('User', foreign_keys='Species.user_created_id') # user keys might be a problem.. or might not.. will implement and find out
-    user_created_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user_modified = db.relationship('User', foreign_keys='Species.user_modified_id')
-    user_modified_id = db.Column(db.Integer, db.ForeignKey('users.id'))    
-    timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
-    timestamp_modified = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     taxonomies = db.relationship("Taxonomy", backref="species")
     traits = db.relationship("Trait", backref="species")
     populations = db.relationship("Population", backref="species")
@@ -2000,7 +1993,8 @@ class Version(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     version_number = db.Column(db.Integer())
     version_of_id = db.Column(db.Integer, db.ForeignKey('versions.id')) 
-    version_date_added = db.Column(db.Date())    
+    version_date_added = db.Column(db.Date())
+    version_timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
     version_uid = db.Column(db.Text())
     
     versions = db.relationship("Version", backref="original_version", remote_side="Version.id")
