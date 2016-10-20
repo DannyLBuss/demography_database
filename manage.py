@@ -565,6 +565,211 @@ def convert_all_headers(dict):
 
     return new_dict
 
+@manager.command
+def submit_new(data):
+    species = Species.query.filter_by(species_accepted=data["species_accepted"]).first()
+
+    if species == None:
+        species = Species(species_accepted=data["species_accepted"])        
+        species.gbif_taxon_key = data["species_gbif_taxon_key"]
+        species.species_author = data["species_author"]
+        species.species_accepted = data["species_accepted"]        
+        species.species_esa_status = ESAStatus.query.filter_by(status_code=data["species_esa_status_id"]).first()        
+        species.species_common = data["species_common"]
+        species.species_iucn_status = IUCNStatus.query.filter_by(status_code=data["species_iucn_status_id"]).first()
+
+
+    ''' Publication '''    
+    if data["publication_DOI_ISBN"] == None:
+        publication = Publication.query.filter_by(authors=data["publication_authors"]).filter_by(year=data["publication_year"]).filter_by(name=data["publication_journal_name"]).first()
+    else: 
+        publication = Publication.query.filter_by(DOI_ISBN=data["publication_DOI_ISBN"]).first()    
+    if publication == None:
+        publication = Publication()
+        publication.authors = data["publication_authors"]
+        publication.year = data["publication_year"]
+        publication.DOI_ISBN = data["publication_DOI_ISBN"]
+        publication.additional_source_string = data["publication_additional_source_string"]
+        publication.name = data["publication_journal_name"]
+
+    ''' Plant Trait '''
+    spand_ex_growth_type = SpandExGrowthType.query.filter_by(type_name=data["trait_spand_ex_growth_type_id"]).first()
+    dicot_monoc = DicotMonoc.query.filter_by(dicot_monoc_name=data["trait_dicot_monoc_id"]).first()
+    growth_form_raunkiaer = GrowthFormRaunkiaer.query.filter_by(form_name=data["trait_growth_form_raunkiaer_id"]).first()
+    organism_type = OrganismType.query.filter_by(type_name=data["trait_organism_type_id"]).first()
+    angio_gymno = AngioGymno.query.filter_by(angio_gymno_name=data["trait_angio_gymno_id"]).first()
+
+    trait = Trait.query.filter_by(species_id=species.id).first()
+
+    if trait == None:
+        trait = Trait()
+        trait.species_id = species.id
+        trait.organism_type = organism_type
+        trait.dicot_monoc = dicot_monoc
+        trait.angio_gymno = angio_gymno
+        trait.spand_ex_growth_type = spand_ex_growth_type
+        trait.growth_form_raunkiaer = growth_form_raunkiaer
+
+    ''' Study '''
+    # What if all none? Will they be grouped together?
+    purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first()
+    purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first()
+
+    study = Study.query.filter_by(publication_id=publication.id, study_start=data["study_start"], study_end=data["study_end"]).first()
+    if study == None:
+        study = Study()
+        study.study_duration = data["study_duration"]
+        study.study_start = data["study_start"]
+        study.study_end = data["study_end"]
+        study.publication_id = publication.id
+        study.number_populations = data["study_number_populations"]
+
+
+    ''' Population '''
+    invasive_status_study = InvasiveStatusStudy.query.filter_by(status_name=data["population_invasive_status_study_id"]).first()
+    invasive_status_elsewhere = InvasiveStatusStudy.query.filter_by(status_name=data["population_invasive_status_elsewhere_id"]).first()
+    ecoregion = Ecoregion.query.filter_by(ecoregion_code=data["population_ecoregion_id"]).first()
+    continent = Continent.query.filter_by(continent_name=data["population_continent_id"]).first()
+
+    pop = Population.query.filter_by(name=data["population_name"], species_id=species.id, publication_id=publication.id).first()
+
+    if pop == None:
+        pop = Population()
+        pop.species_author = data["species_author"]
+        pop.name = data["population_name"]
+        pop.species_id = species.id
+        pop.publication_id = publication.id
+        pop.study_id = study.id
+
+        pop.longitude = data["population_longitude"]
+        pop.latitude = data["population_latitude"]
+        pop.altitude = data["population_altitude"]
+        pop.pop_size = data["population_pop_size"]
+        pop.country = data["population_country"]
+
+        pop.invasive_status_study = invasive_status_study
+        pop.invasive_status_elsewhere = invasive_status_elsewhere
+        pop.ecoregion = ecoregion
+        pop.continent = continent
+
+        print vars(pop)
+
+
+
+
+@manager.command
+def csv_migrate_new():
+    import csv
+
+    input_file = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
+
+    all_deets = []   
+
+    for i, row in enumerate(input_file):                   
+        data = convert_all_headers_new(row)
+        submit_new(data)
+
+    return 
+
+def convert_all_headers_new(dict):
+    import re
+
+    new_dict = {}
+
+    new_dict["species_author"] = dict["species_author"]
+    new_dict["species_accepted"] = dict["species_accepted"]
+    new_dict["species_common"]= dict["species_common"]
+    new_dict["taxonomy_genus"] = dict["taxonomy_genus"]
+    new_dict["taxonomy_family"] = dict["taxonomy_family"]
+    new_dict["taxonomy_order"] = dict["taxonomy_order"]
+    new_dict["taxonomy_class"] = dict["taxonomy_class"]
+    new_dict["taxonomy_phylum"] = dict["taxonomy_phylum"]
+    new_dict["taxonomy_kingdom"] = dict["taxonomy_kingdom"]
+    new_dict["trait_organism_type_id"] = dict["trait_organism_type"]
+    new_dict["trait_dicot_monoc_id"] = dict["trait_dicot_monoc"]
+    new_dict["trait_angio_gymno_id"] = dict["trait_angio_gymno"]
+    new_dict["publication_authors"] = dict["publication_authors"]
+    new_dict["publication_journal_name"] = dict["publication_journal_name"]
+    new_dict["publication_year"] = dict["publication_year"]
+    new_dict["publication_DOI_ISBN"] = dict["publication_DOI_ISBN"]
+    new_dict["publication_additional_source_string"] = dict["publication_additional_source_string"]
+    new_dict["study_duration"] = dict["study_duration"]
+    new_dict["study_start"] = dict["study_start"]
+    new_dict["study_end"] = dict["study_end"]
+    new_dict["matrix_periodicity"] = dict["matrix_periodicity"]
+    new_dict["study_number_populations"] = dict["study_number_populations"]
+    new_dict["matrix_criteria_size"] = dict["matrix_criteria_size"]
+    new_dict["matrix_criteria_ontogeny"] = dict["matrix_criteria_ontogeny"]
+    new_dict["matrix_criteria_age"] = dict["matrix_criteria_age"]
+    new_dict["population_name"] = dict["population_name"]
+    new_dict["population_latitude"] = dict["population_latitude"]
+    new_dict["population_longitude"] = dict["population_longitude"]
+    new_dict["population_altitude"]= dict["population_altitude"]
+    new_dict["population_country"] = dict["population_country"]
+    new_dict["population_continent_id"] = dict["population_continent"]
+    new_dict["population_ecoregion_id"] = dict["population_ecoregion"]
+    new_dict["matrix_studied_sex_id"] = dict["matrix_studied_sex"]
+    new_dict["matrix_composition_id"] = dict["matrix_composition"]
+    new_dict["matrix_treatment_id"] = dict["matrix_treatment_type"]
+    new_dict["matrix_captivity_id"] = dict["matrix_captivity"]
+    new_dict["matrix_start_year"] = dict["matrix_start_year"]
+    new_dict["matrix_start_season_id"] = dict["matrix_start_season"]
+    new_dict["matrix_start_month"] = dict["matrix_start_month"]
+    new_dict["matrix_end_year"] = dict["matrix_end_year"]
+    new_dict["matrix_end_season_id"] = dict["matrix_end_season"]
+    new_dict["matrix_end_month"] = dict["matrix_end_month"]
+    new_dict["matrix_split"] = dict["matrix_split"]
+    new_dict["matrix_fec"] = dict["matrix_fec"]
+    new_dict["matrix_observations"]= dict["matrix_observations"]
+    new_dict["matrix_dimension"] = dict["matrix_dimension"]
+    new_dict["matrix_survival_issue"] = dict["matrix_survival_issue"]
+    new_dict["matrix_a_string"] = dict["matrix_a_string"]
+    new_dict["matrix_c_string"] = dict["matrix_c_string"]
+    new_dict["matrix_f_string"] = dict["matrix_f_string"]
+    new_dict["matrix_u_string"] = dict["matrix_u_string"]
+    new_dict["matrix_class_organized"] = dict["matrix_class_organized"]
+    new_dict["matrix_class_author"] = dict["matrix_class_author"]
+    new_dict["matrix_class_number"] = dict["matrix_class_number"]
+    new_dict["matrix_vectors_includes_na"] = dict["matrix_vectors_includes_na"]
+    new_dict["population_pop_size"] = dict["population_pop_size"]
+    new_dict["species_iucn_status_id"] = dict["species_iucn_status"]
+    new_dict["species_esa_status_id"] = dict["species_esa_status_id"]
+    new_dict["population_invasive_status_study_id"] = dict["population_invasive_status_study"]
+    new_dict["population_invasive_status_elsewhere_id"] = dict["population_invasive_status_elsewhere"]
+    new_dict["study_purpose_endangered_id"] = dict["study_purpose_endangered"]
+    new_dict["study_purpose_weed_id"] = dict["study_purpose_weed"]
+    new_dict["trait_spand_ex_growth_type_id"] = dict["trait_spand_ex_growth_type"]
+    new_dict["trait_growth_form_raunkiaer_id"] = dict["trait_growth_form_raunkiaer"]
+    new_dict["fixed_census_timing_id"] = dict["fixed_census_timing"]
+    new_dict["fixed_small_id"] = dict["fixed_small"]
+    new_dict["fixed_seed_stage_error"] = dict["fixed_seed_stage_error"]
+    new_dict["species_gbif_taxon_key"] = dict["species_gbif_taxon_key"]
+    new_dict["version_checked"] = dict["matrix_checked"]
+    new_dict["version_checked_count"] = dict["matrix_checked_count"]
+    new_dict["taxonomy_genus_accepted"] = dict["taxonomy_genus_accepted"]
+    new_dict["matrix_independent"] = dict["matrix_independent"]
+    new_dict["matrix_non_independence"] = dict["matrix_non_independence"]
+    new_dict["matrix_non_independence_author"] = dict["matrix_non_independence_author"]
+    new_dict["matrix_difficulty"] = dict["matrix_difficulty"]
+    new_dict["matrix_complete"] = dict["matrix_complete"]
+    new_dict["matrix_seasonal"] = dict["matrix_seasonal"]
+    new_dict["database_master_version"] = dict["database_master_version"]
+    new_dict["database_date_created"] = dict["database_date_created"]
+    new_dict["database_number_species_accepted"] = dict["database_number_species_accepted"]
+    new_dict["database_number_studies"] = dict["database_number_studies"]
+    new_dict["database_number_matrices"] = dict["database_number_matrices"]
+    new_dict["database_agreement"] = dict["database_agreement"]
+    new_dict["taxonomy_col_check_ok"] = dict["taxonomy_col_check_ok"]
+    new_dict["taxonomy_col_check_date"]= dict["taxonomy_col_check_date"]
+    new_dict["matrix_independence_origin"] = dict["matrix_independence_origin"]
+
+    for key, value in new_dict.iteritems():
+        if value == "NA":
+            new_dict[key] = None
+
+
+    return new_dict
+
 
 @manager.command
 def migrate_meta():
