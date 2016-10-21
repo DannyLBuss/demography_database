@@ -85,36 +85,74 @@ new_dict["taxonomy_col_check_ok"] = dict["taxonomy_col_check_ok"]
 new_dict["taxonomy_col_check_date"]= dict["taxonomy_col_check_date"]
 new_dict["matrix_independence_origin"] = dict["matrix_independence_origin"]
 
+	
+	''' Fixed '''
 
+	fixed = Fixed.query.filter_by(matrix=matrix).first()
 
-''' Population '''
-invasive_status_study = InvasiveStatusStudy.query.filter_by(status_name=data["population_invasive_status_study_id"]).first()
-invasive_status_elsewhere = InvasiveStatusStudy.query.filter_by(status_name=data["population_invasive_status_study_elsewhere"]).first()
-ecoregion = Ecoregion.query.filter_by(ecoregion_code=data["population_ecoregion_id"]).first()
-continent = Continent.query.filter_by(continent_name=data["population_continent_id"]).first()
+	if fixed == None:
+		fixed = Fixed()
+		fixed.matrix = matrix
+		fixed.census_timings = CensusTiming.query.filter_by(census_name=data["fixed_census_timing_id"]).first()
+		fixed.seed_stage_error = data["fixed_seed_stage_error"]
+		fixed.smalls = Small.query.filter_by(small_name=data["fixed_small_id"])
 
-pop = Population.query.filter_by(name=data["population_name"], species_id=species.id, publication_id=publication.id).first()
+	print vars(fixed)
 
-if pop == None:
-    pop = Population()
-    pop.species_author = data["species_author"]
-    pop.name = data["population_name"]
-    pop.species_id = species.id
-    pop.publication_id = publication.id
-    pop.study_id = study.id
+	
 
-    pop.longitude = data["longitude"]
-    pop.latitude = data["latitude"]
-    pop.altitude = data["altitude"]
-    pop.pop_size = data["pop_size"]
-    pop.country = data["country"]
+	fixed_census_timing_id
+	fixed_seed_stage_error
+	fixed_small_id
 
-    pop.invasive_status_study = invasive_status_study
-    pop.invasive_status_elsewhere = invasive_status_elsewhere
-    pop.ecoregion = ecoregion
-    pop.continent = continent
+    
 
-    print vars(pop)
+    matrix_fec 
+    matrix_start_season_id  
+	matrix_periodicity 
+	matrix_non_independence 
+	
+	matrix_dimension 
+	
+	matrix_criteria_size 
+	matrix_c_string 
+	matrix_f_string 
+	matrix_start_month 
+	matrix_start_year 
+	matrix_a_string 
+	matrix_end_month 
+	matrix_end_year 
+	matrix_studied_sex_id
+	matrix_class_organized 
+	matrix_split 
+	matrix_non_independence_author 
+	matrix_complete
+	matrix_vectors_includes_na
+	matrix_composition_id 
+	matrix_u_string 
+	matrix_independence_origin 
+	matrix_end_season_id 
+	matrix_class_number 
+	matrix_observations 
+	matrix_captivity_id 
+	matrix_class_author 
+	matrix_criteria_ontogeny 
+	matrix_criteria_age 
+	matrix_difficulty 
+	matrix_treatment_id 
+	matrix_independent 
+	matrix_seasonal
+	matrix_survival_issue 
+
+    taxonomy_col_check_date
+	taxonomy_class
+	taxonomy_col_check_ok
+	taxonomy_kingdom
+	taxonomy_family
+	taxonomy_genus_accepted
+	taxonomy_order
+	taxonomy_genus
+	taxonomy_phylum
 
 	population_longitude
 	population_latitude
@@ -139,16 +177,6 @@ if pop == None:
 	publication_additional_source_string
 	publication_DOI_ISBN
 	publication_authors
-
-	taxonomy_col_check_date
-	taxonomy_class
-	taxonomy_col_check_ok
-	taxonomy_kingdom
-	taxonomy_family
-	taxonomy_genus_accepted
-	taxonomy_order
-	taxonomy_genus
-	taxonomy_phylum
 
 	matrix_fec
 	matrix_non_independence
