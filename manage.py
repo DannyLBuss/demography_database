@@ -959,10 +959,9 @@ def csv_migrate_new():
     all_deets = []   
 
     for i, row in enumerate(input_file):
-        if i >= 6276:
-            print i              
-            data = convert_all_headers_new(row)
-            submit_new(data)
+        print i              
+        data = convert_all_headers_new(row)
+        submit_new(data)
 
     return 
 
