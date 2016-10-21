@@ -619,24 +619,24 @@ def submit_new(data):
         species.species_common = data["species_common"]
         species.species_iucn_status = IUCNStatus.query.filter_by(status_code=data["species_iucn_status_id"]).first()
 
-    db.session.add(species)
-    db.session.commit()
+        db.session.add(species)
+        db.session.commit()
 
-    ''' Species Version '''
-    species_version = Version()
-    species_version.version_number = 0
-    species_version.species = species
-    db.session.add(species_version) 
-    db.session.commit()  
-    species_version.version_of_id = species_version.id
-    species_version.checked = True
-    species_version.checked_count = 1
-    species_version.statuses = Status.query.filter_by(status_name="Green").first()
-    species_version.user = User.query.filter_by(username="admin").first()
-    species_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+        ''' Species Version '''
+        species_version = Version()
+        species_version.version_number = 0
+        species_version.species = species
+        db.session.add(species_version) 
+        db.session.commit()  
+        species_version.version_of_id = species_version.id
+        species_version.checked = True
+        species_version.checked_count = 1
+        species_version.statuses = Status.query.filter_by(status_name="Green").first()
+        species_version.user = User.query.filter_by(username="admin").first()
+        species_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
 
-    db.session.add(species_version)
-    db.session.commit()
+        db.session.add(species_version)
+        db.session.commit()
 
     ''' Publication '''    
     if data["publication_DOI_ISBN"] == None:
@@ -651,24 +651,24 @@ def submit_new(data):
         publication.additional_source_string = data["publication_additional_source_string"]
         publication.name = data["publication_journal_name"]
 
-    db.session.add(publication)
-    db.session.commit()
+        db.session.add(publication)
+        db.session.commit()
 
-    ''' Publication Version '''
-    publication_version = Version()
-    publication_version.version_number = 0
-    publication_version.publication = publication
-    db.session.add(publication_version) 
-    db.session.commit()  
-    publication_version.version_of_id = publication_version.id
-    publication_version.checked = True
-    publication_version.checked_count = 1
-    publication_version.statuses = Status.query.filter_by(status_name="Green").first()
-    publication_version.user = User.query.filter_by(username="admin").first()
-    publication_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+        ''' Publication Version '''
+        publication_version = Version()
+        publication_version.version_number = 0
+        publication_version.publication = publication
+        db.session.add(publication_version) 
+        db.session.commit()  
+        publication_version.version_of_id = publication_version.id
+        publication_version.checked = True
+        publication_version.checked_count = 1
+        publication_version.statuses = Status.query.filter_by(status_name="Green").first()
+        publication_version.user = User.query.filter_by(username="admin").first()
+        publication_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
 
-    db.session.add(publication_version)
-    db.session.commit()
+        db.session.add(publication_version)
+        db.session.commit()
 
     ''' Trait '''
     spand_ex_growth_type = SpandExGrowthType.query.filter_by(type_name=data["trait_spand_ex_growth_type_id"]).first()
@@ -688,24 +688,24 @@ def submit_new(data):
         trait.spand_ex_growth_type = spand_ex_growth_type
         trait.growth_form_raunkiaer = growth_form_raunkiaer
 
-    db.session.add(trait)
-    db.session.commit()
+        db.session.add(trait)
+        db.session.commit()
 
-    ''' Trait Version '''
-    trait_version = Version()
-    trait_version.version_number = 0
-    trait_version.trait = trait
-    db.session.add(trait_version) 
-    db.session.commit()  
-    trait_version.version_of_id = trait_version.id
-    trait_version.checked = True
-    trait_version.checked_count = 1
-    trait_version.statuses = Status.query.filter_by(status_name="Green").first()
-    trait_version.user = User.query.filter_by(username="admin").first()
-    trait_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+        ''' Trait Version '''
+        trait_version = Version()
+        trait_version.version_number = 0
+        trait_version.trait = trait
+        db.session.add(trait_version) 
+        db.session.commit()  
+        trait_version.version_of_id = trait_version.id
+        trait_version.checked = True
+        trait_version.checked_count = 1
+        trait_version.statuses = Status.query.filter_by(status_name="Green").first()
+        trait_version.user = User.query.filter_by(username="admin").first()
+        trait_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
 
-    db.session.add(trait_version)
-    db.session.commit()
+        db.session.add(trait_version)
+        db.session.commit()
 
     ''' Study '''
     # What if all none? Will they be grouped together?
@@ -721,24 +721,24 @@ def submit_new(data):
         study.publication_id = publication.id
         study.number_populations = data["study_number_populations"]
 
-    db.session.add(study)
-    db.session.commit()
+        db.session.add(study)
+        db.session.commit()
 
-    ''' Study Version '''
-    study_version = Version()
-    study_version.version_number = 0
-    study_version.study = study
-    db.session.add(study_version) 
-    db.session.commit()  
-    study_version.version_of_id = study_version.id
-    study_version.checked = True
-    study_version.checked_count = 1
-    study_version.statuses = Status.query.filter_by(status_name="Green").first()
-    study_version.user = User.query.filter_by(username="admin").first()
-    study_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+        ''' Study Version '''
+        study_version = Version()
+        study_version.version_number = 0
+        study_version.study = study
+        db.session.add(study_version) 
+        db.session.commit()  
+        study_version.version_of_id = study_version.id
+        study_version.checked = True
+        study_version.checked_count = 1
+        study_version.statuses = Status.query.filter_by(status_name="Green").first()
+        study_version.user = User.query.filter_by(username="admin").first()
+        study_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
 
-    db.session.add(study_version)
-    db.session.commit()
+        db.session.add(study_version)
+        db.session.commit()
 
 
     ''' Population '''
@@ -770,24 +770,24 @@ def submit_new(data):
         pop.ecoregion = ecoregion
         pop.continent = continent
 
-    db.session.add(pop)
-    db.session.commit()
+        db.session.add(pop)
+        db.session.commit()
 
-    ''' Population Version '''
-    population_version = Version()
-    population_version.version_number = 0
-    population_version.population = pop
-    db.session.add(population_version) 
-    db.session.commit()  
-    population_version.version_of_id = population_version.id
-    population_version.checked = True
-    population_version.checked_count = 1
-    population_version.statuses = Status.query.filter_by(status_name="Green").first()
-    population_version.user = User.query.filter_by(username="admin").first()
-    population_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+        ''' Population Version '''
+        population_version = Version()
+        population_version.version_number = 0
+        population_version.population = pop
+        db.session.add(population_version) 
+        db.session.commit()  
+        population_version.version_of_id = population_version.id
+        population_version.checked = True
+        population_version.checked_count = 1
+        population_version.statuses = Status.query.filter_by(status_name="Green").first()
+        population_version.user = User.query.filter_by(username="admin").first()
+        population_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
 
-    db.session.add(population_version)
-    db.session.commit()
+        db.session.add(population_version)
+        db.session.commit()
 
     ''' Taxonomy '''
     tax = Taxonomy.query.filter_by(species_id=species.id).first()
@@ -811,24 +811,24 @@ def submit_new(data):
         tax.col_check_date = data["taxonomy_col_check_date"]
         tax.col_check_ok = data["taxonomy_col_check_ok"]
 
-    db.session.add(tax)
-    db.session.commit()
+        db.session.add(tax)
+        db.session.commit()
 
-    ''' Taxonomy Version '''
-    taxonomy_version = Version()
-    taxonomy_version.version_number = 0
-    taxonomy_version.taxonomy = tax
-    db.session.add(taxonomy_version) 
-    db.session.commit()  
-    taxonomy_version.version_of_id = taxonomy_version.id
-    taxonomy_version.checked = True
-    taxonomy_version.checked_count = 1
-    taxonomy_version.statuses = Status.query.filter_by(status_name="Green").first()
-    taxonomy_version.user = User.query.filter_by(username="admin").first()
-    taxonomy_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+        ''' Taxonomy Version '''
+        taxonomy_version = Version()
+        taxonomy_version.version_number = 0
+        taxonomy_version.taxonomy = tax
+        db.session.add(taxonomy_version) 
+        db.session.commit()  
+        taxonomy_version.version_of_id = taxonomy_version.id
+        taxonomy_version.checked = True
+        taxonomy_version.checked_count = 1
+        taxonomy_version.statuses = Status.query.filter_by(status_name="Green").first()
+        taxonomy_version.user = User.query.filter_by(username="admin").first()
+        taxonomy_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
 
-    db.session.add(taxonomy_version)
-    db.session.commit()
+        db.session.add(taxonomy_version)
+        db.session.commit()
 
     ''' Matrix '''
     matrix = Matrix()
@@ -926,25 +926,25 @@ def submit_new(data):
         fixed.seed_stage_error = data["fixed_seed_stage_error"]
         fixed.smalls = Small.query.filter_by(small_name=data["fixed_small_id"]).first()
 
-    db.session.add(fixed)
-    db.session.commit()
+        db.session.add(fixed)
+        db.session.commit()
 
-    ''' fixed Version '''
-    fixed_version = Version()
-    fixed_version.version_number = 0
-    fixed_version.fixed = fixed
-    db.session.add(fixed_version) 
-    db.session.commit()
-    print "Fixed version id", fixed_version.id
-    fixed_version.version_of_id = fixed_version.id
-    fixed_version.checked = True
-    fixed_version.checked_count = 1
-    fixed_version.statuses = Status.query.filter_by(status_name="Green").first()
-    fixed_version.user = User.query.filter_by(username="admin").first()
-    fixed_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+        ''' fixed Version '''
+        fixed_version = Version()
+        fixed_version.version_number = 0
+        fixed_version.fixed = fixed
+        db.session.add(fixed_version) 
+        db.session.commit()
+        print "Fixed version id", fixed_version.id
+        fixed_version.version_of_id = fixed_version.id
+        fixed_version.checked = True
+        fixed_version.checked_count = 1
+        fixed_version.statuses = Status.query.filter_by(status_name="Green").first()
+        fixed_version.user = User.query.filter_by(username="admin").first()
+        fixed_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
 
-    db.session.add(fixed_version)
-    db.session.commit()
+        db.session.add(fixed_version)
+        db.session.commit()
 
 
 
