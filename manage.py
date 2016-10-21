@@ -1093,6 +1093,7 @@ def migrate_meta():
         Study.migrate()
         User.migrate()
         Version.migrate()
+        Institute.migrate()
     except:
         "Error migrating metadata"
     finally:
