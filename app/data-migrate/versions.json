@@ -2,7 +2,7 @@
 	"Version": {
 	    "Database": [{
             "database_name": "Exeter",
-            "database_description": "David Hodgson",
+            "database_description": "Dave Hodgson",
             "database_master_version" : "NA",
             "database_date_created" : "NA",
             "database_number_species_accepted" : "NA",
@@ -19,7 +19,16 @@
             "database_number_matrices" : "NA",
             "database_agreement" : "NA"
         }, {
-            "database_name": "COMADRE I",
+            "database_name": "COMPADRE 4",
+            "database_description": "Rob Salguero-Gomez, Owen Jones & Collaborators",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "COMADRE 2",
             "database_description": "Rob Salguero-Gomez, Owen Jones & Collaborators",
             "database_master_version" : "NA",
             "database_date_created" : "NA",
@@ -48,6 +57,69 @@
         }, {
             "database_name": "UQ",
             "database_description": "Yvonne Buckley and collaborators",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "Lincoln Park Zoo",
+            "database_description": "Judy Che-Castaldo and collaborators",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "Trinity College Dublin",
+            "database_description": "Yvonne Buckley and collaborators",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "MPIDR",
+            "database_description": "Rob Salguero-Gomez, Alex Scheuerlein, Jim Vaupel and collaborators",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "Southampton",
+            "database_description": "Tom Ezard and collaborators",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "SDU",
+            "database_description": "Owen Jones and collaborators",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "Sheffield",
+            "database_description": "Rob Salguero-Gomez and collaborators",
+            "database_master_version" : "NA",
+            "database_date_created" : "NA",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "Other",
+            "database_description": "Independent Researchers",
             "database_master_version" : "NA",
             "database_date_created" : "NA",
             "database_number_species_accepted" : "NA",

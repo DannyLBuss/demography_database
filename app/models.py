@@ -1186,7 +1186,7 @@ class Species(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # subspecies = db.Column(db.String(64))
     species_accepted = db.Column(db.String(64))
-    species_common = db.Column(db.String(64))
+    species_common = db.Column(db.String(200))
     iucn_status_id = db.Column(db.Integer, db.ForeignKey('iucn_status.id'))
     esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id'))
     invasive_status = db.Column(db.Boolean())
@@ -1780,17 +1780,17 @@ class MatrixValue(db.Model):
 class Matrix(db.Model):
     __tablename__ = 'matrices'
     id = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.Text())
+    uid = db.Column(db.String(200), index=True, unique=True)
     population_id = db.Column(db.Integer, db.ForeignKey('populations.id'))
     treatment_id = db.Column(db.Integer, db.ForeignKey('treatments.id'))
-    matrix_split = db.Column(db.Boolean())
+    matrix_split = db.Column(db.String(64))
     matrix_composition_id = db.Column(db.Integer, db.ForeignKey('matrix_compositions.id'))
     seasonal = db.Column(db.Boolean())
     survival_issue = db.Column(db.Float())
     n_intervals = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, what are these? Schema says, "Number of transition intervals represented in the matrix - should only be >1 for mean matrices", so 0 or 1 or more? Can it be a float, ie 0.8?
-    periodicity = db.Column(db.String(64))
+    periodicity = db.Column(db.String(200))
     # relative = db.Column(db.Boolean()) --> in schema with no description, must confirm with Judy what this relates to, any below?
-    matrix_criteria_size = db.Column(db.Boolean())
+    matrix_criteria_size = db.Column(db.String(200))
     matrix_criteria_ontogeny = db.Column(db.Boolean())
     matrix_criteria_age = db.Column(db.Boolean())
     study_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
@@ -1866,25 +1866,27 @@ class Matrix(db.Model):
         except AttributeError:
             composite = ''
 
-        treatment = self.treatment.treatment_name
+        # treatment = self.treatment.treatment_name
         try:
             start_year = self.matrix_start[-4:]
         except TypeError:
             start_year = ''
 
-        observation = self.observations.encode('utf-8')
-        matrix_a_string = self.matrix_a_string
+        # observation = self.observations.encode('utf-8')
+        # matrix_a_string = self.matrix_a_string
 
-        print(species_accepted, journal, year_pub, authors, pop_name, composite, treatment, start_year, observation, matrix_a_string)
-        uid_concat = '{}{}{}{}{}{}{}{}{}{}'.format(species_accepted, journal, year_pub, authors, pop_name, composite, treatment, start_year, observation, matrix_a_string)
+        import time
+        timestamp = time.time()
+        print(species_accepted, journal, year_pub, authors, pop_name, composite, start_year)
+        uid_concat = '{}{}{}{}{}{}{}{}'.format(species_accepted, journal, year_pub, authors, pop_name, composite, start_year, timestamp)
         uid_lower = uid_concat.lower()
         uid = re.sub('[\W_]+', '', uid_lower)
 
         self.uid = uid
         if Matrix.query.filter_by(uid=uid).first() == None:
-            db.session.add(self)
-            db.session.commit()
-            return uid
+            # db.session.add(self)
+            # db.session.commit()
+            print uid
         else:
             print("UID already exists")
             return 
@@ -2057,7 +2059,7 @@ class Version(db.Model):
     # This is as if treating as a whole row, but we are trying to get away from that
     version_uid = db.Column(db.Text())
     
-    versions = db.relationship("Version", backref="original_version", remote_side="Version.id")
+    versions = db.relationship("Version", backref="original_version", remote_side="Version.id", uselist=True)
     checked = db.Column(db.Boolean())
     
     status_id = db.Column(db.Integer, db.ForeignKey('statuses.id'))
@@ -2084,8 +2086,7 @@ class Version(db.Model):
     matrix_value_id = db.Column(db.Integer, db.ForeignKey('matrix_values.id'))
 
     author_contact_id = db.Column(db.Integer, db.ForeignKey('author_contacts.id'))
-    additional_source_id = db.Column(db.Integer, db.ForeignKey('additional_sources.id'))
-
+    additional_source_id = db.Column(db.Integer, db.ForeignKey('additional_sources.id')) 
     
 
 
@@ -2093,7 +2094,7 @@ class Version(db.Model):
     def migrate():
         Database.migrate()
 
-    def __repr__(self, key):
+    def __repr__(self):
         return '<Version %r>' % self.id
 
 

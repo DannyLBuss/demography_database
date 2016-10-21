@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 import os, csv
 COV = None
@@ -565,6 +568,44 @@ def convert_all_headers(dict):
 
     return new_dict
 
+def generate_uid(species, publication, population, matrix):
+    import re
+
+    species_accepted = species.species_accepted
+    journal = publication.name
+    year_pub = publication.year
+
+    try:
+        authors = publication.authors[:15].encode('utf-8')
+    except:
+        authors = ''
+
+    try:
+        pop_name = population.name.encode('utf-8')[:15]
+    except:
+        pop_name = ''
+    
+    print "population name", pop_name
+    try:
+        composite = matrix.matrix_composition.comp_name
+    except AttributeError:
+        composite = ''
+
+    try:
+        start_year = matrix.matrix_start_year
+    except TypeError:
+        start_year = ''
+
+    import time
+    timestamp = time.time()
+    
+    uid_concat = '{}{}{}{}{}{}{}{}'.format(species_accepted, journal, year_pub, authors, pop_name, composite, start_year, timestamp)
+    uid_lower = uid_concat.lower()
+    uid = re.sub('[\W_]+', '', uid_lower)
+
+    print uid
+    return uid
+
 @manager.command
 def submit_new(data):
     species = Species.query.filter_by(species_accepted=data["species_accepted"]).first()
@@ -578,6 +619,24 @@ def submit_new(data):
         species.species_common = data["species_common"]
         species.species_iucn_status = IUCNStatus.query.filter_by(status_code=data["species_iucn_status_id"]).first()
 
+    db.session.add(species)
+    db.session.commit()
+
+    ''' Species Version '''
+    species_version = Version()
+    species_version.version_number = 0
+    species_version.species = species
+    db.session.add(species_version) 
+    db.session.commit()  
+    species_version.version_of_id = species_version.id
+    species_version.checked = True
+    species_version.checked_count = 1
+    species_version.statuses = Status.query.filter_by(status_name="Green").first()
+    species_version.user = User.query.filter_by(username="admin").first()
+    species_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+
+    db.session.add(species_version)
+    db.session.commit()
 
     ''' Publication '''    
     if data["publication_DOI_ISBN"] == None:
@@ -592,7 +651,26 @@ def submit_new(data):
         publication.additional_source_string = data["publication_additional_source_string"]
         publication.name = data["publication_journal_name"]
 
-    ''' Plant Trait '''
+    db.session.add(publication)
+    db.session.commit()
+
+    ''' Publication Version '''
+    publication_version = Version()
+    publication_version.version_number = 0
+    publication_version.publication = publication
+    db.session.add(publication_version) 
+    db.session.commit()  
+    publication_version.version_of_id = publication_version.id
+    publication_version.checked = True
+    publication_version.checked_count = 1
+    publication_version.statuses = Status.query.filter_by(status_name="Green").first()
+    publication_version.user = User.query.filter_by(username="admin").first()
+    publication_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+
+    db.session.add(publication_version)
+    db.session.commit()
+
+    ''' Trait '''
     spand_ex_growth_type = SpandExGrowthType.query.filter_by(type_name=data["trait_spand_ex_growth_type_id"]).first()
     dicot_monoc = DicotMonoc.query.filter_by(dicot_monoc_name=data["trait_dicot_monoc_id"]).first()
     growth_form_raunkiaer = GrowthFormRaunkiaer.query.filter_by(form_name=data["trait_growth_form_raunkiaer_id"]).first()
@@ -610,6 +688,25 @@ def submit_new(data):
         trait.spand_ex_growth_type = spand_ex_growth_type
         trait.growth_form_raunkiaer = growth_form_raunkiaer
 
+    db.session.add(trait)
+    db.session.commit()
+
+    ''' Trait Version '''
+    trait_version = Version()
+    trait_version.version_number = 0
+    trait_version.trait = trait
+    db.session.add(trait_version) 
+    db.session.commit()  
+    trait_version.version_of_id = trait_version.id
+    trait_version.checked = True
+    trait_version.checked_count = 1
+    trait_version.statuses = Status.query.filter_by(status_name="Green").first()
+    trait_version.user = User.query.filter_by(username="admin").first()
+    trait_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+
+    db.session.add(trait_version)
+    db.session.commit()
+
     ''' Study '''
     # What if all none? Will they be grouped together?
     purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first()
@@ -624,6 +721,25 @@ def submit_new(data):
         study.publication_id = publication.id
         study.number_populations = data["study_number_populations"]
 
+    db.session.add(study)
+    db.session.commit()
+
+    ''' Study Version '''
+    study_version = Version()
+    study_version.version_number = 0
+    study_version.study = study
+    db.session.add(study_version) 
+    db.session.commit()  
+    study_version.version_of_id = study_version.id
+    study_version.checked = True
+    study_version.checked_count = 1
+    study_version.statuses = Status.query.filter_by(status_name="Green").first()
+    study_version.user = User.query.filter_by(username="admin").first()
+    study_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+
+    db.session.add(study_version)
+    db.session.commit()
+
 
     ''' Population '''
     invasive_status_study = InvasiveStatusStudy.query.filter_by(status_name=data["population_invasive_status_study_id"]).first()
@@ -632,6 +748,8 @@ def submit_new(data):
     continent = Continent.query.filter_by(continent_name=data["population_continent_id"]).first()
 
     pop = Population.query.filter_by(name=data["population_name"], species_id=species.id, publication_id=publication.id).first()
+
+
 
     if pop == None:
         pop = Population()
@@ -652,7 +770,182 @@ def submit_new(data):
         pop.ecoregion = ecoregion
         pop.continent = continent
 
-        print vars(pop)
+    db.session.add(pop)
+    db.session.commit()
+
+    ''' Population Version '''
+    population_version = Version()
+    population_version.version_number = 0
+    population_version.population = pop
+    db.session.add(population_version) 
+    db.session.commit()  
+    population_version.version_of_id = population_version.id
+    population_version.checked = True
+    population_version.checked_count = 1
+    population_version.statuses = Status.query.filter_by(status_name="Green").first()
+    population_version.user = User.query.filter_by(username="admin").first()
+    population_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+
+    db.session.add(population_version)
+    db.session.commit()
+
+    ''' Taxonomy '''
+    tax = Taxonomy.query.filter_by(species_id=species.id).first()
+    if tax == None:
+        tax = Taxonomy()
+        tax.species_author = species.species_author
+        tax.species_accepted = species.species_accepted
+        tax.authority = None
+        tax.tpl_version = None
+        tax.infraspecies_accepted = None
+        tax.species_epithet_accepted = None
+        tax.genus_accepted = data["taxonomy_genus_accepted"]
+        tax.genus = data["taxonomy_genus"]
+        tax.family = data["taxonomy_family"]
+        tax.tax_order = data["taxonomy_order"]
+        tax.tax_class = data["taxonomy_class"]
+        tax.phylum = data["taxonomy_phylum"]
+        tax.kingdom = data["taxonomy_kingdom"]
+        tax.species = species
+        tax.publication = publication
+        tax.col_check_date = data["taxonomy_col_check_date"]
+        tax.col_check_ok = data["taxonomy_col_check_ok"]
+
+    db.session.add(tax)
+    db.session.commit()
+
+    ''' Taxonomy Version '''
+    taxonomy_version = Version()
+    taxonomy_version.version_number = 0
+    taxonomy_version.taxonomy = tax
+    db.session.add(taxonomy_version) 
+    db.session.commit()  
+    taxonomy_version.version_of_id = taxonomy_version.id
+    taxonomy_version.checked = True
+    taxonomy_version.checked_count = 1
+    taxonomy_version.statuses = Status.query.filter_by(status_name="Green").first()
+    taxonomy_version.user = User.query.filter_by(username="admin").first()
+    taxonomy_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+
+    db.session.add(taxonomy_version)
+    db.session.commit()
+
+    ''' Matrix '''
+    matrix = Matrix()
+    treatment = Treatment.query.filter_by(treatment_name=data["matrix_treatment_id"]).first()
+    
+    if treatment == None:
+        treatment = Treatment(treatment_name=data["matrix_treatment_id"])
+    
+    matrix.treatment = treatment
+    matrix.matrix_split = data["matrix_split"]
+    
+    composition = MatrixComposition.query.filter_by(comp_name=data["matrix_composition_id"]).first()
+    
+
+    matrix.matrix_composition = composition
+
+    
+    matrix.survival_issue = data["matrix_survival_issue"]    
+    matrix.periodicity = data["matrix_periodicity"]
+    matrix.matrix_criteria_size = data["matrix_criteria_size"]
+    matrix.matrix_criteria_ontogeny = coerce_boolean(data["matrix_criteria_ontogeny"])
+    matrix.matrix_criteria_age = coerce_boolean(data["matrix_criteria_age"]) 
+    
+    matrix.matrix_start_month = data["matrix_start_month"]
+    matrix.matrix_end_month = data["matrix_end_month"]
+    matrix.matrix_start_year = data["matrix_start_year"]
+    matrix.matrix_end_year = data["matrix_end_year"]
+
+
+    start_season = Season.query.filter_by(season_id=data["matrix_start_season_id"]).first()
+    end_season = Season.query.filter_by(season_id=data["matrix_start_season_id"]).first()
+
+    if start_season != None:
+        matrix.start_season_id = start_season.id
+
+    if end_season != None:
+        matrix.end_season_id = end_season.id
+        
+    matrix.matrix_fec = coerce_boolean(data["matrix_fec"])
+
+    matrix.matrix_a_string = data["matrix_a_string"]
+    matrix.matrix_f_string = data["matrix_f_string"]
+    matrix.matrix_u_string = data["matrix_u_string"]
+    matrix.matrix_c_string = data["matrix_c_string"]
+
+    matrix.non_independence = data["matrix_non_independence"]
+    matrix.dimension = data["matrix_dimension"]
+    matrix.non_independence_author = data["matrix_non_independence_author"]
+    matrix.matrix_complete = data["matrix_complete"]
+    matrix.vectors_includes_na = data["matrix_vectors_includes_na"]
+    matrix.class_number = data["matrix_class_number"]
+    matrix.observations = data["matrix_observations"]
+
+    captivities = Captivity.query.filter_by(cap_code=data["matrix_captivity_id"]).first()
+
+    matrix.captivities = captivities
+    matrix.class_author = data["matrix_class_author"]
+    matrix.matrix_difficulty = data["matrix_difficulty"]
+    matrix.independent = data["matrix_independent"]
+    matrix.seasonal = data["matrix_seasonal"]
+
+    matrix.uid = generate_uid(species, publication, pop, matrix)
+
+    matrix.population = pop
+    matrix.study = study
+
+    db.session.add(matrix)
+    db.session.commit()
+
+    ''' matrix Version '''
+    matrix_version = Version()
+    matrix_version.version_number = 0
+    matrix_version.matrix = matrix
+    db.session.add(matrix_version) 
+    db.session.commit()
+    print "Matrix version id", matrix_version.id
+    matrix_version.version_of_id = matrix_version.id
+    matrix_version.checked = True
+    matrix_version.checked_count = 1
+    matrix_version.statuses = Status.query.filter_by(status_name="Green").first()
+    matrix_version.user = User.query.filter_by(username="admin").first()
+    matrix_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+
+    db.session.add(matrix_version)
+    db.session.commit()
+
+    ''' Fixed '''
+
+    fixed = Fixed.query.filter_by(matrix=matrix).first()
+
+    if fixed == None:
+        fixed = Fixed()
+        fixed.matrix = matrix
+        fixed.census_timings = CensusTiming.query.filter_by(census_name=data["fixed_census_timing_id"]).first()
+        fixed.seed_stage_error = data["fixed_seed_stage_error"]
+        fixed.smalls = Small.query.filter_by(small_name=data["fixed_small_id"]).first()
+
+    db.session.add(fixed)
+    db.session.commit()
+
+    ''' fixed Version '''
+    fixed_version = Version()
+    fixed_version.version_number = 0
+    fixed_version.fixed = fixed
+    db.session.add(fixed_version) 
+    db.session.commit()
+    print "Fixed version id", fixed_version.id
+    fixed_version.version_of_id = fixed_version.id
+    fixed_version.checked = True
+    fixed_version.checked_count = 1
+    fixed_version.statuses = Status.query.filter_by(status_name="Green").first()
+    fixed_version.user = User.query.filter_by(username="admin").first()
+    fixed_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
+
+    db.session.add(fixed_version)
+    db.session.commit()
+
 
 
 
@@ -665,9 +958,11 @@ def csv_migrate_new():
 
     all_deets = []   
 
-    for i, row in enumerate(input_file):                   
-        data = convert_all_headers_new(row)
-        submit_new(data)
+    for i, row in enumerate(input_file):
+        if i >= 6276:
+            print i              
+            data = convert_all_headers_new(row)
+            submit_new(data)
 
     return 
 
@@ -766,6 +1061,8 @@ def convert_all_headers_new(dict):
     for key, value in new_dict.iteritems():
         if value == "NA":
             new_dict[key] = None
+        if value == "":
+            new_dict[key] = None
 
 
     return new_dict
@@ -795,6 +1092,7 @@ def migrate_meta():
         Fixed.migrate()
         Study.migrate()
         User.migrate()
+        Version.migrate()
     except:
         "Error migrating metadata"
     finally:
