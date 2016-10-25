@@ -28,7 +28,7 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'mysql://demog_compadre:sitl3015@localhost/demog_compadre'
+        'mysql://root:jeh5t@localhost/demog_compadre'
 
 
 class TestingConfig(Config):

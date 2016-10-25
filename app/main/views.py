@@ -277,7 +277,7 @@ def trait_form(id):
     
     if form.validate_on_submit():
         trait.max_height = form.max_height.data
-        trait.growth_type = form.growth_type.data
+        trait.organism_type = form.organism_type.data
         trait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
         trait.reproductive_repetition = form.reproductive_repetition.data
         trait.dicot_monoc = form.dicot_monoc.data
@@ -286,7 +286,7 @@ def trait_form(id):
         return redirect(url_for('.species_page',id=species.id))
     
     form.max_height.data = trait.max_height
-    form.growth_type.data = trait.growth_type
+    form.organism_type.data = trait.organism_type
     form.growth_form_raunkiaer.data = trait.growth_form_raunkiaer
     form.reproductive_repetition.data = trait.reproductive_repetition
     form.dicot_monoc.data = trait.dicot_monoc
@@ -552,7 +552,7 @@ def trait_new_form(id_sp):
         trait.species_id = species.id
         
         trait.max_height = form.max_height.data
-        trait.growth_type = form.growth_type.data
+        trait.organism_type = form.organism_type.data
         trait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
         trait.reproductive_repetition = form.reproductive_repetition.data
         trait.dicot_monoc = form.dicot_monoc.data

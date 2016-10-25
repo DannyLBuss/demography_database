@@ -145,7 +145,7 @@ class PopulationForm(Form):
 
 class TraitForm(Form):
     max_height = FloatField('Max Height')
-    growth_type = QuerySelectField('Growth Type',
+    organism_type = QuerySelectField('Growth Type',
             query_factory=lambda: OrganismType.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.type_name)
     growth_form_raunkiaer = QuerySelectField('Growth Form Raunkiaer',
@@ -234,7 +234,7 @@ class EntryForm(Form):
 
 	# Plant Traits
 	max_height = StringField('Max Height')
-	growth_type = QuerySelectField('Growth Type',
+	organism_type = QuerySelectField('Growth Type',
             query_factory=lambda: OrganismType.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.type_name)
 	growth_form_raunkiaer = QuerySelectField('Growth Form Raunkiaer',

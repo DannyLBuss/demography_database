@@ -160,7 +160,7 @@ def add_to_classes(data):
     pop = Population(data['species_author'], data['name'], data['geometries_lat_min'], data['geometries_lon_deg'], data['geometries_lat_ns'], data['geometries_lat_we'], \
         data['geometries_lat_sec'], data['geometries_lon_sec'], data['geometries_lon_min'], data['geometries_lat_deg'], data['geometries_altitude'], data['ecoregion_id'], \
         data['country'], data['continent_id'], matrix)
-    trait = Trait(data['growth_type_id'], data['dicot_monoc_id'], data['angio_gymno_id'])
+    trait = Trait(data['organism_type_id'], data['dicot_monoc_id'], data['angio_gymno_id'])
     pub = Publication(data['authors'], data['year'], data['DOI_ISBN'], data['additional_source_string'], tax, pop, trait, study, data['pub_name'])
 
     entry = Entry(pub, study, pop, tax, trait, matrix)
@@ -172,7 +172,7 @@ def convert_all_headers(dict):
     new_dict = {}
     new_dict['additional_source_string'] = dict['AdditionalSource']
     new_dict['matrix_end_season_id'] = dict['MatrixEndSeason']
-    new_dict['growth_type_id'] = dict['GrowthType']
+    new_dict['organism_type_id'] = dict['GrowthType']
     new_dict['geometries_lat_sec'] = dict['LatSec']
     new_dict['study_duration'] = dict['StudyDuration']
     new_dict['matrix_values_c'] = dict['matrixC']

@@ -140,7 +140,7 @@ dict['Ecoregion']
 ''' Plant Traits '''
 species #Fkey
 max_height
-growth_type #Fkey
+organism_type #Fkey
 growth_form_raunkiaer #Fkey
 reproductive_repetition #Fkey
 dicot_monoc #Fkey
