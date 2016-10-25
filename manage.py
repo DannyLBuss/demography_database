@@ -706,6 +706,8 @@ def convert_all_headers_new(dict):
             new_dict[key] = None
         if value == "":
             new_dict[key] = None
+        if value == "None":
+            new_dict[key] = None
 
 
     return new_dict
