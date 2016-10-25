@@ -118,7 +118,7 @@
     $('.taxon_name').each(function () {
         var txt = $(this).text();
         
-        getData("https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&titles="+txt+"&redirects=true", function(data) {
+        getData("https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&origin=*&titles="+txt+"&redirects=true", function(data) {
             var wiki_text = data;
             if (data != null){
                 var wiki_text = data.replace(/<b>/g, '');
