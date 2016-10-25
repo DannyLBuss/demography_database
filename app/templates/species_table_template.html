@@ -40,7 +40,7 @@
     <table class="table" >
         <thead>
             <th>Growth type
-                <button type="button" class="sort btn btn-xs" data-sort="growth_type"> Sort </button>
+                <button type="button" class="sort btn btn-xs" data-sort="organism_type"> Sort </button>
             </th>
             <th>Kingdom <button type="button" class="sort btn btn-xs" data-sort="kingdom"> Sort </button></th>
             <th>Phylum <button type="button" class="sort btn btn-xs" data-sort="phylum"> Sort </button></th>
@@ -54,7 +54,7 @@
                 {% for taxonomy in s.taxonomies %}
                     <tr>
                         {% for trait in s.traits %}
-                        <td class="growthtype">{{ trait.growth_type.type_name }}</td>
+                        <td class="growthtype">{{ trait.organism_type.type_name }}</td>
                         {% endfor %}
                         <td class="kingdom" onClick="addTextTag('{{ taxonomy.kingdom }}');">{{ taxonomy.kingdom }}</td>
                         <td class="phylum">{{ taxonomy.phylum }}</td>
