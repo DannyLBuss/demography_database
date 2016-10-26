@@ -270,7 +270,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" data-toggle="collapse" href="#matrix_{{matrix.id}}2">
                         <h4 id="{{matrix.id}}" class="panel-title">
-                        <p><span class="label label-default">{{ matrix.matrix_composition.comp_name }}</span> <span class="label label-default">{{ matrix.matrix_dimension }} x {{ matrix.matrix_dimension }}</span> <span class="label label-default">Periodicity: {{ matrix.periodicity }}</span> <span class="label label-default">{{ matrix.matrix_start }}-{{ matrix.matrix_end }}</span> <span background-color="#" class="label label-default">{{ matrix.treatment.type_name }}</span> <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span> <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span><small> ID: {{matrix.id}}</small></p>
+                        <p><span class="label label-default">{{ matrix.matrix_composition.comp_name }}</span> <span class="label label-default">{{ matrix.matrix_dimension }} x {{ matrix.matrix_dimension }}</span> <span class="label label-default">Periodicity: {{ matrix.periodicity }}</span> <span class="label label-default">{% if matrix.matrix_start_month %} {{ matrix.matrix_start_month }}/{% endif %}{{ matrix.matrix_start_year }} to {% if matrix.matrix_end_month %} {{ matrix.matrix_end_month }}/{% endif %}{{ matrix.matrix_end_year }}</span> <span background-color="#" class="label label-default">{{ matrix.treatment.type_name }}</span> <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span> <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span><small> ID: {{matrix.id}}</small></p>
                     </h4> </div>
                     <div id="matrix_{{matrix.id}}2" class="panel-collapse collapse">
                         <li class="list-group-item">
@@ -293,17 +293,20 @@
                             </ul>
                             <div class="tab-content">
                                 <div id="home_{{matrix.id}}" class="tab-pane in active">
-                                    <div class="table-responsive matClasses"> {{ matrix.matrix_class_string }} </div>
+                                    <div class="table-responsive matClasses"> {{ matrix.class_author }} </div>
                                     <div class="table-responsive matA"> {{ matrix.matrix_a_string }} </div>
                                 </div>
                                 <div id="menu_{{matrix.id}}_1" class="tab-pane">
-                                    <div class="table-responsive"> INSERT_MAT_U </div>
+                                    <div class="table-responsive matClasses"> {{ matrix.class_author }} </div>
+                                    <div class="table-responsive matA"> {{ matrix.matrix_u_string }} </div>
                                 </div>
                                 <div id="menu_{{matrix.id}}_2" class="tab-pane">
-                                    <div class="table-responsive"> INSERT_MAT_F </div>
+                                    <div class="table-responsive matClasses"> {{ matrix.class_author }} </div>
+                                    <div class="table-responsive matA"> {{ matrix.matrix_f_string }} </div>
                                 </div>
                                 <div id="menu_{{matrix.id}}_3" class="tab-pane">
-                                    <div class="table-responsive"> INSERT_MAT_C </div>
+                                    <div class="table-responsive matClasses"> {{ matrix.class_author }} </div>
+                                    <div class="table-responsive matA"> {{ matrix.matrix_c_string }} </div>
                                 </div>
                                 <div id="menu_{{matrix.id}}_4" class="tab-pane">
                                     <div class="row">
@@ -355,6 +358,7 @@
         var matrix_string = divs[ii].innerHTML;
         var matrix_string = matrix_string.replace(" [", "");
         var matrix_string = matrix_string.replace("] ", "");
+        var matrix_string = matrix_string.replace(/;/g, " ");
         var matrix_string_array = matrix_string.split(" ");
         matSize = Math.sqrt(matrix_string_array.length);
         var table_new = document.createElement('TABLE');
@@ -382,6 +386,7 @@
     var divs = document.getElementsByClassName("matClasses");
     for (var ii = 0; ii < divs.length; ii++) {
         var matrix_string = divs[ii].innerHTML;
+        var matrix_string = matrix_string.substring(4,matrix_string.length - 3);
         var matrix_string_array = matrix_string.split("|");
         numberOfClasses= matrix_string_array.length;
         var table_new = document.createElement('TABLE');
