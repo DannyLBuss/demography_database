@@ -257,7 +257,12 @@
                 <li>Studied for {{ population.study.study_duration }} year(s) from {{ population.study.study_start }} to {{ population.study.study_end }} <small>ID: {{ population.study.id }}</small></li>
                 <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
                 <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}
-                    <li><strong>Geometries: </strong><span class="coordinates">{{ population.geometries }}</span></li>
+                {% if population.altitude %}
+                <li><strong>Location: </strong><span class="coordinates">{{ population.latitude }}, {{ population.longitude }} </span></li>
+                <li><strong>Altitude: </strong><span>{{ population.altitude }}m</span></li>
+                {% else %}
+                <li>No coordinates given</li>
+                {% endif %}
             </ul>
             <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> Show/hide matrices </button>
         
@@ -599,7 +604,7 @@ function htmlreplace(a, b, element) {
     }
 }
 
-htmlreplace('None', 'Unknown');
+// htmlreplace('None', 'Unknown');
 </script>
 
 
