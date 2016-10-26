@@ -229,7 +229,6 @@ def generate_uid(species, publication, population, matrix):
     except:
         pop_name = ''
     
-    print "population name", pop_name
     try:
         composite = matrix.matrix_composition.comp_name
     except AttributeError:
@@ -246,8 +245,6 @@ def generate_uid(species, publication, population, matrix):
     uid_concat = '{}{}{}{}{}{}{}{}'.format(species_accepted, journal, year_pub, authors, pop_name, composite, start_year, timestamp)
     uid_lower = uid_concat.lower()
     uid = re.sub('[\W_]+', '', uid_lower)
-
-    print uid
     return uid
 
 @manager.command
@@ -508,10 +505,10 @@ def submit_new(data):
     end_season = EndSeason.query.filter_by(season_id=data["matrix_end_season_id"]).first()
 
     if start_season != None:
-        matrix.start_season_id = start_season.id
+        matrix.start_season = start_season
 
     if end_season != None:
-        matrix.end_season_id = end_season.id
+        matrix.end_season = end_season
         
     matrix.matrix_fec = coerce_boolean(data["matrix_fec"])
 
@@ -550,7 +547,6 @@ def submit_new(data):
     matrix_version.matrix = matrix
     db.session.add(matrix_version) 
     db.session.commit()
-    print "Matrix version id", matrix_version.id
     matrix_version.version_of_id = matrix_version.id
     matrix_version.checked = True
     matrix_version.checked_count = 1
@@ -581,7 +577,6 @@ def submit_new(data):
         fixed_version.fixed = fixed
         db.session.add(fixed_version) 
         db.session.commit()
-        print "Fixed version id", fixed_version.id
         fixed_version.version_of_id = fixed_version.id
         fixed_version.checked = True
         fixed_version.checked_count = 1
