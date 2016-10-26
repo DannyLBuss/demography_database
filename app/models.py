@@ -1000,13 +1000,13 @@ class MatrixComposition(db.Model):
     def __repr__(self):
         return str(self.id)
 
-class Season(db.Model):
-    __tablename__ = 'seasons'
+class StartSeason(db.Model):
+    __tablename__ = 'start_seasons'
     id = db.Column(db.Integer, primary_key=True)
     season_id = db.Column(db.Integer())
     season_name = db.Column(db.String(64), index=True)
 
-    matrices = db.relationship("Matrix", backref="Matrix.matrix_start_season_id",primaryjoin="Season.id==Matrix.matrix_end_season_id", lazy="dynamic")
+    matrices = db.relationship("Matrix", backref="start_season", lazy="dynamic")
 
     @staticmethod
     def migrate():
@@ -1016,9 +1016,38 @@ class Season(db.Model):
             nodes = json_data["Season"]
 
             for node in nodes:
-                i = Season.query.filter_by(season_id=node['season_id']).first()
+                i = StartSeason.query.filter_by(season_id=node['season_id']).first()
                 if i is None:
-                    i = Season()
+                    i = StartSeason()
+
+                i.season_id = node['season_id']
+                i.season_name = node['season_name']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def __repr__(self):
+        return str(self.id)
+
+class EndSeason(db.Model):
+    __tablename__ = 'end_seasons'
+    id = db.Column(db.Integer, primary_key=True)
+    season_id = db.Column(db.Integer())
+    season_name = db.Column(db.String(64), index=True)
+
+    matrices = db.relationship("Matrix", backref="end_season", lazy="dynamic")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/matrices.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Matrix"]
+            nodes = json_data["Season"]
+
+            for node in nodes:
+                i = EndSeason.query.filter_by(season_id=node['season_id']).first()
+                if i is None:
+                    i = EndSeason()
 
                 i.season_id = node['season_id']
                 i.season_name = node['season_name']
@@ -1800,10 +1829,8 @@ class Matrix(db.Model):
     matrix_end_year = db.Column(db.Integer)
     matrix_end_month = db.Column(db.Integer())
     matrix_end = db.Column(db.String(64)) # These will include month, day, etc. Create method to return these - matrix_start.day() matrix_start.year() etc
-    matrix_start_season_id = db.Column(db.Integer, db.ForeignKey('seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
-    matrix_start_season = db.relationship('Season', foreign_keys='Matrix.matrix_start_season_id')
-    matrix_end_season_id = db.Column(db.Integer, db.ForeignKey('seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
-    matrix_end_season = db.relationship('Season', foreign_keys='Matrix.matrix_end_season_id')
+    matrix_start_season_id = db.Column(db.Integer, db.ForeignKey('start_seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
+    matrix_end_season_id = db.Column(db.Integer, db.ForeignKey('end_seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
     matrix_fec = db.Column(db.Boolean())
     matrix_a_string = db.Column(db.Text())
     matrix_u_string = db.Column(db.Text())
@@ -1847,7 +1874,8 @@ class Matrix(db.Model):
     @staticmethod
     def migrate():
         MatrixComposition.migrate()
-        Season.migrate()
+        StartSeason.migrate()
+        EndSeason.migrate()
         StudiedSex.migrate()
         Captivity.migrate()
         Status.migrate()

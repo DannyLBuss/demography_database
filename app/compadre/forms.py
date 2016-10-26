@@ -7,7 +7,7 @@ from flask.ext.pagedown.fields import PageDownField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from ..models import IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
-    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, Trait, \
+    TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute
 

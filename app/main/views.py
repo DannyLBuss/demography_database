@@ -11,7 +11,7 @@ from .. import db
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
-                    TransitionType, MatrixComposition, Season, StudiedSex, Captivity, Species, Taxonomy, PurposeEndangered, PurposeWeed, Trait, \
+                    TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, PurposeEndangered, PurposeWeed, Trait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Institute
 from ..decorators import admin_required, permission_required, crossdomain
@@ -56,7 +56,7 @@ def meta_tables_json():
                    "Publication" : {"SourceType" : [], "Database" : [], "Purpose" : [], "MissingData" : [] }, \
                    "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] , "InvasiveStatusStudy" : [], "InvasiveStatusElsewhere" : []}, \
                    "StageType" : { "StageTypeClass" : [] }, "MatrixValue" : { "TransitionType" : [] }, \
-                   "Matrix" : {"MatrixComposition" : [], "Season" : [], "StudiedSex" : [], "Captivity" : []}, \
+                   "Matrix" : {"MatrixComposition" : [], "StartSeason" : [], "EndSeason" : [], "StudiedSex" : [], "Captivity" : []}, \
                    "Fixed" : { "Small": [], "CensusTiming" : [] },
                    "Study" : { "PurposeEndangered": [], "PurposeWeed" : []}}
 
@@ -81,7 +81,8 @@ def meta_tables_json():
     meta_tables["StageType"]["StageTypeClass"].extend(StageTypeClass.query.all())
     meta_tables["MatrixValue"]["TransitionType"].extend(TransitionType.query.all())
     meta_tables["Matrix"]["MatrixComposition"].extend(MatrixComposition.query.all())
-    meta_tables["Matrix"]["Season"].extend(Season.query.all())
+    meta_tables["Matrix"]["StartSeason"].extend(StartSeason.query.all())
+    meta_tables["Matrix"]["EndSeason"].extend(EndSeason.query.all())
     meta_tables["Matrix"]["StudiedSex"].extend(StudiedSex.query.all())
     meta_tables["Matrix"]["Captivity"].extend(Captivity.query.all())
     meta_tables["Fixed"]["Small"].extend(Small.query.all())
