@@ -378,6 +378,17 @@ td {
     visibility: hidden;
 }
 
+.non_empty_box {
+
+}
+
+.empty_box {
+    color:#909090;
+    background-color:rgb(247, 247, 247);
+
+}
+
+
 /* Tree stuff */
 
 .node {
