@@ -360,6 +360,7 @@
 
 
 <script>
+    
     // Change matrix strings into tables
     var divs = document.getElementsByClassName("matA");
     for (var ii = 0; ii < divs.length; ii++) {
@@ -379,7 +380,18 @@
             tableBody.appendChild(tr);
             for (var j = 0; j < matSize; j++) {
                 var td = document.createElement('TD');
-                td.appendChild(document.createTextNode(matrix_string_array[index]));
+                var value = Number(matrix_string_array[index])
+                if (value != 0) {
+                    if (value.toFixed(3) != 0) {
+                        td.appendChild(document.createTextNode(value.toFixed(3)));
+                    } else {
+                        td.appendChild(document.createTextNode(value.toPrecision(2)))
+                    }
+                    td.className = 'non_empty_box'
+                } else {
+                    td.appendChild(document.createTextNode(value.toFixed(0)));
+                    td.className = 'empty_box'
+                }
                 tr.appendChild(td);
                 index = index + 1;
             }
@@ -579,6 +591,8 @@ function htmlreplace(a, b, element) {
 }
 
 // htmlreplace('None', 'Unknown');
+    htmlreplace('&lt;', '<');
+    htmlreplace('&gt;', '>');
 </script>
 
 
