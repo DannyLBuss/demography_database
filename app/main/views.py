@@ -197,7 +197,7 @@ def species_form(id):
         species.iucn_status = form.iucn_status.data
         species.esa_status = form.esa_status.data
         species.invasive_status = form.invasive_status.data
-        species.GBIF_key = form.GBIF_key.data
+        species.gbif_taxon_key = form.gbif_taxon_key.data
         species.image_path = form.image_path.data
         species.image_path2 = form.image_path2.data
 
@@ -210,7 +210,7 @@ def species_form(id):
     form.iucn_status.data = species.iucn_status
     form.esa_status.data = species.esa_status
     form.invasive_status.data = species.invasive_status
-    form.GBIF_key.data = species.GBIF_key
+    form.gbif_taxon_key.data = species.gbif_taxon_key
     form.image_path.data = species.image_path
     form.image_path2.data = species.image_path2
     
@@ -232,7 +232,6 @@ def taxonomy_form(id):
     if form.validate_on_submit():
         taxonomy.species_author = form.species_author.data
         taxonomy.authority = form.authority.data
-        taxonomy.taxonomic_status = form.taxonomic_status.data
         taxonomy.tpl_version = form.tpl_version.data
         taxonomy.infraspecies_accepted = form.infraspecies_accepted.data
         taxonomy.species_epithet_accepted = form.species_epithet_accepted.data 
@@ -249,7 +248,6 @@ def taxonomy_form(id):
     
     form.species_author.data = taxonomy.species_author
     form.authority.data = taxonomy.authority
-    form.taxonomic_status.data = taxonomy.taxonomic_status
     form.tpl_version.data = taxonomy.tpl_version
     form.infraspecies_accepted.data = taxonomy.infraspecies_accepted
     form.species_epithet_accepted.data = taxonomy.species_epithet_accepted
@@ -373,6 +371,9 @@ def population_form(id):
         population.ecoregion = form.ecoregion.data
         population.country = form.country.data
         population.continent = form.continent.data
+        population.latitude = form.latitude.data
+        population.longitude = form.longitude.data
+        population.altitude = form.altitude.data
         flash('The population infomation has been updated.')
         return redirect(url_for('.species_page',id=species.id))
         
@@ -380,6 +381,9 @@ def population_form(id):
     form.ecoregion.data = population.ecoregion
     form.country.data = population.country
     form.continent.data = population.continent
+    form.latitude.data = population.latitude
+    form.longitude.data = population.longitude
+    form.altitude.data = population.altitude
     
     return render_template('species_form.html', form=form, population=population,species = species)
 
@@ -435,8 +439,8 @@ def matrix_form(id):
         matrix.matrix_criteria_age = form.matrix_criteria_age.data
         matrix.matrix_start = form.matrix_start.data
         matrix.matrix_end = form.matrix_end.data
-        matrix.matrix_start_season = form.matrix_start_season.data
-        matrix.matrix_end_season = form.matrix_end_season.data
+        matrix.matrix_start_season_id = form.matrix_start_season_id.data
+        matrix.matrix_end_season_id = form.matrix_end_season_id.data
         matrix.matrix_fec = form.matrix_fec.data
         matrix.matrix_a_string = form.matrix_a_string.data
         matrix.matrix_u_string = form.matrix_u_string.data
@@ -453,7 +457,7 @@ def matrix_form(id):
         flash('The matrix infomation has been updated.')
         return redirect(url_for('.species_page',id=species.id))
         
-    form.treatment.data = matrix.treatment.type_name
+    form.treatment.data = matrix.treatment.treatment_name
     form.matrix_split.data = matrix.matrix_split
     form.matrix_composition.data = matrix.matrix_composition
     form.survival_issue.data = matrix.survival_issue
@@ -464,8 +468,8 @@ def matrix_form(id):
     form.matrix_criteria_age.data = matrix.matrix_criteria_age
     form.matrix_start.data = matrix.matrix_start
     form.matrix_end.data = matrix.matrix_end 
-    form.matrix_start_season.data = matrix.matrix_start_season
-    form.matrix_end_season.data = matrix.matrix_end_season 
+    form.matrix_start_season_id.data = matrix.matrix_start_season_id
+    form.matrix_end_season_id.data = matrix.matrix_end_season_id 
     form.matrix_fec.data = matrix.matrix_fec
     form.matrix_dimension.data = matrix.matrix_dimension
     form.matrix_a_string.data = matrix.matrix_a_string
@@ -503,7 +507,7 @@ def species_new_form():
         species.iucn_status = form.iucn_status.data
         species.esa_status = form.esa_status.data
         species.invasive_status = form.invasive_status.data
-        species.GBIF_key = form.GBIF_key.data
+        species.gbif_taxon_key = form.gbif_taxon_key.data
         species.image_path = form.image_path.data
         species.image_path2 = form.image_path2.data
         
@@ -619,6 +623,9 @@ def population_new_form(id_pub,id_sp):
         population.ecoregion = form.ecoregion.data
         population.country = form.country.data
         population.continent = form.continent.data
+        population.latitude = form.latitude.data
+        population.longitude = form.longitude.data
+        population.altitude = form.altitude.data
         
         db.session.add(population)
         db.session.commit()
