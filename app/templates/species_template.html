@@ -71,6 +71,9 @@
         </div>
             <br>
         <div id="dist_map"></div>
+            {% if species.gbif_taxon_key %}
+            <p><a href="http://www.gbif.org/species/{{ species.gbif_taxon_key}}" target="_blank"> Species occurence data from GBIF. </a> For use as a guide only.</p>
+            {% endif %}
     </div>
         </div>
     <div class="col-sm-4">
@@ -258,7 +261,7 @@
                 <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
                 <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}
                 {% if population.altitude %}
-                <li><strong>Location: </strong><span class="coordinates">{{ population.latitude }}, {{ population.longitude }} </span></li>
+                <li><strong>Location: </strong><span class="coordinates">{{ population.latitude }}, {{ population.longitude }}</span></li>
                 <li><strong>Altitude: </strong><span>{{ population.altitude }}m</span></li>
                 {% else %}
                 <li>No coordinates given</li>
@@ -428,9 +431,9 @@
         , minZoom: 1
     }).addTo(mymap);
     
-    {% if species.GBIF_key %} 
-    L.tileLayer('http://api.gbif.org/v1/map/density/tile?x={x}&y={y}&z={z}&type=TAXON&key={{species.GBIF_key}}&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds', {
-        attribution: 'Data: GBIF'
+    {% if species.gbif_taxon_key %} 
+    L.tileLayer('http://api.gbif.org/v1/map/density/tile?x={x}&y={y}&z={z}&type=TAXON&key={{species.gbif_taxon_key}}&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds', {
+        attribution: ''
         , maxZoom: 8
         , minZoom: 1
     , }).addTo(mymap);
@@ -482,56 +485,27 @@
     // create new spidery thing
     var oms = new OverlappingMarkerSpiderfier(mymap,{keepSpiderfied: true});
     
-    // convert lat long coordinates to decimal coordinates
-    var converCoords = function(txt) {
-        var txt = JSON.parse(txt);
-        var coords = Object.keys(txt).map(function(k) { return txt[k] });
-        var lat_dec = 1;
-        var lon_dec = 1;
-        if (coords[0] != 'NA'){
-            if (coords[2] == "S") {
-                var lat_dec = -1;
-            }
-            if (coords[1] == "W") {
-                var lon_dec = -1;
-            }
-            var decCoords = [0,0];
-            var decCoords[0] = lat_dec * (parseInt(coords[8]) + parseInt(coords[6])/60 + parseInt(coords[7])/3600);
-            var decCoords[1] = lon_dec * (parseInt(coords[3]) + parseInt(coords[0])/60 + parseInt(coords[4])/3600); 
-        }
-        return decCoords
-    }
+
 </script>
 <script>     
     // add map markers
     $('.coordinates').each(function () {
         var txt = $(this).text();
-        var txt = JSON.parse(txt);
-        var coords = Object.keys(txt).map(function(k) { return txt[k] });
-        var lat_dec = 1;
-        var lon_dec = 1;
-        if (coords[0] != 'NA'){
-            if (coords[2] == "S") {
-                var lat_dec = -1;
-            }
-            if (coords[1] == "W") {
-                var lon_dec = -1;
-            }
-            var lat_dec = lat_dec * (parseInt(coords[8]) + parseInt(coords[6])/60 + parseInt(coords[7])/3600);
-            var lon_dec = lon_dec * (parseInt(coords[3]) + parseInt(coords[0])/60 + parseInt(coords[4])/3600);
+        var coords = txt.split(", ");
+        var lat_dec = coords[0]
+        var lon_dec = coords[1]
 
-            var parentDiv = $(this).closest("div");
-            var parentDiv = $(parentDiv).attr('class');
-            var parentDiv = parentDiv.split(' ')[1];
+        var parentDiv = $(this).closest("div");
+        var parentDiv = $(parentDiv).attr('class');
+        var parentDiv = parentDiv.split(' ')[1];
 
-            var hexMarker = L.VectorMarkers.icon({markerColor: stringToColour(parentDiv)});
-            hexMarker.options.shadowSize = [0,0];
-            hexMarker.options.iconSize = [16,16];
-            hexMarker.options.iconAnchor = [8, 16];
-            var marker = L.marker([lat_dec, lon_dec], {icon: hexMarker});
-            mymap.addLayer(marker);
-            oms.addMarker(marker);
-        }
+        var hexMarker = L.VectorMarkers.icon({markerColor: stringToColour(parentDiv)});
+        hexMarker.options.shadowSize = [0,0];
+        hexMarker.options.iconSize = [16,16];
+        hexMarker.options.iconAnchor = [8, 16];
+        var marker = L.marker([lat_dec, lon_dec], {icon: hexMarker});
+        mymap.addLayer(marker);
+        oms.addMarker(marker);
 
     });
  </script>
