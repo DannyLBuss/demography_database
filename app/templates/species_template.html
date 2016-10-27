@@ -33,7 +33,7 @@
         {% for trait in species.traits %}
         <li><a href="/traits/{{trait.id}}/edit">Edit</a></li>
         <li><a href="/traits/{{trait.id}}/edit-history">View edits</a></li>
-        <li><a href="/delete/traits/{{trait.id}}">Delete taxonomy</a></li>
+        <li><a href="/delete/traits/{{trait.id}}">Delete species traits</a></li>
         {% endfor %}
         {% else %}
         <li><a href="/traits/new/species={{species.id}}">Add traits</a></li>
@@ -73,6 +73,8 @@
         <div id="dist_map"></div>
             {% if species.gbif_taxon_key %}
             <p><a href="http://www.gbif.org/species/{{ species.gbif_taxon_key}}" target="_blank"> Species occurence data from GBIF. </a> For use as a guide only.</p>
+            {% else %}
+            <p>No occurence data available from GBIF.</p>
             {% endif %}
     </div>
         </div>
@@ -186,7 +188,7 @@
 
             
     <div id="external-sources">
-                Search external Sources: <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://media.eol.org//assets/favicon-9de6ee8ce10b9ad7b2662236411f4539.ico" class="little_logo"> Enyclopedia of Life</a>
+                Search external sources: <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://media.eol.org//assets/favicon-9de6ee8ce10b9ad7b2662236411f4539.ico" class="little_logo"> Enyclopedia of Life</a>
                 <a href="http://www.catalogueoflife.org/col/search/all/key/{{species.species_accepted}}/" target="_blank" class="btn btn-default" role="button"><img src="http://www.catalogueoflife.org/sites/default/files/favicon.gif" class="little_logo"> Catalogue of Life</a>
                 <a href="https://en.wikipedia.org/wiki/{{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://en.wikipedia.org/static/favicon/wikipedia.ico" class="little_logo"> Wikipedia</a>
                 <a href="http://www.ncbi.nlm.nih.gov/nuccore/?term=%22{{species.species_accepted}}%22" target="_blank" class="btn btn-default" role="button"><img class="little_logo" src="https://www.ncbi.nlm.nih.gov/favicon.ico"> Genbank</a>
@@ -388,6 +390,12 @@
                         td.appendChild(document.createTextNode(value.toPrecision(2)))
                     }
                     td.className = 'non_empty_box'
+                    var colour_value = 230-Math.round(value*70);
+                    if (colour_value < 160){
+                        var colour_value = 160;
+                    }
+                    console.log(colour_value);
+                    td.style.backgroundColor = "rgb(" + Number(colour_value) + "," + Number(colour_value+10) + ","+ Number(colour_value+30) + ")";
                 } else {
                     td.appendChild(document.createTextNode(value.toFixed(0)));
                     td.className = 'empty_box'

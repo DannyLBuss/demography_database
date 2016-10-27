@@ -65,7 +65,7 @@ class SpeciesForm(Form):
     esa_status = QuerySelectField('ESA Status',
             query_factory=lambda: ESAStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.status_code, a.status_name))
-    GBIF_key = IntegerField('GBIF Taxon Key')
+    gbif_taxon_key = IntegerField('GBIF Taxon Key')
     image_path = StringField('Path to image')
     image_path2 = StringField('Path to image')
     invasive_status = BooleanField('Invasive Status')
@@ -132,20 +132,14 @@ class PopulationForm(Form):
     continent = QuerySelectField('Continent',
             query_factory=lambda: Continent.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.continent_name)
-    lat_sec = StringField('Lat Sec')
-    lon_we = StringField('Lon WE')
-    lat_ns = StringField('Lat NS')
-    lon_min = StringField('Lon Min')
-    lon_sec = StringField('Lon Sec')
-    altitude = StringField('Altitude')
-    lat_min = StringField('Lat Min')
-    lat_deg = StringField('Lat Deg')
-    lon_deg = StringField('Lon Deg')
+    latitude = FloatField('Decimal latitude')
+    longitude = FloatField('Decimal longitude')
+    altitude = FloatField('Altitude in metres')
     submit = SubmitField('Submit')
 
 class TraitForm(Form):
     max_height = FloatField('Max Height')
-    organism_type = QuerySelectField('Growth Type',
+    organism_type = QuerySelectField('Organism type',
             query_factory=lambda: OrganismType.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.type_name)
     growth_form_raunkiaer = QuerySelectField('Growth Form Raunkiaer',
@@ -160,6 +154,9 @@ class TraitForm(Form):
     angio_gymno = QuerySelectField('Angio Gymno',
             query_factory=lambda: AngioGymno.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.angio_gymno_name)
+    spand_ex_growth_type = QuerySelectField('Spand.ex growth type',
+            query_factory=lambda: SpandExGrowthType.query.all(), get_pk=lambda a: a.id,
+                            get_label=lambda a:a.type_name)
     submit = SubmitField('Submit')
     
 class MatrixForm(Form):
@@ -178,10 +175,10 @@ class MatrixForm(Form):
     #not working
     #, validators=[Required(), Regexp('^(\d{1}[/-]\d{1,4})*$', 0, 'Must be M/YYYY')])
     matrix_end = StringField('Matrix End')
-    matrix_start_season = QuerySelectField('Matrix Start Season',
+    matrix_start_season_id = QuerySelectField('Matrix Start Season',
             query_factory=lambda: Season.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.season_id, a.season_name))
-    matrix_end_season = QuerySelectField('Matrix End Season',
+    matrix_end_season_id = QuerySelectField('Matrix End Season',
             query_factory=lambda: Season.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.season_id, a.season_name))
     matrix_fec = BooleanField('Matrix Fecundity')
@@ -311,10 +308,10 @@ class EntryForm(Form):
 	matrix_criteria_age = IntegerField('Matrix Criteria Age')
 	matrix_start = StringField('Matrix Start *', validators=[Required(), Regexp('^(\d{1}[/-]\d{1,4})*$', 0, 'Must be M/YYYY')], default="M/1994")
 	matrix_end = StringField('Matrix End', validators=[Regexp('(?<=\[).+(?=\])', 0, 'Must be M/YYYY')])
-	matrix_start_season = QuerySelectField('Matrix Start Season',
+	matrix_start_season_id = QuerySelectField('Matrix Start Season',
             query_factory=lambda: Season.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.season_id, a.season_name))
-	matrix_end_season = QuerySelectField('Matrix End Season',
+	matrix_end_season_id = QuerySelectField('Matrix End Season',
             query_factory=lambda: Season.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.season_id, a.season_name))
 	matrix_fec = IntegerField('Matrix Fecundity')
