@@ -2,7 +2,7 @@ from flask import render_template, jsonify, request, current_app, url_for, abort
 from . import api
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user
-from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed
+from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus
 from ..decorators import admin_required, permission_required, crossdomain
 from .errors import unauthorized
 
@@ -26,6 +26,58 @@ def key_valid(key):
 def home():
     print request.cookies
     return render_template('api_1_0/index.html')
+
+# API Routing for Meta Tables
+# Institutes
+@api.route('/<key>/query/institutes/<int:id>')
+def get_institute(key, id):
+    institute = Institute.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(institute.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/institutes/all')
+def get_institutes(key):
+    institutes = Institute.query.all()
+    if key_valid(key):
+        return jsonify({'institutes' : [institute.to_json(key) for institute in institutes]})
+    else:
+        return unauthorized('Invalid credentials')  
+
+#IUCN Status
+@api.route('/<key>/query/iucn-status/<int:id>')
+def get_iucn_status(key, id):
+    iucn_status = IUCNStatus.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(iucn_status.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/iucn-status/all')
+def get_iucn_statuses(key):
+    iucn_statuses = IUCNStatus.query.all()
+    if key_valid(key):
+        return jsonify({'iucn_statuses' : [iucn_status.to_json(key) for iucn_status in iucn_statuses]})
+    else:
+        return unauthorized('Invalid credentials')
+
+#ESA Status
+@api.route('/<key>/query/esa-status/<int:id>')
+def get_esa_status(key, id):
+    esa_status = ESAStatus.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(esa_status.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/esa-status/all')
+def get_esa_statuses(key):
+    esa_statuses = ESAStatus.query.all()
+    if key_valid(key):
+        return jsonify({'esa_statuses' : [esa_status.to_json(key) for esa_status in esa_statuses]})
+    else:
+        return unauthorized('Invalid credentials')  
 
 
 @api.route('/<key>/query/users/<int:id>')
