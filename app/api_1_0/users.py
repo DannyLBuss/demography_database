@@ -2,7 +2,7 @@ from flask import render_template, jsonify, request, current_app, url_for, abort
 from . import api
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user
-from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus, OrganismType, ReproductiveRepetition
+from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus, OrganismType, ReproductiveRepetition, GrowthFormRaunkiaer
 from ..decorators import admin_required, permission_required, crossdomain
 from .errors import unauthorized
 
@@ -84,7 +84,7 @@ def get_esa_statuses(key):
 def get_organism_type(key, id):
     organism_type = OrganismType.query.get_or_404(id)
     if key_valid(key):
-        return jsonify(esa_status.to_json(key))
+        return jsonify(organism_type.to_json(key))
     else:
         return unauthorized('Invalid credentials')
 
@@ -93,6 +93,23 @@ def get_organism_types(key):
     organism_types = OrganismType.query.all()
     if key_valid(key):
         return jsonify({'organism_types' : [organism_type.to_json(key) for organism_type in organism_types]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+#Growth Form Raunkiaer
+@api.route('/<key>/query/growth-form/<int:id>')
+def get_growth_form(key, id):
+    growth_form = GrowthFormRaunkiaer.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(growth_form.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/growth-form/all')
+def get_growth_forms(key):
+    growth_forms = GrowthFormRaunkiaer.query.all()
+    if key_valid(key):
+        return jsonify({'growth_forms' : [growth_form.to_json(key) for growth_form in growth_forms]})
     else:
         return unauthorized('Invalid credentials') 
 
