@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+
+<div class="page-header">
+<h1>
+Publications
+</h1>
+</div>
+
+<h3>The following is a list of manuscripts published/in press/in review that have used COMPADRE:</h3>
+
+<table class="table">
+                <tbody><tr>
+                    <td>
+                        Franco &amp; Silvertown (1990) Plant demography: what do we know? Evol Trends Plants, 4, 74-76.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Silvertown, Franco &amp; McConway (1992) A demographic interpretation of Grime's triangle. Functional Ecology, 6, 130-136.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Silvertown, Franco &amp; McConway (1993) The eternal triangle - an attempt at reconciliation. Functional Ecology, 7, 380-381.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Silvertown &amp; Franco (1993) Plant demography and habitat: a comparative approach Plant Spp Biol
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Silvertown, Franco, Pisanty &amp; Mendoza (1993) Comparative plant demography - relative importance of life-cycle components to the finite rate of increase in woody and herbaceous perennials. Journal of Ecology, 3, 465-476.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Franco &amp; Silvertown (1994) On trade-offs, elasticities and the comparative method: a reply to Shea, Rees &amp; Wood. Journal of Ecology, 4, 958.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Enright, Franco &amp; Silvertown (1995) Comparing plant life histories using elasticity analysis: the importance of life span and the number of life-cycle stages. Oecologia, 104, 79-84.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Franco &amp; Silvertown (1996) Life history variation in plants: an explroation of the fast-slow continuum hypothesis. Philosophical Transactions of the Royal Society - Biological Sciences, 1345, 1341-1348.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Silvertown, Franco &amp; Menges (1996) Interpretation of elasticity matrices as an aid to management of plant populations for conservation. Conservation Biology, 2,  591-597.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Silvertown, Franco &amp; Perez-Ishiwara (2001) Evolution of senescence in iteroparous perennial plants. Evolutionary Ecology Research, 3, 1-20.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Franco &amp; Silvertown (2004) A comparative demography of plants based upon elasticities of vital rates. Ecology, 85, 531–538.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Salguero-Gomez &amp; Casper (2010) Keeping plant shrinkage in the demographic loop. Journal of Ecology, 98, 312–323.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Jongejans, de Kroon, Tuljapurkar &amp; Shea (2010) Plant populations track rather than buffer climate fluctuations. Ecology Letters, 13, 736-743.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Salguero-Gomez &amp; de Kroon (2010) Matrix projection models meet variation in the real world. Journal of Ecology, 98, 250-254.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Salguero-Gomez &amp; Plotkin (2010) Matrix dimensions bias demographic inferences: implciations for comparative plant biology. The American Naturalist, 176, 710-722.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Burns, Blomberg, Crone, Ehrlen, Knight, Pichancourt, Ramula, Wardle &amp; Buckley (2010) Empirical tests of life-history evolution theory using phylogenetic analysis of plant demography. Journal of Ecology, 98, 334-344.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Stott, Franco, Carslake, Townley &amp; Hodgson (2010) Boom or bust? A comparative analysis of transient population dynamics in plants. Journal of Ecology, 98, 302-311.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Buckley, Ramula, Blomberg, Burns, Crone, Ehrlen, Knight, Pichancourt, Quested &amp; Wardle (2010) Causes and consequences of variation in plant population growth rate: a synthesis of matrix population models in a phylogenetic context. Ecology Letters, 13, 1182-1197.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Stott, Townley &amp; Hodgson (2011) A framework for studying transient dynamics of population projection matrix models. Ecology Letters, 14, 959-970.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Crone, Menges, Ellis, Bell, Bierzychudek, Ehrlen, Kaye, Knight, Lesica, Morris, Oostermeijer, Quintana-Ascencio, Stanley, Ticktin, Valverde &amp; Williams (2011) How do plant ecologists use matrix population models? Ecology Letters, 14, 1-8.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Salguero-Gomez, Siewert, Casper &amp; Tielborger (2012) A demographic approach to study effects of climate change in desert plants. Philosophical Transactions of the Royal Society - Biological Sciences, 367, 3100-3114.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Baudisch, Salguero-Gomez, Jones, Wrycza, Mbeau-Ache, Franco &amp; Colchero (2013) The pace and shape of senescence in angiosperms. Journal of Ecology, 101, 596-606.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Caswell &amp; Salguero-Gomez (2013) Age, stage, and senescence in plants. Journal of Ecology, 101, 595-606.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Mbeau-Ache &amp; Franco (2013) The time distribution of reproductive value measures the pace of life. Journal of Ecology, 101, 1273-1280.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        van de Kerk, de Kroon, Conde &amp; Jongejans (2013) Carnivora population dynamics are as slow and as fast as that of other mammals: implication for their conservation. PLOS One, 8, e70354
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Adler, Salguero-Gomez, Compagnoni, Hsu, Mukherjee-Ray, Mbeau-Ache &amp; Franco (2013) Functional traits explain variation in plant life history strategies. Proceedings of the National Academy of Sciencies USA
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Jones, Scheuerlein, Salguero-Gomez, Camarda, Schaible,Ehrlén, Dahlgren, García, Casper, Menges, Quintana-Ascencio, Caswell, Baudisch &amp; Vaupel (2014) Varieties of ageing across the tree of life. Nature
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Salguero-Gómez R, Jones OR, Archer CA, Buckley YM, Che-Castaldo J, Caswell C, Scheuerlein A, Conde DA, Baudisch A, Brinks E, de Buhr H, Farack C, Gottschalk F, Hartmann A, Henning A, Hoppe G, Römer G, Runge J, Ruoff T, Wille J, Zeh S, Vieregg D, Altwegg R, Colchero F, Dong M, Hodgson D, de Kroon H, Lebreton J-D, Metcalf CJE, Neel M, Parker I, Takada T, Valverde T, Vélez-Espino LA, Wardle GM, Franco M &amp; Vaupel JW. (2015) The COMPADRE Plant Matrix Database: an online repository for plant population dynamics. Journal of Ecology 103, 202-218.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Iles D, Salguero-Gómez R, Adler A &amp; Koons D. (In press) Transient dynamics and life history explain biological invasion success. Journal of Ecology DOI 10.1111/1365-2745.12517
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Salguero-Gómez R, Jones OR, Jongejans E, Blomberg S, Hodgson D, Mbeau Ache C, Zuidema PA, de Kroon H &amp; Buckley Y. (In press) The fast-slow continuum and reproductive strategies structure plant life history variation worldwide. PNAS
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Salguero-Gómez R, Jones OR, Archer CA, Bein C, de Buhr H, Farack C, Gottschalk F, Hartmann A, Henning A, Hoppe G, Römer G, Ruoff T, Sommer V, Wille J, Zeh S, Vieregg D, Buckley YM, Che-Castaldo J, Conde DA, Hodgson D, Scheuerlein A, Caswell H, Vaupel JW (In press)  COMADRE: a global database of animal demography. Journal of Animal Ecology. Archived in bioRxiv 10.1101/027821
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Kerr N, Baxter P, Salguero-Gómez R, Wardle G &amp; Buckley Y (In press) Effective management of invasive plant populations using cost, efficacy and demography for 14 species worldwide. Journal of Applied Ecology
+                    </td>
+                </tr>
+            </tbody></table>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

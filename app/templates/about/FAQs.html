@@ -1,0 +1,55 @@
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
+<div class="page-header">
+    <h1>
+Frequently asked questions
+</h1> 
+</div>
+<h3 id="faq-1"><strong>Q.</strong> Do I need to write a proposal to access data from COMPADRE and/or COMADRE?</h3>
+<p>No - access to data from COMPADRE and COMADRE is open to all without the need for a proposal. However, see our data access agreement <a href="/Page/UserAgreement">here</a>.</p>
+<h3 id="faq-2"><strong>Q.</strong> Do I have to login to access data?</h3>
+<p>No – Data is fully open access. However, users are encouraged to register to remained informed on future versions, releases, workshops, potential typos and other opportunities</p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-3"><strong>Q.</strong> If I decide to register, how are my credentials saved internally?</h3>
+<p>Your credentials are stored in our user database. Passwords are encrypted by using a hash algorithm. All personal information will only be used within the COMADRE and COMPADRE for communication purposes.</p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-4"><strong>Q.</strong> What if the piece of information I am looking for is not in the database?</h3>
+<p>Our main goal is to provide matrix population models, and the metadata pertaining to them. These metadata are, as a rule, only included if they are necessary to interpret the matrices correctly. Therefore we routinely include geographical location information and time of data collection. Other variables, which admittedly may be interesting, are not included since they will take resources away from our core mission. Other databases already available or developed by interested users in the future may, down the road, interact with COMPADRE and COMADRE.</p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-5"><strong>Q.</strong> I have this exciting research idea… how do I avoid potential overlaps with on-going projects?</h3>
+<p>COMPADRE and COMADRE are open-access databases. We have no knowledge of what kinds of research are being carried out with them. As with any other area of science, it is up to the user to decide when, how, and with whom you share the details of your ongoing research. We welcome PDF copies of publications that make use of the databases to highlight in the portal; send us your publications at <a href="mailto:compadre-contact@demogr.mpg.de">compadre-contact@demogr.mpg.de</a> to see them updated in the <a href="/AboutUs/PublicationsAndEvents">list of publications</a> that have used COMPADRE/COMADRE.</p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-6"><strong>Q.</strong> I have spotted an error, what should I do?</h3>
+<p>Please contact us <a href="/Help/Question">here</a> with “Typo” in the subject line to let us know, so we can correct the problem. Typos (either accidentally introduced by us or from the source) will be tracked in the variable “Observations” for each matrix, individually, between various versions. The release of a fixed matrix or other piece of information will coincide with our periodic version release (below).</p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-7"><strong>Q.</strong> How should I acknowledge access to COMPADRE and COMADRE and cite the database?</h3>
+<p> Users of COMPADRE and COMADRE are requested to cite the following as the main repository of data through which the analyses were performed:
+    <br>
+    <br> COMPADRE Plant Matrix Database. Max Planck Institute for Demographic Research (Germany). Available at www.compadre-db.org (data downloaded on [date]).
+    <br>
+    <br> COMADRE Animal Matrix Database. Max Planck Institute for Demographic Research (Germany). Available at www.comadre-db.org (data downloaded on [date]).
+    <br>
+    <br> We also encourage users to cite the pertinent works introducing the respective database (Salguero-Gómez et al. Journal of Ecology 2015; Salguero-Gómez et al. bioRxiv 2015), as provided in the zip file of the data download. However, we also suggest that the users give full credit to all sources used by accessing the DOI of manuscritps and ISBN of books from which data were digitized by us, and subsequently analyzed by the user. This information can be accessed in the online appendixes of each introductory publication, as well as by running the data object through our R scripts (<a href="https://github.com/jonesor/compadreDB" target="_blank">https://github.com/jonesor/compadreDB</a>). </p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-8"><strong>Q.</strong> How do I contribute to COMPADRE and/or COMADRE with demographic information?</h3>
+<p> If you come across matrices that are not in COMPADRE or COMADRE (either in the current releases or in our “what’s in Store” <a href="/Data">site</a>), please send the PDF/ancillary files with an explanatory note to <a href="mailto:compadre-contact@demogr.mpg.de">compadre-contact@demogr.mpg.de</a>. </p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-9"><strong>Q.</strong> How and where do I find all the information that is being archived in COMPADRE and in COMADRE?</h3>
+<p>The data digitization protocol details the full archiving process is found here. Species or studies for whose information is not yet digitized or error-checked (thus not released) can be found <a href="/Data">here</a></p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-10"><strong>Q.</strong> How do I find the citations that were used to archive the information in COMPADRE?</h3>
+<p>This information can be found in the Matrix Description file in the downloads area of this site. We provide DOI and ISBN when available to us. Due to copyright limitations, we are unable to provide the actual publications from which data were acquired.</p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-11"><strong>Q.</strong> How often is COMPADRE and COMADRE updated online?</h3>
+<p> We will update the databases approximately every six months. We will inform users on our email list about this (for which users must have <a href="/Login">registered</a>, and will also make announcements on our Twitter <a href="https://twitter.com/@compadreDB" target="_blank">@compadreDB</a> and <a href="https://twitter.com/@comadreDB" target="_blank">@comadreDB</a>, <a href="https://facebook.https://www.facebook.com/groups/compadrecomadre/?ref=br_tf" target="_blank">facebook page</a> and blog <a href="http://compadredb.wordpress.com" target="_blank">blog</a> feeds. </p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-12"><strong>Q.</strong> How are COMPADRE and COMADRE funded?</h3>
+<p> Current and past funding sources can be found here. COMPADRE and COMADRE are provided as a community resource with no funding for individual projects. </p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-13"><strong>Q.</strong> How do I search for and extract the information I need?</h3>
+<p> The files made available in COMPADRE and COMADRE are subsettable and analyzable through a number of basic programs and programming languages (e.g. R, MatLab, python, C++, etc). In our <a href="https://github.com/jonesor/compadreDB/tree/master/Scripts" target="_blank">github page</a>, we have developed scripts to arrange the data according to their needs. Users are welcome to develop further routines (we encourage open-access languages and packages) and request push updates. An R package is currently under development to access and interact with a more advanced version of the database online. This is schedule for release in late 2016. In addition, we routinely run workshops on comparative demography using COMPADRE and COMADRE. Check out our communication channels for upcoming ones: Twitter <a href="https://twitter.com/@compadreDB" target="_blank">@compadreDB</a> and <a href="https://twitter.com/@comadreDB" target="_blank">@comadreDB</a>, <a href="https://facebook.https://www.facebook.com/groups/compadrecomadre/?ref=br_tf" target="_blank">facebook page</a> and blog <a href="http://compadredb.wordpress.com" target="_blank">blog</a> feeds. </p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-14"><strong>Q.</strong> What has COMPADRE and COMADRE been used for up to now?</h3>
+<p> A list of publications from COMPADRE and COMADRE can be found <a href="/AboutUs/PublicationsAndEvents">here</a>. If you have published using these resources, please let us know [contact-compadre@demogr.mpg.de] so we can cite your scientific contribution. </p>
+<div class="divider divider-right"><a href="#" data-scrollto="#faqs-list"><i class="icon-chevron-up"></i></a></div>
+<h3 id="faq-15"><strong>Q.</strong> What are future plans for COMPADRE &amp; COMADRE?</h3>
+<p> We are currently working on the development of searching, browsing and SQL menus that will allow users to find and retrieve demographic information by various conditional searches (e.g. plant growth type, taxonomic class, study duration, matrix dimension, country, GPS coordinates, etc). In addition, we are also developing an R package to derive numerous demographic quantities from these matrices and to integrate the analyses with phylogenetic corrections. </p> {% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }} {% endblock %}

@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+<h1>
+Funding bodies
+</h1>
+</div>
+
+<h3>COMPADRE has been financed by the following funding bodies to the following researchers:</h3>
+
+<table class="table-responsive">
+                <tbody><tr>
+                    <th>Period</th>
+                    <th>Financial support</th>
+                    <th>Leader/recipient</th>
+                </tr>
+                <tr>
+                    <td>1989-1994</td>
+                    <td>The British Council (UK)</td>
+                    <td>Jonathan Silvertown</td>
+                </tr>
+                <tr>
+                    <td>1990-1992</td>
+                    <td>Consejo Nacional de Ciencia y Tecnologia (Mexico)</td>
+                    <td>Miguel Franco</td>
+                </tr>
+                <tr>
+                    <td>
+                        1993-1996
+                    </td>
+                    <td>Academia Mexicana de Ciencias (Mexico)</td>
+                    <td>Miguel Franco</td>
+                </tr>
+                <tr>
+                    <td>
+                        1994-1996
+                    </td>
+                    <td>The Royal Society of London (UK)</td>
+                    <td>Jonathan Silvertown</td>
+                </tr>
+                <tr>
+                    <td>
+                        1999-2000
+                    </td>
+                    <td>The Ferguson Trust. Open University (UK)</td>
+                    <td>Jonathan Silvertown &amp; Miguel Franco</td>
+                </tr>
+                <tr>
+                    <td>
+                        1999-2000
+                    </td>
+                    <td>Consejo Nacional de Ciencia y Tecnología (Mexico)</td>
+                    <td>Miguel Franco</td>
+                </tr>
+                <tr>
+                    <td>
+                        1994-1996
+                    </td>
+                    <td>Dirección General Asuntos del Personal Académico, Universidad Nacional Autónoma de México (Mexico)</td>
+                    <td>Miguel Franco</td>
+                </tr>
+                <tr>
+                    <td>
+                        2006-2007
+                    </td>
+                    <td>Natural Environment Research Council (UK)</td>
+                    <td>Dave Hodgson</td>
+                </tr>
+                <tr>
+                    <td>
+                        2006-2008
+                    </td>
+                    <td>Personal funds</td>
+                    <td>Rob Salguero-Gómez</td>
+                </tr>
+                <tr>
+                    <td>
+                        2007-2010
+                    </td>
+                    <td>Australian Research Council (Australia)</td>
+                    <td>Yvonne Buckley</td>
+                </tr>
+                <tr>
+                    <td>
+                        2007-2010
+                    </td>
+                    <td>Australian &amp; New Zealand Vegetation Function Network (Australia &amp; New Zealand)</td>
+                    <td>Yvonne Buckley</td>
+                </tr>
+                <tr>
+                    <td>
+                        2008-2010
+                    </td>
+                    <td>Reese Family Foundation (USA)</td>
+                    <td>Rob Salguero-Gómez</td>
+                </tr>
+                <tr>
+                    <td>
+                        2009-2012
+                    </td>
+                    <td>European Social Fund (Europe)</td>
+                    <td>Dave Hodgson &amp; Stuart Townley</td>
+                </tr>
+                <tr>
+                    <td>
+                        2011
+                    </td>
+                    <td>Evolutionary Demography Laboratory of the Max Planck Institute for Demographic Research (MPIDR) (Germany)</td>
+                    <td>Rob Salguero-Gómez</td>
+                </tr>
+                <tr>
+                    <td>
+                        2011-2013
+                    </td>
+                    <td>Strategic Environmental Research and Development Program, Department of Defense (US)</td>
+                    <td>Maile Neel &amp; William Fagan</td>
+                </tr>
+                <tr>
+                    <td>
+                        2012-2013
+                    </td>
+                    <td>Australian Research Council (Australia)</td>
+                    <td>Yvonne Buckley</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        2012-2014
+                    </td>
+                    <td>Evolutionary Demography Laboratory, and Independent Group Modeling the Evolution of Ageing, both at the MPIDR (Germany)</td>
+                    <td>Rob Salguero-Gómez &amp; Owen Jones</td>
+                </tr>
+                <tr>
+                    <td>
+                        2014-2016
+                    </td>
+                    <td>Australian Research Council (Australia)</td>
+                    <td>Roberto Salguero-Gómez</td>
+                </tr>
+                <tr>
+                    <td>2014-2017</td>
+                    <td>Natural Environmental Research Council (UK)</td>
+                    <td>David Hodgson</td>
+                </tr>
+                <tr>
+                    <td>2014-2017</td>
+                    <td>Ireland Research Foundation (Ireland)</td>
+                    <td>Yvonne Buckley</td>
+                </tr>
+                <tr>
+                    <td>2016-2020</td>
+                    <td>Natural Environmental Research Council (UK)</td>
+                    <td>Rob Salguero-Gomez</td>
+                </tr>
+                <tr>
+                    <td>2016-2019</td>
+                    <td>Det Drie Forskningsråd</td>
+                    <td>Owen Jones</td>
+                </tr>
+            </tbody></table>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
