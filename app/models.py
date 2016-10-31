@@ -489,7 +489,7 @@ class GrowthFormRaunkiaer(db.Model):
             'type_name': self.form_name,
             'traits' : url_array(self, 'traits', key),
         }
-        return organism_type
+        return growth_form
 
     def to_json_singular(self, key):
         growth_form = {
