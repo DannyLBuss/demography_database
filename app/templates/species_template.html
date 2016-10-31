@@ -321,10 +321,10 @@
                                 <div id="menu_{{matrix.id}}_4" class="tab-pane">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <p>Matrix start season: {% if matrix.matrix_start_season_id > 0 %}{{ matrix.matrix_start_season.season_name }}{% else %} NA{% endif %}</p>
+                                            <p>Matrix start season: {% if matrix.matrix_start_season_id %}{{ matrix.matrix_start_season_id.season_name }}{% else %} NA{% endif %}</p>
                                         </div>
                                         <div class="col-sm-6">
-                                            <p>Matrix end season: {% if matrix.matrix_end_season_id > 0 %}{{ matrix.matrix_end_season.season_name }}{% else %} NA{% endif %}</p>
+                                            <p>Matrix end season: {% if matrix.matrix_end_season_id %}{{ matrix.matrix_end_season_id.season_name }}{% else %} NA{% endif %}</p>
                                         </div>
                                     </div>
                                     <p><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</p>
@@ -367,6 +367,7 @@
     var divs = document.getElementsByClassName("matA");
     for (var ii = 0; ii < divs.length; ii++) {
         var matrix_string = divs[ii].innerHTML;
+
         var matrix_string = matrix_string.replace(" [", "");
         var matrix_string = matrix_string.replace("] ", "");
         var matrix_string = matrix_string.replace(/;/g, " ");
@@ -394,7 +395,6 @@
                     if (colour_value < 160){
                         var colour_value = 160;
                     }
-                    console.log(colour_value);
                     td.style.backgroundColor = "rgb(" + Number(colour_value) + "," + Number(colour_value+10) + ","+ Number(colour_value+30) + ")";
                 } else {
                     td.appendChild(document.createTextNode(value.toFixed(0)));

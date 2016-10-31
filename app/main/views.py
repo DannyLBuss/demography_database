@@ -102,15 +102,6 @@ def data():
 
     return render_template('data.html', species=species)
 
-# simon testing out a somewhat pointless id url
-
-@main.route('/matrix/<species_id>/<pop_id>/<mat_id>')
-def matrix(species_id,pop_id,mat_id):
-    species = Species.query.filter_by(id=species_id).first_or_404()
-    population = Population.query.filter_by(id=pop_id).first_or_404()
-    matrix = Matrix.query.filter_by(id=mat_id).first_or_404()
-    return render_template('matrix.html', species=species, population=population, matrix=matrix)
-
 ### TABLE PAGES
 # the big table of species
 @main.route('/species-table/')
@@ -173,16 +164,34 @@ def explorer(taxon_level,taxon):
     
     return render_template('explorer_template.html',taxon=taxon,taxon_list = taxon_list,taxon_level=taxon_level,next_taxon_level=next_taxon_level, tax_pos = tax_pos)
 
-@main.route('/tree')
-# @login_required
-def tree():
-    return render_template('tree_of_life.html')
-
 # contribute
 @main.route('/contribute-data')
-# @login_required
 def contribute_data():
     return render_template('contribute_data.html')
+
+@main.route('/news')
+def news():
+    return render_template('about/news.html')
+
+@main.route('/team')
+def team():
+    return render_template('about/team.html')
+
+@main.route('/FAQs')
+def FAQs():
+    return render_template('about/FAQs.html')
+
+@main.route('/history')
+def history():
+    return render_template('about/history.html')
+
+@main.route('/funding')
+def funding():
+    return render_template('about/funding.html')
+
+@main.route('/publications')
+def publications():
+    return render_template('about/publications.html')
 
 ### SPECIES/TAXONOMY/TRAIT FORMS + VIEW EDIT HISTORY PAGES -------------------------------------------------------------------------
 # editing species information
@@ -214,7 +223,7 @@ def species_form(id):
     form.image_path.data = species.image_path
     form.image_path2.data = species.image_path2
     
-    return render_template('species_form.html', form=form, species=species)
+    return render_template('data_entry/generic_form.html', form=form, species=species)
 
 # species information edit history
 @main.route('/species/<int:id>/edit-history')
@@ -259,7 +268,7 @@ def taxonomy_form(id):
     form.phylum.data = taxonomy.phylum
     form.kingdom.data = taxonomy.kingdom
 
-    return render_template('species_form.html', form=form, taxonomy=taxonomy,species = species)
+    return render_template('data_entry/generic_form.html', form=form, taxonomy=taxonomy,species = species)
 
 # taxonomy edit history
 @main.route('/taxonomy/<int:id>/edit-history')
@@ -290,7 +299,7 @@ def trait_form(id):
     form.reproductive_repetition.data = trait.reproductive_repetition
     form.dicot_monoc.data = trait.dicot_monoc
     form.angio_gymno.data = trait.angio_gymno
-    return render_template('species_form.html', form=form, trait=trait,species = species)
+    return render_template('data_entry/generic_form.html', form=form, trait=trait,species = species)
 
 # traits edit history
 @main.route('/traits/<int:id>/edit-history')
@@ -350,7 +359,7 @@ def publication_form(id):
     form.additional_source_string.data = publication.additional_source_string
     
     
-    return render_template('publication_form.html', form=form, publication=publication)
+    return render_template('data_entry/publication_form.html', form=form, publication=publication)
 
 # publication edit history
 @main.route('/publication/<int:id>/edit-history')
@@ -385,7 +394,7 @@ def population_form(id):
     form.longitude.data = population.longitude
     form.altitude.data = population.altitude
     
-    return render_template('species_form.html', form=form, population=population,species = species)
+    return render_template('data_entry/generic_form.html', form=form, population=population,species = species)
 
 # population edit history
 @main.route('/population/<int:id>/edit-history')
@@ -411,7 +420,7 @@ def study_form(id):
     form.study_start.data = study.study_start
     form.study_end.data = study.study_end
     
-    return render_template('species_form.html', form=form, study=study)
+    return render_template('data_entry/generic_form.html', form=form, study=study)
 
 # study edit history
 @main.route('/study/<int:id>/edit-history')
@@ -484,7 +493,7 @@ def matrix_form(id):
     form.captivity_id.data = matrix.captivity_id
     form.observations.data = matrix.observations
     
-    return render_template('matrix_form.html', form=form, matrix=matrix,population=population,species = species)
+    return render_template('data_entry/matrix_form.html', form=form, matrix=matrix,population=population,species = species)
 
 # matrix edit history
 @main.route('/matrix/<int:id>/edit-history')
@@ -516,7 +525,7 @@ def species_new_form():
 
         return redirect(url_for('.species_page',id=species.id))
     
-    return render_template('species_form.html', form=form)
+    return render_template('data_entry/generic_form.html', form=form)
 
 @main.route('/taxonomy/new/species=<int:id_sp>', methods=['GET', 'POST'])
 def taxonomy_new_form(id_sp):
@@ -545,7 +554,7 @@ def taxonomy_new_form(id_sp):
         
         return redirect(url_for('.species_page',id=id_sp))
     
-    return render_template('species_form.html', form=form,species = species)
+    return render_template('data_entry/generic_form.html', form=form,species = species)
 
 @main.route('/traits/new/species=<int:id_sp>', methods=['GET', 'POST'])
 def trait_new_form(id_sp):
@@ -564,7 +573,7 @@ def trait_new_form(id_sp):
         trait.angio_gymno = form.angio_gymno.data
         return redirect(url_for('.species_page',id=id_sp))
     
-    return render_template('species_form.html', form=form,species = species)
+    return render_template('data_entry/generic_form.html', form=form,species = species)
 
 @main.route('/publication/new', methods=['GET', 'POST'])
 def new_publication_form():
@@ -599,14 +608,14 @@ def new_publication_form():
         
         return redirect(url_for('.publication_page',id=publication.id))
     
-    return render_template('publication_form.html',form=form)
+    return render_template('data_entry/publication_form.html',form=form)
 
 @main.route('/population/new/publication=<int:id_pub>/choose_species', methods=['GET'])
 def choose_species(id_pub):
     publication = Publication.query.get_or_404(id_pub)
     species = Species.query.all()
     
-    return render_template('choose_species.html',publication=publication,species=species)
+    return render_template('data_entry/choose_species.html',publication=publication,species=species)
     
 @main.route('/population/new/publication=<int:id_pub>/species=<int:id_sp>', methods=['GET', 'POST'])
 def population_new_form(id_pub,id_sp):
@@ -632,7 +641,7 @@ def population_new_form(id_pub,id_sp):
         
         return redirect(url_for('.publication_page',id=id_pub))
     
-    return render_template('species_form.html', form=form, publication=publication, species=species)
+    return render_template('data_entry/generic_form.html', form=form, publication=publication, species=species)
 
 
 ### END OF NEW DATA FORMS  ---------------------------------------------------------------------------------
@@ -688,7 +697,7 @@ def delete_object(thing_to_delete,id_obj):
         flash('The matrix has been deleted')
         return redirect(url_for('.publication_page',id=matrix.publication_id))
     
-    return render_template('delete_confirm.html', form=form)
+    return render_template('data_entry/delete_confirm.html', form=form)
 
 # USER + PROFILE PAGES
 # User

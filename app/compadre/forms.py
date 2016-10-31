@@ -176,10 +176,10 @@ class MatrixForm(Form):
     #, validators=[Required(), Regexp('^(\d{1}[/-]\d{1,4})*$', 0, 'Must be M/YYYY')])
     matrix_end = StringField('Matrix End')
     matrix_start_season_id = QuerySelectField('Matrix Start Season',
-            query_factory=lambda: Season.query.all(), get_pk=lambda a: a.id,
+            query_factory=lambda: StartSeason.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.season_id, a.season_name))
     matrix_end_season_id = QuerySelectField('Matrix End Season',
-            query_factory=lambda: Season.query.all(), get_pk=lambda a: a.id,
+            query_factory=lambda: EndSeason.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.season_id, a.season_name))
     matrix_fec = BooleanField('Matrix Fecundity')
     matrix_dimension = IntegerField('Matrix Dimension')

@@ -30,7 +30,7 @@
     
     
 </div>
-<p>Choose a {{next_taxon_level}}:</p>
+<h3>Choose a {{next_taxon_level}}:</h3>
 {% for taxons in taxon_list %}
     
     {% if taxon_level == "life" %}
@@ -90,7 +90,7 @@
                 var txt = txt.replace(/\s/g, '');
                 var txt = new RegExp(txt, "gi");
                 count = (temp.match(txt).length)/3;
-                $(this).append("<h4>" + count + " species</h4>");
+                $(this).append("<h4>" + count + " species in the Demography Database</h4>");
             {% endif %}
         }
     });
@@ -112,9 +112,7 @@
         });
     }
        
-    // function to get summary from wikipedia, not working on localhost due to error but will work on server
-    // chrome extension: https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?utm_source=chrome-app-launcher-info-dialog for development workaround
-            
+    
     $('.taxon_name').each(function () {
         var txt = $(this).text();
         
@@ -124,7 +122,7 @@
                 var wiki_text = data.replace(/<b>/g, '');
                 var wiki_text = data.replace(/\\"/g, '"');
                 var wiki_text = wiki_text.substring(4,wiki_text.indexOf("\\n"));
-                document.getElementById(txt+"info").innerHTML = wiki_text + "<a target='_blank' href='https://en.wikipedia.org/wiki/"+txt+"'> Read more...</a>";
+                document.getElementById(txt+"info").innerHTML = wiki_text + "<small>Extract from Wikipedia. <a target='_blank' href='https://en.wikipedia.org/wiki/"+txt+"'> Read more...</a></small>";
             } else {
                 document.getElementById(txt+"info").innerHTML = "No description available";
             }
