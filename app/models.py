@@ -280,7 +280,6 @@ class Institute(db.Model):
     country = db.Column(db.String(64))
     website = db.Column(db.String(200))
 
-
     users = db.relationship("User", backref="institute")
 
     @staticmethod
@@ -307,6 +306,24 @@ class Institute(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+    def to_json(self, key):
+        print str(self.date_joined)
+        institute = {
+            'institution_name': self.institution_name,
+            'institution_short' : self.institution_short,
+            'main_contact_email' : self.main_contact_email,
+            'main_contact_name' : self.main_contact_name,
+            'institution_address' : self.institution_address,
+            'research_group' : self.research_group,
+            'date_joined' : str(self.date_joined),
+            'department' : self.department,
+            'country' : self.country,
+            'website' : self.website,
+            'users' : url_array(self, 'users', key),
+
+        }
+        return institute
 
     def __repr__(self):
         return str(self.id)
@@ -342,6 +359,15 @@ class IUCNStatus(db.Model):
                 db.session.add(i)
                 db.session.commit()
             
+    def to_json(self, key):
+        iucn_status = {
+            'status_code': self.status_code,
+            'status_name' : self.status_name,
+            'status_description' : self.status_description,
+            'species' : url_array(self, 'species', key),
+
+        }
+        return iucn_status
 
     def __repr__(self):
         return str(self.id)
@@ -372,6 +398,16 @@ class ESAStatus(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+    def to_json(self, key):
+        esa_status = {
+            'status_code': self.status_code,
+            'status_name' : self.status_name,
+            'status_description' : self.status_description,
+            'species' : url_array(self, 'species', key),
+
+        }
+        return esa_status
 
     def __repr__(self):
         return str(self.id)
@@ -2125,6 +2161,14 @@ class Version(db.Model):
     def __repr__(self):
         return '<Version %r>' % self.id
 
+from datetime import datetime
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, datetime):
+        serial = obj.isoformat()
+        return serial
+    raise TypeError ("Type not serializable")
 
 def url_array(self, string, key):
     if string == 'populations':
@@ -2163,6 +2207,14 @@ def url_array(self, string, key):
                                   _external=False)
             trait_urls.append(url)
         return trait_urls
+    
+    elif string == 'users':
+        user_urls = []
+        for user in self.users:
+            url = url_for('api.get_user', id=user.id, key=key,
+                                  _external=False)
+            user_urls.append(url)
+        return user_urls
 
 
 
