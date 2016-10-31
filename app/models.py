@@ -443,6 +443,20 @@ class OrganismType(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+
+        organism_type = {
+            'type_name': self.type_name,
+            'traits' : url_array(self, 'traits', key),
+        }
+        return organism_type
+
+    def to_json_singular(self, key):        
+        organism_type = {
+            'type_name': self.type_name,
+        }
+        return organism_type
+
     def __repr__(self):
         return str(self.id)
 
@@ -470,10 +484,22 @@ class GrowthFormRaunkiaer(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        growth_form = {
+            'type_name': self.form_name,
+            'traits' : url_array(self, 'traits', key),
+        }
+        return organism_type
+
+    def to_json_singular(self, key):
+        growth_form = {
+            'type_name': self.form_name,
+        }
+        return organism_type
+
     def __repr__(self):
         return str(self.id)
 
-# comment
 class ReproductiveRepetition(db.Model):
     __tablename__ = 'reproductive_repetition'
     id = db.Column(db.Integer, primary_key=True, index=True)
@@ -1398,8 +1424,8 @@ class Trait(db.Model):
             'organism_type_id' : self.organism_type.type_name,
             # 'growth_form_raunkiaer' : self.growth_form_raunkiaer.form_name,
             # 'reproductive_repetition' : self.reproductive_repetition.repetition_name,
-            'dicot_monoc' : self.dicot_monoc.dicot_monoc_name,
-            'angio_gymno' : self.angio_gymno.angio_gymno_name
+            # 'dicot_monoc' : self.dicot_monoc.dicot_monoc_name,
+            # 'angio_gymno' : self.angio_gymno.angio_gymno_name
         }
         return trait
 
