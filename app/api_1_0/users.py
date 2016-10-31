@@ -2,7 +2,7 @@ from flask import render_template, jsonify, request, current_app, url_for, abort
 from . import api
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user
-from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus
+from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus, OrganismType, ReproductiveRepetition
 from ..decorators import admin_required, permission_required, crossdomain
 from .errors import unauthorized
 
@@ -77,7 +77,24 @@ def get_esa_statuses(key):
     if key_valid(key):
         return jsonify({'esa_statuses' : [esa_status.to_json(key) for esa_status in esa_statuses]})
     else:
-        return unauthorized('Invalid credentials')  
+        return unauthorized('Invalid credentials')
+
+#Organism Type
+@api.route('/<key>/query/organism-type/<int:id>')
+def get_organism_type(key, id):
+    organism_type = OrganismType.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(esa_status.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/organism-type/all')
+def get_organism_types(key):
+    organism_types = OrganismType.query.all()
+    if key_valid(key):
+        return jsonify({'organism_types' : [organism_type.to_json(key) for organism_type in organism_types]})
+    else:
+        return unauthorized('Invalid credentials') 
 
 
 @api.route('/<key>/query/users/<int:id>')
