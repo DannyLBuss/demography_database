@@ -125,6 +125,24 @@ def species_page(id):
     species = Species.query.filter_by(id=id).first_or_404()
     return render_template('species_template.html',species = species)
 
+
+
+
+# species overview TEST page
+# TEST PAGE ONLY EDIT THIS ONE
+@main.route('/species/<int:id>/testoverview')
+# @login_required
+def species_page_test(id):
+    species = Species.query.filter_by(id=id).first_or_404()
+    taxonomy = Taxonomy.query.filter_by(id=species.id).first_or_404()
+    trait = Trait.query.filter_by(id=species.id).first_or_404()
+    populations = Population.query.filter_by(id=species.id)
+    return render_template('species_template_test.html',species = species, taxonomy = taxonomy, trait = trait, populations = populations)
+
+
+
+
+
 # publication overview page
 @main.route('/publication/<int:id>')
 # @login_required
