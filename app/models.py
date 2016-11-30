@@ -695,6 +695,21 @@ class SourceType(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        source_type = {
+            'source_name': self.source_name,
+            'source_description': self.source_description,
+            'publications' : url_array(self, 'publications', key)
+        }
+        return source_type
+
+    def to_json_singular(self, key):
+        source_type = {
+            'source_name': self.source_name,
+            'source_description': self.source_description
+        }
+        return source_type
+
     def __repr__(self):
         return str(self.id)
 
@@ -736,6 +751,34 @@ class Database(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+
+    def to_json(self, key):
+        database = {
+            'database_name' : self.database_name,
+            'database_description' : self.database_description,
+            'database_master_version' : self.database_master_version,
+            'database_date_created' : self.database_date_created,
+            'database_number_species_accepted' : self.database_number_species_accepted,
+            'database_number_studies' : self.database_number_studies,
+            'database_number_matrices' : self.database_number_matrices,
+            'database_agreement' : self.database_agreement,
+            'versions' : [version.to_json(key) for version in self.versions]
+        }
+        return database
+
+    def to_json_singular(self, key):
+        database = {
+            'database_name' : self.database_name,
+            'database_description' : self.database_description,
+            'database_master_version' : self.database_master_version,
+            'database_date_created' : self.database_date_created,
+            'database_number_species_accepted' : self.database_number_species_accepted,
+            'database_number_studies' : self.database_number_studies,
+            'database_number_matrices' : self.database_number_matrices,
+            'database_agreement' : self.database_agreement
+        }
+        return database
+
     def __repr__(self):
         return '<Database %r>' % self.id
 
@@ -764,6 +807,22 @@ class Purpose(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+
+    def to_json(self, key):
+        purpose = {
+            'purpose_name' : self.purpose_name,
+            'purpose_description' : self.purpose_description,
+            'publications' : url_array(self, 'publications', key)
+        }
+        return purpose
+
+    def to_json_singular(self, key):
+        purpose = {
+            'purpose_name' : self.purpose_name,
+            'purpose_description' : self.purpose_description
+        }
+        return purpose
 
     def __repr__(self):
         return str(self.id)
@@ -799,6 +858,22 @@ class MissingData(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+
+    def to_json(self, key):
+        missing_data = {
+            'missing_code' : self.missing_code,
+            'missing_description' : self.missing_description,
+            'publications' : url_array(self, 'publications', key)
+        }
+        return missing_data
+
+    def to_json_singular(self, key):
+        missing_data = {
+            'missing_code' : self.missing_code,
+            'missing_description' : self.missing_description
+        }
+        return missing_data
 
     def __repr__(self):
         return str(self.id)
@@ -839,6 +914,21 @@ class ContentEmail(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        content_email = {
+            'content_code' : self.content_code,
+            'content_description' : self.content_description,
+            'publications' : url_array(self, 'publications', key)
+        }
+        return content_email
+
+    def to_json_singular(self, key):
+        content_email = {
+            'content_code' : self.content_code,
+            'content_description' : self.content_description
+        }
+        return content_email
+
     def __repr__(self):
         return str(self.id)
 ''' End Meta Tables for Author Contact '''
@@ -874,6 +964,21 @@ class PurposeEndangered(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        purpose_endangered = {
+            'purpose_name' : self.purpose_name,
+            'purpose_description' : self.purpose_description,
+            'publications' : url_array(self, 'publications', key)
+        }
+        return purpose_endangered
+
+    def to_json_singular(self, key):
+        purpose_endangered = {
+            'purpose_name' : self.purpose_name,
+            'purpose_description' : self.purpose_description
+        }
+        return purpose_endangered
+
     def __repr__(self):
         return str(self.id)
 
@@ -907,6 +1012,21 @@ class PurposeWeed(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        purpose_weed = {
+            'purpose_name' : self.purpose_name,
+            'purpose_description' : self.purpose_description,
+            'publications' : url_array(self, 'publications', key)
+        }
+        return purpose_weed
+
+    def to_json_singular(self, key):
+        purpose_weed = {
+            'purpose_name' : self.purpose_name,
+            'purpose_description' : self.purpose_description
+        }
+        return purpose_weed
+
     def __repr__(self):
         return str(self.id)
 
@@ -939,6 +1059,21 @@ class Ecoregion(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        ecoregion = {
+            'ecoregion_code' : self.ecoregion_code,
+            'ecoregion_description' : self.ecoregion_description,
+            'populations' : url_array(self, 'populations', key)
+        }
+        return ecoregion
+
+    def to_json_singular(self, key):
+        ecoregion = {
+            'ecoregion_code' : self.ecoregion_code,
+            'ecoregion_description' : self.ecoregion_description
+        }
+        return ecoregion
+
     def __repr__(self):
         return str(self.id)
 
@@ -965,6 +1100,19 @@ class Continent(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+    def to_json(self, key):
+        continent = {
+            'continent_name' : self.continent_name,
+            'populations' : url_array(self, 'populations', key)
+        }
+        return continent
+
+    def to_json_singular(self, key):
+        continent = {
+            'continent_name' : self.continent_name
+        }
+        return continent
 
     def __repr__(self):
         return str(self.id)
@@ -995,6 +1143,20 @@ class InvasiveStatusStudy(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        invasive_status_study = {
+            'status_name' : self.status_name,
+            'status_description' : self.status_description,
+            'populations' : url_array(self, 'populations', key)
+        }
+        return invasive_status_study
+
+    def to_json_singular(self, key):
+        invasive_status_study = {
+            'status_name' : self.status_name,
+            'status_description' : self.status_description
+        }
+        return invasive_status_study
     def __repr__(self):
         return str(self.id)
 
