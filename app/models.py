@@ -1186,6 +1186,21 @@ class InvasiveStatusElsewhere(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        invasive_status_elsewhere = {
+            'status_name' : self.status_name,
+            'status_description' : self.status_description,
+            'populations' : url_array(self, 'populations', key)
+        }
+        return invasive_status_elsewhere
+
+    def to_json_singular(self, key):
+        invasive_status_elsewhere = {
+            'status_name' : self.status_name,
+            'status_description' : self.status_description
+        }
+        return invasive_status_elsewhere
+
     def __repr__(self):
         return str(self.id)
 ''' End Meta Tables for Population '''
@@ -1214,6 +1229,19 @@ class StageTypeClass(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+    def to_json(self, key):
+        stage_type_classes = {
+            'type_class' : self.type_class,
+            'stage_types' : self.stage_types
+        }
+        return stage_type_classes
+
+    def to_json_singular(self, key):
+        stage_type_classes = {
+            'type_class' : self.type_class
+        }
+        return stage_type_classes
 
     def __repr__(self):
         return '<Stage Type Class %r>' % self.id
@@ -1245,6 +1273,20 @@ class TransitionType(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+    def to_json(self, key):
+        transition_type = {
+            'trans_code' : self.trans_code,
+            'trans_description' : self.trans_description,
+            'matrix_values' : self.matrix_values
+        }
+        return transition_type
+
+    def to_json_singular(self, key):
+        transition_type = {
+            'type_class' : self.type_class,
+            'trans_description' : self.trans_description
+        }
+        return transition_type
 
     def __repr__(self):
         return '<Transition Type %r>' % self.id
@@ -1275,6 +1317,19 @@ class MatrixComposition(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        matrix_composition = {
+            'comp_name' : self.comp_name,
+            'matrices' : url_array(self, 'matrices', key)
+        }
+        return matrix_composition
+
+    def to_json_singular(self, key):
+        matrix_composition = {
+            'comp_name' : self.comp_name
+        }
+        return matrix_composition
+
     def __repr__(self):
         return str(self.id)
 
@@ -1303,6 +1358,21 @@ class StartSeason(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+    def to_json(self, key):
+        start_season = {
+            'season_id' : self.season_id,
+            'season_name' : self.season_name,
+            'matrices' : url_array(self, 'matrices', key)
+        }
+        return start_season
+
+    def to_json_singular(self, key):
+        start_season = {
+            'season_id' : self.season_id,
+            'season_name' : self.season_name
+        }
+        return start_season
 
     def __repr__(self):
         return str(self.id)
@@ -1333,6 +1403,21 @@ class EndSeason(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        end_season = {
+            'season_id' : self.season_id,
+            'season_name' : self.season_name,
+            'matrices' : url_array(self, 'matrices', key)
+        }
+        return end_season
+
+    def to_json_singular(self, key):
+        end_season = {
+            'season_id' : self.season_id,
+            'season_name' : self.season_name
+        }
+        return end_season
+
     def __repr__(self):
         return str(self.id)
 
@@ -1362,6 +1447,21 @@ class StudiedSex(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        studied_sex = {
+            'sex_code' : self.sex_code,
+            'sex_description' : self.sex_description,
+            'matrices' : url_array(self, 'matrices', key)
+        }
+        return studied_sex
+
+    def to_json_singular(self, key):
+        studied_sex = {
+            'sex_code' : self.sex_code,
+            'sex_description' : self.sex_description
+        }
+        return studied_sex
+
     def __repr__(self):
         return str(self.id)
 
@@ -1390,6 +1490,21 @@ class Captivity(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+    def to_json(self, key):
+        captivity = {
+            'cap_code' : self.cap_code,
+            'cap_description' : self.cap_description,
+            'matrices' : url_array(self, 'matrices', key)
+        }
+        return captivity
+
+    def to_json_singular(self, key):
+        captivity = {
+            'cap_code' : self.cap_code,
+            'cap_description' : self.cap_description
+        }
+        return captivity
 
     def __repr__(self):
         return str(self.id)
@@ -1421,6 +1536,23 @@ class Status(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+    def to_json(self, key):
+        status = {
+            'status_name' : self.status_name,
+            'status_description' : self.status_description,
+            'notes' : self.notes,
+            # 'versions' : [version.to_json(key) for version in self.versions]
+        }
+        return status
+
+    def to_json_singular(self, key):
+        status = {
+            'status_name' : self.status_name,
+            'status_description' : self.status_description,
+            'notes' : self.notes
+        }
+        return status
 
     def __repr__(self):
         return str(self.id)
@@ -2395,6 +2527,20 @@ class Version(db.Model):
     additional_source_id = db.Column(db.Integer, db.ForeignKey('additional_sources.id')) 
     
 
+
+    def to_json(self, key):
+        version = {
+            'version_number' : self.version_number,
+            'original_version' : self.original_version,
+            'version_date_added' : self.version_date_added,
+            'version_timestamp_created' : self.version_timestamp_created,
+            'checked' : self.checked,
+            'status' : self.statuses.to_json_singular(key)
+
+            # versions
+        }
+
+        return version
 
     @staticmethod
     def migrate():
