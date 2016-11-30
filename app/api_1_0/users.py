@@ -1,10 +1,12 @@
 from flask import render_template, jsonify, request, current_app, url_for, abort
 from . import api
+from .. import db
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user
-from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus, OrganismType, ReproductiveRepetition, GrowthFormRaunkiaer, DicotMonoc, AngioGymno, SpandExGrowthType
+from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus, OrganismType, ReproductiveRepetition, GrowthFormRaunkiaer, DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, MissingData, Purpose, ContentEmail, PurposeEndangered, PurposeWeed, Ecoregion, Continent, InvasiveStatusStudy
 from ..decorators import admin_required, permission_required, crossdomain
-from .errors import unauthorized
+from .errors import unauthorized, bad_request
+import sqlalchemy.ext.declarative as declarative
 
 
 def key_valid(key):
@@ -183,6 +185,230 @@ def get_spandex_growth_types(key):
         return jsonify({'spandex_growth_types' : [spandex_growth_type.to_json(key) for spandex_growth_type in spandex_growth_types]})
     else:
         return unauthorized('Invalid credentials') 
+
+''' Publications '''
+#SourceType
+@api.route('/<key>/query/source-type/<int:id>')
+def get_source_type(key, id):
+    source_type = SourceType.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(source_type.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/source-type/all')
+def get_source_types(key):
+    source_types = SourceType.query.all()
+    if key_valid(key):
+        return jsonify({'source_types' : [source_type.to_json(key) for source_type in source_types]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+#Database
+@api.route('/<key>/query/database/<int:id>')
+def get_database(key, id):
+    database = Database.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(database.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/database/all')
+def get_databases(key):
+    databases = Database.query.all()
+    if key_valid(key):
+        return jsonify({'database' : [database.to_json(key) for database in databases]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+#Purpose
+@api.route('/<key>/query/purpose/<int:id>')
+def get_purpose(key, id):
+    purpose = Purpose.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(purpose.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/purpose/all')
+def get_purposes(key):
+    purposes = Purpose.query.all()
+    if key_valid(key):
+        return jsonify({'purpose' : [purpose.to_json(key) for purpose in purposes]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+
+#Missing Data
+@api.route('/<key>/query/missing-data/<int:id>')
+def get_missing_data(key, id):
+    missing_data = MissingData.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(missing_data.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/missing-data/all')
+def get_missing_datas(key):
+    missing_datas = MissingData.query.all()
+    if key_valid(key):
+        return jsonify({'missing_data' : [missing_data.to_json(key) for missing_data in missing_datas]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+
+#Content Email
+@api.route('/<key>/query/content-email/<int:id>')
+def get_content_email(key, id):
+    content_email = ContentEmail.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(content_email.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/content-email/all')
+def get_content_emails(key):
+    content_emails = ContentEmail.query.all()
+    if key_valid(key):
+        return jsonify({'content_email' : [content_email.to_json(key) for content_email in content_emails]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+
+#Purpose Endangered
+@api.route('/<key>/query/purpose-endangered/<int:id>')
+def get_purpose_endangered(key, id):
+    purpose_endangered = PurposeEndangered.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(purpose_endangered.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/purpose-endangered/all')
+def get_purpose_endangereds(key):
+    purpose_endangereds = PurposeEndangered.query.all()
+    if key_valid(key):
+        return jsonify({'purpose_endangered' : [purpose_endangered.to_json(key) for purpose_endangered in purpose_endangereds]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+#Purpose Weed
+@api.route('/<key>/query/purpose-weed/<int:id>')
+def get_purpose_weed(key, id):
+    purpose_weed = PurposeWeed.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(purpose_weed.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/purpose-weed/all')
+def get_purpose_weeds(key):
+    purpose_weeds = PurposeWeed.query.all()
+    if key_valid(key):
+        return jsonify({'purpose_weed' : [purpose_weed.to_json(key) for purpose_weed in purpose_weeds]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+
+''' Population '''
+#Ecoregion
+@api.route('/<key>/query/ecoregion/<int:id>')
+def get_ecoregion(key, id):
+    ecoregion = Ecoregion.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(ecoregion.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/ecoregion/all')
+def get_ecoregions(key):
+    ecoregions = Ecoregion.query.all()
+    if key_valid(key):
+        return jsonify({'ecoregion' : [ecoregion.to_json(key) for ecoregion in ecoregions]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+
+#Continent
+# @api.route('/<key>/query/continent/<int:id>')
+# def get_continent(key, id):
+#     continent = Continent.query.get_or_404(id)
+#     if key_valid(key):
+#         return jsonify(continent.to_json(key))
+#     else:
+#         return unauthorized('Invalid credentials')
+
+# @api.route('/<key>/query/continent/all')
+# def get_continents(key):
+#     continents = Continent.query.all()
+#     if key_valid(key):
+#         return jsonify({'continent' : [continent.to_json(key) for continent in continents]})
+#     else:
+#         return unauthorized('Invalid credentials') 
+
+
+
+''' GLORY '''
+@api.route('/<key>/query/<model>/<int:id>')
+def get_one_entry(key, id, model):
+    class_ = False
+    
+    classes, models, table_names = [], [], []
+    for clazz in db.Model._decl_class_registry.values():
+        try:
+            table_names.append(clazz.__tablename__)
+            classes.append(clazz)
+        except:
+            pass
+    for table in db.metadata.tables.items():
+        if table[0] in table_names:
+            models.append(classes[table_names.index(table[0])])
+
+    for m in models:
+        print model
+        print m.__tablename__
+        if model == m.__tablename__:
+            class_ = m
+
+    if class_:
+        entry = class_.query.get_or_404(1)
+        if key_valid(key):
+            return jsonify(entry.to_json(key))
+        else:
+            return unauthorized('Invalid credentials')
+    else:
+        return bad_request('Bad Request')
+
+@api.route('/<key>/query/<model>/all')
+def get_all_entries(key, model):
+    class_ = False
+    
+    classes, models, table_names = [], [], []
+    for clazz in db.Model._decl_class_registry.values():
+        try:
+            table_names.append(clazz.__tablename__)
+            classes.append(clazz)
+        except:
+            pass
+    for table in db.metadata.tables.items():
+        if table[0] in table_names:
+            models.append(classes[table_names.index(table[0])])
+
+    for m in models:
+        print model
+        print m.__tablename__
+        if model == m.__tablename__:
+            class_ = m
+
+    if class_:
+        entries = class_.query.all()
+        if key_valid(key):
+            return jsonify({model : [entry.to_json(key) for entry in entries]})
+        else:
+            return unauthorized('Invalid credentials')
+    else:
+        return bad_request('Bad Request')
+
 
 ''' Users '''
 
