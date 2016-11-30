@@ -2,7 +2,7 @@ from flask import render_template, jsonify, request, current_app, url_for, abort
 from . import api
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user
-from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus, OrganismType, ReproductiveRepetition, GrowthFormRaunkiaer
+from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus, OrganismType, ReproductiveRepetition, GrowthFormRaunkiaer, DicotMonoc, AngioGymno, SpandExGrowthType
 from ..decorators import admin_required, permission_required, crossdomain
 from .errors import unauthorized
 
@@ -94,7 +94,8 @@ def get_organism_types(key):
     if key_valid(key):
         return jsonify({'organism_types' : [organism_type.to_json(key) for organism_type in organism_types]})
     else:
-        return unauthorized('Invalid credentials') 
+        return unauthorized
+        ('Invalid credentials') 
 
 #Growth Form Raunkiaer
 @api.route('/<key>/query/growth-form/<int:id>')
@@ -113,6 +114,77 @@ def get_growth_forms(key):
     else:
         return unauthorized('Invalid credentials') 
 
+# ReproductiveRepetition
+@api.route('/<key>/query/reproductive-repetition/<int:id>')
+def get_reproductive_repetition(key, id):
+    reproductive_repetition = ReproductiveRepetition.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(reproductive_repetition.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/reproductive-repetition/all')
+def get_reproductive_repetitions(key):
+    reproductive_repetitions = ReproductiveRepetition.query.all()
+    if key_valid(key):
+        return jsonify({'reproductive_repetitions' : [reproductive_repetition.to_json(key) for reproductive_repetition in reproductive_repetitions]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+#DicotMonoc
+@api.route('/<key>/query/dicot-monoc/<int:id>')
+def get_dicot_monoc(key, id):
+    dicot_monoc = DicotMonoc.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(dicot_monoc.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/dicot-monoc/all')
+def get_dicot_monocs(key):
+    dicot_monocs = DicotMonoc.query.all()
+    if key_valid(key):
+        return jsonify({'dicot_monocs' : [dicot_monoc.to_json(key) for dicot_monoc in dicot_monocs]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+
+#AngioGymno
+@api.route('/<key>/query/angio-gymno/<int:id>')
+def get_angio_gymno(key, id):
+    angio_gymno = AngioGymno.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(angio_gymno.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/angio-gymno/all')
+def get_angio_gymnos(key):
+    angio_gymnos = AngioGymno.query.all()
+    if key_valid(key):
+        return jsonify({'angio_gymnos' : [angio_gymno.to_json(key) for angio_gymno in angio_gymnos]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+
+#SpandExGrowthType
+@api.route('/<key>/query/spandex-growth-type/<int:id>')
+def get_spandex_growth_type(key, id):
+    spandex_growth_type = SpandExGrowthType.query.get_or_404(id)
+    if key_valid(key):
+        return jsonify(spandex_growth_type.to_json(key))
+    else:
+        return unauthorized('Invalid credentials')
+
+@api.route('/<key>/query/spandex-growth-type/all')
+def get_spandex_growth_types(key):
+    spandex_growth_types = SpandExGrowthType.query.all()
+    if key_valid(key):
+        return jsonify({'spandex_growth_types' : [spandex_growth_type.to_json(key) for spandex_growth_type in spandex_growth_types]})
+    else:
+        return unauthorized('Invalid credentials') 
+
+''' Users '''
 
 @api.route('/<key>/query/users/<int:id>')
 def get_user(key, id):
