@@ -525,6 +525,19 @@ class ReproductiveRepetition(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        reproductive_repetition = {
+            'repetition_name': self.repetition_name,
+            'traits' : url_array(self, 'traits', key),
+        }
+        return reproductive_repetition
+
+    def to_json_singular(self, key):
+        reproductive_repetition = {
+            'repetition_name': self.repetition_name,
+        }
+        return reproductive_repetition
+
     def __repr__(self):
         return str(self.id)
 
@@ -552,6 +565,19 @@ class DicotMonoc(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        dicot_monoc = {
+            'dicot_monoc_name': self.dicot_monoc_name,
+            'traits' : url_array(self, 'traits', key),
+        }
+        return dicot_monoc
+
+    def to_json_singular(self, key):
+        dicot_monoc = {
+            'dicot_monoc_name': self.dicot_monoc_name,
+        }
+        return dicot_monoc
+
     def __repr__(self):
         return str(self.id)
 
@@ -578,6 +604,19 @@ class AngioGymno(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+    def to_json(self, key):
+        angio_gymno = {
+            'angio_gymno_name': self.angio_gymno_name,
+            'traits' : url_array(self, 'traits', key),
+        }
+        return angio_gymno
+
+    def to_json_singular(self, key):
+        angio_gymno = {
+            'angio_gymno_name': self.angio_gymno_name,
+        }
+        return angio_gymno
 
     def __repr__(self):
         return str(self.id)
@@ -608,6 +647,21 @@ class SpandExGrowthType(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+    def to_json(self, key):
+        spand_ex_growth_type = {
+            'type_name': self.type_name,
+            'type_description': self.type_description,
+            'traits' : url_array(self, 'traits', key),
+        }
+        return spand_ex_growth_type
+
+    def to_json_singular(self, key):
+        spand_ex_growth_type = {
+            'type_name': self.type_name,
+            'type_description': self.type_description
+        }
+        return spand_ex_growth_type
 
     def __repr__(self):
         return str(self.id)
