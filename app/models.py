@@ -307,9 +307,31 @@ class Institute(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
-    def to_json(self, key):
-        print str(self.date_joined)
+    def to_json(self, key):        
         institute = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='institutes', key=key,
+                                      _external=False),
+            'data' :
+                {
+                    'institution_name': self.institution_name,
+                    'institution_short' : self.institution_short,
+                    'main_contact_email' : self.main_contact_email,
+                    'main_contact_name' : self.main_contact_name,
+                    'institution_address' : self.institution_address,
+                    'research_group' : self.research_group,
+                    'date_joined' : str(self.date_joined),
+                    'department' : self.department,
+                    'country' : self.country,
+                    'website' : self.website,
+                    'users' : url_array(self, 'users', key)}
+        }
+        return institute
+
+    def to_json_simple(self, key):
+        institute = {
+        'request_url' : url_for('api.get_one_entry', id=self.id, model='institutes', key=key,
+                                  _external=False), 
+        'data' : {
             'institution_name': self.institution_name,
             'institution_short' : self.institution_short,
             'main_contact_email' : self.main_contact_email,
@@ -319,9 +341,8 @@ class Institute(db.Model):
             'date_joined' : str(self.date_joined),
             'department' : self.department,
             'country' : self.country,
-            'website' : self.website,
-            'users' : url_array(self, 'users', key),
-
+            'website' : self.website}
+            
         }
         return institute
 
@@ -361,11 +382,25 @@ class IUCNStatus(db.Model):
             
     def to_json(self, key):
         iucn_status = {
-            'status_code': self.status_code,
-            'status_name' : self.status_name,
-            'status_description' : self.status_description,
-            'species' : url_array(self, 'species', key),
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='iucn_status', key=key,
+                                  _external=False),
+            'data' : {
+                'status_code': self.status_code,
+                'status_name' : self.status_name,
+                'status_description' : self.status_description,
+                'species' : [species.to_json_simple() for species in self.species]
+                }
+        }
+        return iucn_status
 
+    def to_json_simple(self, key):
+        iucn_status = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='iucn_status', key=key,
+                                  _external=False),
+            'data' : {
+                'status_code': self.status_code,
+                'status_name' : self.status_name
+                }
         }
         return iucn_status
 
@@ -401,11 +436,26 @@ class ESAStatus(db.Model):
 
     def to_json(self, key):
         esa_status = {
-            'status_code': self.status_code,
-            'status_name' : self.status_name,
-            'status_description' : self.status_description,
-            'species' : url_array(self, 'species', key),
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='esa_statuses', key=key,
+                                      _external=False),
+            'data' : {
+                'status_code': self.status_code,
+                'status_name' : self.status_name,
+                'status_description' : self.status_description,
+                'species' : [species.to_json_simple() for species in self.species]
+                }
 
+        }
+        return esa_status
+
+    def to_json_simple(self, key):
+        esa_status = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='esa_statuses', key=key,
+                                      _external=False),
+            'data' : {
+                'status_code': self.status_code,
+                'status_name' : self.status_name
+                }
         }
         return esa_status
 
@@ -444,16 +494,23 @@ class OrganismType(db.Model):
                 db.session.commit()
 
     def to_json(self, key):
-
         organism_type = {
-            'type_name': self.type_name,
-            'traits' : url_array(self, 'traits', key),
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='organism_types', key=key,
+                                      _external=False),
+            'data' : {
+                'type_name': self.type_name,
+                'traits' : [trait.to_json_simple(key) for trait in self.traits]
+            }
         }
         return organism_type
 
-    def to_json_singular(self, key):        
+    def to_json_simple(self, key):        
         organism_type = {
-            'type_name': self.type_name,
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='organism_types', key=key,
+                                      _external=False),
+            'data' : {
+                'type_name': self.type_name
+            }
         }
         return organism_type
 
@@ -486,14 +543,22 @@ class GrowthFormRaunkiaer(db.Model):
 
     def to_json(self, key):
         growth_form = {
-            'type_name': self.form_name,
-            'traits' : url_array(self, 'traits', key),
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='growth_forms_raunkiaer', key=key,
+                                      _external=False),
+            'data' : {
+                'type_name': self.form_name,
+                'traits' : [trait.to_json_simple(key) for trait in self.traits]
+                }
         }
         return growth_form
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         growth_form = {
-            'type_name': self.form_name,
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='growth_forms_raunkiaer', key=key,
+                                      _external=False),
+            'data' : {
+                'type_name': self.form_name
+            }
         }
         return organism_type
 
@@ -527,14 +592,22 @@ class ReproductiveRepetition(db.Model):
 
     def to_json(self, key):
         reproductive_repetition = {
-            'repetition_name': self.repetition_name,
-            'traits' : url_array(self, 'traits', key),
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='reproductive_repetition', key=key,
+                                      _external=False),
+            'data' : {
+                'repetition_name': self.repetition_name,
+                'traits' : [trait.to_json_simple(key) for trait in self.traits]
+                }
         }
         return reproductive_repetition
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         reproductive_repetition = {
-            'repetition_name': self.repetition_name,
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='reproductive_repetition', key=key,
+                                      _external=False),
+            'data' : {
+                'repetition_name': self.repetition_name
+            }
         }
         return reproductive_repetition
 
@@ -567,14 +640,22 @@ class DicotMonoc(db.Model):
 
     def to_json(self, key):
         dicot_monoc = {
-            'dicot_monoc_name': self.dicot_monoc_name,
-            'traits' : url_array(self, 'traits', key),
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='dicot_monoc', key=key,
+                                      _external=False),
+            'data' : {
+                'dicot_monoc_name': self.dicot_monoc_name,
+                'traits' : [trait.to_json_simple(key) for trait in self.traits]
+            }
         }
         return dicot_monoc
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         dicot_monoc = {
-            'dicot_monoc_name': self.dicot_monoc_name,
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='dicot_monoc', key=key,
+                                      _external=False),
+            'data' : {
+                'dicot_monoc_name': self.dicot_monoc_name,
+            }
         }
         return dicot_monoc
 
@@ -607,14 +688,22 @@ class AngioGymno(db.Model):
 
     def to_json(self, key):
         angio_gymno = {
-            'angio_gymno_name': self.angio_gymno_name,
-            'traits' : url_array(self, 'traits', key),
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='angio_gymno', key=key,
+                                      _external=False),
+            'data' : {
+                'angio_gymno_name': self.angio_gymno_name,
+                'traits' : [trait.to_json_simple(key) for trait in self.traits]
+            }
         }
         return angio_gymno
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         angio_gymno = {
-            'angio_gymno_name': self.angio_gymno_name,
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='angio_gymno', key=key,
+                                      _external=False),
+            'data' : {
+                'angio_gymno_name': self.angio_gymno_name
+                }
         }
         return angio_gymno
 
@@ -650,16 +739,24 @@ class SpandExGrowthType(db.Model):
 
     def to_json(self, key):
         spand_ex_growth_type = {
-            'type_name': self.type_name,
-            'type_description': self.type_description,
-            'traits' : url_array(self, 'traits', key),
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='spand_ex_growth_types', key=key,
+                                      _external=False),
+            'data' : {
+                'type_name': self.type_name,
+                'type_description': self.type_description,
+                'traits' : [trait.to_json_simple(key) for trait in self.traits]
+            }
         }
         return spand_ex_growth_type
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         spand_ex_growth_type = {
-            'type_name': self.type_name,
-            'type_description': self.type_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='spand_ex_growth_types', key=key,
+                                      _external=False),
+            'data' : {
+                'type_name': self.type_name,
+                'type_description': self.type_description
+                }
         }
         return spand_ex_growth_type
 
@@ -697,16 +794,24 @@ class SourceType(db.Model):
 
     def to_json(self, key):
         source_type = {
-            'source_name': self.source_name,
-            'source_description': self.source_description,
-            'publications' : url_array(self, 'publications', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='source_types', key=key,
+                                      _external=False),
+            'data' : {
+                'source_name': self.source_name,
+                'source_description': self.source_description,
+                'publications' : [publication.to_json_simple(key) for publication in self.publications]
+            }
         }
         return source_type
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         source_type = {
-            'source_name': self.source_name,
-            'source_description': self.source_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='source_types', key=key,
+                                      _external=False),
+            'data' : {
+                'source_name': self.source_name,
+                'source_description': self.source_description
+            }
         }
         return source_type
 
@@ -754,28 +859,36 @@ class Database(db.Model):
 
     def to_json(self, key):
         database = {
-            'database_name' : self.database_name,
-            'database_description' : self.database_description,
-            'database_master_version' : self.database_master_version,
-            'database_date_created' : self.database_date_created,
-            'database_number_species_accepted' : self.database_number_species_accepted,
-            'database_number_studies' : self.database_number_studies,
-            'database_number_matrices' : self.database_number_matrices,
-            'database_agreement' : self.database_agreement,
-            'versions' : [version.to_json(key) for version in self.versions]
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='databases', key=key,
+                                      _external=False),
+            'data' : {
+                'database_name' : self.database_name,
+                'database_description' : self.database_description,
+                'database_master_version' : self.database_master_version,
+                'database_date_created' : self.database_date_created,
+                'database_number_species_accepted' : self.database_number_species_accepted,
+                'database_number_studies' : self.database_number_studies,
+                'database_number_matrices' : self.database_number_matrices,
+                'database_agreement' : self.database_agreement,
+                'versions' : [version.to_json(key) for version in self.versions]
+            }
         }
         return database
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         database = {
-            'database_name' : self.database_name,
-            'database_description' : self.database_description,
-            'database_master_version' : self.database_master_version,
-            'database_date_created' : self.database_date_created,
-            'database_number_species_accepted' : self.database_number_species_accepted,
-            'database_number_studies' : self.database_number_studies,
-            'database_number_matrices' : self.database_number_matrices,
-            'database_agreement' : self.database_agreement
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='databases', key=key,
+                                      _external=False),
+            'data' : {
+                'database_name' : self.database_name,
+                'database_description' : self.database_description,
+                'database_master_version' : self.database_master_version,
+                'database_date_created' : self.database_date_created,
+                'database_number_species_accepted' : self.database_number_species_accepted,
+                'database_number_studies' : self.database_number_studies,
+                'database_number_matrices' : self.database_number_matrices,
+                'database_agreement' : self.database_agreement
+            }
         }
         return database
 
@@ -811,16 +924,24 @@ class Purpose(db.Model):
 
     def to_json(self, key):
         purpose = {
-            'purpose_name' : self.purpose_name,
-            'purpose_description' : self.purpose_description,
-            'publications' : url_array(self, 'publications', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='purposes', key=key,
+                                      _external=False),
+            'data' : {
+                'purpose_name' : self.purpose_name,
+                'purpose_description' : self.purpose_description,
+                'publications' : [publication.to_json_simple(key) for publication in self.publications]
+            }
         }
         return purpose
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         purpose = {
-            'purpose_name' : self.purpose_name,
-            'purpose_description' : self.purpose_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='purposes', key=key,
+                                          _external=False),
+            'data' : {
+                'purpose_name' : self.purpose_name,
+                'purpose_description' : self.purpose_description
+            }
         }
         return purpose
 
@@ -862,16 +983,24 @@ class MissingData(db.Model):
 
     def to_json(self, key):
         missing_data = {
-            'missing_code' : self.missing_code,
-            'missing_description' : self.missing_description,
-            'publications' : url_array(self, 'publications', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='missing_data', key=key,
+                                      _external=False),
+            'data' : {
+                'missing_code' : self.missing_code,
+                'missing_description' : self.missing_description,
+                'publications' : [publication.to_json_simple(key) for publication in self.publications]
+            }
         }
         return missing_data
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         missing_data = {
-            'missing_code' : self.missing_code,
-            'missing_description' : self.missing_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='missing_data', key=key,
+                                      _external=False),
+            'data' : {
+                'missing_code' : self.missing_code,
+                'missing_description' : self.missing_description
+            }
         }
         return missing_data
 
@@ -916,16 +1045,24 @@ class ContentEmail(db.Model):
 
     def to_json(self, key):
         content_email = {
-            'content_code' : self.content_code,
-            'content_description' : self.content_description,
-            'publications' : url_array(self, 'publications', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='content_email', key=key,
+                                      _external=False),
+            'data' : {
+                'content_code' : self.content_code,
+                'content_description' : self.content_description,
+                'author_contacts' : [author_contacts.to_json_simple(key) for author_contacts in self.author_contacts]
+            }
         }
         return content_email
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         content_email = {
-            'content_code' : self.content_code,
-            'content_description' : self.content_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='content_email', key=key,
+                                      _external=False),
+            'data' : {
+                'content_code' : self.content_code,
+                'content_description' : self.content_description
+            }
         }
         return content_email
 
@@ -966,16 +1103,24 @@ class PurposeEndangered(db.Model):
 
     def to_json(self, key):
         purpose_endangered = {
-            'purpose_name' : self.purpose_name,
-            'purpose_description' : self.purpose_description,
-            'publications' : url_array(self, 'publications', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='purposes_endangered', key=key,
+                                      _external=False),
+            'data' : {
+                'purpose_name' : self.purpose_name,
+                'purpose_description' : self.purpose_description,
+                'studies' : [studies.to_json_simple(key) for studies in self.studies]
+            }
         }
         return purpose_endangered
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         purpose_endangered = {
-            'purpose_name' : self.purpose_name,
-            'purpose_description' : self.purpose_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='purposes_endangered', key=key,
+                                      _external=False),
+            'data' : {
+                'purpose_name' : self.purpose_name,
+                'purpose_description' : self.purpose_description
+            }
         }
         return purpose_endangered
 
@@ -1014,16 +1159,24 @@ class PurposeWeed(db.Model):
 
     def to_json(self, key):
         purpose_weed = {
-            'purpose_name' : self.purpose_name,
-            'purpose_description' : self.purpose_description,
-            'publications' : url_array(self, 'publications', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='purposes_weed', key=key,
+                                      _external=False),
+            'data' : {
+                'purpose_name' : self.purpose_name,
+                'purpose_description' : self.purpose_description,
+                'studies' : [studies.to_json_simple(key) for studies in self.studies]
+            }
         }
         return purpose_weed
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         purpose_weed = {
-            'purpose_name' : self.purpose_name,
-            'purpose_description' : self.purpose_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='purposes_weed', key=key,
+                                      _external=False),
+            'data' : {
+                'purpose_name' : self.purpose_name,
+                'purpose_description' : self.purpose_description
+            }
         }
         return purpose_weed
 
@@ -1061,16 +1214,24 @@ class Ecoregion(db.Model):
 
     def to_json(self, key):
         ecoregion = {
-            'ecoregion_code' : self.ecoregion_code,
-            'ecoregion_description' : self.ecoregion_description,
-            'populations' : url_array(self, 'populations', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='ecoregions', key=key,
+                                      _external=False),
+            'data' : {
+                'ecoregion_code' : self.ecoregion_code,
+                'ecoregion_description' : self.ecoregion_description,
+                'populations' : [population.to_json_simple(key) for population in self.populations]
+            }
         }
         return ecoregion
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         ecoregion = {
-            'ecoregion_code' : self.ecoregion_code,
-            'ecoregion_description' : self.ecoregion_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='ecoregions', key=key,
+                                      _external=False),
+            'data' : {
+                'ecoregion_code' : self.ecoregion_code,
+                'ecoregion_description' : self.ecoregion_description
+            }
         }
         return ecoregion
 
@@ -1103,14 +1264,22 @@ class Continent(db.Model):
 
     def to_json(self, key):
         continent = {
-            'continent_name' : self.continent_name,
-            'populations' : url_array(self, 'populations', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='continents', key=key,
+                                      _external=False),
+            'data' : {
+                'continent_name' : self.continent_name,
+                'populations' : [population.to_json_simple(key) for population in self.populations] if self.populations else []
+            }
         }
         return continent
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         continent = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='continents', key=key,
+                                      _external=False),
+            'data' : {
             'continent_name' : self.continent_name
+            }
         }
         return continent
 
@@ -1145,16 +1314,24 @@ class InvasiveStatusStudy(db.Model):
 
     def to_json(self, key):
         invasive_status_study = {
-            'status_name' : self.status_name,
-            'status_description' : self.status_description,
-            'populations' : url_array(self, 'populations', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='invasivestatusstudies', key=key,
+                                      _external=False),
+            'data' : {
+                'status_name' : self.status_name,
+                'status_description' : self.status_description,
+                'populations' : [population.to_json_simple(key) for population in self.populations]
+            }
         }
         return invasive_status_study
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         invasive_status_study = {
-            'status_name' : self.status_name,
-            'status_description' : self.status_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='invasivestatusstudies', key=key,
+                                      _external=False),
+            'data' : {
+                'status_name' : self.status_name,
+                'status_description' : self.status_description
+            }
         }
         return invasive_status_study
     def __repr__(self):
@@ -1188,16 +1365,24 @@ class InvasiveStatusElsewhere(db.Model):
 
     def to_json(self, key):
         invasive_status_elsewhere = {
-            'status_name' : self.status_name,
-            'status_description' : self.status_description,
-            'populations' : url_array(self, 'populations', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='invasive_status_elsewhere', key=key,
+                                      _external=False),
+            'data' : {
+                'status_name' : self.status_name,
+                'status_description' : self.status_description,
+                'populations' : [population.to_json_simple(key) for population in self.populations]
+            }
         }
         return invasive_status_elsewhere
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         invasive_status_elsewhere = {
-            'status_name' : self.status_name,
-            'status_description' : self.status_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='invasive_status_elsewhere', key=key,
+                                      _external=False),
+            'data' : {
+                'status_name' : self.status_name,
+                'status_description' : self.status_description
+            }
         }
         return invasive_status_elsewhere
 
@@ -1232,14 +1417,22 @@ class StageTypeClass(db.Model):
 
     def to_json(self, key):
         stage_type_classes = {
-            'type_class' : self.type_class,
-            'stage_types' : self.stage_types
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='stage_type_classes', key=key,
+                                      _external=False),
+            'data' : {
+                'type_class' : self.type_class,
+                'stage_types' : [self.stage_types for stage_type in self.stage_types] if self.stage_types else []
+            }
         }
         return stage_type_classes
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         stage_type_classes = {
-            'type_class' : self.type_class
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='stage_type_classes', key=key,
+                                      _external=False),
+            'data' : {
+                'type_class' : self.type_class
+            }
         }
         return stage_type_classes
 
@@ -1275,16 +1468,24 @@ class TransitionType(db.Model):
                 db.session.commit()
     def to_json(self, key):
         transition_type = {
-            'trans_code' : self.trans_code,
-            'trans_description' : self.trans_description,
-            'matrix_values' : self.matrix_values
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='transition_types', key=key,
+                                      _external=False),
+            'data' : {
+                'trans_code' : self.trans_code,
+                'trans_description' : self.trans_description,
+                'matrix_values' : [value.to_json_simple() for value in matrix_values] if self.matrix_values else []
+            }
         }
         return transition_type
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         transition_type = {
-            'type_class' : self.type_class,
-            'trans_description' : self.trans_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='transition_types', key=key,
+                                      _external=False),
+            'data' : {
+                'type_class' : self.type_class,
+                'trans_description' : self.trans_description
+            }
         }
         return transition_type
 
@@ -1319,14 +1520,22 @@ class MatrixComposition(db.Model):
 
     def to_json(self, key):
         matrix_composition = {
-            'comp_name' : self.comp_name,
-            'matrices' : url_array(self, 'matrices', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='matrix_compositions', key=key,
+                                      _external=False),
+            'data' : {
+                'comp_name' : self.comp_name,
+                'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices]
+            }
         }
         return matrix_composition
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         matrix_composition = {
-            'comp_name' : self.comp_name
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='matrix_compositions', key=key,
+                                      _external=False),
+            'data' : {
+                'comp_name' : self.comp_name
+            }
         }
         return matrix_composition
 
@@ -1367,7 +1576,7 @@ class StartSeason(db.Model):
         }
         return start_season
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         start_season = {
             'season_id' : self.season_id,
             'season_name' : self.season_name
@@ -1411,7 +1620,7 @@ class EndSeason(db.Model):
         }
         return end_season
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         end_season = {
             'season_id' : self.season_id,
             'season_name' : self.season_name
@@ -1455,7 +1664,7 @@ class StudiedSex(db.Model):
         }
         return studied_sex
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         studied_sex = {
             'sex_code' : self.sex_code,
             'sex_description' : self.sex_description
@@ -1499,7 +1708,7 @@ class Captivity(db.Model):
         }
         return captivity
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         captivity = {
             'cap_code' : self.cap_code,
             'cap_description' : self.cap_description
@@ -1542,11 +1751,11 @@ class Status(db.Model):
             'status_name' : self.status_name,
             'status_description' : self.status_description,
             'notes' : self.notes,
-            # 'versions' : [version.to_json(key) for version in self.versions]
+            'versions' : [version.to_json_simple(key) for version in self.versions]
         }
         return status
 
-    def to_json_singular(self, key):
+    def to_json_simple(self, key):
         status = {
             'status_name' : self.status_name,
             'status_description' : self.status_description,
@@ -1585,6 +1794,21 @@ class Small(db.Model):
                 db.session.add(i)
                 db.session.commit()
 
+    def to_json(self, key):
+        small = {
+            'small_name' : self.small_name,
+            'small_description' : self.small_description,
+            'fixed' : [fix.to_json(key) for fix in self.fixed]
+        }
+        return small
+
+    def to_json_simple(self, key):
+        small = {
+            'small_name' : self.small_name,
+            'small_description' : self.small_description
+        }
+        return small
+
     def __repr__(self):
         return '<Small %r>' % self.id
 
@@ -1613,6 +1837,21 @@ class CensusTiming(db.Model):
 
                 db.session.add(i)
                 db.session.commit()
+
+    def to_json(self, key):
+        census_timing = {
+            'census_name' : self.census_name,
+            'census_description' : self.census_description,
+            'fixed' : [fix.to_json(key) for fix in self.fixed]
+        }
+        return census_timing
+
+    def to_json_simple(self, key):
+        census_timing = {
+            'census_name' : self.census_name,
+            'census_description' : self.census_description
+        }
+        return census_timing
 
     def __repr__(self):
         return '<StageClassInfo %r>' % self.id
@@ -1649,23 +1888,38 @@ class Species(db.Model):
 
     def to_json(self, key):
         species = {
-            'species_accepted': self.species_accepted,
-            'taxonomy' : [taxonomy.to_json(key) for taxonomy in self.taxonomies][0],
-            'traits' : [trait.to_json(key) for trait in self.traits][0],
-            'populations' : url_array(self, 'populations', key),
-            'number_populations' : len(url_array(self, 'populations', key)),
-            'gbif_taxon_key' : self.gbif_taxon_key
-            # 'stages' : [stage.to_json() for stage in self.stages][0]
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='species', key=key,
+                                      _external=False),
+            'data' : {
+                'species_accepted': self.species_accepted,
+                'taxonomy' : [taxonomy.to_json_simple(key) for taxonomy in self.taxonomies][0],
+                'traits' : [trait.to_json_simple(key) for trait in self.traits],
+                'stages' : [stages.to_json_simple(key) for stages in self.stages] if self.stages else [],
+                'populations' : [population.to_json_simple(key) for population in self.populations],
+                'number_populations' : len([population.to_json_simple(key) for population in self.populations]),
+                'gbif_taxon_key' : self.gbif_taxon_key,
+                'iucn_status' : self.iucn_status.to_json_simple(key) if self.iucn_status else None,
+                'esa_status' : self.esa_status.to_json_simple(key) if self.esa_status else None,
+                'versions' : [version.to_json_simple(key) for version in self.versions]
+            }
         }
         return species
 
     def to_json_simple(self, key):
         species = {
-            'species_accepted': self.species_accepted,
-            'taxonomy' : url_array(self, 'taxonomies', key),
-            'traits' : url_array(self, 'traits', key),
-            'populations' : url_array(self, 'populations', key)
-            # 'stages' : [stage.to_json() for stage in self.stages][0]
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='species', key=key,
+                                      _external=False),
+            'data' : {
+                'species_accepted': self.species_accepted,
+                'taxonomy' : [taxonomy.to_json_simple(key) for taxonomy in self.taxonomies][0],
+                'traits' : [trait.to_json_simple(key) for trait in self.traits],
+                'stages_len' : len(self.stages),
+                'populations_len' : len(self.populations),
+                'gbif_taxon_key' : self.gbif_taxon_key,
+                'iucn_status' : self.iucn_status.to_json_simple(key) if self.iucn_status else None,
+                'esa_status' : self.esa_status.to_json_simple(key) if self.esa_status else None,
+                'versions' : len(self.versions)
+            }
         }
         return species
 
@@ -1702,11 +1956,14 @@ class Taxonomy(db.Model):
         pass
 
     def to_json(self, key):
-        try:
-            taxonomy = {
+        taxonomy = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='taxonomies', key=key,
+                                      _external=False),
+            'data' : {
+                'species' : self.species.to_json_simple(key),
+                'publication' : self.publication.to_json_simple(key),
                 'species_author' : self.species_author,
                 'species_accepted' : self.species_accepted,
-                'publication' : (self.publication).to_json(key),
                 'authority' : self.authority,
                 'taxonomic_status' : self.taxonomic_status.status_name,
                 'tpl_version' : self.tpl_version,
@@ -1718,25 +1975,32 @@ class Taxonomy(db.Model):
                 'tax_order' : self.tax_order,
                 'tax_class' : self.tax_class,
                 'phylum' : self.phylum,
-                'kingdom' : self.kingdom
+                'kingdom' : self.kingdom,
+                'col_check_ok' : self.col_check_ok,
+                'col_check_date' : self.col_check_date,
+                'versions' : [version.to_json_simple(key) for version in self.versions]
             }
-        except:
-            taxonomy = {
+        }
+        return taxonomy
+
+    def to_json_simple(self, key):
+        taxonomy = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='taxonomies', key=key,
+                                      _external=False),
+            'data' : {
+                'publication' : self.publication.to_json_simple(key),
                 'species_author' : self.species_author,
                 'species_accepted' : self.species_accepted,
-                'publication' : (self.publication).to_json(key),
                 'authority' : self.authority,
-                'tpl_version' : self.tpl_version,
-                'infraspecies_accepted' : self.infraspecies_accepted,
-                'species_epithet_accepted' : self.species_epithet_accepted,
-                'genus_accepted' : self.genus_accepted,
                 'genus' : self.genus,
                 'family' : self.family,
                 'tax_order' : self.tax_order,
                 'tax_class' : self.tax_class,
                 'phylum' : self.phylum,
-                'kingdom' : self.kingdom
+                'kingdom' : self.kingdom,
+                'versions' : len(self.versions)
             }
+        }
         return taxonomy
 
     def __repr__(self):
@@ -1768,12 +2032,36 @@ class Trait(db.Model):
 
     def to_json(self, key):
         trait = {
-            'max_height' : self.max_height,
-            'organism_type_id' : self.organism_type.type_name,
-            # 'growth_form_raunkiaer' : self.growth_form_raunkiaer.form_name,
-            # 'reproductive_repetition' : self.reproductive_repetition.repetition_name,
-            # 'dicot_monoc' : self.dicot_monoc.dicot_monoc_name,
-            # 'angio_gymno' : self.angio_gymno.angio_gymno_name
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='traits', key=key,
+                                      _external=False),
+            'data' : {
+                'species' : self.species.to_json_simple(key) if self.species else None,
+                'max_height' : self.max_height,
+                'organism_type' : self.organism_type.to_json_simple(key) if self.organism_type else None,
+                'growth_form_raunkiaer' : self.growth_form_raunkiaer.to_json_simple(key) if self.growth_form_raunkiaer else None,
+                'reproductive_repetition' : self.reproductive_repetition.to_json_simple(key) if self.reproductive_repetition else None,
+                'dicot_monoc' : self.dicot_monoc.to_json_simple(key) if self.dicot_monoc else None,
+                'angio_gymno' : self.angio_gymno.to_json_simple(key) if self.angio_gymno else None,
+                'spand_ex_growth_type' : self.spand_ex_growth_types.to_json_simple(key) if self.spand_ex_growth_types else None,
+                'versions' : [version.to_json_simple(key) for version in self.versions]
+                }
+        }
+        return trait
+
+    def to_json_simple(self, key):
+        trait = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='traits', key=key,
+                                      _external=False),
+            'data' : {
+                'species' : self.species.species_accepted if self.species else None,
+                # 'max_height' : self.max_height,
+                # 'organism_type' : self.organism_type.to_json_simple(key) if self.organism_type else None,
+                # 'growth_form_raunkiaer' : self.growth_form_raunkiaer.to_json_simple(key) if self.growth_form_raunkiaer else None,
+                # 'reproductive_repetition' : self.reproductive_repetition.to_json_simple(key) if self.reproductive_repetition else None,
+                # 'dicot_monoc' : self.dicot_monoc.to_json_simple(key) if self.dicot_monoc else None,
+                # 'angio_gymno' : self.angio_gymno.to_json_simple(key) if self.angio_gymno else None,
+                # 'spand_ex_growth_type' : self.spand_ex_growth_types.to_json_simple(key) if self.spand_ex_growth_types else None
+                }
         }
         return trait
 
@@ -1830,36 +2118,65 @@ class Publication(db.Model):
 
     def to_json(self, key):
         publication = {
-            # 'source_type' : self.source_type.source_name,
-            'authors' : self.authors,
-            'editors' : self.editors,
-            'pub_title' : self.pub_title,
-            'journal_book_conf' : self.journal_book_conf,
-            'year' : self.year,
-            'volume' : self.volume,
-            'pages' : self.pages,
-            'publisher' : self.publisher,
-            'city' : self.city,
-            'country' : self.country,
-            'DOI_ISBN' : self.DOI_ISBN,
-            'name' : self.name,
-            'corresponding_author' : self.corresponding_author,
-            'email' : self.email,
-            # 'purposes' : self.purposes.purpose_name,
-            # 'date_digitised' : self.date_digitised,
-            'embargo' : self.embargo,
-            # 'missing_data' : self.missing_data.missing_code,
-            'additional_source_string' : self.additional_source_string,
-            # Author contacts?
-            # Additional Sources?
-            'populations' : url_array(self, 'populations', key),   
-            # 'stages' : [stage.to_json() for stage in self.stages][0]
-            # 'treatments' : [treatment.to_json() for treatment in self.treatments][0]
-            'taxonomies' : url_array(self, 'taxonomies', key),
-            'studies' : url_array(self, 'studies', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='publications', key=key,
+                                      _external=False),
+            'data' : {
+                'source_type' : self.source_type.to_json_simple(key) if self.source_type else None,
+                'authors' : self.authors,
+                'editors' : self.editors,
+                'pub_title' : self.pub_title,
+                'journal_book_conf' : self.journal_book_conf,
+                'year' : self.year,
+                'volume' : self.volume,
+                'pages' : self.pages,
+                'publisher' : self.publisher,
+                'city' : self.city,
+                'country' : self.country,
+                'institution' : self.institution,
+                'DOI_ISBN' : self.DOI_ISBN,
+                'name' : self.name,
+                'corresponding_author' : self.corresponding_author,
+                'email' : self.email,
+                'purposes' : self.purpose.to_json_simple(key) if self.purpose else None,
+                'date_digitised' : self.date_digitised,
+                'embargo' : self.embargo,
+                'missing_data' : self.missing_data.to_json_simple(key) if self.purposes else None,
+                'additional_source_string' : self.additional_source_string,
+                'author_contacts' : self.author_contacts.to_json_simple(key) if self.author_contacts else None,
+                'additional_sources' : self.additional_sources.to_json_simple(key) if self.additional_sources else None,
+                'populations' : [population.to_json_simple(key) for population in self.populations],
+                'stages' : [stages.to_json_simple(key) for stages in self.stages] if self.stages else None,
+                'taxonomies' : [taxonomies.to_json_simple(key) for taxonomies in self.taxonomies],
+                'studies' : [studies.to_json_simple(key) for studies in self.studies] if self.studies else None,
+                'versions' : [versions.to_json_simple(key) for versions in self.versions] if self.versions else None
+            }
         }
         return publication
 
+    def to_json_simple(self, key):
+        publication = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='publications', key=key,
+                                      _external=False),
+            'data' : {
+                'source_type' : self.source_type.to_json_simple(key) if self.source_type else None,
+                'authors' : self.authors,
+                'pub_title' : self.pub_title,
+                'year' : self.year,
+                'DOI_ISBN' : self.DOI_ISBN,
+                'name' : self.name,
+                'purpose' : self.purpose.to_json_simple(key) if self.purpose else None,
+                'date_digitised' : self.date_digitised,
+                'embargo' : self.embargo,
+                'additional_source_string' : self.additional_source_string,
+                'additional_sources' : len(self.additional_sources),
+                'populations' : len(self.populations),
+                'stages' : len(self.stages),
+                'taxonomies' : len(self.taxonomies),
+                'studies' : len(self.studies),
+                'versions' : len(self.versions)
+            }
+        }
+        return publication
 
     def __repr__(self):
         return '<Publication %r>' % self.id
@@ -1889,15 +2206,40 @@ class Study(db.Model):
 
     def to_json(self, key):
         study = {
-            'publication' : url_for('api.get_publication', id=self.publication.id, key=key,
-                                  _external=False),
-            'study_duration' : self.study_duration,
-            'study_start' : self.study_start,
-            'study_end' : self.study_end,
-            'number_populations' : self.number_populations,           
-            'matrices' : url_array(self, 'matrices', key),
-            'populations' : url_array(self, 'populations', key)
-        }
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='studies', key=key,
+                                      _external=False),
+            'data' : {
+                    'publication' : self.publication.to_json_simple(key),
+                    'study_duration' : self.study_duration,
+                    'study_start' : self.study_start,
+                    'study_end' : self.study_end,
+                    'purpose_endangered' : self.purpose_endangered.to_json_simple(key) if self.purpose_endangered else None,
+                    'purpose_weed' : self.purpose_weed.to_json_simple(key) if self.purpose_weed else Nopne,
+                    'number_populations' : self.number_populations,           
+                    'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices],
+                    'populations' : [population.to_json_simple(key) for population in self.populations],
+                    'versions' : [version.to_json_simple(key) for version in self.versions]
+                }
+            }
+        return study
+
+    def to_json_simple(self, key):
+        study = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='studies', key=key,
+                                      _external=False),
+            'data' : {
+                    'publication' : self.publication.to_json_simple(key),
+                    'study_duration' : self.study_duration,
+                    'study_start' : self.study_start,
+                    'study_end' : self.study_end,
+                    'purpose_endangered' : self.purpose_endangered.to_json_simple(key) if self.purpose_endangered else None,
+                    'purpose_weed' : self.purpose_weed.to_json_simple(key) if self.purpose_weed else None,
+                    'number_populations' : self.number_populations,           
+                    'matrices' : len(self.matrices),
+                    'populations' : len(self.populations),
+                    'versions' : len(self.versions)
+                }
+            }
         return study
 
     def __repr__(self):
@@ -2033,38 +2375,49 @@ class Population(db.Model):
 
 
     def to_json(self, key):
-        try:
-            population = {
-                'species' : url_for('api.get_species', id=self.species.id, key=key,
+        population = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='populations', key=key,
                                       _external=False),
-                'publication' : url_for('api.get_publication', id=self.publication.id, key=key,
-                                      _external=False),
+            'data' : {
+                'species' : self.species.to_json_simple(key),
+                'publication' : self.publication.to_json_simple(key),
                 'study' : self.study.to_json(key),
                 'species_author' : self.species_author,
                 'name' : self.name,
-                'ecoregion' : self.ecoregion.ecoregion_code,
+                'ecoregion' : self.ecoregion.to_json_simple(key),
+                'invasive_status_study' : self.invasive_status_study.to_json_simple(key),
+                'invasive_status_elsewhere' : self.invasive_status_elsewhere.to_json_simple(key),
                 'country' : self.country,
-                'continent' : self.continent.continent_name,
-                'geometries' : self.geometries_dec()
-
-                # Matrices?
+                'continent' : self.continent.to_json_simple(),
+                'longitude' : self.longitude,
+                'latitude' : self.latitude,
+                'altitude' : self.altitude,
+                'population_size' : self.pop_size,
+                'matrices' : [matrix.to_json_simple() for matrix in self.matrices] if self.matrices else None,
+                'versions' : [version.to_json_simple() for version in self.versions] if self.versions else None,
+                 # Matrices?
             }
-        except: 
-            population = {
-            'species' : url_for('api.get_species', id=self.species.id, key=key,
-                                  _external=False),
-            'publication' : url_for('api.get_publication', id=self.publication.id, key=key,
-                                  _external=False),
-            'study' : self.study.to_json(key),
-            'species_author' : self.species_author,
-            'name' : self.name,
-            'country' : self.country,
-            'geometries' : self.geometries_dec()
-
-            # Matrices?
+           
         }
+
         return population
+
+    def to_json_simple(self, key):
+        print url_for('api.get_one_entry', id=self.id, model='populations', key=key,
+                                      _external=False)
+        population = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='populations', key=key,
+                                      _external=False),
+            'data' : {
+                'name' : self.name,
+                'ecoregion' : self.ecoregion.to_json_simple(key) if self.ecoregion else None,
+                'country' : self.country
+            }
+           
+        }
+
         return population
+
 
     @staticmethod
     def migrate():
@@ -2156,11 +2509,27 @@ class Treatment(db.Model):
 
     def to_json(self, key):
         treatment= {
-            'type_name' : self.type_name,
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='treatments', key=key,
+                                  _external=False),
+            'data' : {
+                'treatment_name' : self.treatment_name,
+                'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices]
+            }
 
-            # Matrices?
         }
-        return treatment_type
+        return treatment
+
+    def to_json_simple(self, key):
+        treatment= {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='treatments', key=key,
+                                  _external=False),
+            'data' : {
+                'treatment_name' : self.treatment_name,
+                'matrices' : len(self.matrices)
+            }
+
+        }
+        return treatment
 
 
     def __repr__(self):
@@ -2329,78 +2698,88 @@ class Matrix(db.Model):
             print("UID already exists")
             return 
 
-    def to_json(self, key):
-        try:
-            matrix = {
-                'population' : url_for('api.get_population', key=key, id=self.population.id,
+    def to_json(self, key):       
+        matrix = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='matrices', key=key,
                                   _external=False),
-                'study' : url_for('api.get_study', id=self.study.id, key=key,
-                                  _external=False),
-                'treatment' : self.treatment.treatment_name,
+            'data' : {
+                'population' : self.population.to_json_simple(key),
+                'study' : self.study.to_json_simple(key),
+                'treatment' : self.treatment.to_json_simple(key),
                 'matrix_split' : self.matrix_split,
-                'matrix_composition' : self.matrix_composition.comp_name,
+                'matrix_composition' : self.matrix_composition.to_json_simple(key),
                 'survival_issue' : self.survival_issue,
                 'n_intervals' : self.n_intervals,
                 'periodicity' : self.periodicity,
                 'matrix_criteria_size' : self.matrix_criteria_size,
                 'matrix_criteria_ontogeny' : self.matrix_criteria_ontogeny,
                 'matrix_criteria_age' : self.matrix_criteria_age,
-                'matrix_start' : self.matrix_start,
-                'matrix_end' : self.matrix_end,
-                'matrix_start_season' : self.matrix_start_season.season_name,
-                'matrix_end_season' : self.matrix_end_season.season_name,
+                'matrix_start_season' : self.start_season.to_json_simple(key) if self.start_season else None,
+                'matrix_end_season' : self.end_season.to_json_simple(key) if self.end_season else None,
                 'matrix_fec' : self.matrix_fec,
                 'matrix_a_string' : self.matrix_a_string,
+                'matrix_u_string' : self.matrix_u_string,
+                'matrix_f_string' : self.matrix_f_string,
                 'matrix_class_string' : self.matrix_class_string,
                 'n_plots' : self.n_plots,
                 'plot_size' : self.plot_size,
-                'studied_sex' : self.studied_sex.sex_code,
-                'captivity' : self.captivity.cap_code,
+                'studied_sex' : self.studied_sex.to_json_simple(key),
+                'captivities' : self.captivities.to_json_simple(key),
                 'matrix_dimension' : self.matrix_dimension,
-                'observations' : self.observations
-                
-                # Intervals?
-                # Matrix Values?
-                # Matrix Stages?
-                # Stages?
-                # Fixed?
-            }
-        except:
-            # Without seasons
-            matrix = {
-                'population' : url_for('api.get_population', id=self.population.id, key=key,
-                                  _external=False),
-                'study' : url_for('api.get_study', id=self.study.id, key=key,
-                                  _external=False),
-                'treatment' : self.treatment.treatment_name,
-                'matrix_split' : self.matrix_split,
-                'matrix_composition' : self.matrix_composition.comp_name,
+                'observations' : self.observations,
+                'uid' : self.uid,
+                'seasonal' : self.seasonal,
                 'survival_issue' : self.survival_issue,
-                'n_intervals' : self.n_intervals,
-                'periodicity' : self.periodicity,
-                'matrix_criteria_size' : self.matrix_criteria_size,
-                'matrix_criteria_ontogeny' : self.matrix_criteria_ontogeny,
-                'matrix_criteria_age' : self.matrix_criteria_age,
-                'matrix_start' : self.matrix_start,
-                'matrix_end' : self.matrix_end,
-                'matrix_start_season' : None,
-                'matrix_end_season' : None,
-                'matrix_fec' : self.matrix_fec,
+                'matrix_start_year' : self.matrix_start_year,
+                'matrix_start_month' : self.matrix_start_month,
+                'matrix_end_year' : self.matrix_end_year,
+                'matrix_end_month' : self.matrix_end_month,
+                'matrix_difficulty' : self.matrix_difficulty,
+                'matrix_complete' : self.matrix_complete,
+                'independence_origin' : self.independence_origin,
+                'n_individuals' : self.n_individuals,
+                'class_organized' : self.class_organized,
+                'class_author' : self.class_author,
+                'class_number' : self.class_number,
+                'vectors_includes_na' : self.vectors_includes_na,
+                'independent' : self.independent,
+                'non_independence' : self.non_independence,
+                'non_independence_author' : self.non_independence_author,
+                'intervals' : [interval.to_json_simple(key) for interval in self.intervals] if self.intervals else [],
+                'matrix_values' : [matrix_value.to_json_simple(key) for matrix_value in self.matrix_values] if self.matrix_values else [],
+                'matrix_stages' : [matrix_stage.to_json_simple(key) for matrix_stage in self.matrix_stages] if self.matrix_stages else [],
+                'fixed' : [fixed.to_json_simple(key) for fixed in self.fixed] if self.fixed else [],
+                'seeds' : [seeds.to_json_simple(key) for seeds in self.seeds] if self.seeds else [],
+                'versions' : [versions.to_json_simple(key) for versions in self.versions] if self.versions else []
+            }
+        }
+        return matrix
+
+    def to_json_simple(self, key):       
+        matrix = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='matrices', key=key,
+                                  _external=False),
+            'data' : {
+                'treatment' : self.treatment.to_json_simple(key),
+                'matrix_split' : self.matrix_split,
+                'matrix_composition' : self.matrix_composition.to_json_simple(key),
+                'survival_issue' : self.survival_issue,
                 'matrix_a_string' : self.matrix_a_string,
                 'matrix_class_string' : self.matrix_class_string,
-                'n_plots' : self.n_plots,
-                'plot_size' : self.plot_size,
-                # 'studied_sex' : self.studied_sex.sex_code,
-                'captivity' : None,
                 'matrix_dimension' : self.matrix_dimension,
-                'observations' : self.observations
-                
-                # Intervals?
-                # Matrix Values?
-                # Matrix Stages?
-                # Stages?
-                # Fixed?
+                'observations' : self.observations,
+                'uid' : self.uid,
+                'seasonal' : self.seasonal,
+                'matrix_start_year' : self.matrix_start_year,
+                'matrix_end_year' : self.matrix_end_year,
+                'intervals_count' : len(self.intervals),
+                'matrix_values_len' : len(self.matrix_values),
+                'matrix_stages_len' : len(self.matrix_stages),
+                'fixed_len' : len(self.fixed),
+                'seeds_len' : len(self.seeds),
+                'versions_len' : len(self.versions)
             }
+        }
         return matrix
 
     def __repr__(self):
@@ -2449,19 +2828,37 @@ class Fixed(db.Model):
 
     def to_json(self, key):
         fixed = {
-            # 'matrix' : self.matrix.id (url?)
-            'vector_str' : self.vector_str,
-            'interval_start' : self.interval_start,
-            'vector_present' : self.vector_present,
-            'total_pop_no' : self.total_pop_no,
-            'vector_availablility' : self.vector_availablility.availability_name,
-            'availability_notes' : self.availability_notes,
-            'population_info' : self.population_info,
-            'sampled_entire' : self.sampled_entire,
-            'small' : self.small_name,
-            'private' : self.private
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='fixed', key=key,
+                                  _external=False),
+            'data' : {
+                'matrix' : self.matrix.to_json_simple(key),
+                'vector_str' : self.vector_str,
+                'vector_present' : self.vector_present,
+                'total_pop_no' : self.total_pop_no,
+                'small' : self.smalls,
+                'census' : self.census_timings,
+                'seed_stage_error' : self.seed_stage_error,
+                'private' : self.private,                      
+                'versions' : [version.to_json_simple(key) for version in self.versions]
+            }
+        }
+        return fixed
 
-            # Stage Class Info?
+    def to_json_simple(self, key):
+        fixed = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='fixed', key=key,
+                                  _external=False),
+            'data' : {
+                'matrix' : self.matrix.to_json_simple(key),
+                'vector_str' : self.vector_str,
+                'vector_present' : self.vector_present,
+                'total_pop_no' : self.total_pop_no,
+                'small' : self.smalls,
+                'census' : self.census_timings,
+                'seed_stage_error' : self.seed_stage_error,
+                'private' : self.private,                      
+                'versions' : len(self.versions)
+            }
         }
         return fixed
 
@@ -2531,13 +2928,23 @@ class Version(db.Model):
     def to_json(self, key):
         version = {
             'version_number' : self.version_number,
-            'original_version' : self.original_version,
+            'original_version' : url_for('api.get_one_entry', id=self.original_version[0].id, model="versions", key=key,
+                                  _external=False),
             'version_date_added' : self.version_date_added,
             'version_timestamp_created' : self.version_timestamp_created,
             'checked' : self.checked,
-            'status' : self.statuses.to_json_singular(key)
+            'status' : self.statuses.to_json_simple(key),
+            'versions' : [version.to_json_simple(key) for version in self.versions]
+        }
 
-            # versions
+        return version
+
+    def to_json_simple(self, key):
+        version = {
+            'version_number' : self.version_number,
+            'version_timestamp_created' : self.version_timestamp_created,
+            'checked' : self.checked,
+            'status' : self.statuses.status_name
         }
 
         return version

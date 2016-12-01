@@ -3,7 +3,7 @@ from . import api
 from .. import db
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user
-from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus, OrganismType, ReproductiveRepetition, GrowthFormRaunkiaer, DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, MissingData, Purpose, ContentEmail, PurposeEndangered, PurposeWeed, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Status, Version
+from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus, OrganismType, ReproductiveRepetition, GrowthFormRaunkiaer, DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, MissingData, Purpose, ContentEmail, PurposeEndangered, PurposeWeed, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Status, Version, CensusTiming
 from ..decorators import admin_required, permission_required, crossdomain
 from .errors import unauthorized, bad_request
 import sqlalchemy.ext.declarative as declarative
@@ -48,14 +48,14 @@ def get_one_entry(key, id, model):
             models.append(classes[table_names.index(table[0])])
 
     for m in models:
-        print model
-        print m.__tablename__
         if model == m.__tablename__:
             class_ = m
 
     if class_:
-        entry = class_.query.get_or_404(1)
+        entry = class_.query.get_or_404(id)
+
         if key_valid(key):
+           
             return jsonify(entry.to_json(key))
         else:
             return unauthorized('Invalid credentials')
@@ -79,8 +79,6 @@ def get_all_entries(key, model):
             models.append(classes[table_names.index(table[0])])
 
     for m in models:
-        print model
-        print m.__tablename__
         if model == m.__tablename__:
             class_ = m
 
