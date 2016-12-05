@@ -5,11 +5,12 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from markdown import markdown
 import bleach
 import json
-from flask import current_app, request, url_for
+from flask import current_app, request, url_for, jsonify
 from flask.ext.login import UserMixin, AnonymousUserMixin
 from app.exceptions import ValidationError
 from . import db, login_manager
 from sqlalchemy.inspection import inspect
+
 
 
 class Permission:
@@ -1978,12 +1979,16 @@ class Species(db.Model):
                 'stages' : [stages.to_json_simple(key) for stages in self.stages] if self.stages else [],
                 'populations' : [population.to_json_simple(key) for population in self.populations],
                 'number_populations' : len([population.to_json_simple(key) for population in self.populations]),
-                'gbif_taxon_key' : self.gbif_taxon_key,
-                'iucn_status' : self.iucn_status.to_json_simple(key) if self.iucn_status else None,
-                'esa_status' : self.esa_status.to_json_simple(key) if self.esa_status else None,
                 'versions' : [version.to_json_simple(key) for version in self.versions]
             }
         }
+
+        user = User.query.filter_by(api_hash=key).first()
+        if user is not None and user.institute.institution_name == "University of Exeter":
+            species['data']['gbif_taxon_key'] = self.gbif_taxon_key
+            species['data']['iucn_status'] = self.iucn_status.to_json_simple(key) if self.iucn_status else None
+            species['data']['esa_status'] = self.esa_status.to_json_simple(key) if self.esa_status else None
+        
         return species
 
     def to_json_simple(self, key):
@@ -2084,11 +2089,11 @@ class Trait(db.Model):
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
     max_height = db.Column(db.Float()) #This should be a double, eventually
     organism_type_id = db.Column(db.Integer, db.ForeignKey('organism_types.id'))
-    growth_form_raunkiaer_id = db.Column(db.Integer, db.ForeignKey('growth_forms_raunkiaer.id'))
+    growth_form_raunkiaer_id = db.Column(db.Integer, db.ForeignKey('growth_forms_raunkiaer.id')) 
     reproductive_repetition_id = db.Column(db.Integer, db.ForeignKey('reproductive_repetition.id'))
     dicot_monoc_id = db.Column(db.Integer, db.ForeignKey('dicot_monoc.id'))
     angio_gymno_id = db.Column(db.Integer, db.ForeignKey('angio_gymno.id'))
-    spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id'))
+    spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id')) 
 
     versions = db.relationship("Version", backref="trait")
 
@@ -2109,14 +2114,20 @@ class Trait(db.Model):
                 'species' : self.species.to_json_simple(key) if self.species else None,
                 'max_height' : self.max_height,
                 'organism_type' : self.organism_type.to_json_simple(key) if self.organism_type else None,
-                'growth_form_raunkiaer' : self.growth_form_raunkiaer.to_json_simple(key) if self.growth_form_raunkiaer else None,
+                
                 'reproductive_repetition' : self.reproductive_repetition.to_json_simple(key) if self.reproductive_repetition else None,
                 'dicot_monoc' : self.dicot_monoc.to_json_simple(key) if self.dicot_monoc else None,
                 'angio_gymno' : self.angio_gymno.to_json_simple(key) if self.angio_gymno else None,
-                'spand_ex_growth_type' : self.spand_ex_growth_types.to_json_simple(key) if self.spand_ex_growth_types else None,
+                
                 'versions' : [version.to_json_simple(key) for version in self.versions]
                 }
         }
+
+        user = User.query.filter_by(api_hash=key).first()
+        if user is not None and user.institute.institution_name == "University of Exeter":
+            trait['data']['growth_form_raunkiaer'] = self.growth_form_raunkiaer.to_json_simple(key) if self.growth_form_raunkiaer else None
+            trait['data']['spand_ex_growth_type'] = self.spand_ex_growth_types.to_json_simple(key) if self.spand_ex_growth_types else None
+        
         return trait
 
     def to_json_simple(self, key):
@@ -2127,14 +2138,17 @@ class Trait(db.Model):
                 'species' : self.species.species_accepted if self.species else None,
                 'max_height' : self.max_height,
                 'organism_type' : self.organism_type.to_json_simple(key) if self.organism_type else None,
-                'growth_form_raunkiaer' : self.growth_form_raunkiaer.to_json_simple(key) if self.growth_form_raunkiaer else None,
                 'reproductive_repetition' : self.reproductive_repetition.to_json_simple(key) if self.reproductive_repetition else None,
                 'dicot_monoc' : self.dicot_monoc.to_json_simple(key) if self.dicot_monoc else None,
                 'angio_gymno' : self.angio_gymno.to_json_simple(key) if self.angio_gymno else None,
-                'spand_ex_growth_type' : self.spand_ex_growth_types.to_json_simple(key) if self.spand_ex_growth_types else None,
                 'versions_len' : len(self.versions)
                 }
         }
+
+        if user is not None and user.institute.institution_name == "University of Exeter":
+            trait['data']['growth_form_raunkiaer'] = self.growth_form_raunkiaer.to_json_simple(key) if self.growth_form_raunkiaer else None
+            trait['data']['spand_ex_growth_type'] = self.spand_ex_growth_types.to_json_simple(key) if self.spand_ex_growth_types else None
+        
         return trait
 
     def __repr__(self):
@@ -2285,14 +2299,18 @@ class Study(db.Model):
                     'study_duration' : self.study_duration,
                     'study_start' : self.study_start,
                     'study_end' : self.study_end,
-                    'purpose_endangered' : self.purpose_endangered.to_json_simple(key) if self.purpose_endangered else None,
-                    'purpose_weed' : self.purpose_weed.to_json_simple(key) if self.purpose_weed else None,
                     'number_populations' : self.number_populations,           
                     'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices],
                     'populations' : [population.to_json_simple(key) for population in self.populations],
                     'versions' : [version.to_json_simple(key) for version in self.versions]
                 }
             }
+
+        user = User.query.filter_by(api_hash=key).first()
+        if user is not None and user.institute.institution_name == "University of Exeter":
+            study['data']['purpose_endangered'] = self.purpose_endangered.to_json_simple(key) if self.purpose_endangered else None
+            study['data']['purpose_weed'] = self.purpose_weed.to_json_simple(key) if self.purpose_weed else None
+        
         return study
 
     def to_json_simple(self, key):
@@ -2300,7 +2318,7 @@ class Study(db.Model):
             'request_url' : url_for('api.get_one_entry', id=self.id, model='studies', key=key,
                                       _external=False),
             'data' : {
-                    'publication_len' : len(self.publication),
+                    'publication_doi' : self.publication.DOI_ISBN,
                     'study_duration' : self.study_duration,
                     'study_start' : self.study_start,
                     'study_end' : self.study_end,
@@ -2436,15 +2454,15 @@ class Population(db.Model):
     species_author = db.Column(db.String(64))
     name = db.Column(db.Text())
     ecoregion_id = db.Column(db.Integer, db.ForeignKey('ecoregions.id'))
-    invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasivestatusstudies.id'))
-    invasive_status_elsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id'))
+    invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasivestatusstudies.id')) #
+    invasive_status_elsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id')) #
     country = db.Column(db.Text())
     continent_id = db.Column(db.Integer, db.ForeignKey('continents.id'))
     geometries = db.Column(db.Text())
     latitude = db.Column(db.Float())
     longitude = db.Column(db.Float())
     altitude = db.Column(db.Float())
-    pop_size = db.Column(db.Text())
+    pop_size = db.Column(db.Text()) #
 
     matrices = db.relationship("Matrix", backref="population")
 
@@ -2491,20 +2509,22 @@ class Population(db.Model):
                 'species_author' : self.species_author,
                 'name' : self.name,
                 'ecoregion' : self.ecoregion.to_json_simple(key),
-                'invasive_status_study' : self.invasivestatusstudies.to_json_simple(key) if self.invasivestatusstudies else None,
-                'invasive_status_elsewhere' : self.invasive_status_elsewhere.to_json_simple(key) if self.invasive_status_elsewhere else None,
                 'country' : self.country,
                 'continent' : self.continent.to_json_simple(key),
                 'longitude' : self.longitude,
                 'latitude' : self.latitude,
                 'altitude' : self.altitude,
-                'population_size' : self.pop_size,
                 'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices] if self.matrices else None,
                 'versions' : [version.to_json_simple(key) for version in self.versions] if self.versions else None,
             }
            
         }
-
+        user = User.query.filter_by(api_hash=key).first()
+        if user is not None and user.institute.institution_name == "University of Exeter":  
+            population['data']['invasive_status_study'] = self.invasivestatusstudies.to_json_simple(key) if self.invasivestatusstudies else None
+            population['data']['invasive_status_elsewhere'] = self.invasive_status_elsewhere.to_json_simple(key) if self.invasive_status_elsewhere else None
+            population['data']['population_size'] = self.pop_size
+        
         return population
 
     def to_json_simple(self, key):
@@ -2898,7 +2918,7 @@ class Matrix(db.Model):
                 'n_plots' : self.n_plots,
                 'plot_size' : self.plot_size,
                 'studied_sex' : self.studied_sex.to_json_simple(key),
-                'captivities' : self.captivities.to_json_simple(key),
+                'captivities' : self.captivities.to_json_simple(key) if self.captivities else None,
                 'matrix_dimension' : self.matrix_dimension,
                 'observations' : self.observations,
                 'uid' : self.uid,
@@ -2908,25 +2928,30 @@ class Matrix(db.Model):
                 'matrix_start_month' : self.matrix_start_month,
                 'matrix_end_year' : self.matrix_end_year,
                 'matrix_end_month' : self.matrix_end_month,
-                'matrix_difficulty' : self.matrix_difficulty,
-                'matrix_complete' : self.matrix_complete,
-                'independence_origin' : self.independence_origin,
+                
                 'n_individuals' : self.n_individuals,
                 'class_organized' : self.class_organized,
                 'class_author' : self.class_author,
                 'class_number' : self.class_number,
-                'vectors_includes_na' : self.vectors_includes_na,
-                'independent' : self.independent,
-                'non_independence' : self.non_independence,
-                'non_independence_author' : self.non_independence_author,
                 'intervals' : [interval.to_json_simple(key) for interval in self.intervals] if self.intervals else [],
                 'matrix_values' : [matrix_value.to_json_simple(key) for matrix_value in self.matrix_values] if self.matrix_values else [],
                 'matrix_stages' : [matrix_stage.to_json_simple(key) for matrix_stage in self.matrix_stages] if self.matrix_stages else [],
-                'fixed' : [fixed.to_json_simple(key) for fixed in self.fixed] if self.fixed else [],
                 'seeds' : [seeds.to_json_simple(key) for seeds in self.seeds] if self.seeds else [],
                 'versions' : [versions.to_json_simple(key) for versions in self.versions] if self.versions else []
             }
         }
+
+        user = User.query.filter_by(api_hash=key).first()
+        if user is not None and user.institute.institution_name == "University of Exeter":   
+            matrix['data']['matrix_difficulty'] = self.matrix_difficulty #
+            matrix['data']['matrix_complete'] = self.matrix_complete #
+            matrix['data']['independence_origin'] = self.independence_origin #
+            matrix['data']['vectors_includes_na'] = self.vectors_includes_na #
+            matrix['data']['independent'] = self.independent #
+            matrix['data']['non_independence'] = self.non_independence #
+            matrix['data']['non_independence_author'] = self.non_independence_author #
+            matrix['data']['fixed'] = [fixed.to_json_simple(key) for fixed in self.fixed] if self.fixed else []
+
         return matrix
 
     def to_json_simple(self, key):       
@@ -2954,6 +2979,17 @@ class Matrix(db.Model):
                 'versions_len' : len(self.versions)
             }
         }
+
+        user = User.query.filter_by(api_hash=key).first()
+        if user is not None and user.institute.institution_name == "University of Exeter":
+            matrix['data']['matrix_difficulty'] = self.matrix_difficulty, #
+            matrix['data']['matrix_complete'] = self.matrix_complete, #
+            matrix['data']['independence_origin'] = self.independence_origin, #
+            matrix['data']['vectors_includes_na'] = self.vectors_includes_na, #
+            matrix['data']['independent'] = self.independent, #
+            matrix['data']['non_independence'] = self.non_independence, #
+            matrix['data']['non_independence_author'] = self.non_independence_author, #
+            matrix['data']['fixed_len'] = len(self.fixed)
         return matrix
 
     def __repr__(self):
@@ -3027,13 +3063,19 @@ class Fixed(db.Model):
                 'vector_present' : self.vector_present,
                 'total_pop_no' : self.total_pop_no,
                 'small' : self.smalls.to_json_simple(key) if self.smalls else None,
-                'census' : self.census_timings.to_json_simple(key) if self.census else None,
+                'census' : self.census_timings.to_json_simple(key) if self.census_timings else None,
                 'seed_stage_error' : self.seed_stage_error,
                 'private' : self.private,                      
                 'versions' : [version.to_json_simple(key) for version in self.versions]
             }
         }
-        return fixed
+
+        user = User.query.filter_by(api_hash=key).first()
+        if user is not None and user.institute.institution_name == "University of Exeter":
+            return fixed
+        else:
+            from api_1_0.errors import unauthorized
+            return unauthorized("Invalid Permissions")
 
     def to_json_simple(self, key):
         fixed = {
