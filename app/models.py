@@ -347,7 +347,7 @@ class Institute(db.Model):
                     'department' : self.department,
                     'country' : self.country,
                     'website' : self.website,
-                    'users' : url_array(self, 'users', key)}
+                    'users' : [user.to_json_simple(key) for user in self.users]}
         }
         return institute
 
@@ -365,7 +365,8 @@ class Institute(db.Model):
             'date_joined' : str(self.date_joined),
             'department' : self.department,
             'country' : self.country,
-            'website' : self.website}
+            'website' : self.website,
+            'users' : len(self.users)}
             
         }
         return institute
@@ -1594,16 +1595,24 @@ class StartSeason(db.Model):
 
     def to_json(self, key):
         start_season = {
-            'season_id' : self.season_id,
-            'season_name' : self.season_name,
-            'matrices' : url_array(self, 'matrices', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='start_seasons', key=key,
+                                      _external=False),
+            'data' : {
+                'season_id' : self.season_id,
+                'season_name' : self.season_name,
+                'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices]
+                }
         }
         return start_season
 
     def to_json_simple(self, key):
         start_season = {
-            'season_id' : self.season_id,
-            'season_name' : self.season_name
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='start_seasons', key=key,
+                                      _external=False),
+            'data' : {
+                'season_id' : self.season_id,
+                'season_name' : self.season_name
+                }
         }
         return start_season
 
@@ -1638,16 +1647,24 @@ class EndSeason(db.Model):
 
     def to_json(self, key):
         end_season = {
-            'season_id' : self.season_id,
-            'season_name' : self.season_name,
-            'matrices' : url_array(self, 'matrices', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='end_seasons', key=key,
+                                      _external=False),
+            'data' : {
+                'season_id' : self.season_id,
+                'season_name' : self.season_name,
+                'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices]
+                }
         }
         return end_season
 
     def to_json_simple(self, key):
         end_season = {
-            'season_id' : self.season_id,
-            'season_name' : self.season_name
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='end_seasons', key=key,
+                                      _external=False),
+            'data' : {
+                'season_id' : self.season_id,
+                'season_name' : self.season_name
+            }
         }
         return end_season
 
@@ -1682,16 +1699,24 @@ class StudiedSex(db.Model):
 
     def to_json(self, key):
         studied_sex = {
-            'sex_code' : self.sex_code,
-            'sex_description' : self.sex_description,
-            'matrices' : url_array(self, 'matrices', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='studied_sex', key=key,
+                                      _external=False),
+            'data' : {
+                'sex_code' : self.sex_code,
+                'sex_description' : self.sex_description,
+                'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices]
+                }
         }
         return studied_sex
 
     def to_json_simple(self, key):
         studied_sex = {
-            'sex_code' : self.sex_code,
-            'sex_description' : self.sex_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='studied_sex', key=key,
+                                      _external=False),
+            'data' : {
+                'sex_code' : self.sex_code,
+                'sex_description' : self.sex_description
+                }
         }
         return studied_sex
 
@@ -1726,16 +1751,24 @@ class Captivity(db.Model):
 
     def to_json(self, key):
         captivity = {
-            'cap_code' : self.cap_code,
-            'cap_description' : self.cap_description,
-            'matrices' : url_array(self, 'matrices', key)
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='captivities', key=key,
+                                      _external=False),
+            'data' : {
+                'cap_code' : self.cap_code,
+                'cap_description' : self.cap_description,
+                'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices]
+                }
         }
         return captivity
 
     def to_json_simple(self, key):
         captivity = {
-            'cap_code' : self.cap_code,
-            'cap_description' : self.cap_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='captivities', key=key,
+                                      _external=False),
+            'data' : {
+                'cap_code' : self.cap_code,
+                'cap_description' : self.cap_description
+                }
         }
         return captivity
 
@@ -1772,18 +1805,26 @@ class Status(db.Model):
 
     def to_json(self, key):
         status = {
-            'status_name' : self.status_name,
-            'status_description' : self.status_description,
-            'notes' : self.notes,
-            'versions' : [version.to_json_simple(key) for version in self.versions]
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='statuses', key=key,
+                                      _external=False),
+            'data' : {
+                'status_name' : self.status_name,
+                'status_description' : self.status_description,
+                'notes' : self.notes,
+                'versions' : [version.to_json_simple(key) for version in self.versions]
+            }
         }
         return status
 
     def to_json_simple(self, key):
         status = {
-            'status_name' : self.status_name,
-            'status_description' : self.status_description,
-            'notes' : self.notes
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='statuses', key=key,
+                                      _external=False),
+            'data' : {
+                'status_name' : self.status_name,
+                'status_description' : self.status_description,
+                'notes' : self.notes
+            }
         }
         return status
 
@@ -1820,16 +1861,24 @@ class Small(db.Model):
 
     def to_json(self, key):
         small = {
-            'small_name' : self.small_name,
-            'small_description' : self.small_description,
-            'fixed' : [fix.to_json(key) for fix in self.fixed]
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='smalls', key=key,
+                                      _external=False),
+            'data' : {
+                'small_name' : self.small_name,
+                'small_description' : self.small_description,
+                'fixed' : [fix.to_json(key) for fix in self.fixed]
+            }
         }
         return small
 
     def to_json_simple(self, key):
         small = {
-            'small_name' : self.small_name,
-            'small_description' : self.small_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='smalls', key=key,
+                                      _external=False),
+            'data' : {
+                'small_name' : self.small_name,
+                'small_description' : self.small_description
+            }
         }
         return small
 
@@ -1864,16 +1913,24 @@ class CensusTiming(db.Model):
 
     def to_json(self, key):
         census_timing = {
-            'census_name' : self.census_name,
-            'census_description' : self.census_description,
-            'fixed' : [fix.to_json(key) for fix in self.fixed]
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='census_timings', key=key,
+                                      _external=False),
+            'data' : {
+                'census_name' : self.census_name,
+                'census_description' : self.census_description,
+                'fixed' : [fix.to_json(key) for fix in self.fixed]
+                }
         }
         return census_timing
 
     def to_json_simple(self, key):
         census_timing = {
-            'census_name' : self.census_name,
-            'census_description' : self.census_description
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='census_timings', key=key,
+                                      _external=False),
+            'data' : {
+                'census_name' : self.census_name,
+                'census_description' : self.census_description
+                }
         }
         return census_timing
 
