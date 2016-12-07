@@ -98,6 +98,8 @@ def get_all_entries(key, model):
 
 
 ''' Filtering '''
+def Find(self, **kwargs):
+    f = self.db_session.filter(kwargs).all()
 
 @api.route('/<key>/query/<model>/<filters>/all')
 @crossdomain(origin='*')
@@ -111,13 +113,11 @@ def get_filtered_entries(key, model, filters):
     for term in terms:
         params = term.split('=')
         kwargs[params[0]] = params[1]
-
-
-    print kwargs
     
     classes, models, table_names = [], [], []
     for clazz in db.Model._decl_class_registry.values():
         try:
+            # print(list(clazz.__table__.columns.keys()))
             table_names.append(clazz.__tablename__)
             classes.append(clazz)
         except:
@@ -129,9 +129,22 @@ def get_filtered_entries(key, model, filters):
     for m in models:
         if model == m.__tablename__:
             class_ = m
+            # print list(class_.__table__.columns.keys())
 
-    if class_:
-        entries = class_.query.filter_by(**kwargs).all()
+    if class_:        
+        new_kwargs = {key: value for key, value in kwargs.items() if key in list(class_.__table__.columns.keys())}
+        second = {key: value for key, value in kwargs.items() if key not in list(class_.__table__.columns.keys())}        
+        relationships = {key+'_id' : value for key, value in second.items() if key+'_id' in list(class_.__table__.columns.keys())}
+
+        # if relationships in foreign keys
+        for key, val in relationships.items():
+            print list(list(class_.__table__.columns[key].foreign_keys)[0]._column_tokens)[1]
+
+        # for key, val in kwargs:
+        #     if key in list(class_.__table__.columns.keys()):
+        #         kwargs[key] = val
+
+        entries = class_.query.filter_by(**new_kwargs).all()
         if key_valid(key):
             try:
                 return jsonify({model : [entry.to_json(key) for entry in entries]})
