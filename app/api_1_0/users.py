@@ -97,6 +97,51 @@ def get_all_entries(key, model):
         return bad_request('Bad Request')
 
 
+''' Filtering '''
+
+@api.route('/<key>/query/<model>/<filters>/all')
+@crossdomain(origin='*')
+def get_filtered_entries(key, model, filters):
+    class_ = False
+
+    kwargs = {}
+
+    terms = filters.split('&')
+
+    for term in terms:
+        params = term.split('=')
+        kwargs[params[0]] = params[1]
+
+
+    print kwargs
+    
+    classes, models, table_names = [], [], []
+    for clazz in db.Model._decl_class_registry.values():
+        try:
+            table_names.append(clazz.__tablename__)
+            classes.append(clazz)
+        except:
+            pass
+    for table in db.metadata.tables.items():
+        if table[0] in table_names:
+            models.append(classes[table_names.index(table[0])])
+
+    for m in models:
+        if model == m.__tablename__:
+            class_ = m
+
+    if class_:
+        entries = class_.query.filter_by(**kwargs).all()
+        if key_valid(key):
+            try:
+                return jsonify({model : [entry.to_json(key) for entry in entries]})
+            except TypeError:
+                return unauthorized('Invalid Permissions')
+        else:
+            return unauthorized('Invalid credentials')
+    else:
+        return bad_request('Bad Request')
+
 # ''' Users '''
 
 # @api.route('/<key>/query/users/<int:id>')

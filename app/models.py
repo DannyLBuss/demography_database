@@ -2145,6 +2145,7 @@ class Trait(db.Model):
                 }
         }
 
+        user = User.query.filter_by(api_hash=key).first()
         if user is not None and user.institute.institution_name == "University of Exeter":
             trait['data']['growth_form_raunkiaer'] = self.growth_form_raunkiaer.to_json_simple(key) if self.growth_form_raunkiaer else None
             trait['data']['spand_ex_growth_type'] = self.spand_ex_growth_types.to_json_simple(key) if self.spand_ex_growth_types else None
