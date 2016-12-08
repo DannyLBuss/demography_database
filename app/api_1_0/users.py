@@ -6,6 +6,7 @@ from flask.ext.login import login_user, logout_user, login_required, \
 from ..models import User, Species, Population, Taxonomy, Trait, Publication, Study, AuthorContact, AdditionalSource, Stage, StageType, Treatment, MatrixStage, MatrixValue, Matrix, Interval, Fixed, Institute, IUCNStatus, ESAStatus, OrganismType, ReproductiveRepetition, GrowthFormRaunkiaer, DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, MissingData, Purpose, ContentEmail, PurposeEndangered, PurposeWeed, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Status, Version, CensusTiming
 from ..decorators import admin_required, permission_required, crossdomain
 from .errors import unauthorized, bad_request
+import sqlalchemy
 import sqlalchemy.ext.declarative as declarative
 
 
@@ -131,18 +132,34 @@ def get_filtered_entries(key, model, filters):
             class_ = m
             # print list(class_.__table__.columns.keys())
 
-    if class_:        
+    if class_:
+        '''Filtering by Meta Table'''
         new_kwargs = {key: value for key, value in kwargs.items() if key in list(class_.__table__.columns.keys())}
-        second = {key: value for key, value in kwargs.items() if key not in list(class_.__table__.columns.keys())}        
+        second = {key: value for key, value in kwargs.items() if key not in list(class_.__table__.columns.keys())}      
         relationships = {key+'_id' : value for key, value in second.items() if key+'_id' in list(class_.__table__.columns.keys())}
+        fk_tables = {}
 
-        # if relationships in foreign keys
-        for key, val in relationships.items():
-            print list(list(class_.__table__.columns[key].foreign_keys)[0]._column_tokens)[1]
+        # Getting the actual table names of the meta table options, keeping the value in the dict
+        for k, v in relationships.items():
+            table_name = list(list(class_.__table__.columns[k].foreign_keys)[0]._column_tokens)[1]
+            fk_tables[table_name] = v
 
-        # for key, val in kwargs:
-        #     if key in list(class_.__table__.columns.keys()):
-        #         kwargs[key] = val
+        for m in models:
+            for k, v in fk_tables.items():
+                if k == m.__tablename__:                            
+                    column_names_list = list(m.__table__.columns.values()) #[1].key
+                    column_names = [col.key for col in column_names_list]
+                    for name in column_names:
+                        kwargs = {name:v}
+                        if m.query.filter_by(**kwargs).first() != None:
+                            fk_model = m.query.filter_by(**kwargs).first()
+                            fk_model_id = fk_model.id
+                            new_kwargs[[ke for ke, va in relationships.items() if k[:-1] in ke][0]] = fk_model_id
+                            
+
+        print new_kwargs
+
+                    
 
         entries = class_.query.filter_by(**new_kwargs).all()
         if key_valid(key):
