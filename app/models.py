@@ -1122,8 +1122,6 @@ class PurposeEndangered(db.Model):
                 i.purpose_name = node['purpose_name']
                 i.purpose_description = node['purpose_description']
 
-                print i.purpose_name
-
                 db.session.add(i)
                 db.session.commit()
 
@@ -1178,7 +1176,6 @@ class PurposeWeed(db.Model):
                 i.purpose_name = node['purpose_name']
                 i.purpose_description = node['purpose_description']
 
-                print i.purpose_name
 
                 db.session.add(i)
                 db.session.commit()
@@ -2047,7 +2044,6 @@ class Taxonomy(db.Model):
                 'species_author' : self.species_author,
                 'species_accepted' : self.species_accepted,
                 'authority' : self.authority,
-                'taxonomic_status' : self.taxonomic_status.status_name,
                 'tpl_version' : self.tpl_version,
                 'infraspecies_accepted' : self.infraspecies_accepted,
                 'species_epithet_accepted' : self.species_epithet_accepted,
@@ -2509,9 +2505,9 @@ class Population(db.Model):
                 'study' : self.study.to_json(key),
                 'species_author' : self.species_author,
                 'name' : self.name,
-                'ecoregion' : self.ecoregion.to_json_simple(key),
+                'ecoregion' : self.ecoregion.to_json_simple(key) if self.ecoregion else None,
                 'country' : self.country,
-                'continent' : self.continent.to_json_simple(key),
+                'continent' : self.continent.to_json_simple(key) if self.continent else None,
                 'longitude' : self.longitude,
                 'latitude' : self.latitude,
                 'altitude' : self.altitude,
@@ -2529,8 +2525,6 @@ class Population(db.Model):
         return population
 
     def to_json_simple(self, key):
-        print url_for('api.get_one_entry', id=self.id, model='populations', key=key,
-                                      _external=False)
         population = {
             'request_url' : url_for('api.get_one_entry', id=self.id, model='populations', key=key,
                                       _external=False),
@@ -2879,18 +2873,16 @@ class Matrix(db.Model):
 
         import time
         timestamp = time.time()
-        print(species_accepted, journal, year_pub, authors, pop_name, composite, start_year)
         uid_concat = '{}{}{}{}{}{}{}{}'.format(species_accepted, journal, year_pub, authors, pop_name, composite, start_year, timestamp)
         uid_lower = uid_concat.lower()
         uid = re.sub('[\W_]+', '', uid_lower)
 
         self.uid = uid
         if Matrix.query.filter_by(uid=uid).first() == None:
+            pass
             # db.session.add(self)
             # db.session.commit()
-            print uid
         else:
-            print("UID already exists")
             return 
 
     def to_json(self, key):       
@@ -3046,6 +3038,7 @@ class Fixed(db.Model):
     census_timing_id = db.Column(db.Integer, db.ForeignKey('census_timings.id'))
     seed_stage_error = db.Column(db.Boolean())
     private = db.Column(db.Boolean(), default=True)
+    #fixed_independence_flag
 
     versions = db.relationship("Version", backref="fixed")
 
