@@ -30,6 +30,35 @@ def home():
     print request.cookies
     return render_template('api_1_0/index.html')
 
+@api.route('/hello')
+def hello():
+    classes, models, table_names = [], [], []
+    for clazz in db.Model._decl_class_registry.values():
+        try:
+            # print(list(clazz.__table__.columns.keys()))
+            table_names.append(clazz.__tablename__)
+            classes.append(clazz)
+        except:
+            pass
+    for table in db.metadata.tables.items():
+        if table[0] in table_names:
+            models.append(classes[table_names.index(table[0])])
+
+    tables_columns = {}
+    for model in models:
+        # print vars(model.__table__.columns)
+        tables_columns[model.__tablename__] = model.__table__.columns.keys()
+
+        # print [list(model.__table__.columns[k].foreign_keys) for k in model.__table__.columns.keys()]
+
+        for key in model.__table__.columns.keys():
+           
+            if len(model.__table__.columns[key].foreign_keys) > 0:
+                print vars(list(model.__table__.columns[key].foreign_keys)[0])
+
+
+
+    return jsonify(tables_columns)
 
 ''' GLORY '''
 @api.route('/<key>/query/<model>/<int:id>')
@@ -134,9 +163,13 @@ def get_filtered_entries(key, model, filters):
 
     if class_:
         '''Filtering by Meta Table'''
+        # Keeping keys from original that align with existing table columns within the parent model
         new_kwargs = {key: value for key, value in kwargs.items() if key in list(class_.__table__.columns.keys())}
+        # Storing those that don't match up exactly - these will generally be the foreign keys, although it'll catch typos too
         second = {key: value for key, value in kwargs.items() if key not in list(class_.__table__.columns.keys())}      
+        # Manually adding _id as per the syntax of the database schema, as models can't be passed through the URL, but strings can
         relationships = {key+'_id' : value for key, value in second.items() if key+'_id' in list(class_.__table__.columns.keys())}
+        #Empty dict for foreign key tables
         fk_tables = {}
 
         # Getting the actual table names of the meta table options, keeping the value in the dict
@@ -144,22 +177,25 @@ def get_filtered_entries(key, model, filters):
             table_name = list(list(class_.__table__.columns[k].foreign_keys)[0]._column_tokens)[1]
             fk_tables[table_name] = v
 
+        #Iterating through models and fk_tables to match fk_keys table name to actual model object
         for m in models:
             for k, v in fk_tables.items():
-                if k == m.__tablename__:                            
-                    column_names_list = list(m.__table__.columns.values()) #[1].key
+                if k == m.__tablename__:  
+                    # Grabbing a list of all of the column names                          
+                    column_names_list = list(m.__table__.columns.values())
                     column_names = [col.key for col in column_names_list]
                     for name in column_names:
+                        # Creating a key word argument to pass through to the query filter, of the column name and the original fk_key value.
+                        # Trying each column with the value, to cover names, IDS, code names, etc....
                         kwargs = {name:v}
+                        # If a model query matches the parameters
                         if m.query.filter_by(**kwargs).first() != None:
                             fk_model = m.query.filter_by(**kwargs).first()
+                            # Grab the model ID
                             fk_model_id = fk_model.id
+                            # Go back and loop through the relationships dict to find if substring matches to the original _id column name of the parent model
+                            # Add to new_kwargs with the model ID
                             new_kwargs[[ke for ke, va in relationships.items() if k[:-1] in ke][0]] = fk_model_id
-                            
-
-        print new_kwargs
-
-                    
 
         entries = class_.query.filter_by(**new_kwargs).all()
         if key_valid(key):
@@ -451,4 +487,4 @@ def get_filtered_entries(key, model, filters):
 #     if key_valid(key):
 #         return jsonify(population.to_json(key))
 #     else:
-#         return unauthorized('Invalid credentials')
+#         return unauthorized('Invalid credentials'
