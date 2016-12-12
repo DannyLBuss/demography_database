@@ -32,6 +32,8 @@ def home():
 
 @api.route('/hello')
 def hello():
+    parent = ['species', 'publications', 'populations', 'studies', 'taxonomies', 'traits', 'additional_sources', 'users', 'matrices', 'stages', 'roles', 'versions', 'statuses', 'databases', 'stages', 'matrix_stages', 'matrix_values', 'author_contacts', 'smalls', 'fixed', 'treatments']
+    exclude = ['fixed', 'smalls']
     classes, models, table_names = [], [], []
     for clazz in db.Model._decl_class_registry.values():
         try:
@@ -46,18 +48,23 @@ def hello():
 
     tables_columns = {}
     for model in models:
-        # print vars(model.__table__.columns)
-        tables_columns[model.__tablename__] = model.__table__.columns.keys()
-
-        # print [list(model.__table__.columns[k].foreign_keys) for k in model.__table__.columns.keys()]
-
-        for key in model.__table__.columns.keys():
-           
-            if len(model.__table__.columns[key].foreign_keys) > 0:
-                print vars(list(model.__table__.columns[key].foreign_keys)[0])
-
-
-
+        if model.__tablename__ not in exclude:
+            tables_columns[model.__tablename__] = {k:[] for k, v in model.__table__.columns.items()}
+            for key in model.__table__.columns.keys():           
+                if len(model.__table__.columns[key].foreign_keys) > 0:
+                    table_relation = list(model.__table__.columns[key].foreign_keys)[0]._column_tokens
+                    table_name = table_relation[1]
+                    table_fk = table_relation[2]
+                    # print table_name, table_fk
+                    if table_name not in parent:
+                        print table_name
+                        for m in models:
+                            if table_name == m.__tablename__:
+                                identifying_variable = m.__table__.columns.items()[1][0]
+                                model_queryset = [str(m) for m in m.query.all()]
+                                tables_columns[model.__tablename__][table_name] = model_queryset if model_queryset > 0 else None
+                                tables_columns[model.__tablename__].pop(key, None)
+                            
     return jsonify(tables_columns)
 
 ''' GLORY '''
