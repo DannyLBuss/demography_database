@@ -67,7 +67,7 @@ class Role(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return '<Role %r>' % self.name
+        return self.name
 
 
 class User(UserMixin, db.Model):
@@ -373,7 +373,7 @@ class Institute(db.Model):
         return institute
 
     def __repr__(self):
-        return str(self.id)
+        return self.institution_name
 
 ''' End Meta Tables for Users '''
 
@@ -431,7 +431,7 @@ class IUCNStatus(db.Model):
         return iucn_status
 
     def __repr__(self):
-        return str(self.id)
+        return self.status_code
 
 class ESAStatus(db.Model):
     __tablename__ = 'esa_statuses'
@@ -486,7 +486,7 @@ class ESAStatus(db.Model):
         return esa_status
 
     def __repr__(self):
-        return str(self.id)
+        return self.status_code
 
 ''' End Meta Tables for Species '''
 
@@ -541,7 +541,7 @@ class OrganismType(db.Model):
         return organism_type
 
     def __repr__(self):
-        return str(self.id)
+        return self.type_name
 
 class GrowthFormRaunkiaer(db.Model):
     __tablename__ = 'growth_forms_raunkiaer'
@@ -589,7 +589,7 @@ class GrowthFormRaunkiaer(db.Model):
         return organism_type
 
     def __repr__(self):
-        return str(self.id)
+        return self.form_name
 
 class ReproductiveRepetition(db.Model):
     __tablename__ = 'reproductive_repetition'
@@ -638,7 +638,7 @@ class ReproductiveRepetition(db.Model):
         return reproductive_repetition
 
     def __repr__(self):
-        return str(self.id)
+        return self.repetition_name
 
 class DicotMonoc(db.Model):
     __tablename__ = 'dicot_monoc'
@@ -686,7 +686,7 @@ class DicotMonoc(db.Model):
         return dicot_monoc
 
     def __repr__(self):
-        return str(self.id)
+        return self.dicot_monoc_name
 
 class AngioGymno(db.Model):
     __tablename__ = 'angio_gymno'
@@ -734,7 +734,7 @@ class AngioGymno(db.Model):
         return angio_gymno
 
     def __repr__(self):
-        return str(self.id)
+        return self.angio_gymno_name
 
 class SpandExGrowthType(db.Model):
     __tablename__ = 'spand_ex_growth_types'
@@ -787,7 +787,7 @@ class SpandExGrowthType(db.Model):
         return spand_ex_growth_type
 
     def __repr__(self):
-        return str(self.id)
+        return self.type_name
 ''' End Meta Tables for Traits '''
 
 ''' Meta Tables for Publication/Additional Source '''
@@ -842,7 +842,7 @@ class SourceType(db.Model):
         return source_type
 
     def __repr__(self):
-        return str(self.id)
+        return self.source_name
 
 class Database(db.Model):
     __tablename__ = 'databases'
@@ -919,7 +919,7 @@ class Database(db.Model):
         return database
 
     def __repr__(self):
-        return '<Database %r>' % self.id
+        return self.database_name
 
 class Purpose(db.Model):
     __tablename__ = 'purposes'
@@ -972,7 +972,7 @@ class Purpose(db.Model):
         return purpose
 
     def __repr__(self):
-        return str(self.id)
+        return self.purpose_name
 
 publication_purposes = db.Table('publication_purposes', db.Model.metadata,
     db.Column('id', db.Integer, primary_key=True),
@@ -1031,7 +1031,7 @@ class MissingData(db.Model):
         return missing_data
 
     def __repr__(self):
-        return str(self.id)
+        return self.missing_code
 
 
 publication_missing_data = db.Table('publication_missing_data', db.Model.metadata,
@@ -1093,7 +1093,7 @@ class ContentEmail(db.Model):
         return content_email
 
     def __repr__(self):
-        return str(self.id)
+        return self.content_code
 ''' End Meta Tables for Author Contact '''
 
 ''' Meta Tables for Study'''
@@ -1149,7 +1149,7 @@ class PurposeEndangered(db.Model):
         return purpose_endangered
 
     def __repr__(self):
-        return str(self.id)
+        return self.purpose_name
 
 class PurposeWeed(db.Model):
     __tablename__ = 'purposes_weed'
@@ -1204,7 +1204,7 @@ class PurposeWeed(db.Model):
         return purpose_weed
 
     def __repr__(self):
-        return str(self.id)
+        return self.purpose_name
 
 ''' End Meta Tables for Study '''
 
@@ -1259,7 +1259,7 @@ class Ecoregion(db.Model):
         return ecoregion
 
     def __repr__(self):
-        return str(self.id)
+        return self.ecoregion_code
 
 class Continent(db.Model):
     __tablename__ = 'continents'
@@ -1307,7 +1307,7 @@ class Continent(db.Model):
         return continent
 
     def __repr__(self):
-        return str(self.id)
+        return self.continent_name
 
 class InvasiveStatusStudy(db.Model):
     __tablename__ = 'invasivestatusstudies'
@@ -1358,7 +1358,7 @@ class InvasiveStatusStudy(db.Model):
         }
         return invasive_status_study
     def __repr__(self):
-        return str(self.id)
+        return self.status_name
 
 class InvasiveStatusElsewhere(db.Model):
     __tablename__ = 'invasive_status_elsewhere'
@@ -1410,7 +1410,7 @@ class InvasiveStatusElsewhere(db.Model):
         return invasive_status_elsewhere
 
     def __repr__(self):
-        return str(self.id)
+        return self.status_name
 ''' End Meta Tables for Population '''
 
 ''' Meta Tables for Stage Type '''
@@ -1460,7 +1460,7 @@ class StageTypeClass(db.Model):
         return stage_type_classes
 
     def __repr__(self):
-        return '<Stage Type Class %r>' % self.id
+        return self.type_class
 ''' End Meta Tables for Stage Type '''
 
 ''' Meta Tables for MatrixValue '''
@@ -1513,7 +1513,7 @@ class TransitionType(db.Model):
         return transition_type
 
     def __repr__(self):
-        return '<Transition Type %r>' % self.id
+        return self.trans_code
 ''' End Meta Tables for MatrixValue '''
 
 ''' Meta Tables for Matrix '''
@@ -1563,7 +1563,7 @@ class MatrixComposition(db.Model):
         return matrix_composition
 
     def __repr__(self):
-        return str(self.id)
+        return self.comp_name
 
 class StartSeason(db.Model):
     __tablename__ = 'start_seasons'
@@ -1615,7 +1615,7 @@ class StartSeason(db.Model):
         return start_season
 
     def __repr__(self):
-        return str(self.id)
+        return str(self.season_id)
 
 class EndSeason(db.Model):
     __tablename__ = 'end_seasons'
@@ -1667,7 +1667,7 @@ class EndSeason(db.Model):
         return end_season
 
     def __repr__(self):
-        return str(self.id)
+        return str(self.season_id)
 
 class StudiedSex(db.Model):
     __tablename__ = 'studied_sex'
@@ -1719,7 +1719,7 @@ class StudiedSex(db.Model):
         return studied_sex
 
     def __repr__(self):
-        return str(self.id)
+        return self.sex_code
 
 class Captivity(db.Model):
     __tablename__ = 'captivities'
@@ -1771,7 +1771,7 @@ class Captivity(db.Model):
         return captivity
 
     def __repr__(self):
-        return str(self.id)
+        return self.cap_code
 
 
 class Status(db.Model):
@@ -1827,7 +1827,7 @@ class Status(db.Model):
         return status
 
     def __repr__(self):
-        return str(self.id)
+        return self.status_name
 ''' End Meta Tables for Matrix '''
 
 ''' Meta Tables for Fixed '''
@@ -1881,7 +1881,7 @@ class Small(db.Model):
         return small
 
     def __repr__(self):
-        return '<Small %r>' % self.id
+        return self.small_name
 
 class CensusTiming(db.Model):
     __tablename__ = 'census_timings'
@@ -1933,7 +1933,7 @@ class CensusTiming(db.Model):
         return census_timing
 
     def __repr__(self):
-        return '<StageClassInfo %r>' % self.id
+        return self.census_name
 ''' End Meta Tables for Fixed '''
 
 ''' End Meta Tables '''
@@ -2373,7 +2373,7 @@ class AuthorContact(db.Model):
         return author_contact
 
     def __repr__(self):
-        return '<Author Contact %r>' % self.id
+        return str(self.publication_id)
 
 class AdditionalSource(db.Model):
     __tablename__ = 'additional_sources'
@@ -2591,7 +2591,7 @@ class Stage(db.Model):
         return stage
 
     def __repr__(self):
-        return '<Stage %r>' % self.id
+        return str(self.species_id)
 
 class StageType(db.Model):
     __tablename__ = 'stage_types'
@@ -2633,7 +2633,7 @@ class StageType(db.Model):
         StageTypeClass.migrate()
 
     def __repr__(self):
-        return '<Stage Type %r>' % self.id
+        return self.type_name
 
 
 class Treatment(db.Model):
@@ -2687,7 +2687,7 @@ class Treatment(db.Model):
 
 
     def __repr__(self):
-        return '<Treatment %r>' % self.id
+        return self.treatment_name
 
 class MatrixStage(db.Model):
     __tablename__ = 'matrix_stages'
@@ -2724,7 +2724,7 @@ class MatrixStage(db.Model):
         return matrix_stage
 
     def __repr__(self):
-        return '<Matrix Stage %r>' % self.id
+        return '<Matrix Stage %r>' % self.stage_order
 
 class MatrixValue(db.Model):
     __tablename__ = 'matrix_values'
@@ -2772,7 +2772,7 @@ class MatrixValue(db.Model):
         return matrix_value
 
     def __repr__(self):
-        return '<Matrix Value %r>' % self.id
+        return self.column_number
 
 class Matrix(db.Model):
     __tablename__ = 'matrices'
@@ -3087,7 +3087,7 @@ class Fixed(db.Model):
         return fixed
 
     def __repr__(self):
-        return '<Fixed %r>' % self.id
+        return str(self.matrix_id)
 
 class Seed(db.Model):
     __tablename__ = 'seeds'
@@ -3197,7 +3197,7 @@ class Version(db.Model):
         Database.migrate()
 
     def __repr__(self):
-        return '<Version %r>' % self.id
+        return self.version_timestamp_created
 
 
 
