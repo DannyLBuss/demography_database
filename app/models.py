@@ -137,6 +137,9 @@ class User(UserMixin, db.Model):
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
+        username = self.username
+        hash_ = hashlib.md5(username).hexdigest()
+        self.api_hash = hash_
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
@@ -256,6 +259,7 @@ class User(UserMixin, db.Model):
         hash_ = hashlib.md5(username).hexdigest()
         self.api_hash = hash_
         db.session.add(self)
+        db.session.commit()
         return {'id' : hash_}
 
 

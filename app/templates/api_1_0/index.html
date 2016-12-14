@@ -7,7 +7,12 @@
 {% block page_content %}
 <div class="page-header">
 	<h1>Demography Database API</h1>
-	<h2>University of Exeter</h2>
+</div>
+
+<div class="page-body">
+	{% if current_user.is_authenticated %}
+		<strong>Your API Key:</strong> <code>{{ current_user.api_hash }}</code>
+	{% endif %}
 </div>
 
 
