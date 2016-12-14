@@ -30,10 +30,10 @@ def home():
     print request.cookies
     return render_template('api_1_0/index.html')
 
-@api.route('/hello')
-def hello():
-    parent = ['species', 'publications', 'populations', 'studies', 'taxonomies', 'traits', 'additional_sources', 'users', 'matrices', 'stages', 'roles', 'versions', 'statuses', 'databases', 'stages', 'matrix_stages', 'matrix_values', 'author_contacts', 'smalls', 'fixed', 'treatments']
-    exclude = ['fixed', 'smalls']
+@api.route('/docs')
+def docs():
+    parent = ['species', 'publications', 'populations', 'studies', 'taxonomies', 'traits', 'additional_sources', 'users', 'matrices', 'stages','versions', 'statuses', 'databases', 'stages', 'matrix_stages', 'matrix_values', 'author_contacts', 'smalls', 'fixed', 'treatments']
+    exclude = ['fixed', 'smalls', 'roles', 'matrix_stages', 'stages', 'matrix_values', 'users']
     classes, models, table_names = [], [], []
     for clazz in db.Model._decl_class_registry.values():
         try:
@@ -48,8 +48,8 @@ def hello():
 
     tables_columns = {}
     for model in models:
-        if model.__tablename__ not in exclude:
-            tables_columns[model.__tablename__] = {k:[] for k, v in model.__table__.columns.items()}
+        if model.__tablename__ not in exclude and model.__tablename__ in parent:
+            tables_columns[model.__tablename__] = {k:'' for k, v in model.__table__.columns.items()}
             for key in model.__table__.columns.keys():           
                 if len(model.__table__.columns[key].foreign_keys) > 0:
                     table_relation = list(model.__table__.columns[key].foreign_keys)[0]._column_tokens
@@ -64,8 +64,10 @@ def hello():
                                 model_queryset = [str(m) for m in m.query.all()]
                                 tables_columns[model.__tablename__][table_name] = model_queryset if model_queryset > 0 else None
                                 tables_columns[model.__tablename__].pop(key, None)
-                            
-    return jsonify(tables_columns)
+    
+    print tables_columns                        
+    schema = tables_columns
+    return render_template('api_1_0/schema.html', tables=schema)
 
 ''' GLORY '''
 @api.route('/<key>/query/<model>/<int:id>')
