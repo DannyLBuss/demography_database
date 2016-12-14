@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database | API{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1>Demography Database API</h1>
+	<h2>Filter Options</h2>
+</div>
+
+
+<ul style="list-style:none">
+{% for key, value in tables.iteritems() %}
+	<li><h3><span class="glyphicon glyphicon-tag"></span> {{ key }}</h3>
+	<ul style="list-style:none">
+	{% for k, val in value.iteritems() %}
+		<li><span class="glyphicon glyphicon-arrow-right"></span> {{ k }}
+		{% if val|length > 1 %}
+			<ul style="list-style:none">
+				{% for v in val %}
+				<li><span class="glyphicon glyphicon-chevron-right"></span> <em>{{ v }}</em></li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+		</li>
+	{% endfor %}
+	</ul>
+	</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
