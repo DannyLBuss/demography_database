@@ -1959,7 +1959,7 @@ class Species(db.Model):
     populations = db.relationship("Population", backref="species")
     stages = db.relationship("Stage", backref="species")
 
-    versions = db.relationship("Version", backref="species")
+    version = db.relationship("Version", backref="species", uselist=False)
 
     @staticmethod
     def migrate():
@@ -2852,6 +2852,10 @@ class Matrix(db.Model):
         Captivity.migrate()
         Status.migrate()
 
+    def latest(self):
+        versions = self.versions
+        return versions
+
     # Generate UID for this Matrix
     def create_uid(self):
         import re
@@ -3196,12 +3200,60 @@ class Version(db.Model):
 
         return version
 
+    def __getitem__(self, key):
+        return getattr(self, key)
+
+    def parent_table(self):
+        fk = {
+            'species_id' : self.species_id,
+            'taxonomy_id' : self.taxonomy_id,
+            'trait_id' : self.trait_id,
+            'publication_id' : self.publication_id,
+            'study_id' : self.study_id, 
+            'population_id' : self.population_id,
+            'matrix_id' : self.matrix_id, 
+            'fixed_id' : self.fixed_id, 
+            'stage_id' : self.stage_id,
+            'stage_type_id' : self.stage_type_id,
+            'matrix_stage_id' : self.matrix_stage_id, 
+            'matrix_value_id' : self.matrix_value_id,
+            'author_contact_id': self.author_contact_id,
+            'additional_source_id' : self.additional_source_id
+        }
+
+        for f, k in fk.items():
+            if k == 1:
+                kwargs = {f: k}
+
+        return kwargs
+
+    def all(self):
+        kwargs = self.parent_table()
+        kwargs['statuses'] = Status.query.filter_by(status_name="Green").first()
+        kwargs['checked'] = True
+        return Version.query.filter_by(**kwargs).all()
+
+    def original(self):
+        kwargs = self.parent_table()
+        kwargs['version_number'] = 0
+        kwargs['statuses'] = Status.query.filter_by(status_name="Green").first()
+        kwargs['checked'] = True
+        return Version.query.filter_by(**kwargs).first()
+
+    def latest(self):
+        kwargs = self.parent_table()
+        kwargs['statuses'] = Status.query.filter_by(status_name="Green").first()
+        kwargs['checked'] = True
+        latest = Version.query.filter_by(**kwargs).order_by(Version.version_number.desc()).first()
+        return latest
+
+
     @staticmethod
     def migrate():
         Database.migrate()
 
     def __repr__(self):
-        return self.version_timestamp_created
+        return '<Version {} {} {}>'.format(str(self.id), self.statuses.status_name, self.checked)
 
 
 
