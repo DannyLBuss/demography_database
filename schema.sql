@@ -337,18 +337,18 @@ CREATE TABLE `invasive_status_elsewhere` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `invasivestatusstudies`
+-- Table structure for table `invasive_status_studies`
 --
 
-DROP TABLE IF EXISTS `invasivestatusstudies`;
+DROP TABLE IF EXISTS `invasive_status_studies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `invasivestatusstudies` (
+CREATE TABLE `invasive_status_studies` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `status_name` varchar(64) DEFAULT NULL,
   `status_description` text,
   PRIMARY KEY (`id`),
-  KEY `ix_invasivestatusstudies_status_name` (`status_name`)
+  KEY `ix_invasive_status_studies_status_name` (`status_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

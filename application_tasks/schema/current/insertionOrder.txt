@@ -44,7 +44,7 @@ census_timings
 databases
 esa_statuses
 invasive_status_elsewhere
-invasivestatusstudies
+invasive_status_studies
 iucn_status
 purposes_endangered
 statuses

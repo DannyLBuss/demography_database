@@ -1,6 +1,6 @@
 statuses
 iucn_status
-invasivestatusstudies
+invasive_status_studies
 invasive_status_elsewhere
 esa_statuses
 databases
