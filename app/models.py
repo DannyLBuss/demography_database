@@ -1314,12 +1314,12 @@ class Continent(db.Model):
         return self.continent_name
 
 class InvasiveStatusStudy(db.Model):
-    __tablename__ = 'invasivestatusstudies'
+    __tablename__ = 'invasive_status_studies'
     id = db.Column(db.Integer, primary_key=True)
     status_name = db.Column(db.String(64), index=True)
     status_description = db.Column(db.Text)
 
-    populations = db.relationship("Population", backref="invasivestatusstudies")
+    populations = db.relationship("Population", backref="invasive_status_studies")
 
     @staticmethod
     def migrate():
@@ -1341,7 +1341,7 @@ class InvasiveStatusStudy(db.Model):
 
     def to_json(self, key):
         invasive_status_study = {
-            'request_url' : url_for('api.get_one_entry', id=self.id, model='invasivestatusstudies', key=key,
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='invasive_status_studies', key=key,
                                       _external=False),
             'data' : {
                 'status_name' : self.status_name,
@@ -1353,7 +1353,7 @@ class InvasiveStatusStudy(db.Model):
 
     def to_json_simple(self, key):
         invasive_status_study = {
-            'request_url' : url_for('api.get_one_entry', id=self.id, model='invasivestatusstudies', key=key,
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='invasive_status_studies', key=key,
                                       _external=False),
             'data' : {
                 'status_name' : self.status_name,
@@ -2455,7 +2455,7 @@ class Population(db.Model):
     species_author = db.Column(db.String(64))
     name = db.Column(db.Text())
     ecoregion_id = db.Column(db.Integer, db.ForeignKey('ecoregions.id'))
-    invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasivestatusstudies.id')) #
+    invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasive_status_studies.id')) #
     invasive_status_elsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id')) #
     country = db.Column(db.Text())
     continent_id = db.Column(db.Integer, db.ForeignKey('continents.id'))
@@ -2522,7 +2522,7 @@ class Population(db.Model):
         }
         user = User.query.filter_by(api_hash=key).first()
         if user is not None and user.institute.institution_name == "University of Exeter":  
-            population['data']['invasive_status_study'] = self.invasivestatusstudies.to_json_simple(key) if self.invasivestatusstudies else None
+            population['data']['invasive_status_study'] = self.invasive_status_studies.to_json_simple(key) if self.invasive_status_studies else None
             population['data']['invasive_status_elsewhere'] = self.invasive_status_elsewhere.to_json_simple(key) if self.invasive_status_elsewhere else None
             population['data']['population_size'] = self.pop_size
         

@@ -281,7 +281,7 @@
             <column ascending="true" name="status_name"/>
          </index>
       </table>
-      <table name="invasivestatusstudies" numRows="4" remarks="" type="TABLE">
+      <table name="invasive_status_studies" numRows="4" remarks="" type="TABLE">
          <column autoUpdated="true" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="INT"/>
          <column autoUpdated="false" digits="0" id="1" name="status_name" nullable="true" remarks="" size="64" type="VARCHAR"/>
          <column autoUpdated="false" digits="0" id="2" name="status_description" nullable="true" remarks="" size="65535" type="TEXT"/>
@@ -289,7 +289,7 @@
          <index name="PRIMARY" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="ix_invasivestatusstudies_status_name" unique="false">
+         <index name="ix_invasive_status_studies_status_name" unique="false">
             <column ascending="true" name="status_name"/>
          </index>
       </table>
