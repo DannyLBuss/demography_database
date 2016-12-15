@@ -205,7 +205,7 @@
             <thead>
                 <tr>
                     <td><h4><strong>Publications:</strong></h4></td>
-                    <td><h4>DOI/ISBN</h4></td>
+                    <td></td>
                     <td><h4>Filter</h4></td>
                 </tr>
             </thead>
@@ -214,7 +214,7 @@
                 <tr class="remove_duplicates publication_row {{ population.publication.id}}p">
                     <td>
                         <a href="../../publication/{{ population.publication.id }}">{{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.name }}" in <i>{{ population.publication.pub_title }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}.  </a> <small>ID: {{population.publication.id}}</small> </td>
-                    <td> <a href="https://doi.org/{{ population.publication.DOI_ISBN }}" target="_blank" >{{ population.publication.DOI_ISBN }}</a></td>
+                    <td> {% if population.publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ population.publication.DOI_ISBN }}">Go to source</a>{% endif %}</td>
                     <td>
                         <input type="checkbox" class="filter" data-value="id{{population.publication.id}}"> 
                     </td>
@@ -272,7 +272,7 @@
             <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> Show/hide matrices </button>
         
         <div id="population_{{ population.id }}" class='panel-collapse collapse'>
-            <small>Click on the sections below to view matrix models</small>
+            <p style="text-align: center;">Click on the sections below to view individual matrix models</p>
             
             {% for matrix in population.matrices %}
             
@@ -280,7 +280,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" data-toggle="collapse" href="#matrix_{{matrix.id}}2">
                         <h4 id="{{matrix.id}}" class="panel-title">
-                        <p><span class="label label-default">{{ matrix.matrix_composition.comp_name }}</span> <span class="label label-default">{{ matrix.matrix_dimension }} x {{ matrix.matrix_dimension }}</span> <span class="label label-default">Periodicity: {{ matrix.periodicity }}</span> <span class="label label-default">{% if matrix.matrix_start_month %} {{ matrix.matrix_start_month }}/{% endif %}{{ matrix.matrix_start_year }} to {% if matrix.matrix_end_month %} {{ matrix.matrix_end_month }}/{% endif %}{{ matrix.matrix_end_year }}</span> <span background-color="#" class="label label-default">{{ matrix.treatment.type_name }}</span> <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span> <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span><small> ID: {{matrix.id}}</small></p>
+                        <p><span class="label label-default">{{ matrix.matrix_composition.comp_name }} matrix</span> <span class="label label-default">Periodicity: {{ matrix.periodicity }}</span> <span class="label label-default">{% if matrix.matrix_start_month %} {{ matrix.matrix_start_month }}/{% endif %}{{ matrix.matrix_start_year }} to {% if matrix.matrix_end_month %} {{ matrix.matrix_end_month }}/{% endif %}{{ matrix.matrix_end_year }}</span> <span background-color="#" class="label label-default">{{ matrix.treatment.type_name }}</span> <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span> <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span><small> ID: {{matrix.id}}</small></p>
                     </h4> </div>
                     <div id="matrix_{{matrix.id}}2" class="panel-collapse collapse">
                         <li class="list-group-item">
