@@ -262,4 +262,11 @@ def homepage():
 
     return render_template('test.html', form=form, similar=similar, exact=exact)
 
+@compadre.route('/export/csv')
+def csv_export():
+    all_matrices = Matrix.query.all()
+
+    
+    return "Hello"
+
 ''' End Routing '''
