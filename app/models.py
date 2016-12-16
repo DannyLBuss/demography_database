@@ -2852,10 +2852,6 @@ class Matrix(db.Model):
         Captivity.migrate()
         Status.migrate()
 
-    def latest(self):
-        versions = self.versions
-        return versions
-
     # Generate UID for this Matrix
     def create_uid(self):
         import re
