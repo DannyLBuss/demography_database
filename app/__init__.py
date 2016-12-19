@@ -16,38 +16,11 @@ from flask.ext.sqlalchemy import SQLAlchemy
 bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
-# db = SQLAlchemy()
+db = SQLAlchemy()
 pagedown = PageDown()
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
-
-class VersionQuery(Query):
-    from models import Status, Version
-    def __iter__(self):
-            return Query.__iter__(self)
-    def all(self):
-            status = Status.query.filter(Status.status_name=='Green').first()
-            return [s for s in self.filter(Version.statuses == status).filter(Version.checked == True).order_by(Version.version_number.desc())]
-    def original(self):
-            return self.filter(Version.version_number == 0)[0]
-    def latest(self):
-            status = Status.query.filter(Status.status_name=='Green').first()
-            return self.filter(Version.statuses == status).filter(Version.checked == True).order_by(Version.version_number.desc())[0]
-    def all_checked(self):
-            amber = Status.query.filter(Status.status_name=='Amber').first()
-            green = Status.query.filter(Status.status_name=='Green').first()
-            return self.filter(or_(Version.statuses == amber, Version.statuses == green)).filter(Version.checked == True).order_by(Version.version_number.desc())
-    def all_checked_unchecked(self):
-            amber = Status.query.filter(Status.status_name=='Amber').first()
-            green = Status.query.filter(Status.status_name=='Green').first()
-            return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).order_by(Version.version_number.desc())]
-    def all_v(self):
-            return [s for s in self.all()]
-    def get_version(self, id):
-            return self.filter(Version.version_number == id)[0]
-
-db = SQLAlchemy(session_options={'query_cls': VersionQuery})
 
 
 def create_app(config_name):

@@ -11,8 +11,6 @@ from app.exceptions import ValidationError
 from . import db, login_manager
 from sqlalchemy.inspection import inspect
 
-
-
 class Permission:
     FOLLOW = 0x01
     COMMENT = 0x02
