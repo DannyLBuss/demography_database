@@ -13,7 +13,7 @@ from ..models import Permission, Role, User, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
                     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, PurposeEndangered, PurposeWeed, Trait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Institute
+                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Institute, Status, Version
 from ..decorators import admin_required, permission_required, crossdomain
 
 
@@ -107,6 +107,7 @@ def data():
 @main.route('/species-table/')
 # @login_required
 def species_table():
+    # species = Species.query.all()
     species = Species.query.all()
     return render_template('species_table_template.html', species=species)
 
