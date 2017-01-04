@@ -7,24 +7,10 @@ from flask.ext.login import LoginManager
 from flask.ext.pagedown import PageDown
 from config import config
 
-
-from sqlalchemy.orm.query import Query
-class VersionQuery(Query):
-    def __iter__(self):
-            return Query.__iter__(self.original())
-    def original(self):
-            mzero = self._mapper_zero()
-            if mzero is not None:
-                    # crit = mzero.class_.version.version_number == 0
-                    return self.enable_assertions(False).filter(Version.version_number == 0)
-            else:
-                    return self
-
-
 bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
-db = SQLAlchemy(session_options={'query_cls': VersionQuery})
+db = SQLAlchemy()
 pagedown = PageDown()
 
 login_manager = LoginManager()
