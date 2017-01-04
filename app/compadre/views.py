@@ -263,10 +263,45 @@ def homepage():
     return render_template('test.html', form=form, similar=similar, exact=exact)
 
 @compadre.route('/export/csv')
-def csv_export():
+def csv_export(): 
+    import csv      
+    # First, grab all matrices, as these will be each 'row'
     all_matrices = Matrix.query.all()
 
+    # Use this function to merge
+    def merge_dicts(*dict_args):
+        result = {}
+        for dictionary in dict_args:
+            result.update(dictionary)
+        return result
+
+    for i, matrix in enumerate(all_matrices):
+        # Grab all of the parent objects
+        matrix = matrix
+        fixed = matrix.fixed[0]
+        population = matrix.population
+        publication = population.publication
+        study = population.study
+        species = population.species
+        traits = species.traits[0]
+        taxonomy = species.taxonomies[0]
+        version = matrix.version
+
+        # Merge all of them to one single dict, as dicts
+        entry = merge_dicts(vars(species), vars(taxonomy), vars(traits), vars(publication), vars(study), vars(population), vars(matrix),  vars(fixed), vars(version))
+
+        #If this is the first matrix, construct the headers too
+        if i == 0:
+            headings = [key for key in entry.keys()]
+            with open('export_test.csv', 'wb') as outcsv:
+                writer = csv.DictWriter(outcsv, fieldnames=headings)
+                writer.writeheader()
+        
+                writer.writerow(entry)
     
+        
+
     return "Hello"
+
 
 ''' End Routing '''
