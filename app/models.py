@@ -11,8 +11,6 @@ from app.exceptions import ValidationError
 from . import db, login_manager
 from sqlalchemy.inspection import inspect
 
-
-
 class Permission:
     FOLLOW = 0x01
     COMMENT = 0x02
@@ -1960,6 +1958,7 @@ class Species(db.Model):
     stages = db.relationship("Stage", backref="species")
 
     version = db.relationship("Version", backref="species", uselist=False)
+    version_str = db.String(64)
 
     @staticmethod
     def migrate():
@@ -2032,7 +2031,8 @@ class Taxonomy(db.Model):
     col_check_ok = db.Column(db.Boolean())
     col_check_date = db.Column(db.Date())
 
-    versions = db.relationship("Version", backref="taxonomy")
+    version = db.relationship("Version", backref="taxonomy")
+    version_str = db.String(64)
 
     @staticmethod
     def migrate():
@@ -2095,7 +2095,8 @@ class Trait(db.Model):
     angio_gymno_id = db.Column(db.Integer, db.ForeignKey('angio_gymno.id'))
     spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id')) 
 
-    versions = db.relationship("Version", backref="trait")
+    version = db.relationship("Version", backref="trait")
+    version_str = db.String(64)
 
     @staticmethod
     def migrate():
@@ -2181,12 +2182,6 @@ class Publication(db.Model):
     additional_source_string = db.Column(db.Text())
     colour = db.Column(db.String(6))
 
-    # Again, these might be problematic
-    user_created = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user_modified = db.Column(db.Integer, db.ForeignKey('users.id'))
-    timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
-    timestamp_modified = db.Column(db.DateTime, default=datetime.utcnow)
-
     # Establishing one to many relationships between tables
     author_contacts = db.relationship("AuthorContact", backref="publication")
     additional_sources = db.relationship("AdditionalSource", backref="publication")
@@ -2195,7 +2190,8 @@ class Publication(db.Model):
     taxonomies = db.relationship("Taxonomy", backref="publication")
     studies = db.relationship("Study", backref="publication")
 
-    versions = db.relationship("Version", backref="publication")
+    version = db.relationship("Version", backref="publication")
+    version_str = db.String(64)
 
     @staticmethod
     def migrate():
@@ -2284,7 +2280,8 @@ class Study(db.Model):
     populations = db.relationship("Population", backref="study")
     number_populations = db.Column(db.Integer()) #could verify with populations.count()
 
-    versions = db.relationship("Version", backref="study")
+    version = db.relationship("Version", backref="study")
+    version_str = db.String(64)
 
     @staticmethod
     def migrate():
@@ -2343,7 +2340,8 @@ class AuthorContact(db.Model):
     content_email_id = db.Column(db.Integer, db.ForeignKey('content_email.id')) #possibly many to many, probably a good idea if vector
     author_reply = db.Column(db.Text())
 
-    versions = db.relationship("Version", backref="author_contact")
+    version = db.relationship("Version", backref="author_contact")
+    version_str = db.String(64)
 
 
     @staticmethod
@@ -2399,7 +2397,8 @@ class AdditionalSource(db.Model):
     name = db.Column(db.Text()) #r-generated, needs more info, probably to be generated in method of this model, first author in author list?
     description = db.Column(db.Text())
 
-    versions = db.relationship("Version", backref="additional_source")
+    version = db.relationship("Version", backref="additional_source")
+    version_str = db.String(64)
 
     def to_json(self, key):
         additional_source = {
@@ -2467,7 +2466,8 @@ class Population(db.Model):
 
     matrices = db.relationship("Matrix", backref="population")
 
-    versions = db.relationship("Version", backref="population")
+    version = db.relationship("Version", backref="population")
+    version_str = db.String(64)
 
     def geometries_dec(self):
         geo = json.loads(self.geometries)
@@ -2565,7 +2565,8 @@ class Stage(db.Model):
 
     matrix_stages = db.relationship("MatrixStage", backref="stage")
 
-    versions = db.relationship("Version", backref="stage")
+    version = db.relationship("Version", backref="stage")
+    version_str = db.String(64)
 
     def to_json(self, key):
         stage = {
@@ -2605,7 +2606,8 @@ class StageType(db.Model):
 
     stages = db.relationship("Stage", backref="stage_types")
 
-    versions = db.relationship("Version", backref="stage_type")
+    version = db.relationship("Version", backref="stage_type")
+    version_str = db.String(64)
 
     def to_json(self, key):
         stage_type = {
@@ -2701,7 +2703,8 @@ class MatrixStage(db.Model):
 
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
-    versions = db.relationship("Version", backref="matrix_stage")
+    version = db.relationship("Version", backref="matrix_stage")
+    version_str = db.String(64)
 
     def to_json(self, key):
         matrix_stage = {
@@ -2740,7 +2743,8 @@ class MatrixValue(db.Model):
 
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
-    versions = db.relationship("Version", backref="matrix_value")
+    version = db.relationship("Version", backref="matrix_value")
+    version_str = db.String(64)
 
     @staticmethod
     def migrate():
@@ -2840,7 +2844,8 @@ class Matrix(db.Model):
     seeds = db.relationship("Seed", backref="matrix")
 
     # Versioning
-    versions = db.relationship("Version", backref="matrix")
+    version = db.relationship("Version", backref="matrix")
+    version_str = db.String(64)
     
 
     @staticmethod
@@ -3044,7 +3049,8 @@ class Fixed(db.Model):
     private = db.Column(db.Boolean(), default=True)
     #fixed_independence_flag
 
-    versions = db.relationship("Version", backref="fixed")
+    version = db.relationship("Version", backref="fixed")
+    version_str = db.String(64)
 
     @staticmethod
     def migrate():
