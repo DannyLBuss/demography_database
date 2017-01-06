@@ -3,6 +3,9 @@
 # C extensions
 *.so
 
+config.py
+*config*
+
 # Packages
 *.egg
 *.egg-info
@@ -40,8 +43,6 @@ nosetests.xml
 
 # Virtual environment
 venv
-
-config.py
 
 ext/schema.jar
 ext/mysql-connector-java-5.1.38-bin.jar
