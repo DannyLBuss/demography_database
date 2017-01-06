@@ -47,7 +47,7 @@
         }, {
             "status_code": "LR/lc",
             "status_name": "Lower Risk/Least Concern",
-            "status_description": "At lower risk of extinction, considered to be widespread and abundant. This is an older (1994) category, not used in recent assessments."
+            "status_description": "Indicates they have not been re-evaluated since 2000. Prior to 2001 'least concern' was a subcategory of the 'Lower Risk' category and assigned the code LR/lc or (lc)."
         }],
         "ESAStatus": [{
             "status_code": "EN",
