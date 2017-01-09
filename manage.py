@@ -276,6 +276,7 @@ def submit_new(data):
         species_version.user = User.query.filter_by(username="admin").first()
         species_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         species.version_latest = 1
+        species.version_original = 1
 
         db.session.add(species_version)
         db.session.commit()
@@ -309,6 +310,7 @@ def submit_new(data):
         publication_version.user = User.query.filter_by(username="admin").first()
         publication_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         publication.version_latest = 1
+        publication.version_original = 1
 
         db.session.add(publication_version)
         db.session.commit()
@@ -347,6 +349,7 @@ def submit_new(data):
         trait_version.user = User.query.filter_by(username="admin").first()
         trait_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         trait.version_latest = 1
+        trait.version_original = 1
 
         db.session.add(trait_version)
         db.session.commit()
@@ -381,6 +384,7 @@ def submit_new(data):
         study_version.user = User.query.filter_by(username="admin").first()
         study_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         study.version_latest = 1
+        study.version_original = 1
 
         db.session.add(study_version)
         db.session.commit()
@@ -430,7 +434,9 @@ def submit_new(data):
         population_version.statuses = Status.query.filter_by(status_name="Green").first()
         population_version.user = User.query.filter_by(username="admin").first()
         population_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
-        population.version_latest = 1
+        pop.version_latest = 1
+        pop.version_original = 1
+
 
         db.session.add(population_version)
         db.session.commit()
@@ -472,7 +478,8 @@ def submit_new(data):
         taxonomy_version.statuses = Status.query.filter_by(status_name="Green").first()
         taxonomy_version.user = User.query.filter_by(username="admin").first()
         taxonomy_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
-        taxonomy.version_latest = 1
+        tax.version_latest = 1
+        tax.version_original = 1
 
         db.session.add(taxonomy_version)
         db.session.commit()
@@ -560,6 +567,7 @@ def submit_new(data):
     matrix_version.user = User.query.filter_by(username="admin").first()
     matrix_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
     matrix.version_latest = 1
+    matrix.version_original = 1
 
     db.session.add(matrix_version)
     db.session.commit()
@@ -591,6 +599,7 @@ def submit_new(data):
         fixed_version.user = User.query.filter_by(username="admin").first()
         fixed_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         fixed.version_latest = 1
+        fixed.version_original = 1
 
         db.session.add(fixed_version)
         db.session.commit()
@@ -754,6 +763,7 @@ def migrate_meta():
 def model_version(model):
     for x in model.query.all():
         x.version_latest = 1
+        x.version_original = 1
 
 @manager.command
 def version_current():
