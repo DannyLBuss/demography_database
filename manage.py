@@ -772,6 +772,7 @@ def model_version(model):
     for x in model.query.all():
         x.version_latest = 1
         x.version_original = 1
+        x.version_ok = 1
 
 @manager.command
 def version_current():
