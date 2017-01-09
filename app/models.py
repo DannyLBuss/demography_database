@@ -8,10 +8,35 @@ import json
 from flask import current_app, request, url_for, jsonify
 from flask.ext.login import UserMixin, AnonymousUserMixin
 from app.exceptions import ValidationError
-from . import db, login_manager
+from . import db
+from . import login_manager
 from sqlalchemy.inspection import inspect
 
+from sqlalchemy import or_
+from flask_sqlalchemy import SQLAlchemy, BaseQuery
 
+class VersionQuery(BaseQuery):
+    def all(self):
+        return [s for s in self.filter_by(version_ok=1)]
+    def original(self):
+        return [s for s in self.filter_by(version_original=1)]
+    def latest(self):
+        return [s for s in self.filter_by(version_latest=1)]
+    def all_checked(self):
+        # This is slow
+        amber = Status.query.filter(Status.status_name=='Amber').first()
+        green = Status.query.filter(Status.status_name=='Green').first()
+        return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).filter(Version.checked == True).order_by(Version.version_number.desc())]
+    def all_checked_unchecked(self):
+        # This is slow
+        amber = Status.query.filter(Status.status_name=='Amber').first()
+        green = Status.query.filter(Status.status_name=='Green').first()
+        return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).order_by(Version.version_number.desc())]
+    def all_v(self):
+        return [s for s in self]
+    def version_number(self, id):
+        # This has potential to be slow too
+        return self.filter(Version.version_number == id).all()
 
 class Permission:
     FOLLOW = 0x01
@@ -71,6 +96,7 @@ class Role(db.Model):
 
 
 class User(UserMixin, db.Model):
+    query_class = VersionQuery
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
@@ -89,11 +115,9 @@ class User(UserMixin, db.Model):
     institute_id = db.Column(db.Integer, db.ForeignKey('institutes.id'))
     institute_confirmed = db.Column(db.Boolean, default=False)
 
-    versions = db.relationship("Version", backref="user")
+    version = db.relationship("Version", backref="user")
     version_latest = db.Column(db.String(64))  
     version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
-    version_ok = db.Column(db.Boolean)
     version_ok = db.Column(db.Boolean)
 
     def save_version(self):
@@ -870,6 +894,7 @@ class SourceType(db.Model):
         return self.source_name
 
 class Database(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'databases'
     id = db.Column(db.Integer, primary_key=True)
     database_name = db.Column(db.String(64), index=True)
@@ -881,10 +906,9 @@ class Database(db.Model):
     database_number_matrices = db.Column(db.Integer())
     database_agreement = db.Column(db.String(64))
 
-    versions = db.relationship("Version", backref="database")
+    version = db.relationship("Version", backref="database")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
     version_ok = db.Column(db.Boolean)
 
     @staticmethod
@@ -1804,16 +1828,16 @@ class Captivity(db.Model):
 
 
 class Status(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'statuses'
     id = db.Column(db.Integer, primary_key=True)
     status_name = db.Column(db.String(64), index=True)
     status_description = db.Column(db.Text())
     notes = db.Column(db.Text())
 
-    versions = db.relationship("Version", backref="statuses")
+    version = db.relationship("Version", backref="statuses")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
     version_ok = db.Column(db.Boolean)
 
     @staticmethod
@@ -1972,6 +1996,7 @@ class CensusTiming(db.Model):
 ''' End Meta Tables '''
 
 class Species(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'species'
     id = db.Column(db.Integer, primary_key=True)
     # subspecies = db.Column(db.String(64))
@@ -2043,6 +2068,7 @@ class Species(db.Model):
         return '<Species %r>' % self.id
 
 class Taxonomy(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'taxonomies'
     id = db.Column(db.Integer, primary_key=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
@@ -2064,7 +2090,7 @@ class Taxonomy(db.Model):
     col_check_ok = db.Column(db.Boolean())
     col_check_date = db.Column(db.Date())
 
-    versions = db.relationship("Version", backref="taxonomy")
+    version = db.relationship("Version", backref="taxonomy")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2119,6 +2145,7 @@ class Taxonomy(db.Model):
 
 
 class Trait(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'traits'
     id = db.Column(db.Integer, primary_key=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
@@ -2130,7 +2157,7 @@ class Trait(db.Model):
     angio_gymno_id = db.Column(db.Integer, db.ForeignKey('angio_gymno.id'))
     spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id')) 
 
-    versions = db.relationship("Version", backref="trait")
+    version = db.relationship("Version", backref="trait")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2194,6 +2221,7 @@ class Trait(db.Model):
         return '<Trait %r>' % self.id
 
 class Publication(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'publications'
     id = db.Column(db.Integer, primary_key=True)
     source_type_id = db.Column(db.Integer, db.ForeignKey('source_types.id'))
@@ -2227,7 +2255,7 @@ class Publication(db.Model):
     taxonomies = db.relationship("Taxonomy", backref="publication")
     studies = db.relationship("Study", backref="publication")
 
-    versions = db.relationship("Version", backref="publication")
+    version = db.relationship("Version", backref="publication")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2305,6 +2333,7 @@ class Publication(db.Model):
 
 
 class Study(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'studies'
     id = db.Column(db.Integer, primary_key=True)
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
@@ -2319,7 +2348,7 @@ class Study(db.Model):
     populations = db.relationship("Population", backref="study")
     number_populations = db.Column(db.Integer()) #could verify with populations.count()
 
-    versions = db.relationship("Version", backref="study")
+    version = db.relationship("Version", backref="study")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2373,6 +2402,7 @@ class Study(db.Model):
         return '<Study %r>' % self.id
 
 class AuthorContact(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'author_contacts'
     id = db.Column(db.Integer, primary_key=True)
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
@@ -2381,7 +2411,7 @@ class AuthorContact(db.Model):
     content_email_id = db.Column(db.Integer, db.ForeignKey('content_email.id')) #possibly many to many, probably a good idea if vector
     author_reply = db.Column(db.Text())
 
-    versions = db.relationship("Version", backref="author_contact")
+    version = db.relationship("Version", backref="author_contact")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2421,6 +2451,7 @@ class AuthorContact(db.Model):
         return str(self.publication_id)
 
 class AdditionalSource(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'additional_sources'
     id = db.Column(db.Integer, primary_key=True)
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
@@ -2440,7 +2471,7 @@ class AdditionalSource(db.Model):
     name = db.Column(db.Text()) #r-generated, needs more info, probably to be generated in method of this model, first author in author list?
     description = db.Column(db.Text())
 
-    versions = db.relationship("Version", backref="additional_source")
+    version = db.relationship("Version", backref="additional_source")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2491,6 +2522,7 @@ class AdditionalSource(db.Model):
         return '<Additional Source %r>' % self.id
 
 class Population(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'populations'
     id = db.Column(db.Integer, primary_key=True, index=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
@@ -2511,7 +2543,7 @@ class Population(db.Model):
 
     matrices = db.relationship("Matrix", backref="population")
 
-    versions = db.relationship("Version", backref="population")
+    version = db.relationship("Version", backref="population")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2603,6 +2635,7 @@ class Population(db.Model):
         return '<Population %r>' % self.id
 
 class Stage(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'stages'
     id = db.Column(db.Integer, primary_key=True, index=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
@@ -2612,7 +2645,7 @@ class Stage(db.Model):
 
     matrix_stages = db.relationship("MatrixStage", backref="stage")
 
-    versions = db.relationship("Version", backref="stage")
+    version = db.relationship("Version", backref="stage")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2648,6 +2681,7 @@ class Stage(db.Model):
         return str(self.species_id)
 
 class StageType(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'stage_types'
     id = db.Column(db.Integer, primary_key=True, index=True)
     type_name = db.Column(db.Text())
@@ -2655,7 +2689,7 @@ class StageType(db.Model):
 
     stages = db.relationship("Stage", backref="stage_types")
 
-    versions = db.relationship("Version", backref="stage_type")
+    version = db.relationship("Version", backref="stage_type")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2747,6 +2781,7 @@ class Treatment(db.Model):
         return self.treatment_name
 
 class MatrixStage(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'matrix_stages'
     id = db.Column(db.Integer, primary_key=True)
     stage_order = db.Column(db.SmallInteger())
@@ -2754,7 +2789,7 @@ class MatrixStage(db.Model):
 
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
-    versions = db.relationship("Version", backref="matrix_stage")
+    version = db.relationship("Version", backref="matrix_stage")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2787,6 +2822,7 @@ class MatrixStage(db.Model):
         return '<Matrix Stage %r>' % self.stage_order
 
 class MatrixValue(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'matrix_values'
     id = db.Column(db.Integer, primary_key=True)
     column_number = db.Column(db.SmallInteger())
@@ -2796,7 +2832,7 @@ class MatrixValue(db.Model):
 
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
-    versions = db.relationship("Version", backref="matrix_value")
+    version = db.relationship("Version", backref="matrix_value")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2838,6 +2874,7 @@ class MatrixValue(db.Model):
         return self.column_number
 
 class Matrix(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'matrices'
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.String(200), index=True, unique=True)
@@ -2899,7 +2936,7 @@ class Matrix(db.Model):
     seeds = db.relationship("Seed", backref="matrix")
 
     # Versioning
-    versions = db.relationship("Version", backref="matrix")
+    version = db.relationship("Version", backref="matrix")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -3093,6 +3130,7 @@ class Interval(db.Model):
 
 ''' Secret & Important Fixed Stuff '''
 class Fixed(db.Model):
+    query_class = VersionQuery
     __tablename__ = 'fixed'
     id = db.Column(db.Integer, primary_key=True)
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'), index=True)
@@ -3105,7 +3143,7 @@ class Fixed(db.Model):
     private = db.Column(db.Boolean(), default=True)
     #fixed_independence_flag
 
-    versions = db.relationship("Version", backref="fixed")
+    version = db.relationship("Version", backref="fixed")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
