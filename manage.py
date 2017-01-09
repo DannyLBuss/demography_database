@@ -277,6 +277,7 @@ def submit_new(data):
         species_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         species.version_latest = 1
         species.version_original = 1
+        species.version_ok = 1
 
         db.session.add(species_version)
         db.session.commit()
@@ -311,6 +312,7 @@ def submit_new(data):
         publication_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         publication.version_latest = 1
         publication.version_original = 1
+        publication.version_ok = 1
 
         db.session.add(publication_version)
         db.session.commit()
@@ -350,6 +352,7 @@ def submit_new(data):
         trait_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         trait.version_latest = 1
         trait.version_original = 1
+        trait.version_ok = 1
 
         db.session.add(trait_version)
         db.session.commit()
@@ -385,6 +388,7 @@ def submit_new(data):
         study_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         study.version_latest = 1
         study.version_original = 1
+        study.version_ok = 1
 
         db.session.add(study_version)
         db.session.commit()
@@ -436,6 +440,7 @@ def submit_new(data):
         population_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         pop.version_latest = 1
         pop.version_original = 1
+        pop.version_ok = 1
 
 
         db.session.add(population_version)
@@ -480,6 +485,7 @@ def submit_new(data):
         taxonomy_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         tax.version_latest = 1
         tax.version_original = 1
+        tax.version_ok = 1
 
         db.session.add(taxonomy_version)
         db.session.commit()
@@ -568,6 +574,7 @@ def submit_new(data):
     matrix_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
     matrix.version_latest = 1
     matrix.version_original = 1
+    matrix.version_ok = 1
 
     db.session.add(matrix_version)
     db.session.commit()
@@ -600,6 +607,7 @@ def submit_new(data):
         fixed_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
         fixed.version_latest = 1
         fixed.version_original = 1
+        fixed.version_ok = 1
 
         db.session.add(fixed_version)
         db.session.commit()
@@ -771,6 +779,7 @@ def version_current():
     
     for model in models:
         model_version(model)
+
 @manager.command
 def deploy():
     """Run deployment tasks."""
