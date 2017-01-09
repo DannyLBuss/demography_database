@@ -90,7 +90,7 @@ class User(UserMixin, db.Model):
     institute_confirmed = db.Column(db.Boolean, default=False)
 
     versions = db.relationship("Version", backref="user")
-    version_str = db.Column(db.String(64))  
+    version_latest = db.Column(db.String(64))  
 
     @staticmethod
     def migrate():
@@ -862,7 +862,7 @@ class Database(db.Model):
     database_agreement = db.Column(db.String(64))
 
     versions = db.relationship("Version", backref="database")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     @staticmethod
     def migrate():
@@ -1788,7 +1788,7 @@ class Status(db.Model):
     notes = db.Column(db.Text())
 
     versions = db.relationship("Version", backref="statuses")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     @staticmethod
     def migrate():
@@ -1963,6 +1963,7 @@ class Species(db.Model):
     stages = db.relationship("Stage", backref="species")
 
     version = db.relationship("Version", backref="species", uselist=False)
+    version_latest = db.Column(db.String(64))
 
     @staticmethod
     def migrate():
@@ -2036,7 +2037,7 @@ class Taxonomy(db.Model):
     col_check_date = db.Column(db.Date())
 
     versions = db.relationship("Version", backref="taxonomy")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     @staticmethod
     def migrate():
@@ -2100,7 +2101,7 @@ class Trait(db.Model):
     spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id')) 
 
     versions = db.relationship("Version", backref="trait")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     @staticmethod
     def migrate():
@@ -2195,7 +2196,7 @@ class Publication(db.Model):
     studies = db.relationship("Study", backref="publication")
 
     versions = db.relationship("Version", backref="publication")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     @staticmethod
     def migrate():
@@ -2285,7 +2286,7 @@ class Study(db.Model):
     number_populations = db.Column(db.Integer()) #could verify with populations.count()
 
     versions = db.relationship("Version", backref="study")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     @staticmethod
     def migrate():
@@ -2345,7 +2346,7 @@ class AuthorContact(db.Model):
     author_reply = db.Column(db.Text())
 
     versions = db.relationship("Version", backref="author_contact")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
 
     @staticmethod
@@ -2402,7 +2403,7 @@ class AdditionalSource(db.Model):
     description = db.Column(db.Text())
 
     versions = db.relationship("Version", backref="additional_source")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     def to_json(self, key):
         additional_source = {
@@ -2471,7 +2472,7 @@ class Population(db.Model):
     matrices = db.relationship("Matrix", backref="population")
 
     versions = db.relationship("Version", backref="population")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     def geometries_dec(self):
         geo = json.loads(self.geometries)
@@ -2570,7 +2571,7 @@ class Stage(db.Model):
     matrix_stages = db.relationship("MatrixStage", backref="stage")
 
     versions = db.relationship("Version", backref="stage")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     def to_json(self, key):
         stage = {
@@ -2611,7 +2612,7 @@ class StageType(db.Model):
     stages = db.relationship("Stage", backref="stage_types")
 
     versions = db.relationship("Version", backref="stage_type")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     def to_json(self, key):
         stage_type = {
@@ -2708,7 +2709,7 @@ class MatrixStage(db.Model):
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
     versions = db.relationship("Version", backref="matrix_stage")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     def to_json(self, key):
         matrix_stage = {
@@ -2748,7 +2749,7 @@ class MatrixValue(db.Model):
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
 
     versions = db.relationship("Version", backref="matrix_value")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     @staticmethod
     def migrate():
@@ -2849,7 +2850,7 @@ class Matrix(db.Model):
 
     # Versioning
     versions = db.relationship("Version", backref="matrix")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     @staticmethod
     def migrate():
@@ -3053,7 +3054,7 @@ class Fixed(db.Model):
     #fixed_independence_flag
 
     versions = db.relationship("Version", backref="fixed")
-    version_str = db.Column(db.String(64))
+    version_latest = db.Column(db.String(64))
 
     @staticmethod
     def migrate():
