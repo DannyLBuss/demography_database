@@ -103,7 +103,7 @@ FROM versions
 WHERE %s = versions.species_id AND versions.version_number = %s
 2016-12-16 14:35:54,467 INFO sqlalchemy.engine.base.Engine (1L, 0)
 0L
-
+    
 import time 
 from sqlalchemy import *
 from sqlalchemy.orm import *
@@ -162,3 +162,107 @@ session_loop_manually()
 normal_query()
 session_all_query()
 session_original_query()
+
+///////
+
+
+
+import time 
+from sqlalchemy import *
+from sqlalchemy.orm import *
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm.query import Query
+from sqlalchemy import or_
+
+class VersionQuery(Query):
+    def __iter__(self):
+            return Query.__iter__(self)
+    def all(self):
+            return [s for s in self.filter_by(version_ok=1).order_by(Version.version_number.desc())]
+    def original(self):
+            return self.filter_by(version_original=1)
+    def latest(self):
+            return self.filter_by(version_latest=1)
+    def all_checked(self):
+            amber = Status.query.filter(Status.status_name=='Amber').first()
+            green = Status.query.filter(Status.status_name=='Green').first()
+            return self.filter(or_(Version.statuses == amber, Version.statuses == green)).filter(Version.checked == True).order_by(Version.version_number.desc())]
+    def all_checked_unchecked(self):
+            amber = Status.query.filter(Status.status_name=='Amber').first()
+            green = Status.query.filter(Status.status_name=='Green').first()
+            return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).order_by(Version.version_number.desc())]
+    def all_v(self):
+            return [s for s in self.all()]
+    def get_version(self, id):
+            return self.filter(Version.version_number == id)[0]
+
+Base = declarative_base()
+engine = create_engine('mysql://root:jeh5t@localhost/demog_compadre', echo=False)
+Base.metadata.create_all(engine)
+Session = scoped_session(sessionmaker(bind=engine, query_cls=VersionQuery))
+sess = Session()
+
+sess.query(Species).all_v()
+
+def session_original_query():
+    start_time = time.time()
+    [s for s in sess.query(Species).original()]
+    print("--- Custom Query Loop Original %s seconds ---" % (time.time() - start_time))
+
+session_original_query()
+
+def session_loop_manually():
+    start_time = time.time()
+    [s for s in Species.query.filter(Version.version_number == 0)]
+    print("--- Manual Query Loop Original %s seconds ---" % (time.time() - start_time))
+
+session_loop_manually()
+
+
+
+normal_query()
+session_all_query()
+session_original_query()
+
+import time 
+from sqlalchemy import *
+from sqlalchemy.orm import *
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm.query import Query
+from sqlalchemy import or_
+
+class VersionQuery(Query):
+    def __iter__(self):
+            return Query.__iter__(self)
+    def all(self):
+            try:
+                version_ok = self.version_ok if self.version_ok else 0
+            except:
+                return [s for s in self]
+            else:
+                return [s for s in self.filter_by(version_ok=1).order_by(Version.version_number.desc())]
+    def original(self):
+            return self.filter_by(version_original=1)
+    def latest(self):
+            return self.filter_by(version_latest=1)
+    def all_checked(self):
+            # This is slow
+            amber = Status.query.filter(Status.status_name=='Amber').first()
+            green = Status.query.filter(Status.status_name=='Green').first()
+            return self.filter(or_(Version.statuses == amber, Version.statuses == green)).filter(Version.checked == True).order_by(Version.version_number.desc())]
+    def all_checked_unchecked(self):
+            # This is slow
+            amber = Status.query.filter(Status.status_name=='Amber').first()
+            green = Status.query.filter(Status.status_name=='Green').first()
+            return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).order_by(Version.version_number.desc())]
+    def all_v(self):
+            return [s for s in self]
+    def get_version(self, id):
+            return self.filter(Version.version_number == id)[0]
+
+Base = declarative_base()
+engine = create_engine('mysql://root:jeh5t@localhost/demog_compadre', echo=False)
+Base.metadata.create_all(engine)
+Session = scoped_session(sessionmaker(bind=engine, query_cls=VersionQuery))
+sess = Session()
+

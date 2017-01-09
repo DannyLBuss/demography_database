@@ -776,7 +776,7 @@ def model_version(model):
 
 @manager.command
 def version_current():
-    models = [Taxonomy(), Trait(), Publication(), AuthorContact(), Population(), StageType(), MatrixValue(),Matrix(), Fixed(), Study(), Institute()]
+    models = [Species(), Taxonomy(), Trait(), Publication(), AuthorContact(), Population(), StageType(), MatrixValue(),Matrix(), Fixed(), Study(), Institute()]
     
     for model in models:
         model_version(model)
