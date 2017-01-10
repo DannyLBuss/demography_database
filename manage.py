@@ -769,10 +769,14 @@ def migrate_meta():
     return
 
 def model_version(model):
-    for x in model.query.all():
-        x.version_latest = 1
-        x.version_original = 1
-        x.version_ok = 1
+    count = model.query.count()
+    for x in range(count):
+        y = model.query.get(x+1)
+        y.version_latest = 1
+        y.version_original = 1
+        y.version_ok = 1
+        db.session.add(y)
+        db.session.commit()
 
 @manager.command
 def version_current():

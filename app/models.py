@@ -3232,6 +3232,8 @@ class Version(db.Model):
     __tablename__ = 'versions'
     id = db.Column(db.Integer, primary_key=True)
     version_number = db.Column(db.Integer(), default=0)
+
+    #version of is the ID of the previous version, so each version can refer back to it
     version_of_id = db.Column(db.Integer, db.ForeignKey('versions.id')) 
     version_date_added = db.Column(db.Date())
     version_timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
@@ -3239,6 +3241,7 @@ class Version(db.Model):
     # This is as if treating as a whole row, but we are trying to get away from that
     version_uid = db.Column(db.Text())
     
+    # If this is the original version, it will have other versions
     versions = db.relationship("Version", backref="original_version", remote_side="Version.id", uselist=True)
     checked = db.Column(db.Boolean())
     
