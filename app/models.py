@@ -2536,7 +2536,6 @@ class Population(db.Model):
     country = db.Column(db.Text())
     population_nautical_miles = db.Column(db.Integer())
     continent_id = db.Column(db.Integer, db.ForeignKey('continents.id'))
-    geometries = db.Column(db.Text())
     latitude = db.Column(db.Float())
     longitude = db.Column(db.Float())
     altitude = db.Column(db.Float())
