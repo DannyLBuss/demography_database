@@ -8,6 +8,12 @@
 			"comp_name": "Pooled"
 		}, {
 			"comp_name": "Seasonal"
+        }, {
+			"comp_name": "Spatial Mean"
+        }, {
+			"comp_name": "Temporal Mean"
+        }, {
+			"comp_name": "Spatial-temporal Mean"
 		}, {
 			"comp_name": "C_Mean"
 		}],
