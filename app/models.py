@@ -2529,7 +2529,7 @@ class Population(db.Model):
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
     study_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
     species_author = db.Column(db.String(64))
-    name = db.Column(db.Text())
+    population_name = db.Column(db.Text())
     ecoregion_id = db.Column(db.Integer, db.ForeignKey('ecoregions.id'))
     invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasive_status_studies.id')) #
     invasive_status_elsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id')) #
@@ -2588,7 +2588,7 @@ class Population(db.Model):
                 'publication' : self.publication.to_json_simple(key),
                 'study' : self.study.to_json(key),
                 'species_author' : self.species_author,
-                'name' : self.name,
+                'population_name' : self.population_name,
                 'ecoregion' : self.ecoregion.to_json_simple(key) if self.ecoregion else None,
                 'country' : self.country,
                 'population_nautical_miles' : self.population_nautical_miles,
@@ -2615,7 +2615,7 @@ class Population(db.Model):
             'request_url' : url_for('api.get_one_entry', id=self.id, model='populations', key=key,
                                       _external=False),
             'data' : {
-                'name' : self.name,
+                'population_name' : self.population_name,
                 'ecoregion' : self.ecoregion.to_json_simple(key) if self.ecoregion else None,
                 'country' : self.country,
                 'matrices_len' : len(self.matrices),
