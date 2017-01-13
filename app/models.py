@@ -2283,7 +2283,7 @@ class Publication(db.Model):
                 'publisher' : self.publisher,
                 'city' : self.city,
                 'country' : self.country,
-                'country' : self.population_nautical_miles,
+                'population_nautical_miles' : self.population_nautical_miles,
                 'institution' : self.institution,
                 'DOI_ISBN' : self.DOI_ISBN,
                 'name' : self.name,
