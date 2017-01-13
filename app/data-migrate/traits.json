@@ -1,32 +1,100 @@
 {
-	"Trait": {
-		"OrganismType": [{
-			"type_name": "Algae"
+    "Trait": {
+        "OrganismType": [{
+            "type_name": "Algae"
 		}, {
-			"type_name": "Annual"
+            "type_name": "Annual"
 		}, {
-			"type_name": "Bryophyte"
+            "type_name": "Bryophyte"
 		}, {
-			"type_name": "Epiphyte"
+            "type_name": "Epiphyte"
 		}, {
-			"type_name": "Fern"
+            "type_name": "Fern"
 		}, {
-			"type_name": "Herbaceous perennial"
+            "type_name": "Herbaceous perennial"
 		}, {
-			"type_name": "Liana"
+            "type_name": "Liana"
 		}, {
-			"type_name": "Palm"
+            "type_name": "Palm"
 		}, {
-			"type_name": "Shrub"
+            "type_name": "Shrub"
 		}, {
-			"type_name": "Succulent"
+            "type_name": "Succulent"
 		}, {
-			"type_name": "Tree"
+            "type_name": "Tree"
 		}, {
-			"type_name": "NA"
+            "type_name": "Insecta"
+		}, {
+            "type_name": "Aves"
+        }, {
+            "type_name": "Mammalia"
+        }, {
+            "type_name": "Actinopterygii"
+        }, {
+            "type_name": "Anthozoa"
+        }, {
+            "type_name": "Bivalvia"
+        }, {
+            "type_name": "Amphibia"
+        }, {
+            "type_name": "Reptilia"
+        }, {
+            "type_name": "Elasmobranchii"
+        }, {
+            "type_name": "Malacostraca"
+        }, {
+            "type_name": "Maxillopoda"
+        }, {
+            "type_name": "Demospongiae"
+        }, {
+            "type_name": "Alphaproteobacteria"
+        }, {
+            "type_name": "Reptilia"
+        }, {
+            "type_name": "Branchiopoda"
+        }, {
+            "type_name": "Scyphozoa"
+        }, {
+            "type_name": "Gastropoda"
+        }, {
+            "type_name": "Spirochaetes"
+        }, {
+            "type_name": "Ascidiacea"
+        }, {
+            "type_name": "Echinoidea"
+        }, {
+            "type_name": "Clitellata"
+        }, {
+            "type_name": "Secernentea"
+        }, {
+            "type_name": "Polychaeta"
+        }, {
+            "type_name": "Arachnida"
+        }, {
+            "type_name": "Cephalaspidomorphi"
+        }, {
+            "type_name": "Virus"
+        }, {
+            "type_name": "Ostracoda"
+        }, {
+            "type_name": "Euglenozoa"
+        }, {
+            "type_name": "Merostomata"
+        }, {
+            "type_name": "Gymnolaemata"
+        }, {
+            "type_name": "Adenophorea"
+        }, {
+            "type_name": "Diplopoda"
+        }, {
+            "type_name": "Onychophorida"
+        }, {
+            "type_name": "Thaliacea"
+        }, {
+            "type_name": "NA"
 		}],
-
-		"SpandExGrowthType": [{
+        
+        "SpandExGrowthType": [{
             "growth_type_name": "Tree",
             "growth_type_description": "Large woody plant with a trunk and supporting branches."
         }, {
