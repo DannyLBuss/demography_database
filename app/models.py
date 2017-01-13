@@ -2538,6 +2538,7 @@ class Population(db.Model):
     continent_id = db.Column(db.Integer, db.ForeignKey('continents.id'))
     latitude = db.Column(db.Float())
     longitude = db.Column(db.Float())
+    exact_coordinates = db.Column(db.Boolean())
     altitude = db.Column(db.Float())
     pop_size = db.Column(db.Text()) #
 
@@ -2594,6 +2595,7 @@ class Population(db.Model):
                 'continent' : self.continent.to_json_simple(key) if self.continent else None,
                 'longitude' : self.longitude,
                 'latitude' : self.latitude,
+                'exact_coordinates' : self.exact_coordinates,
                 'altitude' : self.altitude,
                 'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices] if self.matrices else None,
                 'versions' : [version.to_json_simple(key) for version in self.versions] if self.versions else None,
