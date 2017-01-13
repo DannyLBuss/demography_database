@@ -2892,12 +2892,10 @@ class Matrix(db.Model):
     matrix_criteria_ontogeny = db.Column(db.Boolean())
     matrix_criteria_age = db.Column(db.Boolean())
     study_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
-    matrix_start = db.Column(db.String(64)) # These will include month, day, etc. Create method to return these - matrix_start.day() matrix_start.year() etc
     matrix_start_year = db.Column(db.Integer)
     matrix_start_month = db.Column(db.Integer())
     matrix_end_year = db.Column(db.Integer)
     matrix_end_month = db.Column(db.Integer())
-    matrix_end = db.Column(db.String(64)) # These will include month, day, etc. Create method to return these - matrix_start.day() matrix_start.year() etc
     matrix_start_season_id = db.Column(db.Integer, db.ForeignKey('start_seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
     matrix_end_season_id = db.Column(db.Integer, db.ForeignKey('end_seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
     matrix_fec = db.Column(db.Boolean())
