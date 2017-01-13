@@ -198,7 +198,7 @@ def create_id_string(dict):
     "journal" : dict['journal'], #
     "year_pub" : dict["year"], #
     "authors" : dict["authors"][:15], #first15 (if > 15, add character to end >)
-    "name" : dict["name"], #
+    "name" : dict["name"], # what sort of name is this?
     "matrix_composite" : dict['matrix_composition_id'], #
     "matrix_treatment" : dict['treatment_id'], #
     "matrix_start_year" : dict['matrix_start_year'], #
@@ -216,7 +216,7 @@ def generate_uid(species, publication, population, matrix):
     import re
 
     species_accepted = species.species_accepted
-    journal = publication.name
+    journal = publication.journal_name
     year_pub = publication.year
 
     try:
@@ -293,7 +293,7 @@ def submit_new(data):
         publication.year = data["publication_year"]
         publication.DOI_ISBN = data["publication_DOI_ISBN"]
         publication.additional_source_string = data["publication_additional_source_string"]
-        publication.name = data["publication_journal_name"]
+        publication.journal_name = data["publication_journal_name"]
 
         db.session.add(publication)
         db.session.commit()

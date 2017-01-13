@@ -2237,7 +2237,7 @@ class Publication(db.Model):
     country = db.Column(db.Text())
     institution = db.Column(db.Text())
     DOI_ISBN = db.Column(db.Text())
-    name = db.Column(db.Text()) #r-generated, needs more info, probably generated in method of this model
+    journal_name = db.Column(db.Text()) #r-generated, needs more info, probably generated in method of this model
     corresponding_author = db.Column(db.Text())
     email = db.Column(db.Text())
     purposes_id = db.Column(db.Integer, db.ForeignKey('purposes.id'))
@@ -2284,7 +2284,7 @@ class Publication(db.Model):
                 'country' : self.country,
                 'institution' : self.institution,
                 'DOI_ISBN' : self.DOI_ISBN,
-                'name' : self.name,
+                'journal_name' : self.journal_name,
                 'corresponding_author' : self.corresponding_author,
                 'email' : self.email,
                 'purposes' : self.purpose.to_json_simple(key) if self.purpose else None,
@@ -2313,7 +2313,7 @@ class Publication(db.Model):
                 'pub_title' : self.pub_title,
                 'year' : self.year,
                 'DOI_ISBN' : self.DOI_ISBN,
-                'name' : self.name,
+                'journal_name' : self.journal_name,
                 'purpose' : self.purpose.to_json_simple(key) if self.purpose else None,
                 'date_digitised' : self.date_digitised,
                 'embargo' : self.embargo,
@@ -2468,7 +2468,7 @@ class AdditionalSource(db.Model):
     country = db.Column(db.Text())
     institution = db.Column(db.Text())
     DOI_ISBN = db.Column(db.Text())
-    name = db.Column(db.Text()) #r-generated, needs more info, probably to be generated in method of this model, first author in author list?
+    journal_name = db.Column(db.Text()) #r-generated, needs more info, probably to be generated in method of this model, first author in author list?
     description = db.Column(db.Text())
 
     version = db.relationship("Version", backref="additional_source")
@@ -2495,7 +2495,7 @@ class AdditionalSource(db.Model):
                 'country' : self.country,
                 'institution' : self.institution,
                 'DOI_ISBN' : self.DOI_ISBN,
-                'name' : self.name,
+                'journal_name' : self.journal_name,
                 'description' : self.description,
                 'versions' : [version.to_json_simple(key) for version in versions]
             }
@@ -2511,7 +2511,7 @@ class AdditionalSource(db.Model):
                 'pub_title' : self.pub_title,
                 'year' : self.year,
                 'DOI_ISBN' : self.DOI_ISBN,
-                'name' : self.name,
+                'journal_name' : self.journal_name,
                 'description' : self.description,
                 'versions_len' : len(self.versions)
             }
