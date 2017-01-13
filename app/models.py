@@ -2903,7 +2903,6 @@ class Matrix(db.Model):
     matrix_u_string = db.Column(db.Text())
     matrix_f_string = db.Column(db.Text())
     matrix_c_string = db.Column(db.Text())
-    matrix_class_string = db.Column(db.Text())
     matrix_difficulty = db.Column(db.String(64))
     matrix_complete = db.Column(db.Boolean())
     independence_origin = db.Column(db.Text())
@@ -3008,7 +3007,6 @@ class Matrix(db.Model):
                 'matrix_a_string' : self.matrix_a_string,
                 'matrix_u_string' : self.matrix_u_string,
                 'matrix_f_string' : self.matrix_f_string,
-                'matrix_class_string' : self.matrix_class_string,
                 'n_plots' : self.n_plots,
                 'plot_size' : self.plot_size,
                 'studied_sex' : self.studied_sex.to_json_simple(key),
@@ -3058,7 +3056,6 @@ class Matrix(db.Model):
                 'matrix_composition' : self.matrix_composition.to_json_simple(key),
                 'survival_issue' : self.survival_issue,
                 'matrix_a_string' : self.matrix_a_string,
-                'matrix_class_string' : self.matrix_class_string,
                 'matrix_dimension' : self.matrix_dimension,
                 'observations' : self.observations,
                 'uid' : self.uid,
