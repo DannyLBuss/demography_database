@@ -2235,6 +2235,7 @@ class Publication(db.Model):
     publisher = db.Column(db.Text())
     city = db.Column(db.Text())
     country = db.Column(db.Text())
+    population_nautical_miles = db.Column(db.Integer())
     institution = db.Column(db.Text())
     DOI_ISBN = db.Column(db.Text())
     name = db.Column(db.Text()) #r-generated, needs more info, probably generated in method of this model
@@ -2282,6 +2283,7 @@ class Publication(db.Model):
                 'publisher' : self.publisher,
                 'city' : self.city,
                 'country' : self.country,
+                'country' : self.population_nautical_miles,
                 'institution' : self.institution,
                 'DOI_ISBN' : self.DOI_ISBN,
                 'name' : self.name,
