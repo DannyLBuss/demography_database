@@ -407,7 +407,7 @@ def submit_new(data):
     if pop == None:
         pop = Population()
         pop.species_author = data["species_author"]
-        pop.name = data["population_name"]
+        pop.population_name = data["population_name"]
         pop.species_id = species.id
         pop.publication_id = publication.id
         pop.study_id = study.id
