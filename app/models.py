@@ -2235,7 +2235,6 @@ class Publication(db.Model):
     publisher = db.Column(db.Text())
     city = db.Column(db.Text())
     country = db.Column(db.Text())
-    population_nautical_miles = db.Column(db.Integer())
     institution = db.Column(db.Text())
     DOI_ISBN = db.Column(db.Text())
     name = db.Column(db.Text()) #r-generated, needs more info, probably generated in method of this model
@@ -2283,7 +2282,6 @@ class Publication(db.Model):
                 'publisher' : self.publisher,
                 'city' : self.city,
                 'country' : self.country,
-                'population_nautical_miles' : self.population_nautical_miles,
                 'institution' : self.institution,
                 'DOI_ISBN' : self.DOI_ISBN,
                 'name' : self.name,
@@ -2536,6 +2534,7 @@ class Population(db.Model):
     invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasive_status_studies.id')) #
     invasive_status_elsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id')) #
     country = db.Column(db.Text())
+    population_nautical_miles = db.Column(db.Integer())
     continent_id = db.Column(db.Integer, db.ForeignKey('continents.id'))
     geometries = db.Column(db.Text())
     latitude = db.Column(db.Float())
@@ -2592,6 +2591,7 @@ class Population(db.Model):
                 'name' : self.name,
                 'ecoregion' : self.ecoregion.to_json_simple(key) if self.ecoregion else None,
                 'country' : self.country,
+                'population_nautical_miles' : self.population_nautical_miles,
                 'continent' : self.continent.to_json_simple(key) if self.continent else None,
                 'longitude' : self.longitude,
                 'latitude' : self.latitude,
