@@ -2006,8 +2006,10 @@ class Species(db.Model):
     esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id'))
     invasive_status = db.Column(db.Boolean())
     gbif_taxon_key = db.Column(db.Integer)
+    species_iucn_taxonid = db.Column(db.Integer)
     image_path = db.Column(db.Text)
     image_path2 = db.Column(db.Text)
+    
     taxonomies = db.relationship("Taxonomy", backref="species")
     traits = db.relationship("Trait", backref="species")
     populations = db.relationship("Population", backref="species")
@@ -2245,7 +2247,7 @@ class Publication(db.Model):
     embargo = db.Column(db.Date()) #nullable
     missing_data_id = db.Column(db.Integer, db.ForeignKey('missing_data.id'))
     additional_source_string = db.Column(db.Text())
-    colour = db.Column(db.String(6))
+    colour = db.Column(db.String(7))
 
     # Establishing one to many relationships between tables
     author_contacts = db.relationship("AuthorContact", backref="publication")

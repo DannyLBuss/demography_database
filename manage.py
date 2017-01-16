@@ -27,6 +27,11 @@ from app.models import User, Role, Permission, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Version, Institute, EndSeason
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
+import random
+
+def gen_hex_code():
+    r = lambda: random.randint(0,255)
+    return('#%02X%02X%02X' % (r(),r(),r()))
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
@@ -225,7 +230,7 @@ def generate_uid(species, publication, population, matrix):
         authors = ''
 
     try:
-        pop_name = population.name.encode('utf-8')[:15]
+        pop_name = population.population_name.encode('utf-8')[:15]
     except:
         pop_name = ''
     
@@ -254,11 +259,13 @@ def submit_new(data):
     if species == None:
         species = Species(species_accepted=data["species_accepted"])        
         species.gbif_taxon_key = data["species_gbif_taxon_key"]
-        species.species_author = data["species_author"]
+        species.species_iucn_taxonid = data["species_iucn_taxonid"]
         species.species_accepted = data["species_accepted"]        
         species.species_esa_status = ESAStatus.query.filter_by(status_code=data["species_esa_status_id"]).first()        
         species.species_common = data["species_common"]
         species.species_iucn_status = IUCNStatus.query.filter_by(status_code=data["species_iucn_status_id"]).first()
+        species.image_path = data["image_path"]
+        species.image_path2 = data["image_path2"]
 
         db.session.add(species)
         db.session.commit()
@@ -284,7 +291,7 @@ def submit_new(data):
 
     ''' Publication '''    
     if data["publication_DOI_ISBN"] == None:
-        publication = Publication.query.filter_by(authors=data["publication_authors"]).filter_by(year=data["publication_year"]).filter_by(name=data["publication_journal_name"]).first()
+        publication = Publication.query.filter_by(authors=data["publication_authors"]).filter_by(year=data["publication_year"]).filter_by(journal_name=data["publication_journal_name"]).first()
     else: 
         publication = Publication.query.filter_by(DOI_ISBN=data["publication_DOI_ISBN"]).first()    
     if publication == None:
@@ -294,6 +301,9 @@ def submit_new(data):
         publication.DOI_ISBN = data["publication_DOI_ISBN"]
         publication.additional_source_string = data["publication_additional_source_string"]
         publication.journal_name = data["publication_journal_name"]
+        publication.corresponding_author = data["publication_corresponding_author"]
+        publication.email = data["publication_corresponding_email"]
+        publication.colour = gen_hex_code()
 
         db.session.add(publication)
         db.session.commit()
@@ -400,7 +410,7 @@ def submit_new(data):
     ecoregion = Ecoregion.query.filter_by(ecoregion_code=data["population_ecoregion_id"]).first()
     continent = Continent.query.filter_by(continent_name=data["population_continent_id"]).first()
 
-    pop = Population.query.filter_by(name=data["population_name"], species_id=species.id, publication_id=publication.id).first()
+    pop = Population.query.filter_by(population_name=data["population_name"], species_id=species.id, publication_id=publication.id).first()
 
 
 
@@ -450,7 +460,6 @@ def submit_new(data):
     tax = Taxonomy.query.filter_by(species_id=species.id).first()
     if tax == None:
         tax = Taxonomy()
-        tax.species_author = species.species_author
         tax.species_accepted = species.species_accepted
         tax.authority = None
         tax.tpl_version = None
@@ -466,7 +475,7 @@ def submit_new(data):
         tax.species = species
         tax.publication = publication
         tax.col_check_date = data["taxonomy_col_check_date"]
-        tax.col_check_ok = data["taxonomy_col_check_ok"]
+        tax.col_check_ok = coerce_boolean(data["taxonomy_col_check_ok"])
 
         db.session.add(tax)
         db.session.commit()
@@ -537,9 +546,9 @@ def submit_new(data):
     matrix.matrix_c_string = data["matrix_c_string"]
 
     matrix.non_independence = data["matrix_non_independence"]
-    matrix.dimension = data["matrix_dimension"]
+    matrix.matrix_dimension = data["matrix_dimension"]
     matrix.non_independence_author = data["matrix_non_independence_author"]
-    matrix.matrix_complete = data["matrix_complete"]
+    matrix.matrix_complete = coerce_boolean(data["matrix_complete"])
     matrix.vectors_includes_na = data["matrix_vectors_includes_na"]
     matrix.class_number = data["matrix_class_number"]
     matrix.observations = data["matrix_observations"]
@@ -548,9 +557,10 @@ def submit_new(data):
 
     matrix.captivities = captivities
     matrix.class_author = data["matrix_class_author"]
+    matrix.class_organized = data["matrix_class_organized"]
     matrix.matrix_difficulty = data["matrix_difficulty"]
     matrix.independent = data["matrix_independent"]
-    matrix.seasonal = data["matrix_seasonal"]
+    matrix.seasonal = coerce_boolean(data["matrix_seasonal"])
 
     matrix.uid = generate_uid(species, publication, pop, matrix)
 
@@ -620,7 +630,8 @@ def submit_new(data):
 def csv_migrate_new():
     import csv
 
-    input_file = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
+    #input_file = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
+    input_file = UnicodeDictReader(open("app/compadre/comadre_migration_2017_temp.csv", "rU"))
 
     all_deets = []   
 
@@ -693,7 +704,7 @@ def convert_all_headers_new(dict):
     new_dict["matrix_vectors_includes_na"] = dict["matrix_vectors_includes_na"]
     new_dict["population_pop_size"] = dict["population_pop_size"]
     new_dict["species_iucn_status_id"] = dict["species_iucn_status"]
-    new_dict["species_esa_status_id"] = dict["species_esa_status_id"]
+    new_dict["species_esa_status_id"] = dict["species_esa_status"]
     new_dict["population_invasive_status_study_id"] = dict["population_invasive_status_study"]
     new_dict["population_invasive_status_elsewhere_id"] = dict["population_invasive_status_elsewhere"]
     new_dict["study_purpose_endangered_id"] = dict["study_purpose_endangered"]
@@ -704,7 +715,7 @@ def convert_all_headers_new(dict):
     new_dict["fixed_small_id"] = dict["fixed_small"]
     new_dict["fixed_seed_stage_error"] = dict["fixed_seed_stage_error"]
     new_dict["species_gbif_taxon_key"] = dict["species_gbif_taxon_key"]
-    new_dict["version_checked"] = dict["matrix_checked"]
+    #new_dict["version_checked"] = dict["matrix_checked"] #column not in scv?
     new_dict["version_checked_count"] = dict["matrix_checked_count"]
     new_dict["taxonomy_genus_accepted"] = dict["taxonomy_genus_accepted"]
     new_dict["matrix_independent"] = dict["matrix_independent"]
@@ -722,6 +733,20 @@ def convert_all_headers_new(dict):
     new_dict["taxonomy_col_check_ok"] = dict["taxonomy_col_check_ok"]
     new_dict["taxonomy_col_check_date"]= dict["taxonomy_col_check_date"]
     new_dict["matrix_independence_origin"] = dict["matrix_independence_origin"]
+    
+    # newly added
+    new_dict['image_path'] = dict["image_path"]
+    new_dict['image_path2'] = dict["image_path2"]
+    new_dict['species_iucn_taxonid'] = dict["species_iucn_taxonid"]
+    new_dict['publication_corresponding_author'] = dict["publication_corresponding_author"]
+    new_dict['publication_corresponding_email'] = dict["publication_corresponding_email"]
+    
+    
+    # not in migration script yet
+    new_dict['publication_student'] = dict["publication_student"]
+    new_dict['study_database_source'] = dict["study_database_source"]
+    new_dict['WithinSiteReplication'] = dict["WithinSiteReplication"]
+    
 
     for key, value in new_dict.iteritems():
         if value == "NA":
