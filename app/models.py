@@ -2076,7 +2076,6 @@ class Taxonomy(db.Model):
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
     species_author = db.Column(db.String(64), index=True)
-    species_accepted = db.Column(db.String(64))
     authority = db.Column(db.Text())
     tpl_version = db.Column(db.String(64)) # Currently at 1.0, which could be float, but sometimes releases are 1.0.1 etc, best as string for now?
     infraspecies_accepted = db.Column(db.String(64))
@@ -2109,7 +2108,6 @@ class Taxonomy(db.Model):
                 'species' : self.species.to_json_simple(key),
                 'publication' : self.publication.to_json_simple(key),
                 'species_author' : self.species_author,
-                'species_accepted' : self.species_accepted,
                 'authority' : self.authority,
                 'tpl_version' : self.tpl_version,
                 'infraspecies_accepted' : self.infraspecies_accepted,
@@ -2133,7 +2131,6 @@ class Taxonomy(db.Model):
             'request_url' : url_for('api.get_one_entry', id=self.id, model='taxonomies', key=key,
                                       _external=False),
             'data' : {
-                'species_accepted' : self.species_accepted,
                 'authority' : self.authority,
                 'genus' : self.genus,
                 'family' : self.family,
@@ -2240,8 +2237,6 @@ class Publication(db.Model):
     institution = db.Column(db.Text())
     DOI_ISBN = db.Column(db.Text())
     journal_name = db.Column(db.Text()) #r-generated, needs more info, probably generated in method of this model
-    corresponding_author = db.Column(db.Text())
-    email = db.Column(db.Text())
     purposes_id = db.Column(db.Integer, db.ForeignKey('purposes.id'))
     date_digitised = db.Column(db.DateTime(), default=datetime.now)
     embargo = db.Column(db.Date()) #nullable
@@ -2408,9 +2403,12 @@ class AuthorContact(db.Model):
     __tablename__ = 'author_contacts'
     id = db.Column(db.Integer, primary_key=True)
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
+    corresponding_author = db.Column(db.Text())
+    corresponding_author_email = db.Column(db.Text())
     date_contacted = db.Column(db.Date(), index=True)
     contacting_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     content_email_id = db.Column(db.Integer, db.ForeignKey('content_email.id')) #possibly many to many, probably a good idea if vector
+    extra_content_email = db.Column(db.Text())
     author_reply = db.Column(db.Text())
 
     version = db.relationship("Version", backref="author_contact")
@@ -2429,9 +2427,12 @@ class AuthorContact(db.Model):
                                       _external=False),
             'data' : {
                 'publication' : self.publication.to_json_simple(key) if self.publication else None,
+                'corresponding_author' : self.corresponding_author,
+                'corresponding_author_email' : self.corresponding_author_email,
                 'date_contacted' : self.date_contacted,
                 'contacting_user' : self.contacting_user.to_json_simple(key) if self.contacting_user else None,
                 'content_email_id' : self.content_email.to_json_simple(key) if self.content_email else None,
+                'content_email_text' : self.content_email_text,
                 'author_reply' : self.author_reply,
             }
         }

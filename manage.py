@@ -326,6 +326,24 @@ def submit_new(data):
 
         db.session.add(publication_version)
         db.session.commit()
+        
+    ''' Author contact '''
+    
+    author_contacts = AuthorContact.query.filter_by(corresponding_author = data["publication_corresponding_author"]).filter_by(corresponding_author_email = data["publication_corresponding_email"]).first()
+    
+    if author_contacts == None:
+        author_contacts = AuthorContact()
+        author_contacts.publication_id = publication.id
+        author_contacts.date_contacted = data["date_author_contacted"]
+        #author_contacts.contacting_user_id = #null at the moment
+        author_contacts.extra_content_email = data["correspondence_email_content"]
+        author_contacts.author_reply = data["correspondence_author_reply"]
+        author_contacts.corresponding_author = data["publication_corresponding_author"]
+        author_contacts.corresponding_author_email = data["publication_corresponding_email"]
+        
+        db.session.add(author_contacts)
+        db.session.commit()
+        
 
     ''' Trait '''
     spand_ex_growth_type = SpandExGrowthType.query.filter_by(type_name=data["trait_spand_ex_growth_type_id"]).first()
@@ -460,7 +478,6 @@ def submit_new(data):
     tax = Taxonomy.query.filter_by(species_id=species.id).first()
     if tax == None:
         tax = Taxonomy()
-        tax.species_accepted = species.species_accepted
         tax.authority = None
         tax.tpl_version = None
         tax.infraspecies_accepted = None
@@ -631,7 +648,7 @@ def csv_migrate_new():
     import csv
 
     #input_file = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
-    input_file = UnicodeDictReader(open("app/compadre/comadre_migration_2017_temp.csv", "rU"))
+    input_file = UnicodeDictReader(open("app/compadre/comadre_migration_2017.csv", "rU"))
 
     all_deets = []   
 
@@ -740,12 +757,14 @@ def convert_all_headers_new(dict):
     new_dict['species_iucn_taxonid'] = dict["species_iucn_taxonid"]
     new_dict['publication_corresponding_author'] = dict["publication_corresponding_author"]
     new_dict['publication_corresponding_email'] = dict["publication_corresponding_email"]
-    
+    new_dict['date_author_contacted'] = dict["date_author_contacted"]
+    new_dict['correspondence_email_content'] = dict["correspondence_email_content"]
+    new_dict['correspondence_author_reply'] = dict["correspondence_author_reply"]
     
     # not in migration script yet
     new_dict['publication_student'] = dict["publication_student"]
     new_dict['study_database_source'] = dict["study_database_source"]
-    new_dict['WithinSiteReplication'] = dict["WithinSiteReplication"]
+    new_dict['within_site_replication'] = dict["within_site_replication"]
     
 
     for key, value in new_dict.iteritems():
