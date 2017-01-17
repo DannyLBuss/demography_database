@@ -305,7 +305,7 @@ def submit_new(data):
         publication.email = data["publication_corresponding_email"]
         publication.colour = gen_hex_code()
 
-        purposes: {"Comparative Demography" : data["publication_purpose_comparative_demography"],
+        purposes = {"Comparative Demography" : data["publication_purpose_comparative_demography"],
         "Spatial Demography" : data["publication_purpose_spatial_demography"], 
         "Abiotic Impacts" : data["publication_purpose_abiotic"],
         "PVA" : data["publication_purpose_pva"],
