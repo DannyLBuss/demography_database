@@ -305,6 +305,21 @@ def submit_new(data):
         publication.email = data["publication_corresponding_email"]
         publication.colour = gen_hex_code()
 
+        purposes: {"Comparative Demography" : data["publication_purpose_comparative_demography"],
+        "Spatial Demography" : data["publication_purpose_spatial_demography"], 
+        "Abiotic Impacts" : data["publication_purpose_abiotic"],
+        "PVA" : data["publication_purpose_pva"],
+        "Species Dynamics Description" : data["publication_purpose_species_dynamics_description"],
+        "Interspecific Interactions" : data["publication_purpose_interspecific_interactions"],
+        "Management Evaluation" : data["publication_purpose_management_evaluation"],
+        "Methodological Advancement" : data["publication_purpose_methodological_advancement"]
+        }
+
+        queryset = [Purpose.query.filter(Purpose.purpose_name == key).first() for key, val in purposes.items() if val == 1]
+
+        publication.purposes = queryset
+
+
         db.session.add(publication)
         db.session.commit()
 

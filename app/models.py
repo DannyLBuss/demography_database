@@ -980,8 +980,6 @@ class Purpose(db.Model):
     purpose_name = db.Column(db.String(64), index=True)
     purpose_description = db.Column(db.Text())
 
-    publications = db.relationship("Publication", backref="purpose")
-
     @staticmethod
     def migrate():
         with open('app/data-migrate/publications.json') as d_file:
@@ -2237,7 +2235,8 @@ class Publication(db.Model):
     institution = db.Column(db.Text())
     DOI_ISBN = db.Column(db.Text())
     journal_name = db.Column(db.Text()) #r-generated, needs more info, probably generated in method of this model
-    purposes_id = db.Column(db.Integer, db.ForeignKey('purposes.id'))
+    purposes = db.relationship("Purpose",
+                    secondary=publication_purposes, backref="purposes")
     date_digitised = db.Column(db.DateTime(), default=datetime.now)
     embargo = db.Column(db.Date()) #nullable
     missing_data_id = db.Column(db.Integer, db.ForeignKey('missing_data.id'))
