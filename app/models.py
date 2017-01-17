@@ -2236,7 +2236,7 @@ class Publication(db.Model):
     DOI_ISBN = db.Column(db.Text())
     journal_name = db.Column(db.Text()) #r-generated, needs more info, probably generated in method of this model
     purposes = db.relationship("Purpose",
-                    secondary=publication_purposes, backref="purposes")
+                    secondary=publication_purposes, backref="publications")
     date_digitised = db.Column(db.DateTime(), default=datetime.now)
     embargo = db.Column(db.Date()) #nullable
     missing_data_id = db.Column(db.Integer, db.ForeignKey('missing_data.id'))
