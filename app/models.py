@@ -2002,6 +2002,7 @@ class Species(db.Model):
     species_common = db.Column(db.String(200))
     iucn_status_id = db.Column(db.Integer, db.ForeignKey('iucn_status.id'))
     esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id'))
+    species_gisd_status = db.Column(db.Boolean())
     invasive_status = db.Column(db.Boolean())
     gbif_taxon_key = db.Column(db.Integer)
     species_iucn_taxonid = db.Column(db.Integer)
@@ -2032,6 +2033,7 @@ class Species(db.Model):
                                       _external=False),
             'data' : {
                 'species_accepted': self.species_accepted,
+                'species_gisd_status': self.species_gisd_status,
                 'taxonomy' : [taxonomy.to_json_simple(key) for taxonomy in self.taxonomies][0],
                 'traits' : [trait.to_json_simple(key) for trait in self.traits],
                 'stages' : [stages.to_json_simple(key) for stages in self.stages] if self.stages else [],
