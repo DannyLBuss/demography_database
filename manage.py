@@ -260,9 +260,10 @@ def submit_new(data):
         species = Species(species_accepted=data["species_accepted"])        
         species.gbif_taxon_key = data["species_gbif_taxon_key"]
         species.species_iucn_taxonid = data["species_iucn_taxonid"]
-        species.species_accepted = data["species_accepted"]        
-        species.species_esa_status = ESAStatus.query.filter_by(status_code=data["species_esa_status_id"]).first()        
+        species.species_accepted = data["species_accepted"]       
+        # species.species_esa_status = ESAStatus.query.filter_by(status_code=data["species_esa_status_id"]).first()        
         species.species_common = data["species_common"]
+        species.species_gisd_status = 1 if data["species_gisd_status"] else 0
         species.species_iucn_status = IUCNStatus.query.filter_by(status_code=data["species_iucn_status_id"]).first()
         species.image_path = data["image_path"]
         species.image_path2 = data["image_path2"]
@@ -679,6 +680,15 @@ def convert_all_headers_new(dict):
 
     new_dict = {}
 
+    new_dict["species_gisd_status"] = dict["species_gisd_status"]
+    new_dict["publication_purpose_comparative_demography"] = dict["publication_purpose_comparative_demography"]
+    new_dict["publication_purpose_species_dynamics_description"] = dict["publication_purpose_species_dynamics_description"]
+    new_dict["publication_purpose_spatial_demography"] = dict["publication_purpose_spatial_demography"]
+    new_dict["publication_purpose_pva"] = dict["publication_purpose_pva"]
+    new_dict["publication_purpose_methodological_advancement"] = dict["publication_purpose_methodological_advancement"]
+    new_dict["publication_purpose_management_evaluation"] = dict["publication_purpose_management_evaluation"]
+    new_dict["publication_purpose_interspecific_interactions"] = dict["publication_purpose_interspecific_interactions"]
+    new_dict["publication_purpose_abiotic"] = dict["publication_purpose_abiotic"]
     new_dict["species_author"] = dict["species_author"]
     new_dict["species_accepted"] = dict["species_accepted"]
     new_dict["species_common"]= dict["species_common"]
@@ -736,7 +746,7 @@ def convert_all_headers_new(dict):
     new_dict["matrix_vectors_includes_na"] = dict["matrix_vectors_includes_na"]
     new_dict["population_pop_size"] = dict["population_pop_size"]
     new_dict["species_iucn_status_id"] = dict["species_iucn_status"]
-    new_dict["species_esa_status_id"] = dict["species_esa_status"]
+    # new_dict["species_esa_status_id"] = dict["species_esa_status"]
     new_dict["population_invasive_status_study_id"] = dict["population_invasive_status_study"]
     new_dict["population_invasive_status_elsewhere_id"] = dict["population_invasive_status_elsewhere"]
     new_dict["study_purpose_endangered_id"] = dict["study_purpose_endangered"]
