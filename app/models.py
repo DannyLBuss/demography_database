@@ -2006,6 +2006,7 @@ class Species(db.Model):
     invasive_status = db.Column(db.Boolean())
     gbif_taxon_key = db.Column(db.Integer)
     species_iucn_taxonid = db.Column(db.Integer)
+    species_iucn_population_assessed = db.Column(db.String(200))
     image_path = db.Column(db.Text)
     image_path2 = db.Column(db.Text)
     
@@ -2034,6 +2035,7 @@ class Species(db.Model):
             'data' : {
                 'species_accepted': self.species_accepted,
                 'species_gisd_status': self.species_gisd_status,
+                'species_common': self.species_common,
                 'taxonomy' : [taxonomy.to_json_simple(key) for taxonomy in self.taxonomies][0],
                 'traits' : [trait.to_json_simple(key) for trait in self.traits],
                 'stages' : [stages.to_json_simple(key) for stages in self.stages] if self.stages else [],
