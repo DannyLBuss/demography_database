@@ -2398,6 +2398,9 @@ class Study(db.Model):
             }
         return study
 
+    def __getitem__(self, key):
+        return getattr(self, key)
+
     def __repr__(self):
         return '<Study %r>' % self.id
 
