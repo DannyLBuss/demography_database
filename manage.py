@@ -252,41 +252,96 @@ def generate_uid(species, publication, population, matrix):
     uid = re.sub('[\W_]+', '', uid_lower)
     return uid
 
+
+@manager.command
+def csv_state_test():
+    import csv
+
+    #input_file = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
+    input_file = UnicodeDictReader(open("app/compadre/comadre_migration_2017.csv", "rU"))
+
+    all_deets = []   
+
+    for i, row in enumerate(input_file):
+        if i == 133:
+            data = convert_all_headers_new(row)
+            state_test(data)
+
+    return 
+
+
+
+def data_clean(data):
+    incomplete = True if 'NDY' in data.values() else False
+    kwargs = {key: val for key, val in data.items() if val != 'NDY'}
+    amber = Status.query.filter_by(status_name="Amber").first()
+    green = Status.query.filter_by(status_name="Green").first()
+    kwargs['version_ok'] = 0 if incomplete else 1
+    kwargs['version_original'] = 1
+    kwargs['version_latest'] = 1
+    return {'kwargs' : kwargs, 'status' : amber if incomplete else green}
+
+def version_data(cleaned):
+    version =  {'checked' : True, 
+    'checked_count' : 1, 
+    'statuses' : cleaned['status'],
+    'version_number' : 1,
+    'user' : User.query.filter_by(username='admin').first(), 
+    'database' : Database.query.filter_by(database_name='COMPADRE 4').first()}
+    return version
+        
+@manager.command
+def state_test(data):
+    purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
+    purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
+    
+    data = {'study_duration' : data["study_duration"], 'study_start' : data["study_start"], 'study_end' :  data["study_end"], 'number_populations' : data["study_number_populations"], 'purpose_endangered' : purpose_endangered, 'purpose_weed' : purpose_weed}
+    cleaned = data_clean(data)
+    study = Study(**cleaned["kwargs"])
+    db.session.add(study)
+    db.session.commit()
+
+    ''' Study Version '''
+    version = version_data(cleaned)
+    study_version = Version(**version)
+    study_version.version_number = 0
+    study_version.study = study    
+    db.session.add(study_version) 
+    db.session.commit()
+    study_version.version_of_id = study_version.id
+    db.session.add
+
+
+
+
 @manager.command
 def submit_new(data):
+    import datetime
     species = Species.query.filter_by(species_accepted=data["species_accepted"]).first()
 
     if species == None:
-        species = Species(species_accepted=data["species_accepted"])        
-        species.gbif_taxon_key = data["species_gbif_taxon_key"]
-        species.species_iucn_taxonid = data["species_iucn_taxonid"]
-        species.species_accepted = data["species_accepted"]       
-        # species.species_esa_status = ESAStatus.query.filter_by(status_code=data["species_esa_status_id"]).first()        
-        species.species_common = data["species_common"]
-        species.species_gisd_status = 1 if data["species_gisd_status"] else 0
-        species.species_iucn_status = IUCNStatus.query.filter_by(status_code=data["species_iucn_status_id"]).first()
-        species.image_path = data["image_path"]
-        species.image_path2 = data["image_path2"]
+        data = {'gbif_taxon_key': data["species_gbif_taxon_key"], 
+        'species_iucn_taxonid': data["species_iucn_taxonid"], 
+        'species_accepted' : data["species_accepted"], 
+        'species_common' :  data["species_common"], 
+        'species_gisd_status' : 1 if data["species_gisd_status"] else 0, 
+        'species_iucn_status' : IUCNStatus.query.filter_by(status_code=data["species_iucn_status_id"]).first(), 
+        'image_path' : data["image_path"], 
+        'image_path2' : data["image_path2"]}
+        
+        cleaned = data_clean(data)
+        species = Species(**cleaned["kwargs"])
 
         db.session.add(species)
         db.session.commit()
 
         ''' Species Version '''
-        species_version = Version()
-        species_version.version_number = 0
+        version = version_data(cleaned)
+        species_version = Version(**version)
         species_version.species = species
         db.session.add(species_version) 
         db.session.commit()  
         species_version.version_of_id = species_version.id
-        species_version.checked = True
-        species_version.checked_count = 1
-        species_version.statuses = Status.query.filter_by(status_name="Green").first()
-        species_version.user = User.query.filter_by(username="admin").first()
-        species_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
-        species.version_latest = 1
-        species.version_original = 1
-        species.version_ok = 1
-
         db.session.add(species_version)
         db.session.commit()
 
@@ -295,17 +350,8 @@ def submit_new(data):
         publication = Publication.query.filter_by(authors=data["publication_authors"]).filter_by(year=data["publication_year"]).filter_by(journal_name=data["publication_journal_name"]).first()
     else: 
         publication = Publication.query.filter_by(DOI_ISBN=data["publication_DOI_ISBN"]).first()    
+    
     if publication == None:
-        publication = Publication()
-        publication.authors = data["publication_authors"]
-        publication.year = data["publication_year"]
-        publication.DOI_ISBN = data["publication_DOI_ISBN"]
-        publication.additional_source_string = data["publication_additional_source_string"]
-        publication.journal_name = data["publication_journal_name"]
-        publication.corresponding_author = data["publication_corresponding_author"]
-        publication.email = data["publication_corresponding_email"]
-        publication.colour = gen_hex_code()
-
         purposes = {"Comparative Demography" : data["publication_purpose_comparative_demography"],
         "Spatial Demography" : data["publication_purpose_spatial_demography"], 
         "Abiotic Impacts" : data["publication_purpose_abiotic"],
@@ -320,26 +366,30 @@ def submit_new(data):
 
         publication.purposes = queryset
 
+        data = {'authors': data["publication_authors"],
+        'year' : data["publication_year"],
+        'DOI_ISBN' : data["publication_DOI_ISBN"],
+        'additional_source_string' : data["publication_additional_source_string"],
+        'journal_name' : data["publication_journal_name"],
+        'corresponding_author' : data["publication_corresponding_author"],
+        'email' : data["publication_corresponding_email"],
+        'colour' : gen_hex_code(),
+        'purposes' : queryset
+        }
+
+        cleaned = data_clean(data)
+        publication = Publication(**cleaned["kwargs"])
 
         db.session.add(publication)
         db.session.commit()
 
         ''' Publication Version '''
-        publication_version = Version()
-        publication_version.version_number = 0
+        version = version_data(cleaned)
+        publication_version = Version(**version)
         publication_version.publication = publication
         db.session.add(publication_version) 
         db.session.commit()  
         publication_version.version_of_id = publication_version.id
-        publication_version.checked = True
-        publication_version.checked_count = 1
-        publication_version.statuses = Status.query.filter_by(status_name="Green").first()
-        publication_version.user = User.query.filter_by(username="admin").first()
-        publication_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
-        publication.version_latest = 1
-        publication.version_original = 1
-        publication.version_ok = 1
-
         db.session.add(publication_version)
         db.session.commit()
         
@@ -348,16 +398,28 @@ def submit_new(data):
     author_contacts = AuthorContact.query.filter_by(corresponding_author = data["publication_corresponding_author"]).filter_by(corresponding_author_email = data["publication_corresponding_email"]).first()
     
     if author_contacts == None:
-        author_contacts = AuthorContact()
-        author_contacts.publication_id = publication.id
-        author_contacts.date_contacted = data["date_author_contacted"]
-        #author_contacts.contacting_user_id = #null at the moment
-        author_contacts.extra_content_email = data["correspondence_email_content"]
-        author_contacts.author_reply = data["correspondence_author_reply"]
-        author_contacts.corresponding_author = data["publication_corresponding_author"]
-        author_contacts.corresponding_author_email = data["publication_corresponding_email"]
+        data = {'publication_id' : publication.id, 
+        'date_contacted' : datetime.datetime.strptime(data['date_author_contacted'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['date_author_contacted'] else None,
+        'extra_content_email' : data["correspondence_email_content"],
+        'author_reply' : data["correspondence_author_reply"],
+        'corresponding_author' : data["publication_corresponding_author"],
+        'corresponding_author_email' : data["publication_corresponding_email"]
+        }
+
+        cleaned = data_clean(data)
+        author_contact = AuthorContact(**cleaned["kwargs"])
         
-        db.session.add(author_contacts)
+        db.session.add(author_contact)
+        db.session.commit()
+
+        ''' Publication Version '''
+        version = version_data(cleaned)
+        author_contact_version = Version(**version)
+        author_contact_version.author_contact = author_contact
+        db.session.add(author_contact_version) 
+        db.session.commit()  
+        author_contact_version.version_of_id = author_contact_version.id
+        db.session.add(author_contact_version)
         db.session.commit()
         
 
@@ -371,69 +433,57 @@ def submit_new(data):
     trait = Trait.query.filter_by(species_id=species.id).first()
 
     if trait == None:
-        trait = Trait()
-        trait.species_id = species.id
-        trait.organism_type = organism_type
-        trait.dicot_monoc = dicot_monoc
-        trait.angio_gymno = angio_gymno
-        trait.spand_ex_growth_type = spand_ex_growth_type
-        trait.growth_form_raunkiaer = growth_form_raunkiaer
+        data = {'species_id': species.id, 
+        'organism_type': organism_type,
+        'dicot_monoc': dicot_monoc,
+        'angio_gymno': angio_gymno, 
+        'spand_ex_growth_type' : spand_ex_growth_type,
+        'growth_form_raunkiaer' : growth_form_raunkiaer}
+
+        cleaned = data_clean(data)
+        trait = Trait(**cleaned["kwargs"])
 
         db.session.add(trait)
         db.session.commit()
 
         ''' Trait Version '''
-        trait_version = Version()
-        trait_version.version_number = 0
+        version = version_data(cleaned)
+        trait_version = Version(**version)
         trait_version.trait = trait
         db.session.add(trait_version) 
         db.session.commit()  
         trait_version.version_of_id = trait_version.id
-        trait_version.checked = True
-        trait_version.checked_count = 1
-        trait_version.statuses = Status.query.filter_by(status_name="Green").first()
-        trait_version.user = User.query.filter_by(username="admin").first()
-        trait_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
-        trait.version_latest = 1
-        trait.version_original = 1
-        trait.version_ok = 1
-
         db.session.add(trait_version)
         db.session.commit()
 
     ''' Study '''
     # What if all none? Will they be grouped together?
-    purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first()
-    purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first()
-
     study = Study.query.filter_by(publication_id=publication.id, study_start=data["study_start"], study_end=data["study_end"]).first()
     if study == None:
-        study = Study()
-        study.study_duration = data["study_duration"]
-        study.study_start = data["study_start"]
-        study.study_end = data["study_end"]
-        study.publication_id = publication.id
-        study.number_populations = data["study_number_populations"]
+        purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
+        purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
+        
+        data = {'study_duration' : data["study_duration"],
+        'publication_id' : publication.id,
+        'study_start' : data["study_start"], 
+        'study_end' :  data["study_end"], 
+        'number_populations' : data["study_number_populations"], 
+        'purpose_endangered' : purpose_endangered, 
+        'purpose_weed' : purpose_weed}
 
+        cleaned = data_clean(data)
+        study = Study(**cleaned["kwargs"])
         db.session.add(study)
         db.session.commit()
 
         ''' Study Version '''
-        study_version = Version()
+        version = version_data(cleaned)
+        study_version = Version(**version)
         study_version.version_number = 0
-        study_version.study = study
+        study_version.study = study    
         db.session.add(study_version) 
-        db.session.commit()  
+        db.session.commit()
         study_version.version_of_id = study_version.id
-        study_version.checked = True
-        study_version.checked_count = 1
-        study_version.statuses = Status.query.filter_by(status_name="Green").first()
-        study_version.user = User.query.filter_by(username="admin").first()
-        study_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
-        study.version_latest = 1
-        study.version_original = 1
-        study.version_ok = 1
-
         db.session.add(study_version)
         db.session.commit()
 
@@ -446,89 +496,73 @@ def submit_new(data):
 
     pop = Population.query.filter_by(population_name=data["population_name"], species_id=species.id, publication_id=publication.id).first()
 
-
-
     if pop == None:
-        pop = Population()
-        pop.species_author = data["species_author"]
-        pop.population_name = data["population_name"]
-        pop.species_id = species.id
-        pop.publication_id = publication.id
-        pop.study_id = study.id
+        data = {'species_author' : data["species_author"],
+        'population_name' : data["population_name"],
+        'species_id' : species.id,
+        'publication_id' : publication.id,
+        'study_id' : study.id,
+        'longitude' : data["population_longitude"],
+        'latitude' : data["population_latitude"],
+        'altitude' : data["population_altitude"],
+        'pop_size' : data["population_pop_size"],
+        'country' : data["population_country"],
+        'invasive_status_study' : invasive_status_study,
+        'invasive_status_elsewhere' : invasive_status_elsewhere,
+        'ecoregion' : ecoregion, 
+        'continent' : continent
+        }
 
-        pop.longitude = data["population_longitude"]
-        pop.latitude = data["population_latitude"]
-        pop.altitude = data["population_altitude"]
-        pop.pop_size = data["population_pop_size"]
-        pop.country = data["population_country"]
-
-        pop.invasive_status_study = invasive_status_study
-        pop.invasive_status_elsewhere = invasive_status_elsewhere
-        pop.ecoregion = ecoregion
-        pop.continent = continent
+        cleaned = data_clean(data)
+        pop = Population(**cleaned["kwargs"])
 
         db.session.add(pop)
         db.session.commit()
 
         ''' Population Version '''
-        population_version = Version()
+        version = version_data(cleaned)
+        population_version = Version(**version)
         population_version.version_number = 0
-        population_version.population = pop
+        population_version.population = pop    
         db.session.add(population_version) 
-        db.session.commit()  
+        db.session.commit()
         population_version.version_of_id = population_version.id
-        population_version.checked = True
-        population_version.checked_count = 1
-        population_version.statuses = Status.query.filter_by(status_name="Green").first()
-        population_version.user = User.query.filter_by(username="admin").first()
-        population_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
-        pop.version_latest = 1
-        pop.version_original = 1
-        pop.version_ok = 1
-
-
         db.session.add(population_version)
         db.session.commit()
 
     ''' Taxonomy '''
     tax = Taxonomy.query.filter_by(species_id=species.id).first()
     if tax == None:
-        tax = Taxonomy()
-        tax.authority = None
-        tax.tpl_version = None
-        tax.infraspecies_accepted = None
-        tax.species_epithet_accepted = None
-        tax.genus_accepted = data["taxonomy_genus_accepted"]
-        tax.genus = data["taxonomy_genus"]
-        tax.family = data["taxonomy_family"]
-        tax.tax_order = data["taxonomy_order"]
-        tax.tax_class = data["taxonomy_class"]
-        tax.phylum = data["taxonomy_phylum"]
-        tax.kingdom = data["taxonomy_kingdom"]
-        tax.species = species
-        tax.publication = publication
-        tax.col_check_date = data["taxonomy_col_check_date"]
-        tax.col_check_ok = coerce_boolean(data["taxonomy_col_check_ok"])
+        data = {'authority' : None, 
+        'tpl_version' : None, 
+        'infraspecies_accepted' : None,
+        'species_epithet_accepted' : None, 
+        'genus_accepted' : data["taxonomy_genus_accepted"],
+        'genus' : data["taxonomy_genus"], 
+        'family' : data["taxonomy_family"], 
+        'tax_order' : data["taxonomy_order"], 
+        'tax_class' : data["taxonomy_class"],
+        'phylum' : data["taxonomy_phylum"], 
+        'kingdom' : data["taxonomy_kingdom"], 
+        'species' : species,
+        'publication' : publication,
+        'col_check_date' : datetime.datetime.strptime(data["taxonomy_col_check_date"], "%d/%m/%Y").strftime("%Y-%m-%d") if data['taxonomy_col_check_date'] else None,
+        'col_check_ok' : coerce_boolean(data["taxonomy_col_check_ok"])}
+
+        cleaned = data_clean(data)
+        tax = Taxonomy(**cleaned["kwargs"])
 
         db.session.add(tax)
         db.session.commit()
 
         ''' Taxonomy Version '''
-        taxonomy_version = Version()
+        version = version_data(cleaned)
+        taxonomy_version = Version(**version)
         taxonomy_version.version_number = 0
-        taxonomy_version.taxonomy = tax
+        taxonomy_version.taxonomy = tax    
         db.session.add(taxonomy_version) 
-        db.session.commit()  
+        db.session.commit()
         taxonomy_version.version_of_id = taxonomy_version.id
-        taxonomy_version.checked = True
-        taxonomy_version.checked_count = 1
-        taxonomy_version.statuses = Status.query.filter_by(status_name="Green").first()
-        taxonomy_version.user = User.query.filter_by(username="admin").first()
-        taxonomy_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
-        tax.version_latest = 1
-        tax.version_original = 1
-        tax.version_ok = 1
-
         db.session.add(taxonomy_version)
         db.session.commit()
 
