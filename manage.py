@@ -27,8 +27,10 @@ from app.models import User, Role, Permission, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Version, Institute, EndSeason
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
-import random
 
+from app.matrix_functions import as_array, calc_lambda, calc_surv_issue, is_matrix_irreducible, is_matrix_primitive, is_matrix_ergodic
+
+import random
 def gen_hex_code():
     r = lambda: random.randint(0,255)
     return('#%02X%02X%02X' % (r(),r(),r()))
@@ -577,12 +579,14 @@ def submit_new(data):
     matrix.matrix_split = data["matrix_split"]
     
     composition = MatrixComposition.query.filter_by(comp_name=data["matrix_composition_id"]).first()
-    
-
     matrix.matrix_composition = composition
-
     
-    matrix.survival_issue = data["matrix_survival_issue"]    
+    #untested
+    matrix.survival_issue = calc_surve_isssue(data["matrix_u_string"])
+    matrix.matrix_irreducible = is_matrix_irreducible(data["matrix_a_string"])
+    matrix.matrix_primitive = is_matrix_primitive(data["matrix_a_string"])
+    matrix.matrix_ergodic = is_matrix_ergodic(data["matrix_a_string"])
+    
     matrix.periodicity = data["matrix_periodicity"]
     matrix.matrix_criteria_size = data["matrix_criteria_size"]
     matrix.matrix_criteria_ontogeny = coerce_boolean(data["matrix_criteria_ontogeny"])

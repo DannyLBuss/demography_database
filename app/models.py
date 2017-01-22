@@ -2077,7 +2077,7 @@ class Taxonomy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
-    species_author = db.Column(db.String(64), index=True)
+    #species_author = db.Column(db.String(64), index=True)
     authority = db.Column(db.Text())
     tpl_version = db.Column(db.String(64)) # Currently at 1.0, which could be float, but sometimes releases are 1.0.1 etc, best as string for now?
     infraspecies_accepted = db.Column(db.String(64))
@@ -2109,7 +2109,7 @@ class Taxonomy(db.Model):
             'data' : {
                 'species' : self.species.to_json_simple(key),
                 'publication' : self.publication.to_json_simple(key),
-                'species_author' : self.species_author,
+                #'species_author' : self.species_author,
                 'authority' : self.authority,
                 'tpl_version' : self.tpl_version,
                 'infraspecies_accepted' : self.infraspecies_accepted,
@@ -2896,6 +2896,9 @@ class Matrix(db.Model):
     matrix_composition_id = db.Column(db.Integer, db.ForeignKey('matrix_compositions.id'))
     seasonal = db.Column(db.Boolean())
     survival_issue = db.Column(db.Float())
+    matrix_irreducible = db.Column(db.Boolean())
+    matrix_primitive = db.Column(db.Boolean())
+    matrix_ergodic = db.Column(db.Boolean())
     n_intervals = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, what are these? Schema says, "Number of transition intervals represented in the matrix - should only be >1 for mean matrices", so 0 or 1 or more? Can it be a float, ie 0.8?
     periodicity = db.Column(db.String(200))
     # relative = db.Column(db.Boolean()) --> in schema with no description, must confirm with Judy what this relates to, any below?
@@ -2930,8 +2933,8 @@ class Matrix(db.Model):
     class_number = db.Column(db.Text())
 
     vectors_includes_na = db.Column(db.Boolean())
+    matrix_lambda = db.Column(db.Float())
 
-    
 
     
     independent = db.Column(db.Boolean())
