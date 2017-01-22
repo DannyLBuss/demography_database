@@ -5,7 +5,7 @@
         <p>You are at: <a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> > <i>{{species.species_accepted}}</i></p> {% endfor %} {% else %}
         <p>No taxonomy</p> {% endif %} </div> 
     
-    <!-- compadrino actions for top part of page -->
+    
     {% if current_user.is_authenticated %} 
     <div class="dropdown pull-right">
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
@@ -25,21 +25,11 @@
             <li><a href="/delete/traits/{{trait.id}}">Delete species traits</a></li> {% endfor %} {% else %}
             <li><a href="/traits/new/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
     </div> {% endif %}
-    
-    
-    <!-- page header -->
     <h1><i>{{species.species_accepted}}</i> <small>ID: {{species.id}}</small></h1> {% if species.species_common %}
-    <p><b>Common name(s):</b> {{species.species_common}}</p> {% endif %}
-
-<p> iucn_status_id: {{ iucn_status_id }}</p>
-<p>esa_status_id: {{ esa_status_id }}</p>
-<p>invasive_status: {{ invasive_status }}</p>
-<p>gbif_taxon_key: {{ gbif_taxon_key }}</p>
-<p>species_iucn_taxonid: {{ species_iucn_taxonid }}</p>
-
+    <p><b>Common name(s):</b> {{species.species_common}}</p> {% endif %} 
 </div>
 
-<!-- Top page section (species, taxonomy, traits models)-->
+<!-- Top page section -->
 <div class="row">
     
     <div class="col-sm-8"> <!-- Left side infobox with pictures and map -->
@@ -96,12 +86,6 @@
                     <td>Authority: </td>
                     <td>{{ taxonomy.authority }}</td>
                 </tr>
-                {% if taxonomy.kingdom == "Plantae" %}
-                <tr>
-                    <td>TPL version: </td>
-                    <td>{{ taxonomy.tpl_version }}</td>
-                </tr>
-                {% endif %}
             </tbody>
         </table> {% endfor %} {% else %}
         <h3>Taxonomy</h3>
@@ -114,11 +98,6 @@
                 <td> {{ trait.organism_type.type_name }} </td>
             </tr>
             <tr>
-                <td> <strong>Reproductive repetition:</strong> </td>
-                <td> {{ trait.reproductive_repetition.repetition_name }} </td>
-            </tr>
-            {% if trait.kingdom == "Plantae" %}
-            <tr>
                 <td> <strong>Dicotyledon/monocotyledon: </strong> </td>
                 <td> {{ trait.dicot_monoc.dicot_monoc_name }} </td>
             </tr>
@@ -126,16 +105,14 @@
                 <td> <strong>Angiosperm/gymnosperm: </strong> </td>
                 <td> {{ trait.angio_gymno.angio_gymno_name }} </td>
             </tr>
-            
             <tr>
                 <td> <strong>Growth form raunkiaer:</strong> </td>
                 <td> {{ trait.growth_form_raunkiaer.form_name }} </td>
             </tr>
             <tr>
-                <td> <strong>SPANDEX growth type:</strong> </td>
-                <td> {{ trait.spandex_growth_type_id.spandex_growth_types }} </td>
+                <td> <strong>Reproductive repetition:</strong> </td>
+                <td> {{ trait.reproductive_repetition.repetition_name }} </td>
             </tr>
-            {% endif %}
         </table> {% endfor %} {% else %}
         <h3>Traits</h3>
         <div class="info_box_empty">
@@ -143,9 +120,8 @@
             <p><a href="../../traits/new/species={{species.id}}">Add traits</a></p>
         </div> {% endif %} </div>
 </div>
-<!-- End of top section (species, taxonomy, traits models)) -->
 
-<!-- External sources line with buttons  (species model)--> 
+<!-- External sources line with buttons --> 
 <div id="external-sources"> Search external sources:
     <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://media.eol.org//assets/favicon-9de6ee8ce10b9ad7b2662236411f4539.ico" class="little_logo"> Enyclopedia of Life</a>
     <a href="http://www.catalogueoflife.org/col/search/all/key/{{species.species_accepted}}/" target="_blank" class="btn btn-default" role="button"><img src="http://www.catalogueoflife.org/sites/default/files/favicon.gif" class="little_logo"> Catalogue of Life</a>
@@ -153,8 +129,6 @@
     <a href="http://www.ncbi.nlm.nih.gov/nuccore/?term=%22{{species.species_accepted}}%22" target="_blank" class="btn btn-default" role="button"><img class="little_logo" src="https://www.ncbi.nlm.nih.gov/favicon.ico"> Genbank</a>
     <a href="https://scholar.google.co.uk/scholar?q={{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://scholar.google.co.uk/favicon-png.ico" class="little_logo"> Scholar</a>
 </div>
-<!-- end of external sources  (species model)-->
-
 <br>
 
 <!-- list of publications -->
@@ -171,17 +145,13 @@
                 </tr>
             </thead> {% if species.populations %}
             <tbody> {% for population in species.populations %}
-                <tr class="remove_duplicates publication_row" style="border-left-color:{{ population.publication.colour }};">
-                    <td> <a href="../../publication/{{ population.publication.id }}">{{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.name }}" in <i>{{ population.publication.pub_title }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}.  </a> <small>ID: {{population.publication.id}}</small> 
-                        <p><b>Purposes:</b> 1 2 3 etc.</p>
-                        {% if population.publication.additional_source_string %}<p><b>Additional sources:</b> {{ population.publication.additional_source_string }}</p>{% endif %}
-                        <p><b>Date Digitised:</b> {{ population.publication.date_digitised }}</p>
-                    </td>
+                <tr class="remove_duplicates publication_row {{ population.publication.id}}p">
+                    <td> <a href="../../publication/{{ population.publication.id }}">{{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.name }}" in <i>{{ population.publication.pub_title }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}.  </a> <small>ID: {{population.publication.id}}</small> </td>
                     <td> {% if population.publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ population.publication.DOI_ISBN }}">Go to source</a>{% endif %}</td>
                     <td>
                         <input type="checkbox" class="filter" data-value="id{{population.publication.id}}"> </td>
                 </tr> {% endfor %} </tbody>
-            {% else %}
+            <p>Do you have demographic data for these publications? Contribute <a href="{{ url_for('main.contribute_data') }}">here</a>.</p> {% else %}
             <tbody>
                 <tr>
                     <td>
@@ -201,7 +171,7 @@
         
         <!-- looping through populations -->
         {% for population in species.populations %}
-        <div class="population_box {{ population.publication.colour }}" style="border-left-color:{{ population.publication.colour }};">
+        <div class="population_box {{ population.publication.id}}p">
             <div class="population" data-value="id{{population.publication.id}}"></div> 
             
             <!-- compadrino actions box -->
@@ -220,21 +190,13 @@
             <!-- population information -->
             <h4><strong>Population Name: </strong>{{ population.name }} <small>ID: {{ population.id }}</small> </h4>
             <ul>
+                <li><strong>Publication: </strong>{{ population.publication.authors }}</li>
                 <li>Studied for {{ population.study.study_duration }} year(s) from {{ population.study.study_start }} to {{ population.study.study_end }} <small>ID: {{ population.study.id }}</small></li>
                 <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
-                <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }} 
-                    {% if population.altitude %}
+                <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }} {% if population.altitude %}
                     <li><strong>Location: </strong><span class="coordinates">{{ population.latitude }}, {{ population.longitude }}</span></li>
-                    <li><strong>Altitude: </strong><span>{{ population.altitude }}m</span></li> 
-                    {% if population.population_nautical_miles %}<li><strong>Nautical miles:</strong>  {{ population_nautical_miles }} </li>{% endif %}
-                {% else %}
-                    <li>No coordinates given</li> 
-                {% endif %}
-                <li>invasive_status_study_id</li>
-                <li>invasive_status_elsewhere_id</li>
-                <li>pop_size</li>
-            </ul>
-
+                    <li><strong>Altitude: </strong><span>{{ population.altitude }}m</span></li> {% else %}
+                    <li>No coordinates given</li> {% endif %} </ul>
             <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> Show/hide matrices </button>
             <div id="population_{{ population.id }}" class='panel-collapse collapse'>
                 <p style="text-align: center;">Click on the sections below to view individual matrix models</p> 
@@ -245,30 +207,8 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" data-toggle="collapse" href="#matrix_{{matrix.id}}2">
                             <h4 id="{{matrix.id}}" class="panel-title">
-                            <p>
-                                <span class="label label-default">{{ matrix.matrix_composition.comp_name }} matrix</span> 
-                                <span class="label label-default">{{ matrix.matrix_dimension }}x{{ matrix.matrix_dimension }}</span> 
-                                <span class="label label-default">Periodicity: {{ matrix.periodicity }}</span> 
-                                <span class="label label-default">{% if matrix.matrix_start_season_id %}{{ matrix.matrix_start_season }}{% endif %} {% if matrix.matrix_start_month %} {{ matrix.matrix_start_month }}/{% endif %}{{ matrix.matrix_start_year }} to {% if matrix.matrix_end_season_id %}{{ matrix.matrix_end_season }}{% endif %} {% if matrix.matrix_end_month %} {{ matrix.matrix_end_month }}/{% endif %}{{ matrix.matrix_end_year }}</span> 
-                                <span class="label label-default">{{ matrix.treatment.type_name }}</span>       
-                                <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span>
-                                <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span>
-                                <span class="label label-default">matrix_split: {{ matrix.matrix_split }}</span>
-                                <span class="label label-default">Seasonal: {{ matrix.seasonal }}</span>
-                                <span class="label label-default">survival_issue: {{ matrix.survival_issue }}</span>
-                                <span class="label label-default">{{ matrix.treatment.matrix_fec }}</span>   
-                                <span class="label label-default">{{ matrix.treatment.matrix_complete }}</span>   
-                                <span class="label label-default">{{ matrix.treatment.n_plots }}</span>   
-                                <span class="label label-default">{{ matrix.treatment.plot_size }}</span>   
-                                <span class="label label-default">{{ matrix.treatment.matrix_irreducible }}</span> 
-                                <span class="label label-default">{{ matrix.treatment.matrix_ergodic }}</span> 
-                                <span class="label label-default">{{ matrix.treatment.matrix_primitive }}</span> 
-                                <span class="label label-default">λ = {{ matrix.treatment.matrix_lambda }}</span> 
-                                <small> ID: {{matrix.id}}</small>
-                            </p>
-                            </h4> 
-                        </div>
-                        
+                        <p><span class="label label-default">{{ matrix.matrix_composition.comp_name }} matrix</span> <span class="label label-default">Periodicity: {{ matrix.periodicity }}</span> <span class="label label-default">{% if matrix.matrix_start_month %} {{ matrix.matrix_start_month }}/{% endif %}{{ matrix.matrix_start_year }} to {% if matrix.matrix_end_month %} {{ matrix.matrix_end_month }}/{% endif %}{{ matrix.matrix_end_year }}</span> <span background-color="#" class="label label-default">{{ matrix.treatment.type_name }}</span> <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span> <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span><small> ID: {{matrix.id}}</small></p>
+                    </h4> </div>
                         <div id="matrix_{{matrix.id}}2" class="panel-collapse collapse">
                             <li class="list-group-item">
                                 <ul class="nav nav-pills matrices">
@@ -303,20 +243,14 @@
                                         <div class="table-responsive matA"> {{ matrix.matrix_c_string }} </div>
                                     </div>
                                     <div id="menu_{{matrix.id}}_4" class="tab-pane">
-                                        <p>Matrix start season: {% if matrix.matrix_start_season_id %}{{ matrix.matrix_start_season_id.season_name }}{% else %} NA{% endif %}</p>
-                                        <p>Matrix end season: {% if matrix.matrix_end_season_id %}{{ matrix.matrix_end_season_id.season_name }}{% else %} NA{% endif %}</p>
-                                        <p>matrix_criteria_size</p>
-                                        <p>matrix_criteria_ontogeny</p>
-                                        <p>matrix_criteria_age</p>    
-                                        <p>matrix_complete</p>
-                                        <p>independence_origin</p>
-                                        <p>matrix_complete</p>
-                                        <p>n_individuals</p>
-                                        <p>vectors_includes_na</p>
-                                        <p>independent</p>
-                                        <p>non_independence</p>
-                                        <p>non_independence_author</p>
-                                        <p>matrix_difficulty</p>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <p>Matrix start season: {% if matrix.matrix_start_season_id %}{{ matrix.matrix_start_season_id.season_name }}{% else %} NA{% endif %}</p>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <p>Matrix end season: {% if matrix.matrix_end_season_id %}{{ matrix.matrix_end_season_id.season_name }}{% else %} NA{% endif %}</p>
+                                            </div>
+                                        </div>
                                         <p><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</p>
                                     </div>
                                     <p><strong>Observations: </strong> {{ matrix.observations }}</p>
@@ -422,12 +356,15 @@
         attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service'
         , maxZoom: 8
         , minZoom: 1
-    }).addTo(mymap); {% if species.gbif_taxon_key %}
+    }).addTo(mymap); { %
+        if species.gbif_taxon_key %
+    }
     L.tileLayer('http://api.gbif.org/v1/map/density/tile?x={x}&y={y}&z={z}&type=TAXON&key={{species.gbif_taxon_key}}&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds', {
         attribution: ''
         , maxZoom: 8
         , minZoom: 1
-    , }).addTo(mymap); {% endif %}
+    , }).addTo(mymap); { % endif %
+    }
 </script>
 <script>
     // remove duplicate publications
@@ -443,8 +380,6 @@
         x[i].style.visibility = "visible";
     }
 </script>
-
-
 <script>
     // string to colour hash
     var stringToColour = function (str) {
@@ -462,9 +397,11 @@
 </script>
 <script>
     // change colour or left hand border of populations
-    {% for population in species.populations %}
-    $('.{{ population.publication.id}}p').css('border-left-color', stringToColour("{{ population.publication.id}}p")); 
-     {% endfor %}
+    { %
+        for population in species.populations %
+    }
+    $('.{{ population.publication.id}}p').css('border-left-color', stringToColour("{{ population.publication.id}}p")); { % endfor %
+    }
 </script>
 <script>
     // create new spidery thing
@@ -483,7 +420,7 @@
         var parentDiv = $(parentDiv).attr('class');
         var parentDiv = parentDiv.split(' ')[1];
         var hexMarker = L.VectorMarkers.icon({
-            markerColor: parentDiv
+            markerColor: stringToColour(parentDiv)
         });
         hexMarker.options.shadowSize = [0, 0];
         hexMarker.options.iconSize = [16, 16];
