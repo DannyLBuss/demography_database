@@ -820,7 +820,7 @@ def migrate_meta():
         Institute.migrate()
     except:
         "Error migrating metadata"
-    finally:
+    else:
         "Done + good"
    
     return
@@ -845,15 +845,26 @@ def version_current():
 @manager.command
 def deploy():
     """Run deployment tasks."""
-    from flask.ext.migrate import upgrade
+    from flask.ext.migrate import upgrade, migrate
     from app.models import User, Role, Permission
-    # create user roles
-    print "Inserting roles..."
-    Role.insert_roles()
-    print "Migrating meta data to tables..."
-    migrate_meta()
+    
+    print "Migrating models to database"
+    upgrade()
+    migrate()
+    upgrade()
+    print "Models migrated to database"
+
+    print "Migrating meta data to tables"
+    try: 
+        migrate_meta()
+    except:
+        "Error migrating meta tables"
+    else:
+        print "Meta tables migrated"
+
     print "Initial migration of our current version of database..."
-    csv_migrate()
+    migrate_comadre()
+    # migrate_both()
 
 
 if __name__ == '__main__':
