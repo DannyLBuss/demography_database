@@ -1123,8 +1123,6 @@ class ContentEmail(db.Model):
     content_code = db.Column(db.String(5), index=True)
     content_description = db.Column(db.Text())
 
-    author_contacts = db.relationship("AuthorContact", backref="content_email")
-
     @staticmethod
     def migrate():
         with open('app/data-migrate/author_contacts.json') as d_file:
@@ -2443,7 +2441,7 @@ class AuthorContact(db.Model):
     date_contacted = db.Column(db.Date(), index=True)
     contacting_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     content_emails = db.relationship("ContentEmail",
-                    secondary=contact_contents, backref="author_contact")
+                    secondary=contact_contents, backref="author_contacts")
     extra_content_email = db.Column(db.Text())
     author_reply = db.Column(db.Text())
 
