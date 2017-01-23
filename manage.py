@@ -802,6 +802,8 @@ def convert_all_headers_new(dict):
             new_dict[key] = None
         if value == "None":
             new_dict[key] = None
+        if value == "NC":
+            new_dict[key] = None
 
 
     return new_dict
@@ -820,6 +822,7 @@ def migrate_meta():
     try:
         Role.insert_roles()
         Species.migrate()
+        User.migrate_self()
         Taxonomy.migrate()
         Trait.migrate()
         Publication.migrate()
