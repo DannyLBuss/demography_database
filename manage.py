@@ -255,21 +255,21 @@ def generate_uid(species, publication, population, matrix):
     return uid
 
 
-@manager.command
-def csv_state_test():
-    import csv
+# @manager.command
+# def csv_state_test():
+#     import csv
 
-    #input_file = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
-    input_file = UnicodeDictReader(open("app/compadre/comadre_migration_2017.csv", "rU"))
+#     #input_file = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
+#     input_file = UnicodeDictReader(open("app/compadre/comadre_migration_2017.csv", "rU"))
 
-    all_deets = []   
+#     all_deets = []   
 
-    for i, row in enumerate(input_file):
-        if i == 133:
-            data = convert_all_headers_new(row)
-            state_test(data)
+#     for i, row in enumerate(input_file):
+#         if i == 133:
+#             data = convert_all_headers_new(row)
+#             state_test(data)
 
-    return 
+#     return 
 
 
 
@@ -292,46 +292,45 @@ def version_data(cleaned):
     'database' : Database.query.filter_by(database_name='COMPADRE 4').first()}
     return version
         
-@manager.command
-def state_test(data):
-    purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
-    purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
+# @manager.command
+# def state_test(data):
+#     purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
+#     purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
     
-    data = {'study_duration' : data["study_duration"], 'study_start' : data["study_start"], 'study_end' :  data["study_end"], 'number_populations' : data["study_number_populations"], 'purpose_endangered' : purpose_endangered, 'purpose_weed' : purpose_weed}
-    cleaned = data_clean(data)
-    study = Study(**cleaned["kwargs"])
-    db.session.add(study)
-    db.session.commit()
+#     data = {'study_duration' : data["study_duration"], 'study_start' : data["study_start"], 'study_end' :  data["study_end"], 'number_populations' : data["study_number_populations"], 'purpose_endangered' : purpose_endangered, 'purpose_weed' : purpose_weed}
+#     cleaned = data_clean(data)
+#     study = Study(**cleaned["kwargs"])
+#     db.session.add(study)
+#     db.session.commit()
 
-    ''' Study Version '''
-    version = version_data(cleaned)
-    study_version = Version(**version)
-    study_version.version_number = 0
-    study_version.study = study    
-    db.session.add(study_version) 
-    db.session.commit()
-    study_version.version_of_id = study_version.id
-    db.session.add
-
-
+#     ''' Study Version '''
+#     version = version_data(cleaned)
+#     study_version = Version(**version)
+#     study_version.version_number = 0
+#     study_version.study = study    
+#     db.session.add(study_version) 
+#     db.session.commit()
+#     study_version.version_of_id = study_version.id
+#     db.session.add
 
 
 @manager.command
 def submit_new(data):
     import datetime
     species = Species.query.filter_by(species_accepted=data["species_accepted"]).first()
+    iucn = IUCNStatus.query.filter_by(status_code=data["species_iucn_status_id"]).first()
 
     if species == None:
-        data = {'gbif_taxon_key': data["species_gbif_taxon_key"], 
+        dict_ = {'gbif_taxon_key': data["species_gbif_taxon_key"], 
         'species_iucn_taxonid': data["species_iucn_taxonid"], 
         'species_accepted' : data["species_accepted"], 
         'species_common' :  data["species_common"], 
         'species_gisd_status' : 1 if data["species_gisd_status"] else 0, 
-        'species_iucn_status' : IUCNStatus.query.filter_by(status_code=data["species_iucn_status_id"]).first(), 
+        'iucn_status_id' : iucn.id if iucn else None, 
         'image_path' : data["image_path"], 
         'image_path2' : data["image_path2"]}
         
-        cleaned = data_clean(data)
+        cleaned = data_clean(dict_)
         species = Species(**cleaned["kwargs"])
 
         db.session.add(species)
@@ -366,20 +365,16 @@ def submit_new(data):
 
         queryset = [Purpose.query.filter(Purpose.purpose_name == key).first() for key, val in purposes.items() if val == 1]
 
-        publication.purposes = queryset
-
-        data = {'authors': data["publication_authors"],
+        dict_ = {'authors': data["publication_authors"],
         'year' : data["publication_year"],
         'DOI_ISBN' : data["publication_DOI_ISBN"],
         'additional_source_string' : data["publication_additional_source_string"],
         'journal_name' : data["publication_journal_name"],
-        'corresponding_author' : data["publication_corresponding_author"],
-        'email' : data["publication_corresponding_email"],
         'colour' : gen_hex_code(),
         'purposes' : queryset
         }
 
-        cleaned = data_clean(data)
+        cleaned = data_clean(dict_)
         publication = Publication(**cleaned["kwargs"])
 
         db.session.add(publication)
@@ -400,7 +395,7 @@ def submit_new(data):
     author_contacts = AuthorContact.query.filter_by(corresponding_author = data["publication_corresponding_author"]).filter_by(corresponding_author_email = data["publication_corresponding_email"]).first()
     
     if author_contacts == None:
-        data = {'publication_id' : publication.id, 
+        dict_ = {'publication_id' : publication.id, 
         'date_contacted' : datetime.datetime.strptime(data['date_author_contacted'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['date_author_contacted'] else None,
         'extra_content_email' : data["correspondence_email_content"],
         'author_reply' : data["correspondence_author_reply"],
@@ -408,7 +403,7 @@ def submit_new(data):
         'corresponding_author_email' : data["publication_corresponding_email"]
         }
 
-        cleaned = data_clean(data)
+        cleaned = data_clean(dict_)
         author_contact = AuthorContact(**cleaned["kwargs"])
         
         db.session.add(author_contact)
@@ -435,14 +430,14 @@ def submit_new(data):
     trait = Trait.query.filter_by(species_id=species.id).first()
 
     if trait == None:
-        data = {'species_id': species.id, 
+        dict_ = {'species_id': species.id, 
         'organism_type': organism_type,
         'dicot_monoc': dicot_monoc,
         'angio_gymno': angio_gymno, 
-        'spand_ex_growth_type' : spand_ex_growth_type,
-        'growth_form_raunkiaer' : growth_form_raunkiaer}
+        'spand_ex_growth_type_id' : spand_ex_growth_type.id if spand_ex_growth_type else None,
+        'growth_form_raunkiaer_id' : growth_form_raunkiaer.id if growth_form_raunkiaer else None}
 
-        cleaned = data_clean(data)
+        cleaned = data_clean(dict_)
         trait = Trait(**cleaned["kwargs"])
 
         db.session.add(trait)
@@ -465,15 +460,15 @@ def submit_new(data):
         purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
         purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
         
-        data = {'study_duration' : data["study_duration"],
+        dict_ = {'study_duration' : data["study_duration"],
         'publication_id' : publication.id,
         'study_start' : data["study_start"], 
         'study_end' :  data["study_end"], 
         'number_populations' : data["study_number_populations"], 
-        'purpose_endangered' : purpose_endangered, 
-        'purpose_weed' : purpose_weed}
+        'purpose_endangered_id' : purpose_endangered.id if purpose_endangered else None, 
+        'purpose_weed_id' : purpose_weed.id if purpose_weed else None}
 
-        cleaned = data_clean(data)
+        cleaned = data_clean(dict_)
         study = Study(**cleaned["kwargs"])
         db.session.add(study)
         db.session.commit()
@@ -499,7 +494,7 @@ def submit_new(data):
     pop = Population.query.filter_by(population_name=data["population_name"], species_id=species.id, publication_id=publication.id).first()
 
     if pop == None:
-        data = {'species_author' : data["species_author"],
+        dict_ = {'species_author' : data["species_author"],
         'population_name' : data["population_name"],
         'species_id' : species.id,
         'publication_id' : publication.id,
@@ -509,13 +504,13 @@ def submit_new(data):
         'altitude' : data["population_altitude"],
         'pop_size' : data["population_pop_size"],
         'country' : data["population_country"],
-        'invasive_status_study' : invasive_status_study,
-        'invasive_status_elsewhere' : invasive_status_elsewhere,
+        'invasive_status_study_id' : invasive_status_study.id if invasive_status_study else None,
+        'invasive_status_elsewhere_id' : invasive_status_elsewhere.id if invasive_status_elsewhere else None,
         'ecoregion' : ecoregion, 
         'continent' : continent
         }
 
-        cleaned = data_clean(data)
+        cleaned = data_clean(dict_)
         pop = Population(**cleaned["kwargs"])
 
         db.session.add(pop)
@@ -535,7 +530,7 @@ def submit_new(data):
     ''' Taxonomy '''
     tax = Taxonomy.query.filter_by(species_id=species.id).first()
     if tax == None:
-        data = {'authority' : None, 
+        dict_ = {'authority' : None, 
         'tpl_version' : None, 
         'infraspecies_accepted' : None,
         'species_epithet_accepted' : None, 
@@ -551,7 +546,7 @@ def submit_new(data):
         'col_check_date' : datetime.datetime.strptime(data["taxonomy_col_check_date"], "%d/%m/%Y").strftime("%Y-%m-%d") if data['taxonomy_col_check_date'] else None,
         'col_check_ok' : coerce_boolean(data["taxonomy_col_check_ok"])}
 
-        cleaned = data_clean(data)
+        cleaned = data_clean(dict_)
         tax = Taxonomy(**cleaned["kwargs"])
 
         db.session.add(tax)
@@ -569,94 +564,68 @@ def submit_new(data):
         db.session.commit()
 
     ''' Matrix '''
-    matrix = Matrix()
     treatment = Treatment.query.filter_by(treatment_name=data["matrix_treatment_id"]).first()
     
     if treatment == None:
         treatment = Treatment(treatment_name=data["matrix_treatment_id"])
+
+    dict_ = {'treatment' : treatment,
+    'matrix_split' : data["matrix_split"],
+    'matrix_composition' : MatrixComposition.query.filter_by(comp_name=data["matrix_composition_id"]).first(),
+    'periodicity' : data["matrix_periodicity"],
+    'matrix_criteria_size' : data["matrix_criteria_size"],
+    'matrix_criteria_ontogeny' : coerce_boolean(data["matrix_criteria_ontogeny"]),
+    'matrix_criteria_age' : coerce_boolean(data["matrix_criteria_age"]),
+    'matrix_start_month' : data["matrix_start_month"],
+    'matrix_end_month' : data["matrix_end_month"],
+    'matrix_start_year' : data["matrix_start_year"],
+    'matrix_end_year' : data["matrix_end_year"],
+    'studied_sex' : StudiedSex.query.filter_by(sex_code=data["matrix_studied_sex_id"]).first(),
+    'start_season' : StartSeason.query.filter_by(season_id=data["matrix_start_season_id"]).first() if data["matrix_start_season_id"] else None,
+    'end_season' : EndSeason.query.filter_by(season_id=data["matrix_end_season_id"]).first() if data["matrix_end_season_id"] else None,
+    'matrix_fec' : coerce_boolean(data["matrix_fec"]),
+    'matrix_a_string' : data["matrix_a_string"],
+    'matrix_f_string' : data["matrix_f_string"],
+    'matrix_u_string' : data["matrix_u_string"],
+    'matrix_c_string' : data["matrix_c_string"],
+    'non_independence' : data["matrix_non_independence"],
+    'matrix_dimension' : data["matrix_dimension"],
+    'non_independence_author' : data["matrix_non_independence_author"],
+    'matrix_complete' : coerce_boolean(data["matrix_complete"]),
+    'vectors_includes_na' : data["matrix_vectors_includes_na"],
+    'class_number' : data["matrix_class_number"],
+    'observations' : data["matrix_observations"],
+    'captivities' : Captivity.query.filter_by(cap_code=data["matrix_captivity_id"]).first(),
+    'class_author' : data["matrix_class_author"],
+    'class_organized' : data["matrix_class_organized"],
+    'matrix_difficulty' : data["matrix_difficulty"],
+    'independent' : coerce_boolean(data["matrix_seasonal"]),
+    'population' : pop,
+    'study' : study,
+    # 'survival_issue' : calc_surv_issue(data["matrix_u_string"]),
+    # 'matrix_irreducible' : is_matrix_irreducible(data["matrix_a_string"]),
+    # 'matrix_primitive' : is_matrix_primitive(data["matrix_a_string"]),
+    # 'matrix_ergodic' : is_matrix_ergodic(data["matrix_a_string"])
+    }
     
-    matrix.treatment = treatment
-    matrix.matrix_split = data["matrix_split"]
-    
-    composition = MatrixComposition.query.filter_by(comp_name=data["matrix_composition_id"]).first()
-    matrix.matrix_composition = composition
-    
-    #untested
-    matrix.survival_issue = calc_surve_isssue(data["matrix_u_string"])
-    matrix.matrix_irreducible = is_matrix_irreducible(data["matrix_a_string"])
-    matrix.matrix_primitive = is_matrix_primitive(data["matrix_a_string"])
-    matrix.matrix_ergodic = is_matrix_ergodic(data["matrix_a_string"])
-    
-    matrix.periodicity = data["matrix_periodicity"]
-    matrix.matrix_criteria_size = data["matrix_criteria_size"]
-    matrix.matrix_criteria_ontogeny = coerce_boolean(data["matrix_criteria_ontogeny"])
-    matrix.matrix_criteria_age = coerce_boolean(data["matrix_criteria_age"]) 
-    
-    matrix.matrix_start_month = data["matrix_start_month"]
-    matrix.matrix_end_month = data["matrix_end_month"]
-    matrix.matrix_start_year = data["matrix_start_year"]
-    matrix.matrix_end_year = data["matrix_end_year"]
-
-    matrix.studied_sex = StudiedSex.query.filter_by(sex_code=data["matrix_studied_sex_id"]).first()
-
-
-    start_season = StartSeason.query.filter_by(season_id=data["matrix_start_season_id"]).first()
-    end_season = EndSeason.query.filter_by(season_id=data["matrix_end_season_id"]).first()
-
-    if start_season != None:
-        matrix.start_season = start_season
-
-    if end_season != None:
-        matrix.end_season = end_season
-        
-    matrix.matrix_fec = coerce_boolean(data["matrix_fec"])
-
-    matrix.matrix_a_string = data["matrix_a_string"]
-    matrix.matrix_f_string = data["matrix_f_string"]
-    matrix.matrix_u_string = data["matrix_u_string"]
-    matrix.matrix_c_string = data["matrix_c_string"]
-
-    matrix.non_independence = data["matrix_non_independence"]
-    matrix.matrix_dimension = data["matrix_dimension"]
-    matrix.non_independence_author = data["matrix_non_independence_author"]
-    matrix.matrix_complete = coerce_boolean(data["matrix_complete"])
-    matrix.vectors_includes_na = data["matrix_vectors_includes_na"]
-    matrix.class_number = data["matrix_class_number"]
-    matrix.observations = data["matrix_observations"]
-
-    captivities = Captivity.query.filter_by(cap_code=data["matrix_captivity_id"]).first()
-
-    matrix.captivities = captivities
-    matrix.class_author = data["matrix_class_author"]
-    matrix.class_organized = data["matrix_class_organized"]
-    matrix.matrix_difficulty = data["matrix_difficulty"]
-    matrix.independent = data["matrix_independent"]
-    matrix.seasonal = coerce_boolean(data["matrix_seasonal"])
-
-    matrix.uid = generate_uid(species, publication, pop, matrix)
-
-    matrix.population = pop
-    matrix.study = study
+    cleaned = data_clean(dict_)
+    matrix = Matrix(**cleaned["kwargs"])
 
     db.session.add(matrix)
     db.session.commit()
 
+    matrix.uid = generate_uid(species, publication, pop, matrix)
+    db.session.add(matrix)
+    db.session.commit()
+
     ''' matrix Version '''
-    matrix_version = Version()
+    version = version_data(cleaned)
+    matrix_version = Version(**version)
     matrix_version.version_number = 0
-    matrix_version.matrix = matrix
+    matrix_version.matrix = matrix    
     db.session.add(matrix_version) 
     db.session.commit()
     matrix_version.version_of_id = matrix_version.id
-    matrix_version.checked = True
-    matrix_version.checked_count = 1
-    matrix_version.statuses = Status.query.filter_by(status_name="Green").first()
-    matrix_version.user = User.query.filter_by(username="admin").first()
-    matrix_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
-    matrix.version_latest = 1
-    matrix.version_original = 1
-    matrix.version_ok = 1
-
     db.session.add(matrix_version)
     db.session.commit()
 
@@ -664,32 +633,28 @@ def submit_new(data):
 
     fixed = Fixed.query.filter_by(matrix=matrix).first()
 
+    print data
     if fixed == None:
-        fixed = Fixed()
-        fixed.matrix = matrix
-        fixed.census_timings = CensusTiming.query.filter_by(census_name=data["fixed_census_timing_id"]).first()
-        fixed.seed_stage_error = data["fixed_seed_stage_error"]
-        fixed.smalls = Small.query.filter_by(small_name=data["fixed_small_id"]).first()
+        dict_ = {'matrix' : matrix,
+        'census_timings' : CensusTiming.query.filter_by(census_name=data["fixed_census_timing_id"]).first(),
+        'seed_stage_error' : data["fixed_seed_stage_error"],
+        'smalls' : Small.query.filter_by(small_name=data["fixed_small_id"]).first()
+        }
+
+        cleaned = data_clean(dict_)
+        fixed = Fixed(**cleaned["kwargs"])
 
         db.session.add(fixed)
         db.session.commit()
 
         ''' fixed Version '''
-        fixed_version = Version()
+        version = version_data(cleaned)
+        fixed_version = Version(**version)
         fixed_version.version_number = 0
-        fixed_version.fixed = fixed
+        fixed_version.fixed = fixed    
         db.session.add(fixed_version) 
         db.session.commit()
         fixed_version.version_of_id = fixed_version.id
-        fixed_version.checked = True
-        fixed_version.checked_count = 1
-        fixed_version.statuses = Status.query.filter_by(status_name="Green").first()
-        fixed_version.user = User.query.filter_by(username="admin").first()
-        fixed_version.database = Database.query.filter_by(database_name="COMPADRE 4").first()
-        fixed.version_latest = 1
-        fixed.version_original = 1
-        fixed.version_ok = 1
-
         db.session.add(fixed_version)
         db.session.commit()
 

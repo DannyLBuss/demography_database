@@ -2005,7 +2005,7 @@ class Species(db.Model):
     species_gisd_status = db.Column(db.Boolean())
     invasive_status = db.Column(db.Boolean())
     gbif_taxon_key = db.Column(db.Integer)
-    species_iucn_taxonid = db.Column(db.Integer)
+    species_iucn_taxonid = db.Column(db.Integer())
     species_iucn_population_assessed = db.Column(db.String(200))
     image_path = db.Column(db.Text)
     image_path2 = db.Column(db.Text)
