@@ -135,6 +135,29 @@ class User(UserMixin, db.Model):
 
         self.version_latest
 
+    @staticmethod
+    def migrate_self():
+        with open('app/data-migrate/users.json') as user_file:
+            data = json.load(user_file)
+            user = data["User"]
+            usern = user["User"]
+
+           
+            u = User.query.filter_by(email=usern['email']).first()
+            if u is None:
+                u = User()
+
+            u.email = usern['email']
+            u.username = usern['username']
+            u.role_id = usern['role_id']
+            u.password = generate_password_hash(usern['password'])
+            u.confirmed = usern['confirmed']
+            u.institute_id = usern['institute_id']
+            u.institute_confirmed = usern['institute_confirmed']
+
+            db.session.add(u)
+            db.session.commit()
+
 
     @staticmethod
     def migrate():
