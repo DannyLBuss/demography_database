@@ -118,6 +118,7 @@ def publications_table():
     publications = Publication.query.all()
     return render_template('publications_table_template.html', publications=publications)
 
+###############################################################################################################################
 ### OVERVIEW PAGES
 # species overview page
 @main.route('/species/<int:id>/overview')
@@ -126,11 +127,7 @@ def species_page(id):
     species = Species.query.filter_by(id=id).first_or_404()
     return render_template('species_template.html',species = species)
 
-
-
-
 # species overview TEST page
-# TEST PAGE ONLY EDIT THIS ONE
 @main.route('/species/<int:id>/testoverview')
 # @login_required
 def species_page_test(id):
@@ -139,10 +136,6 @@ def species_page_test(id):
     trait = Trait.query.filter_by(id=species.id).first_or_404()
     populations = Population.query.filter_by(id=species.id)
     return render_template('species_template_test.html',species = species, taxonomy = taxonomy, trait = trait, populations = populations)
-
-
-
-
 
 # publication overview page
 @main.route('/publication/<int:id>')
@@ -212,7 +205,9 @@ def funding():
 def publications():
     return render_template('about/publications.html')
 
-### SPECIES/TAXONOMY/TRAIT FORMS + VIEW EDIT HISTORY PAGES -------------------------------------------------------------------------
+###############################################################################################################################
+### SPECIES/TAXONOMY/TRAIT FORMS + VIEW EDIT HISTORY PAGES
+
 # editing species information
 @main.route('/species/<int:id>/edit', methods=['GET', 'POST'])
 def species_form(id):
@@ -520,8 +515,9 @@ def matrix_edit_history(id):
     matrix = Matrix.query.get_or_404(id)
     return render_template('edit_history.html', matrix= matrix)
 
-### END OF EDITING FORMS + EDIT HISTORY ---------------------------------------------------------------------------------
+### END OF EDITING FORMS + EDIT HISTORY
 
+###############################################################################################################################
 ### NEW DATA INPUT FORMS
 
 @main.route('/species/new', methods=['GET', 'POST'])
@@ -663,8 +659,9 @@ def population_new_form(id_pub,id_sp):
     return render_template('data_entry/generic_form.html', form=form, publication=publication, species=species)
 
 
-### END OF NEW DATA FORMS  ---------------------------------------------------------------------------------
+### END OF NEW DATA FORMS
 
+###############################################################################################################################
 ### Delete stuff
 
 @main.route('/delete/<thing_to_delete>/<int:id_obj>', methods=['GET', 'POST'])

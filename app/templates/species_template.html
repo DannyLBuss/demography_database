@@ -28,7 +28,7 @@
     
     
     <!-- page header -->
-    <h1><i>{{species.species_accepted}}</i> <small>ID: {{species.id}}</small></h1> {% if species.species_common %}
+    <h1><i>{{species.species_accepted}}</i> <small> {{species.id}}</small></h1> {% if species.species_common %}
     <p><b>Common name(s):</b> {{species.species_common}}</p> {% endif %}
 
 <p> iucn_status_id: {{ iucn_status_id }}</p>
@@ -61,7 +61,7 @@
     
     <!-- Right side information with taxonom and traits -->
     <div class="col-sm-4"> {% if species.taxonomies %} {% for taxonomy in species.taxonomies %}
-        <h3>Taxonomy <small>ID: {{taxonomy.id}}</small></h3>
+        <h3>Taxonomy <small> {{taxonomy.id}}</small></h3>
         <table style="width:100%" class="table">
             <tbody>
                 <tr>
@@ -107,7 +107,7 @@
         <h3>Taxonomy</h3>
         <div class="info_box_empty">
             <p>Not entered</p> <a href="../../taxonomy/new/species={{species.id}}">Add taxonomic information</a> </div> {% endif %} {% if species.traits %} {% for trait in species.traits %}
-        <h3>Traits <small>ID: {{trait.id}}</small></h3>
+        <h3>Traits <small> {{trait.id}}</small></h3>
         <table style="width:100%" class="table">
             <tr>
                 <td> <strong>Growth type: </strong> </td>
@@ -172,10 +172,10 @@
             </thead> {% if species.populations %}
             <tbody> {% for population in species.populations %}
                 <tr class="remove_duplicates publication_row" style="border-left-color:{{ population.publication.colour }};">
-                    <td> <a href="../../publication/{{ population.publication.id }}">{{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.name }}" in <i>{{ population.publication.pub_title }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}.  </a> <small>ID: {{population.publication.id}}</small> 
-                        <p><b>Purposes:</b> 1 2 3 etc.</p>
+                    <td> <a href="../../publication/{{ population.publication.id }}">{{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.name }}" in <i>{{ population.publication.pub_title }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}.  </a> <small> {{population.publication.id}}</small> 
+                        <p><b>Purposes:</b> {% for purp in population.publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}</p>
                         {% if population.publication.additional_source_string %}<p><b>Additional sources:</b> {{ population.publication.additional_source_string }}</p>{% endif %}
-                        <p><b>Date Digitised:</b> {{ population.publication.date_digitised }}</p>
+                        <p><b>Date Digitised:</b> {{ population.publication.date_digitised.strftime('%Y-%m-%d') }}</p>
                     </td>
                     <td> {% if population.publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ population.publication.DOI_ISBN }}">Go to source</a>{% endif %}</td>
                     <td>
@@ -218,9 +218,9 @@
             {% endif %}
             
             <!-- population information -->
-            <h4><strong>Population Name: </strong>{{ population.name }} <small>ID: {{ population.id }}</small> </h4>
+            <h4><strong>Population Name: </strong>{{ population.name }} <small> {{ population.id }}</small> </h4>
             <ul>
-                <li>Studied for {{ population.study.study_duration }} year(s) from {{ population.study.study_start }} to {{ population.study.study_end }} <small>ID: {{ population.study.id }}</small></li>
+                <li>Studied for {{ population.study.study_duration }} year(s) from {{ population.study.study_start }} to {{ population.study.study_end }} <small> {{ population.study.id }}</small></li>
                 <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
                 <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }} 
                     {% if population.altitude %}
@@ -253,18 +253,18 @@
                                 <span class="label label-default">{{ matrix.treatment.type_name }}</span>       
                                 <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span>
                                 <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span>
-                                <span class="label label-default">matrix_split: {{ matrix.matrix_split }}</span>
+                                <span class="label label-default">{{ matrix.matrix_split }}</span>
                                 <span class="label label-default">Seasonal: {{ matrix.seasonal }}</span>
                                 <span class="label label-default">survival_issue: {{ matrix.survival_issue }}</span>
-                                <span class="label label-default">{{ matrix.treatment.matrix_fec }}</span>   
-                                <span class="label label-default">{{ matrix.treatment.matrix_complete }}</span>   
-                                <span class="label label-default">{{ matrix.treatment.n_plots }}</span>   
-                                <span class="label label-default">{{ matrix.treatment.plot_size }}</span>   
-                                <span class="label label-default">{{ matrix.treatment.matrix_irreducible }}</span> 
-                                <span class="label label-default">{{ matrix.treatment.matrix_ergodic }}</span> 
-                                <span class="label label-default">{{ matrix.treatment.matrix_primitive }}</span> 
-                                <span class="label label-default">λ = {{ matrix.treatment.matrix_lambda }}</span> 
-                                <small> ID: {{matrix.id}}</small>
+                                {# <span class="label label-default">{{ matrix.matrix_fec }}</span>   
+                                <span class="label label-default">{{ matrix.matrix_complete }}</span>   
+                                <span class="label label-default">{{ matrix.n_plots }}</span>   
+                                <span class="label label-default">{{ matrix.plot_size }}</span> #}   
+                                <span class="label label-default">{{ matrix.matrix_irreducible }}</span> 
+                                <span class="label label-default">{{ matrix.matrix_ergodic }}</span> 
+                                <span class="label label-default">{{ matrix.matrix_primitive }}</span> 
+                                <span class="label label-default">λ = {{ matrix.matrix_lambda }}</span> 
+                                <small>  {{matrix.id}}</small>
                             </p>
                             </h4> 
                         </div>
