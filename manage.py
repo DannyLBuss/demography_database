@@ -336,7 +336,7 @@ def submit_new(data):
         'purposes' : queryset
         }
 
-        print dict_
+        #print dict_
 
         cleaned = data_clean(dict_)
         publication = Publication(**cleaned["kwargs"])
@@ -526,9 +526,9 @@ def submit_new(data):
         db.session.add(taxonomy_version)
         db.session.commit()
 
-    ''' Matrix '''
+    ''' Matrix '''     
     treatment = Treatment.query.filter_by(treatment_name=data["matrix_treatment_id"]).first()
-    
+
     if treatment == None:
         treatment = Treatment(treatment_name=data["matrix_treatment_id"])
 
@@ -565,14 +565,16 @@ def submit_new(data):
     'independent' : coerce_boolean(data["matrix_seasonal"]),
     'population' : pop,
     'study' : study,
-    # 'survival_issue' : calc_surv_issue(data["matrix_u_string"]),
-    # 'matrix_irreducible' : is_matrix_irreducible(data["matrix_a_string"]),
-    # 'matrix_primitive' : is_matrix_primitive(data["matrix_a_string"]),
-    # 'matrix_ergodic' : is_matrix_ergodic(data["matrix_a_string"])
+    'survival_issue' : calc_surv_issue(data["matrix_u_string"]),
+    'matrix_irreducible' : is_matrix_irreducible(data["matrix_a_string"]),
+    'matrix_primitive' : is_matrix_primitive(data["matrix_a_string"]),
+    'matrix_ergodic' : is_matrix_ergodic(data["matrix_a_string"]),
+    'matrix_lambda' : calc_lambda(data["matrix_a_string"])
     }
-    
+
+
     cleaned = data_clean(dict_)
-    matrix = Matrix(**cleaned["kwargs"])
+    matrix = Matrix(**cleaned["kwargs"])    
 
     db.session.add(matrix)
     db.session.commit()

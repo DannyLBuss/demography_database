@@ -5,15 +5,18 @@ import numpy as np
 def as_array(mat_str):
     # input: matlab format matrix
     # output: 
-    mat_str = mat_str[1:(len(mat_str)-1)].replace(";"," ").split()
-    mat_str = [float(i) for i in mat_str]
-    mat_str = np.array(mat_str)
-    order = int(np.sqrt(len(mat_str)))
-    shape = (order,order)
     try:
-        mat_str = mat_str.reshape(shape)
-        return(mat_str)
-    except ValueError:
+        mat_str = mat_str[1:(len(mat_str)-1)].replace(";"," ").split()
+        mat_str = [float(i) for i in mat_str]
+        mat_str = np.array(mat_str)
+        order = int(np.sqrt(len(mat_str)))
+        shape = (order,order)
+        try:
+            mat_str = mat_str.reshape(shape)
+            return(mat_str)
+        except ValueError:
+            return("NA")
+    except:
         return("NA")
     
 
