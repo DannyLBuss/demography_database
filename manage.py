@@ -330,7 +330,8 @@ def submit_new(data):
         'additional_source_string' : data["publication_additional_source_string"],
         'journal_name' : data["publication_journal_name"],
         'colour' : gen_hex_code(),
-        'purposes' : queryset
+        'purposes' : queryset,
+        'date_digitised' : datetime.datetime.strptime(data['population_date_digitization'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['publication_date_digitization'] else None,
         }
 
         cleaned = data_clean(dict_)
@@ -729,6 +730,7 @@ def convert_all_headers_new(dict):
     new_dict["matrix_vectors_includes_na"] = dict["matrix_vectors_includes_na"]
     new_dict["population_pop_size"] = dict["population_pop_size"]
     new_dict["species_iucn_status_id"] = dict["species_iucn_status"]
+    new_dict["publication_date_digitization"] = dict["publication_date_digitization"]
     # new_dict["species_esa_status_id"] = dict["species_esa_status"]
     new_dict["population_invasive_status_study_id"] = dict["population_invasive_status_study"]
     new_dict["population_invasive_status_elsewhere_id"] = dict["population_invasive_status_elsewhere"]
