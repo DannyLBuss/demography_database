@@ -1168,6 +1168,12 @@ class ContentEmail(db.Model):
 
     def __repr__(self):
         return self.content_code
+
+contact_contents = db.Table('contact_contents', db.Model.metadata,
+    db.Column('id', db.Integer, primary_key=True),
+    db.Column('content_email_id', db.Integer, db.ForeignKey('content_email.id')),
+    db.Column('author_contact_id', db.Integer, db.ForeignKey('author_contacts.id'))
+)
 ''' End Meta Tables for Author Contact '''
 
 ''' Meta Tables for Study'''
@@ -2436,7 +2442,8 @@ class AuthorContact(db.Model):
     corresponding_author_email = db.Column(db.Text())
     date_contacted = db.Column(db.Date(), index=True)
     contacting_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    content_email_id = db.Column(db.Integer, db.ForeignKey('content_email.id')) #possibly many to many, probably a good idea if vector
+    content_emails = db.relationship("ContentEmail",
+                    secondary=contact_contents, backref="author_contact")
     extra_content_email = db.Column(db.Text())
     author_reply = db.Column(db.Text())
 
