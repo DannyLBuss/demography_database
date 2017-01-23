@@ -322,7 +322,9 @@ def submit_new(data):
         "Methodological Advancement" : data["publication_purpose_methodological_advancement"]
         }
 
-        queryset = [Purpose.query.filter(Purpose.purpose_name == key).first() for key, val in purposes.items() if val == 1]
+        queryset = [Purpose.query.filter(Purpose.purpose_name == key).first() for key, val in purposes.items() if val == '1']
+
+    
 
         dict_ = {'authors': data["publication_authors"],
         'year' : data["publication_year"],
@@ -330,13 +332,14 @@ def submit_new(data):
         'additional_source_string' : data["publication_additional_source_string"],
         'journal_name' : data["publication_journal_name"],
         'colour' : gen_hex_code(),
-        'purposes' : queryset,
-        'date_digitised' : datetime.datetime.strptime(data['population_date_digitization'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['publication_date_digitization'] else None,
+        'date_digitised' : datetime.datetime.strptime(data['publication_date_digitization'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['publication_date_digitization'] else None,
+        'purposes' : queryset
         }
+
+        print dict_
 
         cleaned = data_clean(dict_)
         publication = Publication(**cleaned["kwargs"])
-
         db.session.add(publication)
         db.session.commit()
 
@@ -593,7 +596,6 @@ def submit_new(data):
 
     fixed = Fixed.query.filter_by(matrix=matrix).first()
 
-    print data
     if fixed == None:
         dict_ = {'matrix' : matrix,
         'census_timings' : CensusTiming.query.filter_by(census_name=data["fixed_census_timing_id"]).first(),
@@ -803,8 +805,7 @@ def migrate_meta():
     print "Migrating Meta Tables..."
     try:
         Role.insert_roles()
-        Species.migrate()
-        User.migrate_self()
+        Species.migrate()        
         Taxonomy.migrate()
         Trait.migrate()
         Publication.migrate()
@@ -818,6 +819,7 @@ def migrate_meta():
         User.migrate()
         Version.migrate()
         Institute.migrate()
+        User.migrate_self()
     except:
         "Error migrating metadata"
     else:
@@ -845,22 +847,22 @@ def version_current():
 @manager.command
 def deploy():
     """Run deployment tasks."""
-    from flask.ext.migrate import upgrade, migrate
+    from flask.ext.migrate import upgrade, migrate, init
     from app.models import User, Role, Permission
     
+
+
     print "Migrating models to database"
-    upgrade()
+    init()
     migrate()
     upgrade()
+    migrate()
+
     print "Models migrated to database"
 
     print "Migrating meta data to tables"
-    try: 
-        migrate_meta()
-    except:
-        "Error migrating meta tables"
-    else:
-        print "Meta tables migrated"
+    migrate_meta()
+    print "Meta tables migrated"
 
     print "Initial migration of our current version of database..."
     migrate_comadre()
