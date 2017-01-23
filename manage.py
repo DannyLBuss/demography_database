@@ -91,21 +91,21 @@ def UnicodeDictReader(utf8_data, **kwargs):
         yield {key: unicode(value, 'latin-1') for key, value in row.iteritems()}
 
 
-@manager.command
-def csv_migrate():
-    import csv
+# @manager.command
+# def csv_migrate():
+#     import csv
 
-    input_file = UnicodeDictReader(open("app/compadre/compadreFlat3.csv", "rU"))
+#     input_file = UnicodeDictReader(open("app/compadre/compadreFlat3.csv", "rU"))
 
-    all_deets = []   
+#     all_deets = []   
 
-    for i, row in enumerate(input_file):
-        if i > 6235:                      
-            data = convert_all_headers(row)
-            entry = add_to_classes(data)
-            all_deets.append(entry)
-            submit(entry)
-    return 
+#     for i, row in enumerate(input_file):
+#         if i > 6235:                      
+#             data = convert_all_headers(row)
+#             entry = add_to_classes(data)
+#             all_deets.append(entry)
+#             submit(entry)
+#     return 
 
 
 def versions_to_nil(array):
@@ -254,25 +254,6 @@ def generate_uid(species, publication, population, matrix):
     uid = re.sub('[\W_]+', '', uid_lower)
     return uid
 
-
-# @manager.command
-# def csv_state_test():
-#     import csv
-
-#     #input_file = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
-#     input_file = UnicodeDictReader(open("app/compadre/comadre_migration_2017.csv", "rU"))
-
-#     all_deets = []   
-
-#     for i, row in enumerate(input_file):
-#         if i == 133:
-#             data = convert_all_headers_new(row)
-#             state_test(data)
-
-#     return 
-
-
-
 def data_clean(data):
     incomplete = True if 'NDY' in data.values() else False
     kwargs = {key: val for key, val in data.items() if val != 'NDY'}
@@ -291,28 +272,6 @@ def version_data(cleaned):
     'user' : User.query.filter_by(username='admin').first(), 
     'database' : Database.query.filter_by(database_name='COMPADRE 4').first()}
     return version
-        
-# @manager.command
-# def state_test(data):
-#     purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
-#     purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
-    
-#     data = {'study_duration' : data["study_duration"], 'study_start' : data["study_start"], 'study_end' :  data["study_end"], 'number_populations' : data["study_number_populations"], 'purpose_endangered' : purpose_endangered, 'purpose_weed' : purpose_weed}
-#     cleaned = data_clean(data)
-#     study = Study(**cleaned["kwargs"])
-#     db.session.add(study)
-#     db.session.commit()
-
-#     ''' Study Version '''
-#     version = version_data(cleaned)
-#     study_version = Version(**version)
-#     study_version.version_number = 0
-#     study_version.study = study    
-#     db.session.add(study_version) 
-#     db.session.commit()
-#     study_version.version_of_id = study_version.id
-#     db.session.add
-
 
 @manager.command
 def submit_new(data):
@@ -660,23 +619,44 @@ def submit_new(data):
 
 
 
-
-
-@manager.command
-def csv_migrate_new():
-    import csv
-
-    #input_file = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
-    input_file = UnicodeDictReader(open("app/compadre/comadre_migration_2017.csv", "rU"))
-
+def migration_loop(input_file):
     all_deets = []   
 
     for i, row in enumerate(input_file):
         print i              
         data = convert_all_headers_new(row)
         submit_new(data)
+    return "Migration Complete"
 
-    return 
+@manager.command
+def migrate_compadre():
+    import csv
+
+    print "Migrating COMPADRE"
+    compadre = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
+    return migration_loop(compadre)
+
+
+@manager.command
+def migrate_comadre():
+    import csv
+
+    print "Migrating COMADRE"
+    comadre = UnicodeDictReader(open("app/compadre/comadre_migration_2017.csv", "rU"))
+    return migration_loop(comadre)
+
+@manager.command
+def migrate_all():
+    import csv
+    
+    print "Preparing to migrape COMPADRE and COMADRE"
+    compadre = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
+    comadre = UnicodeDictReader(open("app/compadre/comadre_migration_2017.csv", "rU"))
+    print "Migrating COMPADRE"
+    migration_loop(compadre)
+    print "Migrating COMADRE"
+    migration_loop(comadre)
+    return
 
 def convert_all_headers_new(dict):
     import re
