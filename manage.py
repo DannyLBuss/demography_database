@@ -439,7 +439,7 @@ def submit_new(data):
         ''' Study Version '''
         version = version_data(cleaned)
         study_version = Version(**version)
-        study_version.version_number = 0
+        study_version.version_number = 1
         study_version.study = study    
         db.session.add(study_version) 
         db.session.commit()
@@ -482,7 +482,7 @@ def submit_new(data):
         ''' Population Version '''
         version = version_data(cleaned)
         population_version = Version(**version)
-        population_version.version_number = 0
+        population_version.version_number = 1
         population_version.population = pop    
         db.session.add(population_version) 
         db.session.commit()
@@ -518,7 +518,7 @@ def submit_new(data):
         ''' Taxonomy Version '''
         version = version_data(cleaned)
         taxonomy_version = Version(**version)
-        taxonomy_version.version_number = 0
+        taxonomy_version.version_number = 1
         taxonomy_version.taxonomy = tax    
         db.session.add(taxonomy_version) 
         db.session.commit()
@@ -584,7 +584,7 @@ def submit_new(data):
     ''' matrix Version '''
     version = version_data(cleaned)
     matrix_version = Version(**version)
-    matrix_version.version_number = 0
+    matrix_version.version_number = 1
     matrix_version.matrix = matrix    
     db.session.add(matrix_version) 
     db.session.commit()
@@ -612,7 +612,7 @@ def submit_new(data):
         ''' fixed Version '''
         version = version_data(cleaned)
         fixed_version = Version(**version)
-        fixed_version.version_number = 0
+        fixed_version.version_number = 1
         fixed_version.fixed = fixed    
         db.session.add(fixed_version) 
         db.session.commit()
