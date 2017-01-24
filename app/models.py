@@ -2026,8 +2026,8 @@ class Species(db.Model):
     # subspecies = db.Column(db.String(64))
     species_accepted = db.Column(db.String(64))
     species_common = db.Column(db.String(200))
-    iucn_status_id = db.Column(db.Integer, db.ForeignKey('iucn_status.id'))
-    esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id'))
+    iucn_status_id = db.Column(db.Integer, db.ForeignKey('iucn_status.id',ondelete='CASCADE'))
+    esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id',ondelete='CASCADE'))
     species_gisd_status = db.Column(db.Boolean())
     invasive_status = db.Column(db.Boolean())
     gbif_taxon_key = db.Column(db.Integer)
@@ -2036,12 +2036,12 @@ class Species(db.Model):
     image_path = db.Column(db.Text)
     image_path2 = db.Column(db.Text)
     
-    taxonomies = db.relationship("Taxonomy", backref="species")
-    traits = db.relationship("Trait", backref="species")
-    populations = db.relationship("Population", backref="species")
-    stages = db.relationship("Stage", backref="species")
+    taxonomies = db.relationship("Taxonomy", backref="species", passive_deletes=True)
+    traits = db.relationship("Trait", backref="species", passive_deletes=True)
+    populations = db.relationship("Population", backref="species", passive_deletes=True)
+    stages = db.relationship("Stage", backref="species", passive_deletes=True)
 
-    version = db.relationship("Version", backref="species", uselist=False)
+    version = db.relationship("Version", backref="species", uselist=False, passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2101,8 +2101,8 @@ class Taxonomy(db.Model):
     query_class = VersionQuery
     __tablename__ = 'taxonomies'
     id = db.Column(db.Integer, primary_key=True)
-    species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
-    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
+    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
+    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
     #species_author = db.Column(db.String(64), index=True)
     authority = db.Column(db.Text())
     tpl_version = db.Column(db.String(64)) # Currently at 1.0, which could be float, but sometimes releases are 1.0.1 etc, best as string for now?
@@ -2119,7 +2119,7 @@ class Taxonomy(db.Model):
     col_check_ok = db.Column(db.Boolean())
     col_check_date = db.Column(db.Date())
 
-    version = db.relationship("Version", backref="taxonomy")
+    version = db.relationship("Version", backref="taxonomy", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2175,16 +2175,16 @@ class Trait(db.Model):
     query_class = VersionQuery
     __tablename__ = 'traits'
     id = db.Column(db.Integer, primary_key=True)
-    species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
+    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
     max_height = db.Column(db.Float()) #This should be a double, eventually
-    organism_type_id = db.Column(db.Integer, db.ForeignKey('organism_types.id'))
-    growth_form_raunkiaer_id = db.Column(db.Integer, db.ForeignKey('growth_forms_raunkiaer.id')) 
-    reproductive_repetition_id = db.Column(db.Integer, db.ForeignKey('reproductive_repetition.id'))
-    dicot_monoc_id = db.Column(db.Integer, db.ForeignKey('dicot_monoc.id'))
-    angio_gymno_id = db.Column(db.Integer, db.ForeignKey('angio_gymno.id'))
-    spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id')) 
+    organism_type_id = db.Column(db.Integer, db.ForeignKey('organism_types.id',ondelete='CASCADE'))
+    growth_form_raunkiaer_id = db.Column(db.Integer, db.ForeignKey('growth_forms_raunkiaer.id',ondelete='CASCADE')) 
+    reproductive_repetition_id = db.Column(db.Integer, db.ForeignKey('reproductive_repetition.id',ondelete='CASCADE'))
+    dicot_monoc_id = db.Column(db.Integer, db.ForeignKey('dicot_monoc.id',ondelete='CASCADE'))
+    angio_gymno_id = db.Column(db.Integer, db.ForeignKey('angio_gymno.id',ondelete='CASCADE'))
+    spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id',ondelete='CASCADE')) 
 
-    version = db.relationship("Version", backref="trait")
+    version = db.relationship("Version", backref="trait", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2251,7 +2251,7 @@ class Publication(db.Model):
     query_class = VersionQuery
     __tablename__ = 'publications'
     id = db.Column(db.Integer, primary_key=True)
-    source_type_id = db.Column(db.Integer, db.ForeignKey('source_types.id'))
+    source_type_id = db.Column(db.Integer, db.ForeignKey('source_types.id',ondelete='CASCADE'))
     authors = db.Column(db.Text()) # These appear as vectors in Judy's schema, trying to think of the best way to implement this within MySQL and Django/Flask
     editors = db.Column(db.Text())
     pub_title = db.Column(db.Text())
@@ -2266,25 +2266,25 @@ class Publication(db.Model):
     DOI_ISBN = db.Column(db.Text())
     journal_name = db.Column(db.Text()) #r-generated, needs more info, probably generated in method of this model
     purposes = db.relationship("Purpose",
-                    secondary=publication_purposes, backref="publications")
+                    secondary=publication_purposes, backref="publications", passive_deletes=True)
     date_digitised = db.Column(db.DateTime(), default=datetime.now)
     embargo = db.Column(db.Date()) #nullable
     missing_data = db.relationship("MissingData",
-                    secondary=publication_missing_data, backref="publications")
+                    secondary=publication_missing_data, backref="publications", passive_deletes=True)
     additional_source_string = db.Column(db.Text())
     colour = db.Column(db.String(7))
     student = db.Column(db.String(200))
     study_notes = db.Column(db.Text())
 
     # Establishing one to many relationships between tables
-    author_contacts = db.relationship("AuthorContact", backref="publication")
-    additional_sources = db.relationship("AdditionalSource", backref="publication")
-    populations = db.relationship("Population", backref="publication")
-    stages = db.relationship("Stage", backref="publication")
-    taxonomies = db.relationship("Taxonomy", backref="publication")
-    studies = db.relationship("Study", backref="publication")
+    author_contacts = db.relationship("AuthorContact", backref="publication", passive_deletes=True)
+    additional_sources = db.relationship("AdditionalSource", backref="publication", passive_deletes=True)
+    populations = db.relationship("Population", backref="publication", passive_deletes=True)
+    stages = db.relationship("Stage", backref="publication", passive_deletes=True)
+    taxonomies = db.relationship("Taxonomy", backref="publication", passive_deletes=True)
+    studies = db.relationship("Study", backref="publication", passive_deletes=True)
 
-    version = db.relationship("Version", backref="publication")
+    version = db.relationship("Version", backref="publication", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2365,21 +2365,21 @@ class Study(db.Model):
     query_class = VersionQuery
     __tablename__ = 'studies'
     id = db.Column(db.Integer, primary_key=True)
-    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
+    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
     study_duration = db.Column(db.Integer(), index=True)
     study_start = db.Column(db.Integer())
     study_end = db.Column(db.Integer())
 
-    purpose_endangered_id = db.Column(db.Integer, db.ForeignKey('purposes_endangered.id'))
-    purpose_weed_id = db.Column(db.Integer, db.ForeignKey('purposes_weed.id'))
+    purpose_endangered_id = db.Column(db.Integer, db.ForeignKey('purposes_endangered.id',ondelete='CASCADE'))
+    purpose_weed_id = db.Column(db.Integer, db.ForeignKey('purposes_weed.id',ondelete='CASCADE'))
 
-    database_source_id = db.Column(db.Integer, db.ForeignKey('institutes.id'))
+    database_source_id = db.Column(db.Integer, db.ForeignKey('institutes.id',ondelete='CASCADE'))
 
-    matrices = db.relationship("Matrix", backref="study")
-    populations = db.relationship("Population", backref="study")
+    matrices = db.relationship("Matrix", backref="study", passive_deletes=True)
+    populations = db.relationship("Population", backref="study", passive_deletes=True)
     number_populations = db.Column(db.Integer()) #could verify with populations.count()
 
-    version = db.relationship("Version", backref="study")
+    version = db.relationship("Version", backref="study", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2439,17 +2439,17 @@ class AuthorContact(db.Model):
     query_class = VersionQuery
     __tablename__ = 'author_contacts'
     id = db.Column(db.Integer, primary_key=True)
-    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
+    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
     corresponding_author = db.Column(db.Text())
     corresponding_author_email = db.Column(db.Text())
     date_contacted = db.Column(db.Date(), index=True)
-    contacting_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    contacting_user_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
     content_emails = db.relationship("ContentEmail",
-                    secondary=contact_contents, backref="author_contacts")
+                    secondary=contact_contents, backref="author_contacts", passive_deletes=True)
     extra_content_email = db.Column(db.Text())
     author_reply = db.Column(db.Text())
 
-    version = db.relationship("Version", backref="author_contact")
+    version = db.relationship("Version", backref="author_contact", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2495,8 +2495,8 @@ class AdditionalSource(db.Model):
     query_class = VersionQuery
     __tablename__ = 'additional_sources'
     id = db.Column(db.Integer, primary_key=True)
-    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
-    source_type_id = db.Column(db.Integer, db.ForeignKey('source_types.id'))
+    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
+    source_type_id = db.Column(db.Integer, db.ForeignKey('source_types.id',ondelete='CASCADE'))
     authors = db.Column(db.Text())
     editors = db.Column(db.Text())
     pub_title = db.Column(db.Text())
@@ -2512,7 +2512,7 @@ class AdditionalSource(db.Model):
     journal_name = db.Column(db.Text()) #r-generated, needs more info, probably to be generated in method of this model, first author in author list?
     description = db.Column(db.Text())
 
-    version = db.relationship("Version", backref="additional_source")
+    version = db.relationship("Version", backref="additional_source", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2566,17 +2566,17 @@ class Population(db.Model):
     query_class = VersionQuery
     __tablename__ = 'populations'
     id = db.Column(db.Integer, primary_key=True, index=True)
-    species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
-    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
-    study_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
+    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
+    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
+    study_id = db.Column(db.Integer, db.ForeignKey('studies.id',ondelete='CASCADE'))
     species_author = db.Column(db.String(64))
     population_name = db.Column(db.Text())
-    ecoregion_id = db.Column(db.Integer, db.ForeignKey('ecoregions.id'))
-    invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasive_status_studies.id')) #
-    invasive_status_elsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id')) #
+    ecoregion_id = db.Column(db.Integer, db.ForeignKey('ecoregions.id',ondelete='CASCADE'))
+    invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasive_status_studies.id',ondelete='CASCADE')) #
+    invasive_status_elsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id',ondelete='CASCADE')) #
     country = db.Column(db.Text())
     population_nautical_miles = db.Column(db.Integer())
-    continent_id = db.Column(db.Integer, db.ForeignKey('continents.id'))
+    continent_id = db.Column(db.Integer, db.ForeignKey('continents.id',ondelete='CASCADE'))
     latitude = db.Column(db.Float())
     longitude = db.Column(db.Float())
     exact_coordinates = db.Column(db.Boolean())
@@ -2584,9 +2584,9 @@ class Population(db.Model):
     pop_size = db.Column(db.Text())
     within_site_replication = db.Column(db.String(200))
 
-    matrices = db.relationship("Matrix", backref="population")
+    matrices = db.relationship("Matrix", backref="population", passive_deletes=True)
 
-    version = db.relationship("Version", backref="population")
+    version = db.relationship("Version", backref="population", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2683,14 +2683,14 @@ class Stage(db.Model):
     query_class = VersionQuery
     __tablename__ = 'stages'
     id = db.Column(db.Integer, primary_key=True, index=True)
-    species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
-    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
-    stage_type_id = db.Column(db.Integer, db.ForeignKey('stage_types.id')) 
+    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
+    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
+    stage_type_id = db.Column(db.Integer, db.ForeignKey('stage_types.id',ondelete='CASCADE')) 
     name = db.Column(db.Text())
 
-    matrix_stages = db.relationship("MatrixStage", backref="stage")
+    matrix_stages = db.relationship("MatrixStage", backref="stage", passive_deletes=True)
 
-    version = db.relationship("Version", backref="stage")
+    version = db.relationship("Version", backref="stage", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2730,11 +2730,11 @@ class StageType(db.Model):
     __tablename__ = 'stage_types'
     id = db.Column(db.Integer, primary_key=True, index=True)
     type_name = db.Column(db.Text())
-    type_class_id = db.Column(db.Integer, db.ForeignKey('stage_type_classes.id'))
+    type_class_id = db.Column(db.Integer, db.ForeignKey('stage_type_classes.id',ondelete='CASCADE'))
 
-    stages = db.relationship("Stage", backref="stage_types")
+    stages = db.relationship("Stage", backref="stage_types", passive_deletes=True)
 
-    version = db.relationship("Version", backref="stage_type")
+    version = db.relationship("Version", backref="stage_type", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2777,7 +2777,7 @@ class Treatment(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
     treatment_name = db.Column(db.Text())
     
-    matrices = db.relationship("Matrix", backref="treatment")
+    matrices = db.relationship("Matrix", backref="treatment", passive_deletes=True)
     
 
     @staticmethod
@@ -2830,11 +2830,11 @@ class MatrixStage(db.Model):
     __tablename__ = 'matrix_stages'
     id = db.Column(db.Integer, primary_key=True)
     stage_order = db.Column(db.SmallInteger())
-    stage_id = db.Column(db.Integer, db.ForeignKey('stages.id'))
+    stage_id = db.Column(db.Integer, db.ForeignKey('stages.id',ondelete='CASCADE'))
 
-    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
+    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id',ondelete='CASCADE'))
 
-    version = db.relationship("Version", backref="matrix_stage")
+    version = db.relationship("Version", backref="matrix_stage", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2872,12 +2872,12 @@ class MatrixValue(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     column_number = db.Column(db.SmallInteger())
     row_number = db.Column(db.SmallInteger())
-    transition_type_id = db.Column(db.Integer, db.ForeignKey('transition_types.id'))
+    transition_type_id = db.Column(db.Integer, db.ForeignKey('transition_types.id',ondelete='CASCADE'))
     value = db.Column(db.Float())
 
-    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
+    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id',ondelete='CASCADE'))
 
-    version = db.relationship("Version", backref="matrix_value")
+    version = db.relationship("Version", backref="matrix_value", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2923,10 +2923,10 @@ class Matrix(db.Model):
     __tablename__ = 'matrices'
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.String(200), index=True, unique=True)
-    population_id = db.Column(db.Integer, db.ForeignKey('populations.id'))
-    treatment_id = db.Column(db.Integer, db.ForeignKey('treatments.id'))
+    population_id = db.Column(db.Integer, db.ForeignKey('populations.id',ondelete='CASCADE'))
+    treatment_id = db.Column(db.Integer, db.ForeignKey('treatments.id',ondelete='CASCADE'))
     matrix_split = db.Column(db.String(64))
-    matrix_composition_id = db.Column(db.Integer, db.ForeignKey('matrix_compositions.id'))
+    matrix_composition_id = db.Column(db.Integer, db.ForeignKey('matrix_compositions.id',ondelete='CASCADE'))
     seasonal = db.Column(db.Boolean())
     survival_issue = db.Column(db.Float())
     matrix_irreducible = db.Column(db.Boolean())
@@ -2938,13 +2938,13 @@ class Matrix(db.Model):
     matrix_criteria_size = db.Column(db.String(200))
     matrix_criteria_ontogeny = db.Column(db.Boolean())
     matrix_criteria_age = db.Column(db.Boolean())
-    study_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
+    study_id = db.Column(db.Integer, db.ForeignKey('studies.id',ondelete='CASCADE'))
     matrix_start_year = db.Column(db.Integer)
     matrix_start_month = db.Column(db.Integer())
     matrix_end_year = db.Column(db.Integer)
     matrix_end_month = db.Column(db.Integer())
-    matrix_start_season_id = db.Column(db.Integer, db.ForeignKey('start_seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
-    matrix_end_season_id = db.Column(db.Integer, db.ForeignKey('end_seasons.id')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
+    matrix_start_season_id = db.Column(db.Integer, db.ForeignKey('start_seasons.id',ondelete='CASCADE')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
+    matrix_end_season_id = db.Column(db.Integer, db.ForeignKey('end_seasons.id',ondelete='CASCADE')) # Proto says season used as described in manuscript, maybe not safe to derive this from latdeg, country, date
     matrix_fec = db.Column(db.Boolean())
     matrix_a_string = db.Column(db.Text())
     matrix_u_string = db.Column(db.Text())
@@ -2956,8 +2956,8 @@ class Matrix(db.Model):
     n_plots = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, will need your help with plots too - not quite sure what they are.
     plot_size = db.Column(db.Float()) # Schema states, 'R convert to m^2'
     n_individuals = db.Column(db.Integer()) # Schema states, 'total number of individuals observed'
-    studied_sex_id = db.Column(db.Integer, db.ForeignKey('studied_sex.id'))
-    captivity_id = db.Column(db.Integer, db.ForeignKey('captivities.id'))
+    studied_sex_id = db.Column(db.Integer, db.ForeignKey('studied_sex.id',ondelete='CASCADE'))
+    captivity_id = db.Column(db.Integer, db.ForeignKey('captivities.id',ondelete='CASCADE'))
     matrix_dimension = db.Column(db.Integer()) # dimension of matrix population A   
     observations = db.Column(db.Text())
 
@@ -2974,14 +2974,14 @@ class Matrix(db.Model):
     non_independence = db.Column(db.Text())
     non_independence_author = db.Column(db.Text())
 
-    intervals = db.relationship("Interval", backref="matrix")
-    matrix_values = db.relationship("MatrixValue", backref="matrix")
-    matrix_stages = db.relationship("MatrixStage", backref="matrix")
-    fixed = db.relationship("Fixed", backref="matrix")
-    seeds = db.relationship("Seed", backref="matrix")
+    intervals = db.relationship("Interval", backref="matrix",passive_deletes=True)
+    matrix_values = db.relationship("MatrixValue", backref="matrix", passive_deletes=True)
+    matrix_stages = db.relationship("MatrixStage", backref="matrix", passive_deletes=True)
+    fixed = db.relationship("Fixed", backref="matrix", passive_deletes=True)
+    seeds = db.relationship("Seed", backref="matrix", passive_deletes=True)
 
     # Versioning
-    version = db.relationship("Version", backref="matrix")
+    version = db.relationship("Version", backref="matrix", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -3137,7 +3137,7 @@ class Matrix(db.Model):
 class Interval(db.Model):
     __tablename__ = 'intervals'
     id = db.Column(db.Integer, primary_key=True)
-    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
+    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id',ondelete='CASCADE'))
     interval_order = db.Column(db.Integer())
     interval_start = db.Column(db.Date())
     interval_end = db.Column(db.Date())
@@ -3176,17 +3176,17 @@ class Fixed(db.Model):
     query_class = VersionQuery
     __tablename__ = 'fixed'
     id = db.Column(db.Integer, primary_key=True)
-    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'), index=True)
+    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id',ondelete='CASCADE'), index=True)
     vector_str = db.Column(db.Text())
     vector_present = db.Column(db.Boolean())
     total_pop_no = db.Column(db.Integer())
-    small_id = db.Column(db.Integer, db.ForeignKey('smalls.id'))
-    census_timing_id = db.Column(db.Integer, db.ForeignKey('census_timings.id'))
+    small_id = db.Column(db.Integer, db.ForeignKey('smalls.id',ondelete='CASCADE'))
+    census_timing_id = db.Column(db.Integer, db.ForeignKey('census_timings.id',ondelete='CASCADE'))
     seed_stage_error = db.Column(db.Boolean())
     private = db.Column(db.Boolean(), default=True)
     #fixed_independence_flag
 
-    version = db.relationship("Version", backref="fixed")
+    version = db.relationship("Version", backref="fixed", passive_deletes=True)
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -3277,7 +3277,7 @@ class Version(db.Model):
     version_number = db.Column(db.Integer(), default=0)
 
     #version of is the ID of the previous version, so each version can refer back to it
-    version_of_id = db.Column(db.Integer, db.ForeignKey('versions.id')) 
+    version_of_id = db.Column(db.Integer, db.ForeignKey('versions.id',ondelete='CASCADE')) 
     version_date_added = db.Column(db.Date())
     version_timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
     
@@ -3285,34 +3285,34 @@ class Version(db.Model):
     version_uid = db.Column(db.Text())
     
     # If this is the original version, it will have other versions
-    versions = db.relationship("Version", backref="original_version", remote_side="Version.id", uselist=True)
+    versions = db.relationship("Version", backref="original_version", remote_side="Version.id", uselist=True, passive_deletes=True)
     checked = db.Column(db.Boolean())
     
-    status_id = db.Column(db.Integer, db.ForeignKey('statuses.id'))
+    status_id = db.Column(db.Integer, db.ForeignKey('statuses.id',ondelete='CASCADE'))
     checked_count = db.Column(db.Integer(), default=0)
 
     # Utility relationships
-    version_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    database_id = db.Column(db.Integer, db.ForeignKey('databases.id'))
+    version_user_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
+    database_id = db.Column(db.Integer, db.ForeignKey('databases.id',ondelete='CASCADE'))
 
     # Demography relationships
-    species_id = db.Column(db.Integer, db.ForeignKey('species.id'))
-    taxonomy_id = db.Column(db.Integer, db.ForeignKey('taxonomies.id'))
-    trait_id = db.Column(db.Integer, db.ForeignKey('traits.id'))
-    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id'))
-    study_id = db.Column(db.Integer, db.ForeignKey('studies.id'))
-    population_id = db.Column(db.Integer, db.ForeignKey('populations.id'))
-    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id'))
-    fixed_id = db.Column(db.Integer, db.ForeignKey('fixed.id'))
+    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
+    taxonomy_id = db.Column(db.Integer, db.ForeignKey('taxonomies.id',ondelete='CASCADE'))
+    trait_id = db.Column(db.Integer, db.ForeignKey('traits.id',ondelete='CASCADE'))
+    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
+    study_id = db.Column(db.Integer, db.ForeignKey('studies.id',ondelete='CASCADE'))
+    population_id = db.Column(db.Integer, db.ForeignKey('populations.id',ondelete='CASCADE'))
+    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id',ondelete='CASCADE'))
+    fixed_id = db.Column(db.Integer, db.ForeignKey('fixed.id',ondelete='CASCADE'))
 
-    stage_id = db.Column(db.Integer, db.ForeignKey('stages.id'))
-    stage_type_id = db.Column(db.Integer, db.ForeignKey('stage_types.id'))
+    stage_id = db.Column(db.Integer, db.ForeignKey('stages.id',ondelete='CASCADE'))
+    stage_type_id = db.Column(db.Integer, db.ForeignKey('stage_types.id',ondelete='CASCADE'))
 
-    matrix_stage_id = db.Column(db.Integer, db.ForeignKey('matrix_stages.id'))
-    matrix_value_id = db.Column(db.Integer, db.ForeignKey('matrix_values.id'))
+    matrix_stage_id = db.Column(db.Integer, db.ForeignKey('matrix_stages.id',ondelete='CASCADE'))
+    matrix_value_id = db.Column(db.Integer, db.ForeignKey('matrix_values.id',ondelete='CASCADE'))
 
-    author_contact_id = db.Column(db.Integer, db.ForeignKey('author_contacts.id'))
-    additional_source_id = db.Column(db.Integer, db.ForeignKey('additional_sources.id')) 
+    author_contact_id = db.Column(db.Integer, db.ForeignKey('author_contacts.id',ondelete='CASCADE'))
+    additional_source_id = db.Column(db.Integer, db.ForeignKey('additional_sources.id',ondelete='CASCADE')) 
     
 
 
