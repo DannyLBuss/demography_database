@@ -343,7 +343,8 @@ def submit_new(data):
         'date_digitised' : datetime.datetime.strptime(data['publication_date_digitization'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['publication_date_digitization'] else None,
         'purposes' : queryset,
         'missing_data' : missing_data,
-        'student' : data["publication_student"]
+        'student' : data["publication_student"],
+        'study_notes' : data["publication_study_notes"]
         }
 
         cleaned = data_clean(dict_)
@@ -810,6 +811,7 @@ def convert_all_headers_new(dict):
     new_dict['publication_missing_data'] = dict["publication_missing_data"]
     new_dict['publication_student'] = dict["publication_student"]
     new_dict['study_database_source'] = dict["study_database_source"]
+    new_dict['publication_study_notes'] = dict["publication_study_notes"]
     
     # not in migration script yet
     
