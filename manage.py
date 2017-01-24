@@ -161,6 +161,7 @@ def delete_table_data():
     response = raw_input("Are you sure you want to delete all data? (y/n): ")
 
     if response == "y":
+        Version.query.delete()
         Taxonomy.query.delete()
         Matrix.query.delete()
         Population.query.delete()
