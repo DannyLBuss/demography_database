@@ -1060,8 +1060,6 @@ class MissingData(db.Model):
     missing_code = db.Column(db.String(5), index=True)
     missing_description = db.Column(db.Text())
 
-    publications = db.relationship("Publication", backref="missing_data")
-
     @staticmethod
     def migrate():
         with open('app/data-migrate/publications.json') as d_file:
@@ -2270,7 +2268,8 @@ class Publication(db.Model):
                     secondary=publication_purposes, backref="publications")
     date_digitised = db.Column(db.DateTime(), default=datetime.now)
     embargo = db.Column(db.Date()) #nullable
-    missing_data_id = db.Column(db.Integer, db.ForeignKey('missing_data.id'))
+    missing_data = db.relationship("MissingData",
+                    secondary=publication_missing_data, backref="publications")
     additional_source_string = db.Column(db.Text())
     colour = db.Column(db.String(7))
 
