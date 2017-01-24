@@ -2272,6 +2272,7 @@ class Publication(db.Model):
                     secondary=publication_missing_data, backref="publications")
     additional_source_string = db.Column(db.Text())
     colour = db.Column(db.String(7))
+    student = db.Column(db.String(200))
 
     # Establishing one to many relationships between tables
     author_contacts = db.relationship("AuthorContact", backref="publication")

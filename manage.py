@@ -339,7 +339,8 @@ def submit_new(data):
         'colour' : gen_hex_code(),
         'date_digitised' : datetime.datetime.strptime(data['publication_date_digitization'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['publication_date_digitization'] else None,
         'purposes' : queryset,
-        'missing_data' : missing_data
+        'missing_data' : missing_data,
+        'student' : data["publication_student"]
         }
 
         cleaned = data_clean(dict_)
@@ -800,12 +801,13 @@ def convert_all_headers_new(dict):
     new_dict['date_author_contacted'] = dict["date_author_contacted"]
     new_dict['correspondence_email_content'] = dict["correspondence_email_content"]
     new_dict['correspondence_author_reply'] = dict["correspondence_author_reply"]
+    new_dict['population_within_site_replication'] = dict["within_site_replication"]
+    new_dict['publication_missing_data'] = dict["publication_missing_data"]
     
     # not in migration script yet
     new_dict['publication_student'] = dict["publication_student"] # This will attach to the publication version user - we need a list of compadrinos to migrate initially?
     new_dict['study_database_source'] = dict["study_database_source"]
-    new_dict['population_within_site_replication'] = dict["within_site_replication"]
-    new_dict['publication_missing_data'] = dict["publication_missing_data"]
+    
     
 
     for key, value in new_dict.iteritems():
