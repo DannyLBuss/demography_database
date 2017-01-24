@@ -327,8 +327,11 @@ def submit_new(data):
 
         queryset = [Purpose.query.filter(Purpose.purpose_name == key).first() for key, val in purposes.items() if val == '1']
         
-        missing_data_unicode = data['publication_missing_data'].split(';') if data['publication_missing_data'] else None
-        missing_data = [MissingData.query.filter_by(missing_code=key).first() for key in missing_data_unicode] if missing_data_unicode else 'NDY'
+        if 'NDY' not in data['publication_missing_data'] or 'NA' not in data['publication_missing_data']:
+            missing_data_unicode = data['publication_missing_data'].split(';')
+            missing_data = [MissingData.query.filter_by(missing_code=key).first() for key in missing_data_unicode] if missing_data_unicode else 'NDY'
+        else:
+            missing_data = 'NDY'
 
 
         dict_ = {'authors': data["publication_authors"],
@@ -429,13 +432,15 @@ def submit_new(data):
     if study == None:
         purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
         purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
+        database_source = Institute.query.filter_by(instutution_name=data["study_database_source"]).first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
         
         dict_ = {'study_duration' : data["study_duration"],
         'study_start' : data["study_start"], 
         'study_end' :  data["study_end"], 
         'number_populations' : data["study_number_populations"], 
         'purpose_endangered_id' : purpose_endangered.id if purpose_endangered else None, 
-        'purpose_weed_id' : purpose_weed.id if purpose_weed else None}
+        'purpose_weed_id' : purpose_weed.id if purpose_weed else None,
+        'database_source' : database_source}
 
         cleaned = data_clean(dict_)
 
@@ -803,10 +808,11 @@ def convert_all_headers_new(dict):
     new_dict['correspondence_author_reply'] = dict["correspondence_author_reply"]
     new_dict['population_within_site_replication'] = dict["within_site_replication"]
     new_dict['publication_missing_data'] = dict["publication_missing_data"]
+    new_dict['publication_student'] = dict["publication_student"]
+    new_dict['study_database_source'] = dict["study_database_source"]
     
     # not in migration script yet
-    new_dict['publication_student'] = dict["publication_student"] # This will attach to the publication version user - we need a list of compadrinos to migrate initially?
-    new_dict['study_database_source'] = dict["study_database_source"]
+    
     
     
 

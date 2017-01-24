@@ -378,6 +378,7 @@ class Institute(db.Model):
     website = db.Column(db.String(200))
 
     users = db.relationship("User", backref="institute")
+    studies = db.relationship("Study", backref="database_source")
 
     @staticmethod
     def migrate():
@@ -2370,6 +2371,8 @@ class Study(db.Model):
 
     purpose_endangered_id = db.Column(db.Integer, db.ForeignKey('purposes_endangered.id'))
     purpose_weed_id = db.Column(db.Integer, db.ForeignKey('purposes_weed.id'))
+
+    database_source_id = db.Column(db.Integer, db.ForeignKey('institutes.id'))
 
     matrices = db.relationship("Matrix", backref="study")
     populations = db.relationship("Population", backref="study")
