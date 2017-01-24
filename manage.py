@@ -326,10 +326,10 @@ def submit_new(data):
         }
 
         queryset = [Purpose.query.filter(Purpose.purpose_name == key).first() for key, val in purposes.items() if val == '1']
-        
-        if 'NDY' not in data['publication_missing_data'] or 'NA' not in data['publication_missing_data']:
-            missing_data_unicode = data['publication_missing_data'].split(';')
-            missing_data = [MissingData.query.filter_by(missing_code=key).first() for key in missing_data_unicode] if missing_data_unicode else 'NDY'
+    
+        if data['publication_missing_data'] != 'NDY' and data['publication_missing_data']:
+            missing_data_unicode = data['publication_missing_data'].replace(" ", "").split(';')
+            missing_data = [MissingData.query.filter_by(missing_code=key).first() for key in missing_data_unicode if MissingData.query.filter_by(missing_code=key).first()]
         else:
             missing_data = 'NDY'
 
@@ -659,8 +659,8 @@ def submit_new(data):
 def migration_loop(input_file):
     all_deets = []   
 
-    for i, row in enumerate(input_file):
-        print i              
+    for i, row in enumerate(input_file):  
+        print i       
         data = convert_all_headers_new(row)
         submit_new(data)
     return "Migration Complete"

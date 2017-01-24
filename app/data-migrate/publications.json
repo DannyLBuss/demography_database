@@ -87,6 +87,9 @@
 		}, {
 			"missing_code": "No",
 			"missing_description": "Everything is digitised"
+		}, {
+			"missing_code": "V",
+			"missing_description": "Population vectors of the initial stage structure for each matrix"
 		}]
 
 	}
