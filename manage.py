@@ -476,9 +476,19 @@ def submit_new(data):
     pop = Population.query.filter_by(population_name=data["population_name"], species_id=species.id, publication_id=publication.id).first()
 
     if pop == None:
-        dict_ = {'population_name' : data["population_name"],        
-        'longitude' : data["population_longitude"],
+        dict_ = {'population_name' : data["population_name"],       
         'latitude' : data["population_latitude"],
+        'lat_ns' : data["lat_ns"], 
+        'lat_deg' : data["lat_deg"], 
+        'lat_min' : data["lat_min"],  
+        'lat_sec' : data["lat_sec"], 
+
+        'longitude' : data["population_longitude"],
+        'lon_ew' : data["lon_ew"],
+        'lon_deg' : data["lon_deg"],
+        'lon_min' : data["lon_min"], 
+        'lon_sec' : data["lon_sec"],           
+     
         'altitude' : data["population_altitude"],
         'pop_size' : data["population_pop_size"],
         'country' : data["population_country"],
@@ -738,7 +748,15 @@ def convert_all_headers_new(dict):
     new_dict["matrix_criteria_age"] = dict["matrix_criteria_age"]
     new_dict["population_name"] = dict["population_name"]
     new_dict["population_latitude"] = dict["population_latitude"]
+    new_dict["lat_ns"] = dict["lat_ns"]
+    new_dict["lat_deg"] = dict["lat_deg"]
+    new_dict["lat_min"] = dict["lat_min"]
+    new_dict["lat_sec"] = dict["lat_sec"]
     new_dict["population_longitude"] = dict["population_longitude"]
+    new_dict["lon_ew"] = dict["lon_ew"]
+    new_dict["lon_deg"] = dict["lon_deg"]
+    new_dict["lon_min"] = dict["lon_min"]
+    new_dict["lon_sec"] = dict["lon_sec"]   
     new_dict["population_altitude"]= dict["population_altitude"]
     new_dict["population_country"] = dict["population_country"]
     new_dict["population_continent_id"] = dict["population_continent"]
