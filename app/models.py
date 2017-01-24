@@ -1051,8 +1051,8 @@ class Purpose(db.Model):
 
 publication_purposes = db.Table('publication_purposes', db.Model.metadata,
     db.Column('id', db.Integer, primary_key=True),
-    db.Column('purpose_id', db.Integer, db.ForeignKey('purposes.id')),
-    db.Column('publication_id', db.Integer, db.ForeignKey('publications.id'))
+    db.Column('purpose_id', db.Integer, db.ForeignKey('purposes.id', ondelete='CASCADE')),
+    db.Column('publication_id', db.Integer, db.ForeignKey('publications.id', ondelete='CASCADE'))
 )
 
 class MissingData(db.Model):
@@ -1109,8 +1109,8 @@ class MissingData(db.Model):
 
 publication_missing_data = db.Table('publication_missing_data', db.Model.metadata,
     db.Column('id', db.Integer, primary_key=True),
-    db.Column('missing_data_id', db.Integer, db.ForeignKey('missing_data.id')),
-    db.Column('publication_id', db.Integer, db.ForeignKey('publications.id'))
+    db.Column('missing_data_id', db.Integer, db.ForeignKey('missing_data.id',ondelete='CASCADE')),
+    db.Column('publication_id', db.Integer, db.ForeignKey('publications.id', ondelete='CASCADE'))
 )
 
 ''' End Meta Tables for Publication/Additional Source '''
@@ -1168,8 +1168,8 @@ class ContentEmail(db.Model):
 
 contact_contents = db.Table('contact_contents', db.Model.metadata,
     db.Column('id', db.Integer, primary_key=True),
-    db.Column('content_email_id', db.Integer, db.ForeignKey('content_email.id')),
-    db.Column('author_contact_id', db.Integer, db.ForeignKey('author_contacts.id'))
+    db.Column('content_email_id', db.Integer, db.ForeignKey('content_email.id', ondelete='CASCADE')),
+    db.Column('author_contact_id', db.Integer, db.ForeignKey('author_contacts.id', ondelete='CASCADE'))
 )
 ''' End Meta Tables for Author Contact '''
 
