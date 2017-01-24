@@ -2932,7 +2932,7 @@ class Matrix(db.Model):
     matrix_primitive = db.Column(db.Boolean())
     matrix_ergodic = db.Column(db.Boolean())
     n_intervals = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, what are these? Schema says, "Number of transition intervals represented in the matrix - should only be >1 for mean matrices", so 0 or 1 or more? Can it be a float, ie 0.8?
-    periodicity = db.Column(db.String(200))
+    periodicity = db.Column(db.Float())
     # relative = db.Column(db.Boolean()) --> in schema with no description, must confirm with Judy what this relates to, any below?
     matrix_criteria_size = db.Column(db.String(200))
     matrix_criteria_ontogeny = db.Column(db.Boolean())
