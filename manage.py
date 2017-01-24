@@ -477,7 +477,8 @@ def submit_new(data):
         'invasive_status_study_id' : invasive_status_study.id if invasive_status_study else None,
         'invasive_status_elsewhere_id' : invasive_status_elsewhere.id if invasive_status_elsewhere else None,
         'ecoregion' : ecoregion, 
-        'continent' : continent
+        'continent' : continent,
+        'within_site_replication' : data['population_within_site_replication']
         }
 
         cleaned = data_clean(dict_)
@@ -801,9 +802,9 @@ def convert_all_headers_new(dict):
     new_dict['correspondence_author_reply'] = dict["correspondence_author_reply"]
     
     # not in migration script yet
-    new_dict['publication_student'] = dict["publication_student"]
+    new_dict['publication_student'] = dict["publication_student"] # This will attach to the publication version user - we need a list of compadrinos to migrate initially?
     new_dict['study_database_source'] = dict["study_database_source"]
-    new_dict['within_site_replication'] = dict["within_site_replication"]
+    new_dict['population_within_site_replication'] = dict["within_site_replication"]
     new_dict['publication_missing_data'] = dict["publication_missing_data"]
     
 
