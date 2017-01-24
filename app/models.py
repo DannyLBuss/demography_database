@@ -2577,9 +2577,20 @@ class Population(db.Model):
     country = db.Column(db.Text())
     population_nautical_miles = db.Column(db.Integer())
     continent_id = db.Column(db.Integer, db.ForeignKey('continents.id',ondelete='CASCADE'))
+    
     latitude = db.Column(db.Float())
     longitude = db.Column(db.Float())
-    exact_coordinates = db.Column(db.Boolean())
+    
+    lat_ns = db.Column(db.String(1))
+    lat_deg = db.Column(db.Integer())
+    lat_min = db.Column(db.Integer())
+    lat_sec = db.Column(db.Integer())
+    
+    lon_ew = db.Column(db.String(1))
+    lon_deg = db.Column(db.Integer())
+    lon_min = db.Column(db.Integer())
+    lon_sec = db.Column(db.Integer())
+        
     altitude = db.Column(db.Float())
     pop_size = db.Column(db.Text())
     within_site_replication = db.Column(db.String(200))
@@ -2591,34 +2602,34 @@ class Population(db.Model):
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
 
-    def geometries_dec(self):
-        geo = json.loads(self.geometries)
-
-        lat_min = geo['lat_min']
-        lat_deg = geo['lat_deg']
-        lat_sec = geo['lat_sec']
-        lat_ns = geo['lat_ns']
-        lon_min = geo['lon_min']
-        lon_deg = geo['lon_deg']
-        lon_sec = geo['lon_sec']
-        lat_we = geo['lat_we']
-        altitude = geo['altitude']
-
-        if lat_we != 'NA':
-            if lat_we == 'W':
-                lon_deg = -float(lon_deg)
-                
-        try:
-            decimal_lat = float(lat_deg)+float(lat_min)/60+float(lat_sec)/3600
-            decimal_lon = float(lon_deg)+float(lon_min)/60+float(lon_sec)/3600
-            altitude = float(altitude)
-        except:
-            decimal_lat = 'NA'
-            decimal_lon = 'NA'
-            altitude = 'NA'
-
-        geometries = {"latitude" : decimal_lat, "longitude" : decimal_lon, "altitude" : altitude}
-        return geometries
+#    def geometries_dec(self):
+#        geo = json.loads(self.geometries)
+#
+#        lat_min = geo['lat_min']
+#        lat_deg = geo['lat_deg']
+#        lat_sec = geo['lat_sec']
+#        lat_ns = geo['lat_ns']
+#        lon_min = geo['lon_min']
+#        lon_deg = geo['lon_deg']
+#        lon_sec = geo['lon_sec']
+#        lat_we = geo['lat_we']
+#        altitude = geo['altitude']
+#
+#        if lat_we != 'NA':
+#            if lat_we == 'W':
+#                lon_deg = -float(lon_deg)
+#                
+#        try:
+#            decimal_lat = float(lat_deg)+float(lat_min)/60+float(lat_sec)/3600
+#            decimal_lon = float(lon_deg)+float(lon_min)/60+float(lon_sec)/3600
+#            altitude = float(altitude)
+#        except:
+#            decimal_lat = 'NA'
+#            decimal_lon = 'NA'
+#            altitude = 'NA'
+#
+#        geometries = {"latitude" : decimal_lat, "longitude" : decimal_lon, "altitude" : altitude}
+#        return geometries
 
 
     def to_json(self, key):
