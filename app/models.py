@@ -2576,7 +2576,8 @@ class Population(db.Model):
     longitude = db.Column(db.Float())
     exact_coordinates = db.Column(db.Boolean())
     altitude = db.Column(db.Float())
-    pop_size = db.Column(db.Text()) #
+    pop_size = db.Column(db.Text())
+    within_site_replication = db.Column(db.String(200))
 
     matrices = db.relationship("Matrix", backref="population")
 
