@@ -65,28 +65,33 @@ class SpeciesForm(Form):
     esa_status = QuerySelectField('ESA Status',
             query_factory=lambda: ESAStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.status_code, a.status_name))
+    species_gisd_status = BooleanField('GISD Status')
+    invasive_status = BooleanField('Invasive Status')
+    species_iucn_taxonid = IntegerField('GBIF Taxon key')
+    species_iucn_population_assessed = IntegerField('IUCN taxon ID')   
     gbif_taxon_key = IntegerField('GBIF Taxon Key')
     image_path = StringField('Path to image')
     image_path2 = StringField('Path to image')
-    invasive_status = BooleanField('Invasive Status')
+    
     
     submit = SubmitField('Submit')
 
 class TaxonomyForm(Form):
-	species_author = StringField('Species Author *', validators=[Required(), ])
-	authority = StringField('Authority', validators=[])
-	tpl_version = StringField('TPL Version')
-	infraspecies_accepted = StringField('Infraspecies Accepted')
-	species_epithet_accepted = StringField('Species Epithet Accepted', validators=[Required()])
-	genus_accepted = StringField('Genus Accepted', validators=[Required()])
-	genus = StringField('Genus', validators=[Required()])
-	family = StringField('Family', validators=[Required()])
-	tax_order = StringField('Order', validators=[Required()])
-	tax_class = StringField('Class', validators=[Required()])
-	phylum = StringField('Phylum', validators=[Required()])
-	kingdom = StringField('Kingdom', validators=[Required()])
+    authority = StringField('Authority', validators=[])
+    tpl_version = StringField('TPL Version')
+    infraspecies_accepted = StringField('Infraspecies Accepted')
+    species_epithet_accepted = StringField('Species Epithet Accepted', validators=[Required()])
+    genus_accepted = StringField('Genus Accepted', validators=[Required()])
+    genus = StringField('Genus', validators=[Required()])
+    family = StringField('Family', validators=[Required()])
+    tax_order = StringField('Order', validators=[Required()])
+    tax_class = StringField('Class', validators=[Required()])
+    phylum = StringField('Phylum', validators=[Required()])
+    kingdom = StringField('Kingdom', validators=[Required()])
+    col_check_ok = BooleanField('Col Check OK')
+    col_check_date = DateField('Col Check Date')
 
-	submit = SubmitField('Submit')
+    submit = SubmitField('Submit')
     
 class PublicationForm(Form):
     source_type = QuerySelectField('Source Type',
@@ -154,7 +159,7 @@ class TraitForm(Form):
     angio_gymno = QuerySelectField('Angio Gymno',
             query_factory=lambda: AngioGymno.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.angio_gymno_name)
-    spand_ex_growth_type = QuerySelectField('Spand.ex growth type',
+    spand_ex_growth_types = QuerySelectField('Spand.ex growth type',
             query_factory=lambda: SpandExGrowthType.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.type_name)
     submit = SubmitField('Submit')
