@@ -2036,10 +2036,9 @@ class Species(db.Model):
     image_path = db.Column(db.Text)
     image_path2 = db.Column(db.Text)
     
-    taxonomies = db.relationship("Taxonomy", backref="species", passive_deletes=True)
-    traits = db.relationship("Trait", backref="species", passive_deletes=True)
-    populations = db.relationship("Population", backref="species", passive_deletes=True)
-    stages = db.relationship("Stage", backref="species", passive_deletes=True)
+    taxonomy = db.relationship("Taxonomy", backref="species", passive_deletes=True)
+    trait = db.relationship("Trait", backref="species", passive_deletes=True)
+    studies = db.relationship("Study", backref="species", passive_deletes=True)
 
     version = db.relationship("Version", backref="species", uselist=False, passive_deletes=True)
     version_latest = db.Column(db.String(64))
@@ -2102,8 +2101,6 @@ class Taxonomy(db.Model):
     __tablename__ = 'taxonomies'
     id = db.Column(db.Integer, primary_key=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
-    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
-    #species_author = db.Column(db.String(64), index=True)
     authority = db.Column(db.Text())
     tpl_version = db.Column(db.String(64)) # Currently at 1.0, which could be float, but sometimes releases are 1.0.1 etc, best as string for now?
     infraspecies_accepted = db.Column(db.String(64))
@@ -2279,9 +2276,6 @@ class Publication(db.Model):
     # Establishing one to many relationships between tables
     author_contacts = db.relationship("AuthorContact", backref="publication", passive_deletes=True)
     additional_sources = db.relationship("AdditionalSource", backref="publication", passive_deletes=True)
-    populations = db.relationship("Population", backref="publication", passive_deletes=True)
-    stages = db.relationship("Stage", backref="publication", passive_deletes=True)
-    taxonomies = db.relationship("Taxonomy", backref="publication", passive_deletes=True)
     studies = db.relationship("Study", backref="publication", passive_deletes=True)
 
     version = db.relationship("Version", backref="publication", passive_deletes=True)
@@ -2366,6 +2360,7 @@ class Study(db.Model):
     __tablename__ = 'studies'
     id = db.Column(db.Integer, primary_key=True)
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
+    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
     study_duration = db.Column(db.Integer(), index=True)
     study_start = db.Column(db.Integer())
     study_end = db.Column(db.Integer())
@@ -2375,7 +2370,6 @@ class Study(db.Model):
 
     database_source_id = db.Column(db.Integer, db.ForeignKey('institutes.id',ondelete='CASCADE'))
 
-    matrices = db.relationship("Matrix", backref="study", passive_deletes=True)
     populations = db.relationship("Population", backref="study", passive_deletes=True)
     number_populations = db.Column(db.Integer()) #could verify with populations.count()
 
@@ -2566,8 +2560,6 @@ class Population(db.Model):
     query_class = VersionQuery
     __tablename__ = 'populations'
     id = db.Column(db.Integer, primary_key=True, index=True)
-    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
-    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
     study_id = db.Column(db.Integer, db.ForeignKey('studies.id',ondelete='CASCADE'))
     species_author = db.Column(db.String(64))
     population_name = db.Column(db.Text())
@@ -2694,7 +2686,6 @@ class Stage(db.Model):
     query_class = VersionQuery
     __tablename__ = 'stages'
     id = db.Column(db.Integer, primary_key=True, index=True)
-    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
     stage_type_id = db.Column(db.Integer, db.ForeignKey('stage_types.id',ondelete='CASCADE')) 
     name = db.Column(db.Text())
@@ -2834,7 +2825,7 @@ class Treatment(db.Model):
 
 
     def __repr__(self):
-        return self.treatment_name
+        return self.treatment_name if self.treatment_name else ''
 
 class MatrixStage(db.Model):
     query_class = VersionQuery
@@ -2943,9 +2934,7 @@ class Matrix(db.Model):
     matrix_irreducible = db.Column(db.Boolean())
     matrix_primitive = db.Column(db.Boolean())
     matrix_ergodic = db.Column(db.Boolean())
-    n_intervals = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, what are these? Schema says, "Number of transition intervals represented in the matrix - should only be >1 for mean matrices", so 0 or 1 or more? Can it be a float, ie 0.8?
-    periodicity = db.Column(db.Float())
-    # relative = db.Column(db.Boolean()) --> in schema with no description, must confirm with Judy what this relates to, any below?
+    n_intervals = db.Column(db.SmallInteger())
     matrix_criteria_size = db.Column(db.String(200))
     matrix_criteria_ontogeny = db.Column(db.Boolean())
     matrix_criteria_age = db.Column(db.Boolean())
@@ -2978,8 +2967,6 @@ class Matrix(db.Model):
 
     vectors_includes_na = db.Column(db.Boolean())
     matrix_lambda = db.Column(db.Float())
-
-
     
     independent = db.Column(db.Boolean())
     non_independence = db.Column(db.Text())
@@ -3296,7 +3283,7 @@ class Version(db.Model):
     version_uid = db.Column(db.Text())
     
     # If this is the original version, it will have other versions
-    versions = db.relationship("Version", backref="original_version", remote_side="Version.id", uselist=True, passive_deletes=True)
+    versions = db.relationship("Version", backref="original_version", remote_side="Version.id", uselist=True)
     checked = db.Column(db.Boolean())
     
     status_id = db.Column(db.Integer, db.ForeignKey('statuses.id',ondelete='CASCADE'))
