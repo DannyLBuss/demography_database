@@ -311,7 +311,7 @@ def submit_new(data):
 
     ''' Publication '''    
     if data["publication_DOI_ISBN"] == None:
-        publication = Publication.query.filter_by(authors=data["publication_authors"]).filter_by(year=data["publication_year"]).filter_by(journal_name=data["publication_journal_name"]).first()
+        publication = Publication.query.filter_by(authors=data["publication_authors"]).filter_by(year=data["publication_year"]).filter_by(journal_name=data["publication_journal_name"]).filter_by(additional_source_string=data["publication_additional_source_string"]).filter_by(study_notes= data["publication_study_notes"]).first()
     else: 
         publication = Publication.query.filter_by(DOI_ISBN=data["publication_DOI_ISBN"]).first()    
     
@@ -340,18 +340,21 @@ def submit_new(data):
         'DOI_ISBN' : data["publication_DOI_ISBN"],
         'additional_source_string' : data["publication_additional_source_string"],
         'journal_name' : data["publication_journal_name"],
-        'colour' : gen_hex_code(),
         'date_digitised' : datetime.datetime.strptime(data['publication_date_digitization'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['publication_date_digitization'] else None,
         'purposes' : queryset,
-        'missing_data' : missing_data,
         'student' : data["publication_student"],
         'study_notes' : data["publication_study_notes"]
         }
 
         cleaned = data_clean(dict_)
 
-        if not all(value == None for key, value in cleaned.items() if key not in ignore_keys):
+        if not all(value == None for key, value in cleaned["kwargs"].items() if key not in ignore_keys):
             publication = Publication(**cleaned["kwargs"])
+            db.session.add(publication)
+            db.session.commit()
+
+            publication.missing_data = missing_data if type(missing_data) == list else []
+
             db.session.add(publication)
             db.session.commit()
 
@@ -359,6 +362,7 @@ def submit_new(data):
             version = version_data(cleaned)
             publication_version = Version(**version)
             publication_version.publication = publication
+            publication.colour = gen_hex_code()
             db.session.add(publication_version) 
             db.session.commit()  
             publication_version.version_of_id = publication_version.id
@@ -430,6 +434,7 @@ def submit_new(data):
 
     ''' Study '''
     # What if all none? Will they be grouped together?
+    publication_id = publication.id if publication else None
     study = Study.query.filter_by(publication_id=publication.id, study_start=data["study_start"], study_end=data["study_end"]).first()
     if study == None:
         purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
@@ -446,12 +451,12 @@ def submit_new(data):
 
         cleaned = data_clean(dict_)
 
-        if not all(value == None for key, value in cleaned.items() if key not in ignore_keys):
+        if not all(value == None for key, value in cleaned["kwargs"].items() if key not in ignore_keys):
             study = Study(**cleaned["kwargs"])
             db.session.add(study)
             db.session.commit()
 
-            study.publication_id = publication.id if publication else None
+            study.publication_id = publication_id
             db.session.add(study)
             db.session.commit()
 
@@ -501,7 +506,7 @@ def submit_new(data):
 
         cleaned = data_clean(dict_)
 
-        if not all(value == None for key, value in cleaned.items() if key not in ignore_keys):
+        if not all(value == None for key, value in cleaned["kwargs"].items() if key not in ignore_keys):
             pop = Population(**cleaned["kwargs"])
 
             db.session.add(pop)
@@ -545,7 +550,7 @@ def submit_new(data):
 
         cleaned = data_clean(dict_)
 
-        if not all(value == None for key, value in cleaned.items() if key not in ignore_keys):
+        if not all(value == None for key, value in cleaned["kwargs"].items() if key not in ignore_keys):
             tax = Taxonomy(**cleaned["kwargs"])
 
             db.session.add(tax)
@@ -568,11 +573,18 @@ def submit_new(data):
             db.session.add(taxonomy_version)
             db.session.commit()
 
-    ''' Matrix '''     
-    treatment = Treatment.query.filter_by(treatment_name=data["matrix_treatment_id"]).first()
+    ''' Matrix '''
+    treatment_string = data["matrix_treatment_id"]
+    
 
-    if treatment == None:
-        treatment = Treatment(treatment_name=data["matrix_treatment_id"])
+    if treatment_string == 'NDY':
+        treatment = 'NDY'
+    elif treatment_string == None:
+        treatment = None
+    else:
+        treatment = Treatment.query.filter_by(treatment_name=data["matrix_treatment_id"]).first() if Treatment.query.filter_by(treatment_name=data["matrix_treatment_id"]).first() else Treatment(treatment_name=data["matrix_treatment_id"])
+        db.session.add(treatment)
+        db.session.commit()
 
     dict_ = {'treatment' : treatment,
     'matrix_split' : data["matrix_split"],
@@ -614,7 +626,7 @@ def submit_new(data):
 
     cleaned = data_clean(dict_)
 
-    if not all(value == None for key, value in cleaned.items() if key not in ignore_keys):
+    if not all(value == None for key, value in cleaned["kwargs"].items() if key not in ignore_keys):
         matrix = Matrix(**cleaned["kwargs"])    
 
         db.session.add(matrix)
@@ -848,6 +860,8 @@ def convert_all_headers_new(dict):
             new_dict[key] = None
         if value == ".":
             new_dict[key] = None
+        if value == "AFI":
+            new_dict[key] = 'NDY'
 
 
     return new_dict
