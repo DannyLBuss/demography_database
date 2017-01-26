@@ -208,7 +208,7 @@ def publications():
 ###############################################################################################################################
 ### SPECIES/TAXONOMY/TRAIT FORMS + VIEW EDIT HISTORY PAGES
 
-# editing species information
+# editing species information #updated 25/1/17
 @main.route('/species/<int:id>/edit', methods=['GET', 'POST'])
 def species_form(id):
     species = Species.query.get_or_404(id)
@@ -219,6 +219,9 @@ def species_form(id):
         species.species_common = form.species_common.data
         species.iucn_status = form.iucn_status.data
         species.esa_status = form.esa_status.data
+        species.species_gisd_status = form.species_gisd_status.data #
+        species.species_iucn_taxonid = form.species_iucn_taxonid.data #
+        species.species_iucn_population_assessed = form.species_iucn_population_assessed.data #
         species.invasive_status = form.invasive_status.data
         species.gbif_taxon_key = form.gbif_taxon_key.data
         species.image_path = form.image_path.data
@@ -232,6 +235,9 @@ def species_form(id):
     form.species_common.data = species.species_common
     form.iucn_status.data = species.iucn_status
     form.esa_status.data = species.esa_status
+    form.species_gisd_status.data = species.species_gisd_status #
+    form.species_iucn_taxonid.data = species.species_iucn_taxonid #
+    form.species_iucn_population_assessed.data = species.species_iucn_population_assessed #
     form.invasive_status.data = species.invasive_status
     form.gbif_taxon_key.data = species.gbif_taxon_key
     form.image_path.data = species.image_path
@@ -245,7 +251,7 @@ def species_edit_history(id):
     species = Species.query.get_or_404(id)
     return render_template('edit_history.html', species=species)
 
-# editing taxonomy
+# editing taxonomy # updated 25/1/17
 @main.route('/taxonomy/<int:id>/edit', methods=['GET', 'POST'])
 def taxonomy_form(id):
     taxonomy = Taxonomy.query.get_or_404(id)
@@ -253,7 +259,6 @@ def taxonomy_form(id):
     form = TaxonomyForm(taxonomy=taxonomy)
     
     if form.validate_on_submit():
-        taxonomy.species_author = form.species_author.data
         taxonomy.authority = form.authority.data
         taxonomy.tpl_version = form.tpl_version.data
         taxonomy.infraspecies_accepted = form.infraspecies_accepted.data
@@ -265,11 +270,13 @@ def taxonomy_form(id):
         taxonomy.tax_class = form.tax_class.data
         taxonomy.phylum = form.phylum.data
         taxonomy.kingdom = form.kingdom.data
+        taxonomy.col_check_ok = form.col_check_ok.data #
+        taxonomy.col_check_date = form.col_check_date.data #
+        
         flash('The taxonomy has been updated.')
         species_name = species.species_accepted
         return redirect(url_for('.species_page',id=species.id))
     
-    form.species_author.data = taxonomy.species_author
     form.authority.data = taxonomy.authority
     form.tpl_version.data = taxonomy.tpl_version
     form.infraspecies_accepted.data = taxonomy.infraspecies_accepted
@@ -281,6 +288,8 @@ def taxonomy_form(id):
     form.tax_class.data = taxonomy.tax_class
     form.phylum.data = taxonomy.phylum
     form.kingdom.data = taxonomy.kingdom
+    form.col_check_ok.data = taxonomy.col_check_ok
+    form.col_check_date.data = taxonomy.col_check_date
 
     return render_template('data_entry/generic_form.html', form=form, taxonomy=taxonomy,species = species)
 
@@ -304,6 +313,7 @@ def trait_form(id):
         trait.reproductive_repetition = form.reproductive_repetition.data
         trait.dicot_monoc = form.dicot_monoc.data
         trait.angio_gymno = form.angio_gymno.data
+        trait.spand_ex_growth_types = form.spand_ex_growth_types.data
         flash('The trait infomation has been updated.')
         return redirect(url_for('.species_page',id=species.id))
     
@@ -313,6 +323,7 @@ def trait_form(id):
     form.reproductive_repetition.data = trait.reproductive_repetition
     form.dicot_monoc.data = trait.dicot_monoc
     form.angio_gymno.data = trait.angio_gymno
+    form.spand_ex_growth_types.data = trait.spand_ex_growth_types
     return render_template('data_entry/generic_form.html', form=form, trait=trait,species = species)
 
 # traits edit history
