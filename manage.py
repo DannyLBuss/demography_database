@@ -90,72 +90,6 @@ def UnicodeDictReader(utf8_data, **kwargs):
     for row in csv_reader:
         yield {key: unicode(value, 'latin-1') for key, value in row.iteritems()}
 
-
-# @manager.command
-# def csv_migrate():
-#     import csv
-
-#     input_file = UnicodeDictReader(open("app/compadre/compadreFlat3.csv", "rU"))
-
-#     all_deets = []   
-
-#     for i, row in enumerate(input_file):
-#         if i > 6235:                      
-#             data = convert_all_headers(row)
-#             entry = add_to_classes(data)
-#             all_deets.append(entry)
-#             submit(entry)
-#     return 
-
-
-def versions_to_nil(array):
-    for x in array:
-        if x.version is None:
-            x.version = 0
-            x.version_of_id = x.id
-            
-            db.session.add(x)
-            db.session.commit()
-
-@manager.command
-def version_null_to_0():
-    print "Setting ALL null versions to 0"
-
-    print "Resetting Species..."
-    versions_to_nil(Species.query.all())
-
-    print "Resetting Taxonomy..."
-    versions_to_nil(Taxonomy.query.all())
-    
-    print "Resetting Matrix..."
-    versions_to_nil(Matrix.query.all())
-
-    print "Resetting Study..."
-    versions_to_nil(Study.query.all())
-
-    print "Resetting Publication..."
-    versions_to_nil(Publication.query.all())
-
-    print "Resetting Trait..."
-    versions_to_nil(Trait.query.all())
-
-    print "Resetting Population..."
-    versions_to_nil(Population.query.all())
-
-    print "Resetting AuthorContact..."
-    versions_to_nil(AuthorContact.query.all())
-
-    print "Resetting Stage..."
-    versions_to_nil(Stage.query.all())
-
-    print "Resetting StageType..."
-    versions_to_nil(StageType.query.all())
-
-    print "Resetting MatrixStage..."
-    versions_to_nil(MatrixStage.query.all())
-
-
-
 @manager.command
 def delete_table_data():
     response = raw_input("Are you sure you want to delete all data? (y/n): ")
@@ -625,7 +559,6 @@ def submit_new(data):
 
     matrix_cleaned = data_clean(matrix_dict)
 
-    # check all data isn't null to ensure we *don't* add an empty row
     # if not all(value == None for key, value in matrix_cleaned["kwargs"].items() if key not in ignore_keys):
     matrix = Matrix(**matrix_cleaned["kwargs"])    
 
@@ -636,7 +569,7 @@ def submit_new(data):
 
     db.session.add(matrix)
     db.session.commit()
-    
+
     ''' matrix Version '''
     version = version_data(matrix_cleaned)
     matrix_version = Version(**version)
