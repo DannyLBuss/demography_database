@@ -143,20 +143,21 @@ class User(UserMixin, db.Model):
             usern = user["User"]
 
            
-            u = User.query.filter_by(email=usern['email']).first()
-            if u is None:
-                u = User()
+            for us in usern:
+                u = User.query.filter_by(email=us['email']).first()
+                if u is None:
+                    u = User()
 
-            u.email = usern['email']
-            u.username = usern['username']
-            u.role_id = usern['role_id']
-            u.password = generate_password_hash(usern['password'])
-            u.confirmed = usern['confirmed']
-            u.institute_id = usern['institute_id']
-            u.institute_confirmed = usern['institute_confirmed']
+                u.email = us['email']
+                u.username = us['username']
+                u.role_id = us['role_id']
+                u.password = generate_password_hash(us['password'])
+                u.confirmed = us['confirmed']
+                u.institute_id = us['institute_id']
+                u.institute_confirmed = us['institute_confirmed']
 
-            db.session.add(u)
-            db.session.commit()
+                db.session.add(u)
+                db.session.commit()
 
 
     @staticmethod

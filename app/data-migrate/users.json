@@ -1,6 +1,6 @@
 {
 	"User": {
-          "User": {
+          "User": [{
             "email" : "lifecycle@exeter.ac.uk",
             "username" : "admin",
             "role_id" : 2,
@@ -9,6 +9,14 @@
             "institute_id" : 2, 
             "institute_confirmed" : 1
             },
+            {
+            "email" : "pw355@exeter.ac.uk",
+            "username" : "phil_wilson",
+            "role_id" : 2,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 2,
+            "institute_confirmed" : 1}],
 	    "Institute": [{
             "institution_name": " Max Plank Institute of Demographic Research",
             "institution_short" : "MPIDR",

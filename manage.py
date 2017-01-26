@@ -278,36 +278,8 @@ def version_data(cleaned):
 def submit_new(data):
     import datetime
 
+    # When checking for null data later, these need to be excluded, as they will always have a value
     ignore_keys = ['version_ok', 'version_latest', 'version_original']
-
-    species = Species.query.filter_by(species_accepted=data["species_accepted"]).first()
-    iucn = IUCNStatus.query.filter_by(status_code=data["species_iucn_status_id"]).first()
-
-    if species == None:
-        dict_ = {'gbif_taxon_key': data["species_gbif_taxon_key"], 
-        'species_iucn_taxonid': data["species_iucn_taxonid"], 
-        'species_accepted' : data["species_accepted"], 
-        'species_common' :  data["species_common"], 
-        'species_gisd_status' : 1 if data["species_gisd_status"] else 0, 
-        'iucn_status_id' : iucn.id if iucn else None, 
-        'image_path' : data["image_path"], 
-        'image_path2' : data["image_path2"]}
-        
-        cleaned = data_clean(dict_)
-        species = Species(**cleaned["kwargs"])
-
-        db.session.add(species)
-        db.session.commit()
-
-        ''' Species Version '''
-        version = version_data(cleaned)
-        species_version = Version(**version)
-        species_version.species = species
-        db.session.add(species_version) 
-        db.session.commit()  
-        species_version.version_of_id = species_version.id
-        db.session.add(species_version)
-        db.session.commit()
 
     ''' Publication '''    
     if data["publication_DOI_ISBN"] == None:
@@ -335,7 +307,7 @@ def submit_new(data):
             missing_data = 'NDY'
 
 
-        dict_ = {'authors': data["publication_authors"],
+        pub_dict = {'authors': data["publication_authors"],
         'year' : data["publication_year"],
         'DOI_ISBN' : data["publication_DOI_ISBN"],
         'additional_source_string' : data["publication_additional_source_string"],
@@ -346,58 +318,89 @@ def submit_new(data):
         'study_notes' : data["publication_study_notes"]
         }
 
-        cleaned = data_clean(dict_)
+        pub_cleaned = data_clean(pub_dict)
 
-        if not all(value == None for key, value in cleaned["kwargs"].items() if key not in ignore_keys):
-            publication = Publication(**cleaned["kwargs"])
-            db.session.add(publication)
+        # if not all(value == None for key, value in pub_cleaned["kwargs"].items() if key not in ignore_keys) and study_present:
+        publication = Publication(**pub_cleaned["kwargs"])
+        db.session.add(publication)
+        db.session.commit()
+
+        publication.missing_data = missing_data if type(missing_data) == list else []
+
+        db.session.add(publication)
+        db.session.commit()
+
+        ''' Publication Version '''
+        version = version_data(pub_cleaned)
+        publication_version = Version(**version)
+        publication_version.publication = publication
+        publication.colour = gen_hex_code()
+        db.session.add(publication_version) 
+        db.session.commit()  
+        publication_version.version_of_id = publication_version.id
+        db.session.add(publication_version)
+        db.session.commit()
+    
+        ''' Author contact '''
+        
+        author_contacts = AuthorContact.query.filter_by(corresponding_author = data["publication_corresponding_author"]).filter_by(corresponding_author_email = data["publication_corresponding_email"]).first()
+        
+        if author_contacts == None:
+            ac_dict = {'publication_id' : publication.id, 
+            'date_contacted' : datetime.datetime.strptime(data['date_author_contacted'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['date_author_contacted'] else None,
+            'extra_content_email' : data["correspondence_email_content"],
+            'author_reply' : data["correspondence_author_reply"],
+            'corresponding_author' : data["publication_corresponding_author"],
+            'corresponding_author_email' : data["publication_corresponding_email"]
+            }
+
+            ac_cleaned = data_clean(ac_dict)
+            author_contact = AuthorContact(**ac_cleaned["kwargs"])
+            
+            db.session.add(author_contact)
             db.session.commit()
 
-            publication.missing_data = missing_data if type(missing_data) == list else []
-
-            db.session.add(publication)
-            db.session.commit()
-
-            ''' Publication Version '''
-            version = version_data(cleaned)
-            publication_version = Version(**version)
-            publication_version.publication = publication
-            publication.colour = gen_hex_code()
-            db.session.add(publication_version) 
+            ''' Author Contact Version '''
+            version = version_data(ac_cleaned)
+            author_contact_version = Version(**version)
+            author_contact_version.author_contact = author_contact
+            db.session.add(author_contact_version) 
             db.session.commit()  
-            publication_version.version_of_id = publication_version.id
-            db.session.add(publication_version)
+            author_contact_version.version_of_id = author_contact_version.id
+            db.session.add(author_contact_version)
             db.session.commit()
-        
-            ''' Author contact '''
-            
-            author_contacts = AuthorContact.query.filter_by(corresponding_author = data["publication_corresponding_author"]).filter_by(corresponding_author_email = data["publication_corresponding_email"]).first()
-            
-            if author_contacts == None:
-                dict_ = {'publication_id' : publication.id, 
-                'date_contacted' : datetime.datetime.strptime(data['date_author_contacted'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['date_author_contacted'] else None,
-                'extra_content_email' : data["correspondence_email_content"],
-                'author_reply' : data["correspondence_author_reply"],
-                'corresponding_author' : data["publication_corresponding_author"],
-                'corresponding_author_email' : data["publication_corresponding_email"]
-                }
+    
 
-                cleaned = data_clean(dict_)
-                author_contact = AuthorContact(**cleaned["kwargs"])
-                
-                db.session.add(author_contact)
-                db.session.commit()
 
-                ''' Author Contact Version '''
-                version = version_data(cleaned)
-                author_contact_version = Version(**version)
-                author_contact_version.author_contact = author_contact
-                db.session.add(author_contact_version) 
-                db.session.commit()  
-                author_contact_version.version_of_id = author_contact_version.id
-                db.session.add(author_contact_version)
-                db.session.commit()
+    ''' Species '''
+    species = Species.query.filter_by(species_accepted=data["species_accepted"]).first()
+    iucn = IUCNStatus.query.filter_by(status_code=data["species_iucn_status_id"]).first()
+
+    if species == None:
+        species_dict = {'gbif_taxon_key': data["species_gbif_taxon_key"], 
+        'species_iucn_taxonid': data["species_iucn_taxonid"], 
+        'species_accepted' : data["species_accepted"], 
+        'species_common' :  data["species_common"], 
+        'species_gisd_status' : 1 if data["species_gisd_status"] else 0, 
+        'iucn_status_id' : iucn.id if iucn else None, 
+        'image_path' : data["image_path"], 
+        'image_path2' : data["image_path2"]}
         
+        species_cleaned = data_clean(species_dict)
+        species = Species(**species_cleaned["kwargs"])
+
+        db.session.add(species)
+        db.session.commit()
+
+        ''' Species Version '''
+        version = version_data(species_cleaned)
+        species_version = Version(**version)
+        species_version.species = species
+        db.session.add(species_version) 
+        db.session.commit()  
+        species_version.version_of_id = species_version.id
+        db.session.add(species_version)
+        db.session.commit()
 
     ''' Trait '''
     spand_ex_growth_type = SpandExGrowthType.query.filter_by(type_name=data["trait_spand_ex_growth_type_id"]).first()
@@ -409,21 +412,21 @@ def submit_new(data):
     trait = Trait.query.filter_by(species_id=species.id).first()
 
     if trait == None:
-        dict_ = {'species_id': species.id, 
+        trait_dict = {'species_id': species.id, 
         'organism_type': organism_type,
         'dicot_monoc': dicot_monoc,
         'angio_gymno': angio_gymno, 
         'spand_ex_growth_type_id' : spand_ex_growth_type.id if spand_ex_growth_type else None,
         'growth_form_raunkiaer_id' : growth_form_raunkiaer.id if growth_form_raunkiaer else None}
 
-        cleaned = data_clean(dict_)
-        trait = Trait(**cleaned["kwargs"])
+        trait_cleaned = data_clean(trait_dict)
+        trait = Trait(**trait_cleaned["kwargs"])
 
         db.session.add(trait)
         db.session.commit()
 
         ''' Trait Version '''
-        version = version_data(cleaned)
+        version = version_data(trait_cleaned)
         trait_version = Version(**version)
         trait_version.trait = trait
         db.session.add(trait_version) 
@@ -432,16 +435,53 @@ def submit_new(data):
         db.session.add(trait_version)
         db.session.commit()
 
+    ''' Taxonomy '''
+    tax = Taxonomy.query.filter_by(species_id=species.id).first()
+    if tax == None:
+        tax_dict = {'authority' : None, 
+        'tpl_version' : None, 
+        'infraspecies_accepted' : None,
+        'species_epithet_accepted' : None, 
+        'genus_accepted' : data["taxonomy_genus_accepted"],
+        'genus' : data["taxonomy_genus"], 
+        'family' : data["taxonomy_family"], 
+        'tax_order' : data["taxonomy_order"], 
+        'tax_class' : data["taxonomy_class"],
+        'phylum' : data["taxonomy_phylum"], 
+        'kingdom' : data["taxonomy_kingdom"], 
+        'col_check_date' : datetime.datetime.strptime(data["taxonomy_col_check_date"], "%d/%m/%Y").strftime("%Y-%m-%d") if data['taxonomy_col_check_date'] else None,
+        'col_check_ok' : coerce_boolean(data["taxonomy_col_check_ok"])}
+
+        tax_cleaned = data_clean(tax_dict)
+
+        # if not all(value == None for key, value in tax_cleaned["kwargs"].items() if key not in ignore_keys):
+        tax = Taxonomy(**tax_cleaned["kwargs"])
+        db.session.add(tax)
+        db.session.commit()
+        tax.species = species
+        db.session.add(tax)
+        db.session.commit()
+
+        ''' Taxonomy Version '''
+        version = version_data(tax_cleaned)
+        taxonomy_version = Version(**version)
+        taxonomy_version.version_number = 1
+        taxonomy_version.taxonomy = tax    
+        db.session.add(taxonomy_version) 
+        db.session.commit()
+        taxonomy_version.version_of_id = taxonomy_version.id
+        db.session.add(taxonomy_version)
+        db.session.commit()
+
     ''' Study '''
     # What if all none? Will they be grouped together?
-    publication_id = publication.id if publication else None
     study = Study.query.filter_by(publication_id=publication.id, study_start=data["study_start"], study_end=data["study_end"]).first()
     if study == None:
         purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
         purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
         database_source = Institute.query.filter_by(instutution_name=data["study_database_source"]).first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
         
-        dict_ = {'study_duration' : data["study_duration"],
+        study_dict = {'study_duration' : data["study_duration"],
         'study_start' : data["study_start"], 
         'study_end' :  data["study_end"], 
         'number_populations' : data["study_number_populations"], 
@@ -449,39 +489,43 @@ def submit_new(data):
         'purpose_weed_id' : purpose_weed.id if purpose_weed else None,
         'database_source' : database_source}
 
-        cleaned = data_clean(dict_)
+        study_cleaned = data_clean(study_dict)
 
-        if not all(value == None for key, value in cleaned["kwargs"].items() if key not in ignore_keys):
-            study = Study(**cleaned["kwargs"])
-            db.session.add(study)
-            db.session.commit()
+        # if not all(value == None for key, value in study_cleaned["kwargs"].items() if key not in ignore_keys) and population_present:
+        study = Study(**study_cleaned["kwargs"])
+        db.session.add(study)
+        db.session.commit()
 
-            study.publication_id = publication_id
-            db.session.add(study)
-            db.session.commit()
-
-            ''' Study Version '''
-            version = version_data(cleaned)
-            study_version = Version(**version)
-            study_version.version_number = 1
-            study_version.study = study    
-            db.session.add(study_version) 
-            db.session.commit()
-            study_version.version_of_id = study_version.id
-            db.session.add(study_version)
-            db.session.commit()
+        study.publication_id = publication.id
+        study.species_id = species.id
+        db.session.add(study)
+        db.session.commit()
 
 
+        ''' Study Version '''
+        version = version_data(study_cleaned)
+        study_version = Version(**version)
+        study_version.version_number = 1
+        study_version.study = study    
+        db.session.add(study_version) 
+        db.session.commit()
+        study_version.version_of_id = study_version.id
+        db.session.add(study_version)
+        db.session.commit()
+
+    
     ''' Population '''
+    '''            '''
     invasive_status_study = InvasiveStatusStudy.query.filter_by(status_name=data["population_invasive_status_study_id"]).first()
     invasive_status_elsewhere = InvasiveStatusStudy.query.filter_by(status_name=data["population_invasive_status_elsewhere_id"]).first()
     ecoregion = Ecoregion.query.filter_by(ecoregion_code=data["population_ecoregion_id"]).first()
     continent = Continent.query.filter_by(continent_name=data["population_continent_id"]).first()
 
-    pop = Population.query.filter_by(population_name=data["population_name"], species_id=species.id, publication_id=publication.id).first()
+    
+    pop = Population.query.filter_by(population_name=data["population_name"], study_id=study.id).first()
 
     if pop == None:
-        dict_ = {'population_name' : data["population_name"],       
+        pop_dict = {'population_name' : data["population_name"],       
         'latitude' : data["population_latitude"],
         'lat_ns' : data["lat_ns"], 
         'lat_deg' : data["lat_deg"], 
@@ -504,78 +548,34 @@ def submit_new(data):
         'within_site_replication' : data['population_within_site_replication']
         }
 
-        cleaned = data_clean(dict_)
+        pop_cleaned = data_clean(pop_dict)
 
-        if not all(value == None for key, value in cleaned["kwargs"].items() if key not in ignore_keys):
-            pop = Population(**cleaned["kwargs"])
+        # if not all(value == None for key, value in pop_cleaned["kwargs"].items() if key not in ignore_keys) and matrix_present:
+        pop = Population(**pop_cleaned["kwargs"])
 
-            db.session.add(pop)
-            db.session.commit()
+        db.session.add(pop)
+        db.session.commit()
 
-            pop.species_id = species.id
-            pop.publication_id = publication.id if publication else None
-            pop.study_id = study.id if study else None
-            pop.species_author = data["species_author"]
+        pop.species_author = data["species_author"]
+        pop.study_id = study.id
 
-            db.session.add(pop)
-            db.session.commit()
+        db.session.add(pop)
+        db.session.commit()
 
-            ''' Population Version '''
-            version = version_data(cleaned)
-            population_version = Version(**version)
-            population_version.version_number = 1
-            population_version.population = pop    
-            db.session.add(population_version) 
-            db.session.commit()
-            population_version.version_of_id = population_version.id
-            db.session.add(population_version)
-            db.session.commit()
+        ''' Population Version '''
+        version = version_data(pop_cleaned)
+        population_version = Version(**version)
+        population_version.version_number = 1
+        population_version.population = pop    
+        db.session.add(population_version) 
+        db.session.commit()
+        population_version.version_of_id = population_version.id
+        db.session.add(population_version)
+        db.session.commit()
 
-    ''' Taxonomy '''
-    tax = Taxonomy.query.filter_by(species_id=species.id).first()
-    if tax == None:
-        dict_ = {'authority' : None, 
-        'tpl_version' : None, 
-        'infraspecies_accepted' : None,
-        'species_epithet_accepted' : None, 
-        'genus_accepted' : data["taxonomy_genus_accepted"],
-        'genus' : data["taxonomy_genus"], 
-        'family' : data["taxonomy_family"], 
-        'tax_order' : data["taxonomy_order"], 
-        'tax_class' : data["taxonomy_class"],
-        'phylum' : data["taxonomy_phylum"], 
-        'kingdom' : data["taxonomy_kingdom"], 
-        'col_check_date' : datetime.datetime.strptime(data["taxonomy_col_check_date"], "%d/%m/%Y").strftime("%Y-%m-%d") if data['taxonomy_col_check_date'] else None,
-        'col_check_ok' : coerce_boolean(data["taxonomy_col_check_ok"])}
-
-        cleaned = data_clean(dict_)
-
-        if not all(value == None for key, value in cleaned["kwargs"].items() if key not in ignore_keys):
-            tax = Taxonomy(**cleaned["kwargs"])
-
-            db.session.add(tax)
-            db.session.commit()
-
-            tax.species = species
-            tax.publication = publication if publication else None
-
-            db.session.add(tax)
-            db.session.commit()
-
-            ''' Taxonomy Version '''
-            version = version_data(cleaned)
-            taxonomy_version = Version(**version)
-            taxonomy_version.version_number = 1
-            taxonomy_version.taxonomy = tax    
-            db.session.add(taxonomy_version) 
-            db.session.commit()
-            taxonomy_version.version_of_id = taxonomy_version.id
-            db.session.add(taxonomy_version)
-            db.session.commit()
 
     ''' Matrix '''
-    treatment_string = data["matrix_treatment_id"]
-    
+    treatment_string = data["matrix_treatment_id"]    
 
     if treatment_string == 'NDY':
         treatment = 'NDY'
@@ -586,10 +586,9 @@ def submit_new(data):
         db.session.add(treatment)
         db.session.commit()
 
-    dict_ = {'treatment' : treatment,
+    matrix_dict = {'treatment' : treatment,
     'matrix_split' : data["matrix_split"],
     'matrix_composition' : MatrixComposition.query.filter_by(comp_name=data["matrix_composition_id"]).first(),
-    'periodicity' : data["matrix_periodicity"],
     'matrix_criteria_size' : data["matrix_criteria_size"],
     'matrix_criteria_ontogeny' : coerce_boolean(data["matrix_criteria_ontogeny"]),
     'matrix_criteria_age' : coerce_boolean(data["matrix_criteria_age"]),
@@ -624,59 +623,59 @@ def submit_new(data):
     'matrix_lambda' : calc_lambda(data["matrix_a_string"])
     }
 
-    cleaned = data_clean(dict_)
+    matrix_cleaned = data_clean(matrix_dict)
 
-    if not all(value == None for key, value in cleaned["kwargs"].items() if key not in ignore_keys):
-        matrix = Matrix(**cleaned["kwargs"])    
+    # check all data isn't null to ensure we *don't* add an empty row
+    # if not all(value == None for key, value in matrix_cleaned["kwargs"].items() if key not in ignore_keys):
+    matrix = Matrix(**matrix_cleaned["kwargs"])    
 
-        db.session.add(matrix)
+    db.session.add(matrix)
+    db.session.commit()
+
+    matrix.population_id = pop.id
+
+    db.session.add(matrix)
+    db.session.commit()
+    
+    ''' matrix Version '''
+    version = version_data(matrix_cleaned)
+    matrix_version = Version(**version)
+    matrix_version.version_number = 1
+    matrix_version.matrix = matrix    
+    db.session.add(matrix_version) 
+    db.session.commit()
+    matrix_version.version_of_id = matrix_version.id
+    db.session.add(matrix_version)
+    db.session.commit()
+
+    ''' Fixed '''
+
+    fixed = Fixed.query.filter_by(matrix=matrix).first()
+
+    if fixed == None:
+        fixed_dict = {'matrix' : matrix,
+        'census_timings' : CensusTiming.query.filter_by(census_name=data["fixed_census_timing_id"]).first(),
+        'seed_stage_error' : data["fixed_seed_stage_error"],
+        'smalls' : Small.query.filter_by(small_name=data["fixed_small_id"]).first()
+        }
+
+        fixed_cleaned = data_clean(fixed_dict)
+        fixed = Fixed(**fixed_cleaned["kwargs"])
+
+        db.session.add(fixed)
         db.session.commit()
 
-        matrix.population = pop if pop else None
-        matrix.study = study if study else None
-
-        matrix.uid = generate_uid(species, publication, pop, matrix)
-        db.session.add(matrix)
+        ''' fixed Version '''
+        version = version_data(fixed_cleaned)
+        fixed_version = Version(**version)
+        fixed_version.version_number = 1
+        fixed_version.fixed = fixed    
+        db.session.add(fixed_version) 
+        db.session.commit()
+        fixed_version.version_of_id = fixed_version.id
+        db.session.add(fixed_version)
         db.session.commit()
 
-        ''' matrix Version '''
-        version = version_data(cleaned)
-        matrix_version = Version(**version)
-        matrix_version.version_number = 1
-        matrix_version.matrix = matrix    
-        db.session.add(matrix_version) 
-        db.session.commit()
-        matrix_version.version_of_id = matrix_version.id
-        db.session.add(matrix_version)
-        db.session.commit()
-
-        ''' Fixed '''
-
-        fixed = Fixed.query.filter_by(matrix=matrix).first()
-
-        if fixed == None:
-            dict_ = {'matrix' : matrix,
-            'census_timings' : CensusTiming.query.filter_by(census_name=data["fixed_census_timing_id"]).first(),
-            'seed_stage_error' : data["fixed_seed_stage_error"],
-            'smalls' : Small.query.filter_by(small_name=data["fixed_small_id"]).first()
-            }
-
-            cleaned = data_clean(dict_)
-            fixed = Fixed(**cleaned["kwargs"])
-
-            db.session.add(fixed)
-            db.session.commit()
-
-            ''' fixed Version '''
-            version = version_data(cleaned)
-            fixed_version = Version(**version)
-            fixed_version.version_number = 1
-            fixed_version.fixed = fixed    
-            db.session.add(fixed_version) 
-            db.session.commit()
-            fixed_version.version_of_id = fixed_version.id
-            db.session.add(fixed_version)
-            db.session.commit()
 
 
 
