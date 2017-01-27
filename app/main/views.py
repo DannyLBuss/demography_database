@@ -181,6 +181,10 @@ def explorer(taxon_level,taxon):
 def contribute_data():
     return render_template('contribute_data.html')
 
+@main.route('/education')
+def education():
+    return render_template('about/education.html')
+
 @main.route('/news')
 def news():
     return render_template('about/news.html')
