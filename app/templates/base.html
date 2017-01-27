@@ -50,6 +50,7 @@ Demography Database
                         <li ><a href="{{ url_for('main.history') }}">History</a></li>
                         <li ><a href="{{ url_for('main.funding') }}">Funding bodies</a></li>
                         <li ><a href="{{ url_for('main.publications') }}">Publications</a></li>
+                        <li ><a href="{{ url_for('main.education') }}">Education</a>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -63,7 +64,7 @@ Demography Database
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Education<b class="caret"></b> </a>
                     <ul class="dropdown-menu">
-                        <li class = "disabled"><a href="#">What is a matrix model?</a></li>
+                        <li ><a href="{{ url_for('main.education') }}">What is a matrix model?</a></li>
                     </ul>
                 </li>
                 <li><a href="{{ url_for('main.meta_tables_json') }}">Meta Tables</a></li>
