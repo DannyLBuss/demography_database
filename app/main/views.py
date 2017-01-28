@@ -124,8 +124,50 @@ def publications_table():
 @main.route('/species/<int:id>/overview')
 # @login_required
 def species_page(id):
-    species = Species.query.filter_by(id=id).first_or_404()
-    return render_template('species_template.html',species = species)
+    #get species
+    species = Species.query.filter_by(id=id).filter_by(version_latest=1).first()
+    print(species) #check
+    
+    #get taxonomy
+    taxonomy = Taxonomy.query.filter_by(species_id=species.id).filter_by(version_latest=1).first()
+    print(taxonomy) #check
+    
+    #get traits
+    trait = Trait.query.filter_by(species_id=species.id).filter_by(version_latest=1).first()
+    print(trait) #check
+    
+    # querying studies returns a weird thing so I have to do this first
+    all_studies = Study.query.filter_by(species_id=species.id).filter_by(version_latest=1)
+    
+    # generate empty lists to store studies and populations
+    studies = []
+    publications = []
+    for study in all_studies:
+        studies.append(study)
+        publications.append(Publication.query.filter_by(id=study.publication_id).filter_by(version_latest=1).first())
+    # remove duplicates in publications
+    publications = list(set(publications))
+    
+    print(studies) # check
+    print(publications) #check
+    
+    #get populations
+    populations = []
+    for study in studies:
+        populations_temp = (Population.query.filter_by(study_id=study.id).filter_by(version_latest=1))
+        for populations_i in populations_temp:
+            populations.append(populations_i)
+    print(populations)
+    
+    #get matrices
+    matrices = []
+    for population in populations:
+        matrices_temp = Matrix.query.filter_by(population_id=population.id).filter_by(version_latest=1)
+        for matrices_i in matrices_temp:
+            matrices.append(matrices_i)
+    print(matrices)
+    
+    return render_template('species_template.html',species = species, taxonomy = taxonomy, trait = trait, publications = publications, studies = studies, populations = populations, matrices = matrices)
 
 # species overview TEST page
 @main.route('/species/<int:id>/testoverview')
