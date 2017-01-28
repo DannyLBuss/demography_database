@@ -1,8 +1,8 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
 <div class="page-header">
     <!-- BREADCRUMB -->
-    <div class="breadcrumb"> {% if species.taxonomies %} {% for taxonomy in species.taxonomies %}
-        <p>You are at: <a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> > <i>{{species.species_accepted}}</i></p> {% endfor %} {% else %}
+    <div class="breadcrumb"> {% if taxonomy %}
+        <p>You are at: <a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> > <i>{{species.species_accepted}}</i></p> {% else %}
         <p>No taxonomy</p> {% endif %} </div> 
     
     <!-- compadrino actions for top part of page -->
@@ -28,8 +28,11 @@
     
     
     <!-- page header -->
-    <h1><i>{{species.species_accepted}}</i> <small> {{species.id}}</small></h1> {% if species.species_common %}
-    <p><b>Common name(s):</b> {{species.species_common}}</p> {% endif %}
+    <h1><i>{{species.species_accepted}}</i> <small> {{species.id}}</small> <img src="../../static/statuses/{{species.version.statuses.id}}.png"> {{species.version}} </h1> 
+    {% if species.species_common %}
+    <p><b>Common name(s):</b> 
+        {{species.species_common}}</p>
+    {% endif %}
 
 <p> iucn_status_id: {{ iucn_status_id }}</p>
 <p>esa_status_id: {{ esa_status_id }}</p>
@@ -60,8 +63,8 @@
     </div>
     
     <!-- Right side information with taxonom and traits -->
-    <div class="col-sm-4"> {% if species.taxonomies %} {% for taxonomy in species.taxonomies %}
-        <h3>Taxonomy <small> {{taxonomy.id}}</small></h3>
+    <div class="col-sm-4"> {% if taxonomy %}
+        <h3>Taxonomy <small> {{taxonomy.id}}</small>  {{taxonomy.version}} </h3>
         <table style="width:100%" class="table">
             <tbody>
                 <tr>
@@ -103,11 +106,11 @@
                 </tr>
                 {% endif %}
             </tbody>
-        </table> {% endfor %} {% else %}
+        </table> {% else %}
         <h3>Taxonomy</h3>
         <div class="info_box_empty">
-            <p>Not entered</p> <a href="../../taxonomy/new/species={{species.id}}">Add taxonomic information</a> </div> {% endif %} {% if species.traits %} {% for trait in species.traits %}
-        <h3>Traits <small> {{trait.id}}</small></h3>
+            <p>Not entered</p> <a href="../../taxonomy/new/species={{species.id}}">Add taxonomic information</a> </div> {% endif %} {% if trait %}
+        <h3>Traits <small> {{trait.id}}</small> {{trait.version}}</h3>
         <table style="width:100%" class="table">
             <tr>
                 <td> <strong>Growth type: </strong> </td>
@@ -136,7 +139,7 @@
                 <td> {{ trait.spandex_growth_type_id.spandex_growth_types }} </td>
             </tr>
             {% endif %}
-        </table> {% endfor %} {% else %}
+        </table> {% else %}
         <h3>Traits</h3>
         <div class="info_box_empty">
             <p>Not entered</p>
@@ -169,17 +172,18 @@
                     <td>
                         <h4>Filter</h4></td>
                 </tr>
-            </thead> {% if species.populations %}
-            <tbody> {% for population in species.populations %}
-                <tr class="remove_duplicates publication_row" style="border-left-color:{{ population.publication.colour }};">
-                    <td> <a href="../../publication/{{ population.publication.id }}">{{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.name }}" in <i>{{ population.publication.pub_title }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}.  </a> <small> {{population.publication.id}}</small> 
-                        <p><b>Purposes:</b> {% for purp in population.publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}</p>
-                        {% if population.publication.additional_source_string %}<p><b>Additional sources:</b> {{ population.publication.additional_source_string }}</p>{% endif %}
-                        <p><b>Date Digitised:</b> {{ population.publication.date_digitised.strftime('%Y-%m-%d') }}</p>
+            </thead> {% if publications %}
+            <tbody> {% for publication in publications %}
+                
+                <tr class="remove_duplicates publication_row" style="border-left-color:{{ publication.colour }};">
+                    <td> <a href="../../publication/{{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.name }}" in <i>{{ publication.pub_title }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> <small> {{publication.id}}</small> 
+                        <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}</p>
+                        {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}</p>{% endif %}
+                        <p><b>Date Digitised:</b> {{ publication.date_digitised.strftime('%Y-%m-%d') }}</p>
                     </td>
-                    <td> {% if population.publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ population.publication.DOI_ISBN }}">Go to source</a>{% endif %}</td>
+                    <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source</a>{% endif %}</td>
                     <td>
-                        <input type="checkbox" class="filter" data-value="id{{population.publication.id}}"> </td>
+                        <input type="checkbox" class="filter" data-value="id{{publication.id}}"> </td>
                 </tr> {% endfor %} </tbody>
             {% else %}
             <tbody>
@@ -193,16 +197,19 @@
                 </tr>
             </tbody> {% endif %} </table>
     </div> 
+
     
     <!-- populations + matrices section -->
-    
-    {%if species.populations%}
+    {%if populations%}
     <div class="list"> 
         
         <!-- looping through populations -->
-        {% for population in species.populations %}
-        <div class="population_box {{ population.publication.colour }}" style="border-left-color:{{ population.publication.colour }};">
-            <div class="population" data-value="id{{population.publication.id}}"></div> 
+        {% for study in studies %}
+        {{ study.id }}
+        {% for population in populations %}
+        {% if population.study_id == study.id %}
+        <div class="population_box {{ study.publication.colour }}" style="border-left-color:{{ study.publication.colour }};">
+            <div class="population" data-value="id{{study.publication.id}}"></div> 
             
             <!-- compadrino actions box -->
             {% if current_user.is_authenticated %}
@@ -220,7 +227,6 @@
             <!-- population information -->
             <h4><strong>Population Name: </strong>{{ population.name }} <small> {{ population.id }}</small> </h4>
             <ul>
-                <li>Studied for {{ population.study.study_duration }} year(s) from {{ population.study.study_start }} to {{ population.study.study_end }} <small> {{ population.study.id }}</small></li>
                 <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
                 <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }} 
                     {% if population.altitude %}
@@ -240,7 +246,8 @@
                 <p style="text-align: center;">Click on the sections below to view individual matrix models</p> 
                 
                 <!-- looping through matrices -->
-                {% for matrix in population.matrices %}
+                {% for matrix in matrices %}
+                {% if matrix.population_id == population.id %}
                 <div class="panel-group">
                     <div class="panel panel-default">
                         <div class="panel-heading" data-toggle="collapse" href="#matrix_{{matrix.id}}2">
@@ -324,8 +331,8 @@
                             </li>
                         </div>
                     </div>
-                </div> {% endfor %} </div>
-        </div> {% endfor %} </div> 
+                </div> {% endif %} {% endfor %}  </div>
+        </div> {% endif %} {% endfor %} {% endfor %} </div> 
     
     <!-- what to show if there are no populations -->
     {% else %}
@@ -333,8 +340,8 @@
         <p>There are no populations attatched to this species, new populations are added via the publication overview:</p>
         <p><a href="{{ url_for('main.publications_table') }}">Search existing publications</a></p>
         <p><a href="{{ url_for('main.new_publication_form') }}">Add new publication</a></p>
-    </div> {% endif %} 
-
+    </div> {% endif %}
+    
 </div> {% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }}
 <!-- JAVASCRIPT -->
 <script>
@@ -462,8 +469,8 @@
 </script>
 <script>
     // change colour or left hand border of populations
-    {% for population in species.populations %}
-    $('.{{ population.publication.id}}p').css('border-left-color', stringToColour("{{ population.publication.id}}p")); 
+    {% for publication in publications %}
+    $('.{{ publication.id}}p').css('border-left-color', stringToColour("{{ publication.id}}p")); 
      {% endfor %}
 </script>
 <script>
