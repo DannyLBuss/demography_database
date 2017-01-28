@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+
+<div class="page-header">
+<h1>
+An Introduction to Population Projection Matrices
+</h1>
+</div>
+<h3> Population Projection Matrices (PPMs) </h3>
+	<h4><i> by Iain Stott </i></h4>
+		<p>Population projection matrices (PPMs) are one of the most widely-used modelling tools in population ecology. Many projects and studies have used PPM models to inform on population management strategies for conservation (<a href="http://www.sciencedirect.com/science/article/pii/S000632070100146X?np=y" target="_blank">Esparza-Olguin et al. 2002 Biol. Conserv. 103 349-359</a>; <a href="http://onlinelibrary.wiley.com/doi/10.1890/05-1931/full" target="_blank"> Linares et al. 2007 Ecology 88 918-928</a>), pest control and invasive species (<a href="http://onlinelibrary.wiley.com/doi/10.1890/06-1216.1/full" target="_blank">Dudas, Dower and Anholt 2007 Ecology 88 2084-2093</a>) and harvesting (<a href="http://www.sciencedirect.com/science/article/pii/S0304380099000393" target="_blank">Cropper and DiResta 1999 Ecol. Model. 118 1-15</a>), amongst other applications. The main thing that differentiates matrix models from earlier population models is the ability to incorporate vital rates that are heterogeneous across the life cycle. Earlier models (Lotka-Volterra models being the classic example) assumed that each individual in the population was equal to every other in their contribution, whereas we know this is not the case. For example, juveniles have differing reproductive contributions to adults, survival may depend on age or size, growth rate may depend on geographic location or genotype, and so on.</p>
+
+<h3> Life Cycles and Population Projection Matrices </h3>
+	<h4><i> by Iain Stott </i></h4>
+		<p>At the core of the PPM model is the life cycle. This describes how each stage of life is connected to each other stage. The simplest example of a life cycle is one structured by age. Each individual grows to the next age class every year, and adults give birth to young:
+			<br><br><i> image coming soon </i><br></p>
+				<!--img src="/../../static/images/lifecycle_example.png" width= "500" height="50" alt="hi" /> -->
+
+		<p>However, many organisms do not conform to a rigid age-structured life. For many, there are distinct stages of life that may be independent of age (such as for insects with a larva-pupa-adult life cycle) and for others, their survival and reproduction may depend on other aspects of their biology (for example, plant fecundity is often dictated by size rather than age). In such cases, a stage-structured life cycle may be more appropriate. In a stage-structured life cycle, movement between life stages is more complex, in addition to growing and reproducing, individuals may stay in their current stage class (stasis), skip stage classes (progression) or regress back through the life cycle (regression):
+			<br><br><i> image coming soon </i><br></p>
+
+				<!--img src="/../../static/images/lifecycle_example_2.png" width= "500" height="50" alt="hi" /> -->
+
+		<p>Numbers can be attached to the arrows in such life cycles: these represent the contributions that each stage class makes to each other stage class. For example, stage 4 in the above cycle might have a stasis of 0.2, a growth of 0.4, a regression of 0.1 and a fecundity of 2. This means that on average, in a given year, 20% of individuals stay as a stage 4 (e.g. if the organism was a plant and the life cycle is size-based, they do not get any smaller or larger) 40% become a stage 5 (e.g. they grow larger), 10% become a stage 3 (e.g. they get smaller, perhaps because of herbivory) and 2 seedlings germinate and survive and are recruited to the population.
+			<br>
+		This is where the PPM comes in: to represent these life cycle graphs in a mathematical format, we present the life cycle as a matrix. Each column represents the current stage class an individual may be in, and each row represents the stage class that those individuals may move into. The vital rates are placed in their corresponding positions in the matrix:
+			<br><br><i> image coming soon </i><br></p>
+
+				<!--img src="/../../static/images/lifecycle_example_3.png" width= "1000" height="500" alt="hi" /> -->
+
+		<p>The columns represent the current stage and the rows represent the stage in the next time interval. So, G(1)=growth of stage 1 into stage 2 with probability 0.06. S(4)=Stasis of stage 4 with probability 0.95. F(6)=fecundity of stage 6, contributing on average 2.63 offspring to the subsequent year. This matrix is in fact for a palm, Iriartea deltoidea (<a href="http://www.jstor.org/stable/2388974" target="_blank">Pinard 1993 Biotropica 25 2-14</a>). The earliest PPM models were age-structured, called Leslie matrices after P. H. Leslie, who introduced them to ecology. Stage-structured models are often called Lefkovitch matrices, after L. P. Lefkovitch. These broad classifications are often made more specific nowadays, according to whether, in addition to the ubiquitous growth and fecundity rates, they include stasis, progression and/or regression through the life cycle (<a href="http://onlinelibrary.wiley.com/doi/10.1890/08-1188.1/full" target="_blank">Carslake 2009 Ecology 90 3258-3267</a>).</p>
+
+<h3>Integral Projection Models</h3>
+	<h4><i> by Iain Stott and Danny Buss </i></h4>
+		<p>A recent development in matrix-based modelling is the Integral Projection Model (IPM), which better describes the life cycle of organisms whose vital rates are continuous functions of their biology (e.g. fecundity and survival as a continuous function of organism size). These provide a greater resolution of detail in prediction of population dynamics of such organisms, and much of their analysis has its roots in the PPM modelling literature. See (<a href="http://www.jstor.org/stable/10.1086/499438" target="_blank">Ellner and Rees 2006 Am. Nat. 167 410-428</a>) for more details.<br>
+		TBC...
+			<br><br><i> image coming soon </i><br></p>
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

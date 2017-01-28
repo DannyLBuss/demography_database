@@ -221,6 +221,13 @@ footer {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
+.info_box_green{
+    background-color: #ecf5de;
+    padding: 1em;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
 .info_box_transparent{
     background-color: hsla(0, 0%, 100%, 0.68);
     padding: 0.5em;

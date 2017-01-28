@@ -185,6 +185,10 @@ def contribute_data():
 def education():
     return render_template('about/education.html')
 
+@main.route('/education_ppm')
+def education_ppm():
+    return render_template('education_pages/education_matrix_modelling.html')
+
 @main.route('/news')
 def news():
     return render_template('about/news.html')
