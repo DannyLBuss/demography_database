@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database - Users {% endblock %}
+
+{% block page_content %}
+
+<div class="page-header">
+    <h1>Database users</h1>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>Confirmed</th>
+            <th>Institute</th>
+            <th>Institute confirmed</th>
+            <th>Member since</th>
+            <th>Last online</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.role }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.confirmed }}</td>
+            <td>{{ user.institute }}</td>
+            <td>{{ user.institute_confirmed }}</td>
+            <td>{{ user.member_since.strftime('%Y-%m-%d') }}</td>
+            <td>{{ user.last_seen.strftime('%Y-%m-%d') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

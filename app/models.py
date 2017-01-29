@@ -16,7 +16,7 @@ from sqlalchemy import or_
 from flask_sqlalchemy import SQLAlchemy, BaseQuery
 
 class VersionQuery(BaseQuery):
-    def all(self):
+    def all_versions(self): #was overwriting the original all() function
         return [s for s in self.filter_by(version_ok=1)]
     def original(self):
         return [s for s in self.filter_by(version_original=1)]
