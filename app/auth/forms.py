@@ -1,8 +1,9 @@
 from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
-from ..models import User
+from ..models import User, Role, Institute
 
 
 class LoginForm(Form):
@@ -20,6 +21,9 @@ class RegistrationForm(Form):
         Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
                                           'Usernames must have only letters, '
                                           'numbers, dots or underscores')])
+    name = StringField('Full name', validators=[Required()])
+    role = QuerySelectField('Role',query_factory=lambda: Role.query.all(), get_pk=lambda a: a.id,get_label=lambda a:a.name)
+    institute = QuerySelectField('Institution',query_factory=lambda: Institute.query.all(), get_pk=lambda a: a.id,get_label=lambda a:a.institution_name, validators=[Required()])
     password = PasswordField('Password', validators=[
         Required(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[Required()])

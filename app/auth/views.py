@@ -67,7 +67,10 @@ def register():
     if form.validate_on_submit():
         user = User(email=form.email.data,
                     username=form.username.data,
-                    password=form.password.data)
+                    password=form.password.data,
+                    name = form.name.data,
+                    role = form.role.data,
+                    institute = form.institute.data)
 
         if account_type == 'developer':
             user.role = Role.query.filter_by(name='Developer').first()
