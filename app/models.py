@@ -3075,7 +3075,7 @@ class Matrix(db.Model):
     class_author = db.Column(db.Text())
     class_number = db.Column(db.Text())
 
-    vectors_includes_na = db.Column(db.Boolean())
+    vectors_includes_na = db.Column(db.Text())
     matrix_lambda = db.Column(db.Float())
     
     independent = db.Column(db.Boolean())
