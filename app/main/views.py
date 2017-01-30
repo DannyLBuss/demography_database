@@ -41,10 +41,10 @@ def server_shutdown():
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    species = Species.query.filter_by(version_latest=1)
-    images = [""]
-for s in species[0:5]:
-    images = images.append(str(s.image_path))
+    #species = Species.query.filter_by(version_latest=1)
+    #images = []
+    #for s in species[0:5]:
+    #    images = images.append(str(s.image_path))
     return render_template('index.html')
 
 
