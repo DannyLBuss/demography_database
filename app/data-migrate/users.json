@@ -8,14 +8,61 @@
             "confirmed" : 1, 
             "institute_id" : 2, 
             "institute_confirmed" : 1
-            },
-            {
+            },{
+            "email" : "r.salguero@sheffield.ac.uk",
+            "username" : "rob_salguero_gomez",
+            "role_id" : 2,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : #,
+            "institute_confirmed" : 1
+            },{
             "email" : "pw355@exeter.ac.uk",
             "username" : "phil_wilson",
             "role_id" : 2,
             "password" : "password",
             "confirmed" : 1,
             "institute_id" : 2,
+            "institute_confirmed" : 1
+            },{
+            "email" : "lachmann@demogr.mpg.de",
+            "username" : "arne_lachmann",
+            "role_id" : 2,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : #,
+            "institute_confirmed" : 1
+            },{
+            "email" : "sschneider@demogr.mpg.de",
+            "username" : "sandra_schneider",
+            "role_id" : 2,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : #,
+            "institute_confirmed" : 1
+            },{
+            "email" : "healyke@tcd.ie",
+            "username" : "kevin_healy",
+            "role_id" : 2,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : #,
+            "institute_confirmed" : 1
+            },{
+            "email" : "alfinn@tcd.ie",
+            "username" : "alain_alfinn",
+            "role_id" : 2,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : #,
+            "institute_confirmed" : 1
+            },{
+            "email" : "wille@demogr.mpg.de",
+            "username" : "julia_wille",
+            "role_id" : 2,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : #,
             "institute_confirmed" : 1}],
 	    "Institute": [{
             "institution_name": " Max Plank Institute of Demographic Research",
