@@ -2075,7 +2075,7 @@ class Species(db.Model):
 
         return s
 
-    def save_admin(self):
+    def save_admin(self, current_user):
         species = {
             'species_accepted' : self.species_accepted,
             'species_common' : self.species_common,
@@ -2104,11 +2104,12 @@ class Species(db.Model):
             'original_version_id' : self.version.original_version[0].id,
             'checked' : 1,
             'status_id' : status.id,
-            'checked_count' : 1,
-            'version_user_id' : 1,
+            'checked_count' : self.version.checked_count + 1 if self.version.checked_count else 1,
+            'version_user_id' : current_user.id,
             'database_id' : 1,
             'species_id' : s.id
         }
+
         v = Version(**version)
         db.session.add(v)
         db.session.commit()
@@ -2122,12 +2123,15 @@ class Species(db.Model):
 
         return s
 
-    # def verify(self, status_colour):
+    # def verify(self, status_colour, current_user):
     #     status = Status.query.filter_by(status_name=status_colour).first()
 
     #     self.version.status_id = status.id
     #     self.version.checked = True
     #     self.version.checked_count = self.version.checked_count + 1 if self.version.checked_count else 1
+    #     self.version.version_user_id = current_user.id
+
+    #     this_version = [self.version.version_number]
 
     #     if status.status_name == 'Green':
     #         self.version_latest = 1
@@ -2138,15 +2142,18 @@ class Species(db.Model):
     #             db.session.add(child)
     #             db.session.commit()
         
-    #     if status.status_name == 'Amber':
-    #         self.version_latest = 0
-    #         self.version_ok = 0
-    #         original_version_children = self.version.original_version[0].child_versions
-    #         for child in original_version_children:
-    #             if child.version.statuses.status_name == "Green":                    
-    #             child.version_latest = 0
-    #             db.session.add(child)
-    #             db.session.commit()
+        # if status.status_name == 'Amber':
+        #     self.version_latest = 0
+        #     self.version_ok = 0
+        #     original_version_children = self.version.original_version[0].child_versions
+        #     original_species_children = [s.species for s in self.version.original_version[0].child_versions]
+        #     green = Status.query.filter_by(status_name='Green').first()
+        #     this_version = [v.version_number]
+        #     green_statuses = [child.version_number for child in original_version_children if child.statuses is green and child.version_number not in this_version]
+        #     closest_green_status = min(green_statuses, key=lambda x:abs(x-this_version[0]))
+        #     closest_id = [child for child in original_version_children if child.version_number is closest_green_status][0].species_id
+        #     species = Species.query.get(closest_id)
+        #     species.version_latest = 1
  
     @staticmethod
     def migrate():
