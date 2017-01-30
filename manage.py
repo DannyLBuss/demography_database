@@ -414,7 +414,7 @@ def submit_new(data):
         purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
 
         purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_weed_id"]
-        database_source = Institute.query.filter_by(instutution_name=data["study_database_source"]).first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
+        database_source = Institute.query.filter_by(institution_name=data["study_database_source"]).first()# if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
         
         study_dict = {'study_duration' : data["study_duration"],
         'study_start' : data["study_start"], 
