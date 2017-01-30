@@ -3,7 +3,8 @@
           "User": [{
             "email" : "lifecycle@exeter.ac.uk",
             "username" : "admin",
-            "role_id" : 2,
+            "name" : "admin",
+            "role_id" : 1,
             "password" : "toaster",
             "confirmed" : 1, 
             "institute_id" : 2, 
@@ -11,58 +12,218 @@
             },{
             "email" : "r.salguero@sheffield.ac.uk",
             "username" : "rob_salguero_gomez",
-            "role_id" : 2,
+            "name" : "Rob",
+            "role_id" : 6,
             "password" : "password",
             "confirmed" : 1,
-            "institute_id" : #,
+            "institute_id" : 4,
             "institute_confirmed" : 1
             },{
-            "email" : "pw355@exeter.ac.uk",
-            "username" : "phil_wilson",
-            "role_id" : 2,
+            "email" : "jones@biology.sdu.dk",
+            "username" : "owen_jones",
+            "name" : "Owen",
+            "role_id" : 6,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 6,
+            "institute_confirmed" : 1
+            },{
+            "email" : "d.j.hodgson@exeter.ac.uk",
+            "username" : "dave_hodgson",
+            "name" : "Dave",
+            "role_id" : 6,
             "password" : "password",
             "confirmed" : 1,
             "institute_id" : 2,
             "institute_confirmed" : 1
             },{
-            "email" : "lachmann@demogr.mpg.de",
-            "username" : "arne_lachmann",
+            "email" : "d.l.buss@exeter.ac.uk",
+            "username" : "danny_buss",
+            "name" : "Danny",
+            "role_id" : 1,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 2,
+            "institute_confirmed" : 1
+            },{
+            "email" : "srolph1@sheffield.ac.uk",
+            "username" : "simon_rolph",
+            "name" : "Simon",
+            "role_id" : 1,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 4,
+            "institute_confirmed" : 1
+            },{
+            "email" : "pw355@exeter.ac.uk",
+            "username" : "phil_wilson",
+            "name" : "Phil",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 2,
+            "institute_confirmed" : 1
+            },{
+            "email" : "sommer@demogr.mpg.de",
+            "username" : "veronika_sommer",
+            "name" : "Veronika",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 1,
+            "institute_confirmed" : 1
+            },{
+            "email" : "france@compadrefake.ac.uk",
+            "username" : "france_mpidr",
+            "name" : "france",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 1,
+            "institute_confirmed" : 1
+            },{
+            "email" : "jens@compadrefake.ac.uk",
+            "username" : "jens_mpidr",
+            "name" : "jens",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 1,
+            "institute_confirmed" : 1
+            },{
+            "email" : "claudia@compadrefake.ac.uk",
+            "username" : "claudia_mpidr",
+            "name" : "claudia",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 1,
+            "institute_confirmed" : 1
+            },{
+            "email" : "tara@compadrefake.ac.uk",
+            "username" : "tara_mpidr",
+            "name" : "tara",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 1,
+            "institute_confirmed" : 1
+            },{
+            "email" : "christoph@compadrefake.ac.uk",
+            "username" : "christoph_mpidr",
+            "name" : "christoph",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 1,
+            "institute_confirmed" : 1
+            },{
+            "email" : "anne@compadrefake.ac.uk",
+            "username" : "anne_mpidr",
+            "name" : "anne",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 1,
+            "institute_confirmed" : 1
+            },{
+            "email" : "erik@compadrefake.ac.uk",
+            "username" : "erik_brinks",
+            "name" : "erik",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 11,
+            "institute_confirmed" : 1
+            },{
+            "email" : "",
+            "username" : "",
+            "name" : "",
             "role_id" : 2,
             "password" : "password",
             "confirmed" : 1,
             "institute_id" : #,
+            "institute_confirmed" : 1
+            },{
+            "email" : "",
+            "username" : "",
+            "name" : "",
+            "role_id" : 2,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : #,
+            "institute_confirmed" : 1
+            },{
+            "email" : "voigt@demogr.mpg.de",
+            "username" : "jakob_voigt",
+            "name" : "jakob",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 1,
+            "institute_confirmed" : 1
+            },{
+            "email" : "pmcintern@lpzoo.org",
+            "username" : "christina_lpz",
+            "name" : "christina",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 7,
+            "institute_confirmed" : 1
+            },{
+            "email" : "meissner@demogr.mpg.de",
+            "username" : "janek_meissner",
+            "name" : "janek",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 1,
+            "institute_confirmed" : 1
+            },{
+            "email" : "lachmann@demogr.mpg.de",
+            "username" : "arne_lachmann",
+            "name" : "Arne",
+            "role_id" : 3,
+            "password" : "password",
+            "confirmed" : 1,
+            "institute_id" : 1,
             "institute_confirmed" : 1
             },{
             "email" : "sschneider@demogr.mpg.de",
             "username" : "sandra_schneider",
-            "role_id" : 2,
+            "name" : "Sandra",
+            "role_id" : 4,
             "password" : "password",
             "confirmed" : 1,
-            "institute_id" : #,
+            "institute_id" : 1,
             "institute_confirmed" : 1
             },{
             "email" : "healyke@tcd.ie",
             "username" : "kevin_healy",
-            "role_id" : 2,
+            "name" : "Kevin",
+            "role_id" : 4,
             "password" : "password",
             "confirmed" : 1,
-            "institute_id" : #,
+            "institute_id" : 3,
             "institute_confirmed" : 1
             },{
             "email" : "alfinn@tcd.ie",
             "username" : "alain_alfinn",
-            "role_id" : 2,
+            "name" : "Alain",
+            "role_id" : 3,
             "password" : "password",
             "confirmed" : 1,
-            "institute_id" : #,
+            "institute_id" : 3,
             "institute_confirmed" : 1
             },{
             "email" : "wille@demogr.mpg.de",
             "username" : "julia_wille",
-            "role_id" : 2,
+            "name" : "Juia",
+            "role_id" : 3,
             "password" : "password",
             "confirmed" : 1,
-            "institute_id" : #,
+            "institute_id" : 1,
             "institute_confirmed" : 1}],
 	    "Institute": [{
             "institution_name": " Max Plank Institute of Demographic Research",
