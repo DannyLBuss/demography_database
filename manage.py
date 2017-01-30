@@ -271,7 +271,7 @@ def submit_new(data):
         publication.colour = gen_hex_code()
         db.session.add(publication_version) 
         db.session.commit()  
-        publication_version.version_of_id = publication_version.id
+        publication_version.original_version_id = publication_version.id
         db.session.add(publication_version)
         db.session.commit()
     
@@ -300,7 +300,7 @@ def submit_new(data):
             author_contact_version.author_contact = author_contact
             db.session.add(author_contact_version) 
             db.session.commit()  
-            author_contact_version.version_of_id = author_contact_version.id
+            author_contact_version.original_version_id = author_contact_version.id
             db.session.add(author_contact_version)
             db.session.commit()
     
@@ -332,7 +332,7 @@ def submit_new(data):
         species_version.species = species
         db.session.add(species_version) 
         db.session.commit()  
-        species_version.version_of_id = species_version.id
+        species_version.original_version_id = species_version.id
         db.session.add(species_version)
         db.session.commit()
 
@@ -365,7 +365,7 @@ def submit_new(data):
         trait_version.trait = trait
         db.session.add(trait_version) 
         db.session.commit()  
-        trait_version.version_of_id = trait_version.id
+        trait_version.original_version_id = trait_version.id
         db.session.add(trait_version)
         db.session.commit()
 
@@ -403,7 +403,7 @@ def submit_new(data):
         taxonomy_version.taxonomy = tax    
         db.session.add(taxonomy_version) 
         db.session.commit()
-        taxonomy_version.version_of_id = taxonomy_version.id
+        taxonomy_version.original_version_id = taxonomy_version.id
         db.session.add(taxonomy_version)
         db.session.commit()
 
@@ -443,7 +443,7 @@ def submit_new(data):
         study_version.study = study    
         db.session.add(study_version) 
         db.session.commit()
-        study_version.version_of_id = study_version.id
+        study_version.original_version_id = study_version.id
         db.session.add(study_version)
         db.session.commit()
 
@@ -503,7 +503,7 @@ def submit_new(data):
         population_version.population = pop    
         db.session.add(population_version) 
         db.session.commit()
-        population_version.version_of_id = population_version.id
+        population_version.original_version_id = population_version.id
         db.session.add(population_version)
         db.session.commit()
 
@@ -577,7 +577,7 @@ def submit_new(data):
     matrix_version.matrix = matrix    
     db.session.add(matrix_version) 
     db.session.commit()
-    matrix_version.version_of_id = matrix_version.id
+    matrix_version.original_version_id = matrix_version.id
     db.session.add(matrix_version)
     db.session.commit()
 
@@ -605,7 +605,7 @@ def submit_new(data):
         fixed_version.fixed = fixed    
         db.session.add(fixed_version) 
         db.session.commit()
-        fixed_version.version_of_id = fixed_version.id
+        fixed_version.original_version_id = fixed_version.id
         db.session.add(fixed_version)
         db.session.commit()
 
