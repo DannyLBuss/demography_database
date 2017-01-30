@@ -2031,7 +2031,7 @@ class Species(db.Model):
     @staticmethod
     def find_version(original):
         original = original[0]
-        last = Version.query.filter_by(version_of_id=original.id).order_by(Version.version_number.desc()).first()
+        last = Version.query.filter_by(original_version_id=original.id).order_by(Version.version_number.desc()).first()
         return last.version_number + 1
 
     def save(self):
@@ -2058,9 +2058,11 @@ class Species(db.Model):
 
         # if version exists...
         status = Status.query.filter_by(status_name="Amber").first()
+
+        original_version = self.version.original_version
         version = {
-            'version_number' : self.find_version(self.version.original_version),
-            'version_of_id' : self.version.original_version[0].id,
+            'version_number' : self.find_version(original_version),
+            'original_version_id' : self.version.original_version[0].id,
             'checked' : 0,
             'status_id' : status.id,
             'checked_count' : 0,
@@ -2073,6 +2075,59 @@ class Species(db.Model):
         db.session.commit()
 
         return s
+
+    def save_admin(self):
+        species = {
+            'species_accepted' : self.species_accepted,
+            'species_common' : self.species_common,
+            'iucn_status_id' : self.iucn_status_id,
+            'esa_status_id' : self.esa_status_id,
+            'species_gisd_status' : self.species_gisd_status,
+            'invasive_status' : self.invasive_status,
+            'gbif_taxon_key' : self.gbif_taxon_key,
+            'species_iucn_taxonid' : self.species_iucn_taxonid,
+            'species_iucn_population_assessed' : self.species_iucn_population_assessed,
+            'image_path' : self.image_path,
+            'image_path2' : self.image_path2,
+            'version_latest' : 1,
+            'version_original' : 1,
+            'version_ok' : 1
+        }
+
+        s = Species(**species)
+        db.session.add(s)
+        db.session.commit()
+
+        status = Status.query.filter_by(status_name="Green").first()
+        original_version = self.version.original_version
+
+        version = {
+            'version_number' : self.find_version(original_version),
+            'original_version_id' : self.version.original_version[0].id,
+            'checked' : 1,
+            'status_id' : status.id,
+            'checked_count' : 1,
+            'version_user_id' : 1,
+            'database_id' : 1,
+            'species_id' : s.id
+        }
+        v = Version(**version)
+        db.session.add(v)
+        db.session.commit()
+
+        original_version_children = self.version.original_version[0].child_versions
+
+        for child in original_version_children:
+            child.version_latest = 0
+            child.version_original = 0
+            child.version_ok = 0
+            db.session.add(child)
+            db.session.commit()
+
+        return s
+
+    def verify(status_colour):
+        return
 
     @staticmethod
     def migrate():
@@ -3304,15 +3359,12 @@ class Version(db.Model):
     version_number = db.Column(db.Integer(), default=0)
 
     #version of is the ID of the previous version, so each version can refer back to it
-    version_of_id = db.Column(db.Integer, db.ForeignKey('versions.id',ondelete='CASCADE')) 
+    original_version_id = db.Column(db.Integer, db.ForeignKey('versions.id', ondelete='CASCADE')) 
     version_date_added = db.Column(db.Date())
     version_timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # This is as if treating as a whole row, but we are trying to get away from that
-    version_uid = db.Column(db.Text())
-    
     # If this is the original version, it will have other versions
-    versions = db.relationship("Version", backref="original_version", remote_side="Version.id", uselist=True)
+    original_version = db.relationship("Version", backref="child_versions", remote_side="Version.id", uselist=True)
     checked = db.Column(db.Boolean())
     
     status_id = db.Column(db.Integer, db.ForeignKey('statuses.id',ondelete='CASCADE'))
