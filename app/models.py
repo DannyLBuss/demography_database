@@ -2048,7 +2048,6 @@ class Species(db.Model):
             'image_path' : self.image_path,
             'image_path2' : self.image_path2,
             'version_latest' : 0,
-            'version_original' : 0,
             'version_ok' : 0
         }
 
@@ -2090,7 +2089,6 @@ class Species(db.Model):
             'image_path' : self.image_path,
             'image_path2' : self.image_path2,
             'version_latest' : 1,
-            'version_original' : 1,
             'version_ok' : 1
         }
 
@@ -2119,16 +2117,37 @@ class Species(db.Model):
 
         for child in original_version_children:
             child.version_latest = 0
-            child.version_original = 0
-            child.version_ok = 0
             db.session.add(child)
             db.session.commit()
 
         return s
 
-    def verify(status_colour):
-        return
+    def verify(self, status_colour):
+        status = Status.query.filter_by(status_name=status_colour).first()
 
+        self.version.status_id = status.id
+        self.version.checked = True
+        self.version.checked_count = self.version.checked_count + 1 if self.version.checked_count else 1
+
+        if status.status_name == 'Green':
+            self.version_latest = 1
+            self.version_ok = 1
+            original_version_children = self.version.original_version[0].child_versions
+            for child in original_version_children:
+                child.version_latest = 0
+                db.session.add(child)
+                db.session.commit()
+        
+        if status.status_name == 'Amber':
+            self.version_latest = 0
+            self.version_ok = 0
+            original_version_children = self.version.original_version[0].child_versions
+            for child in original_version_children:
+                if child.version.statuses.status_name == "Green":                    
+                child.version_latest = 0
+                db.session.add(child)
+                db.session.commit()
+ 
     @staticmethod
     def migrate():
         IUCNStatus.migrate()
