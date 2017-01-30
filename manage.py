@@ -412,7 +412,7 @@ def submit_new(data):
     study = Study.query.filter_by(publication_id=publication.id, study_start=data["study_start"], study_end=data["study_end"]).first()
     if study == None:
         purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
-        purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
+        purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_weed_id"]
         database_source = Institute.query.filter_by(instutution_name=data["study_database_source"]).first() if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
         
         study_dict = {'study_duration' : data["study_duration"],
