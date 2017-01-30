@@ -63,7 +63,7 @@
             "website" : ""
         },{
             "institution_name": "University of Southampton",
-            "institution_short" : "UOS",
+            "institution_short" : "UOSP",
             "main_contact_email" : "t.ezard@soton.ac.uk",
             "main_contact_name" : "Tom Ezard",
             "institution_address" : "",
@@ -99,6 +99,28 @@
             "institution_short" : "UVA",
             "main_contact_email" : "",
             "main_contact_name" : "Hal Caswell",
+            "institution_address" : "",
+            "research_group" : "",
+            "date_joined" : "",
+            "department" : "",
+            "country" : "",
+            "website" : ""
+        },{
+            "institution_name": "National Center for Ecological Analysis and Synthesis",
+            "institution_short" : "NCEAS",
+            "main_contact_email" : "elizabeth.crone@tufts.edu",
+            "main_contact_name" : "Elizabeth Crone",
+            "institution_address" : "",
+            "research_group" : "",
+            "date_joined" : "",
+            "department" : "",
+            "country" : "",
+            "website" : ""
+        },{
+            "institution_name": "University of Turku",
+            "institution_short" : "Ramula",
+            "main_contact_email" : "satu.ramula@utu.fi",
+            "main_contact_name" : "Satu Ramula",
             "institution_address" : "",
             "research_group" : "",
             "date_joined" : "",
