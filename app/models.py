@@ -2034,7 +2034,7 @@ class Species(db.Model):
         last = Version.query.filter_by(original_version_id=original.id).order_by(Version.version_number.desc()).first()
         return last.version_number + 1
 
-    def save(self):
+    def save(self,current_user):
         species = {
             'species_accepted' : self.species_accepted,
             'species_common' : self.species_common,
@@ -2066,7 +2066,7 @@ class Species(db.Model):
             'checked' : 0,
             'status_id' : status.id,
             'checked_count' : 0,
-            'version_user_id' : 1,
+            'version_user_id' : current_user.id, #needs to get user id
             'database_id' : 1,
             'species_id' : s.id
         }

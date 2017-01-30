@@ -125,7 +125,7 @@ def publications_table():
 # @login_required
 def species_page(id):
     #get species
-    species = Species.query.filter_by(id=id).filter_by(version_latest=1).first()
+    species = Species.query.filter_by(id=id).filter_by(version_latest=1).first_or_404()
     print(species) #check
     
     #get taxonomy
@@ -139,7 +139,7 @@ def species_page(id):
     # querying studies returns a weird thing so I have to do this first
     all_studies = Study.query.filter_by(species_id=species.id).filter_by(version_latest=1)
     
-    # generate empty lists to store studies and populations
+    # generate empty lists to store studies and publications
     studies = []
     publications = []
     for study in all_studies:
@@ -277,7 +277,7 @@ def species_form(id):
         species.image_path = form.image_path.data
         species.image_path2 = form.image_path2.data
 
-        species.save_as_version()
+        species.save(current_user = current_user)
         flash('The species infomation has been updated.')
         return redirect(url_for('.species_page',id=id))
     
