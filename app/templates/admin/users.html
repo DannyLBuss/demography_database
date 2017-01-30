@@ -33,7 +33,11 @@
             <td>{{ user.email }}</td>
             <td>{{ user.confirmed }}</td>
             <td>{{ user.institute }}</td>
+            {% if user.institute_confirmed == 0 %}
+            <td><a class="btn btn-success btn-xs" target="_blank" href="">Confirm now</a></td>
+            {% else %}
             <td>{{ user.institute_confirmed }}</td>
+            {% endif %}
             <td>{{ user.member_since.strftime('%Y-%m-%d') }}</td>
             <td>{{ user.last_seen.strftime('%Y-%m-%d') }}</td>
         </tr>
