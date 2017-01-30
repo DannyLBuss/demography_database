@@ -626,7 +626,7 @@ def migrate_compadre():
     import csv
 
     print "Migrating COMPADRE"
-    compadre = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
+    compadre = UnicodeDictReader(open("app/compadre/compadre_migration_2017.csv", "rU"))
     return migration_loop(compadre)
 
 
@@ -643,7 +643,7 @@ def migrate_all():
     import csv
     
     print "Preparing to migrape COMPADRE and COMADRE"
-    compadre = UnicodeDictReader(open("app/compadre/compadre_4_unicode.csv", "rU"))
+    compadre = UnicodeDictReader(open("app/compadre/compadre_migration_2017.csv", "rU"))
     comadre = UnicodeDictReader(open("app/compadre/comadre_migration_2017.csv", "rU"))
     print "Migrating COMPADRE"
     migration_loop(compadre)
