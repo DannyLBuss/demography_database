@@ -24,8 +24,8 @@ def species_form(id,edit_or_new):
         species = Species.query.get_or_404(id)
         form = SpeciesForm(species=species)
     else:
-        form = SpeciesForm()
         species = Species()
+        form = SpeciesForm()
 
     if form.validate_on_submit():
         species.species_accepted = form.species_accepted.data
@@ -71,14 +71,23 @@ def species_edit_history(id):
     return render_template('edit_history.html', species=species)
 
 # editing taxonomy # updated 25/1/17
-@data_manage.route('/taxonomy/<int:id>/edit', methods=['GET', 'POST'])
+@data_manage.route('/taxonomy/<string:edit_or_new>/<int:id>/species=<int:species_id>', methods=['GET', 'POST'])
 @login_required
-def taxonomy_form(id):
-    taxonomy = Taxonomy.query.get_or_404(id)
-    species = Species.query.get_or_404(taxonomy.species_id)
-    form = TaxonomyForm(taxonomy=taxonomy)
+def taxonomy_form(id,species_id,edit_or_new):
+    # needs checks to make sure you can't create 2 taxonomies for the same species
+    
+    species = Species.query.get_or_404(species_id)
+    
+    if edit_or_new == "edit":
+        taxonomy = Taxonomy.query.get_or_404(id)
+        form = TaxonomyForm(taxonomy=taxonomy)
+    else:
+        taxonomy = Taxonomy()
+        form = TaxonomyForm()
     
     if form.validate_on_submit():
+        if edit_or_new == "new":  
+            taxonomy.species_id = species.id
         taxonomy.authority = form.authority.data
         taxonomy.tpl_version = form.tpl_version.data
         taxonomy.infraspecies_accepted = form.infraspecies_accepted.data
@@ -93,25 +102,29 @@ def taxonomy_form(id):
         taxonomy.col_check_ok = form.col_check_ok.data #
         taxonomy.col_check_date = form.col_check_date.data #
         
+        taxonomy.save(current_user = current_user) # not yet implemented
         flash('The taxonomy has been updated.')
-        species_name = species.species_accepted
         return redirect(url_for('.species_page',id=species.id))
     
-    form.authority.data = taxonomy.authority
-    form.tpl_version.data = taxonomy.tpl_version
-    form.infraspecies_accepted.data = taxonomy.infraspecies_accepted
-    form.species_epithet_accepted.data = taxonomy.species_epithet_accepted
-    form.genus_accepted.data = taxonomy.genus_accepted
-    form.genus.data = taxonomy.genus
-    form.family.data = taxonomy.family
-    form.tax_order.data = taxonomy.tax_order
-    form.tax_class.data = taxonomy.tax_class
-    form.phylum.data = taxonomy.phylum
-    form.kingdom.data = taxonomy.kingdom
-    form.col_check_ok.data = taxonomy.col_check_ok
-    form.col_check_date.data = taxonomy.col_check_date
+    if edit_or_new == "edit":
+        form.authority.data = taxonomy.authority
+        form.tpl_version.data = taxonomy.tpl_version
+        form.infraspecies_accepted.data = taxonomy.infraspecies_accepted
+        form.species_epithet_accepted.data = taxonomy.species_epithet_accepted
+        form.genus_accepted.data = taxonomy.genus_accepted
+        form.genus.data = taxonomy.genus
+        form.family.data = taxonomy.family
+        form.tax_order.data = taxonomy.tax_order
+        form.tax_class.data = taxonomy.tax_class
+        form.phylum.data = taxonomy.phylum
+        form.kingdom.data = taxonomy.kingdom
+        form.col_check_ok.data = taxonomy.col_check_ok
+        form.col_check_date.data = taxonomy.col_check_date
 
-    return render_template('data_entry/generic_form.html', form=form, taxonomy=taxonomy,species = species)
+    if edit_or_new == "edit":
+        return render_template('data_manage/generic_form.html', form=form, taxonomy= taxonomy, species=species)
+    else:
+        return render_template('data_manage/generic_form.html', form=form, species=species)
 
 # taxonomy edit history
 @data_manage.route('/taxonomy/<int:id>/edit-history')
@@ -121,7 +134,7 @@ def taxonomy_edit_history(id):
     return render_template('edit_history.html', taxonomy=taxonomy)
 
 # editing traits
-@data_manage.route('/traits/<int:id>/edit', methods=['GET', 'POST'])
+@data_manage.route('/traits/<string:edit_or_new>/<int:id>/species=<int:species_id>', methods=['GET', 'POST'])
 @login_required
 def trait_form(id):
     trait = Trait.query.get_or_404(id)
@@ -146,7 +159,7 @@ def trait_form(id):
     form.dicot_monoc.data = trait.dicot_monoc
     form.angio_gymno.data = trait.angio_gymno
     form.spand_ex_growth_types.data = trait.spand_ex_growth_types
-    return render_template('data_entry/generic_form.html', form=form, trait=trait,species = species)
+    return render_template('data_manage/generic_form.html', form=form, trait=trait,species = species)
 
 # traits edit history
 @data_manage.route('/traits/<int:id>/edit-history')
@@ -156,7 +169,7 @@ def trait_edit_history(id):
     return render_template('edit_history.html', trait=trait)
 
 # editing publication
-@data_manage.route('/publication/<int:id>/edit', methods=['GET', 'POST'])
+@data_manage.route('/publication/<string:edit_or_new>/<int:id>', methods=['GET', 'POST'])
 @login_required
 def publication_form(id):
     publication = Publication.query.get_or_404(id)
@@ -208,7 +221,7 @@ def publication_form(id):
     form.additional_source_string.data = publication.additional_source_string
     
     
-    return render_template('data_entry/publication_form.html', form=form, publication=publication)
+    return render_template('data_manage/publication_form.html', form=form, publication=publication)
 
 # publication edit history
 @data_manage.route('/publication/<int:id>/edit-history')
@@ -219,7 +232,7 @@ def publication_edit_history(id):
 
 # editing population infomation
 # NEEDS UPDATE
-@data_manage.route('/population/<int:id>/edit', methods=['GET', 'POST'])
+@data_manage.route('/population/<string:edit_or_new>/<int:id>', methods=['GET', 'POST'])
 @login_required
 def population_form(id):
     population = Population.query.get_or_404(id)
@@ -245,7 +258,7 @@ def population_form(id):
     form.longitude.data = population.longitude
     form.altitude.data = population.altitude
     
-    return render_template('data_entry/generic_form.html', form=form, population=population,species = species)
+    return render_template('data_manage/generic_form.html', form=form, population=population,species = species)
 
 # population edit history
 @data_manage.route('/population/<int:id>/edit-history')
@@ -274,7 +287,7 @@ def study_form(id):
     form.study_start.data = study.study_start
     form.study_end.data = study.study_end
     
-    return render_template('data_entry/generic_form.html', form=form, study=study)
+    return render_template('data_manage/generic_form.html', form=form, study=study)
 
 # study edit history
 @data_manage.route('/study/<int:id>/edit-history')
@@ -285,7 +298,7 @@ def study_edit_history(id):
 
 # editing matrix
 # NEEDS UPDATE
-@data_manage.route('/matrix/<int:id>/edit', methods=['GET', 'POST'])
+@data_manage.route('/matrix/<string:edit_or_new>/<int:id>', methods=['GET', 'POST'])
 @login_required
 def matrix_form(id):
     matrix = Matrix.query.get_or_404(id)
@@ -350,7 +363,7 @@ def matrix_form(id):
     form.captivity_id.data = matrix.captivity_id
     form.observations.data = matrix.observations
     
-    return render_template('data_entry/matrix_form.html', form=form, matrix=matrix,population=population,species = species)
+    return render_template('data_manage/matrix_form.html', form=form, matrix=matrix,population=population,species = species)
 
 # matrix edit history
 @data_manage.route('/matrix/<int:id>/edit-history')
@@ -410,7 +423,7 @@ def delete_object(thing_to_delete,id_obj):
         flash('The matrix has been deleted')
         return redirect(url_for('.publication_page',id=matrix.publication_id))
     
-    return render_template('data_entry/delete_confirm.html', form=form)
+    return render_template('data_manage/delete_confirm.html', form=form)
 
 # CSV EXPORT, work in progress
 @data_manage.route('/export/csv')
