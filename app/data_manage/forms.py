@@ -69,7 +69,7 @@ class SpeciesForm(Form):
     species_gisd_status = BooleanField('GISD Status')
     invasive_status = BooleanField('Invasive Status')
     species_iucn_taxonid = IntegerField('IUCN Taxon key')
-    species_iucn_population_assessed = IntegerField('IUCN Population assessed')   
+    species_iucn_population_assessed = StringField('IUCN Population assessed')   
     gbif_taxon_key = IntegerField('GBIF Taxon Key')
     image_path = StringField('Path to image')
     image_path2 = StringField('Path to image')
