@@ -2155,18 +2155,18 @@ class Species(db.Model):
     #             db.session.add(child)
     #             db.session.commit()
         
-        # if status.status_name == 'Amber':
-        #     self.version_latest = 0
-        #     self.version_ok = 0
-        #     original_version_children = self.version.original_version[0].child_versions
-        #     original_species_children = [s.species for s in self.version.original_version[0].child_versions]
-        #     green = Status.query.filter_by(status_name='Green').first()
-        #     this_version = [v.version_number]
-        #     green_statuses = [child.version_number for child in original_version_children if child.statuses is green and child.version_number not in this_version]
-        #     closest_green_status = min(green_statuses, key=lambda x:abs(x-this_version[0]))
-        #     closest_id = [child for child in original_version_children if child.version_number is closest_green_status][0].species_id
-        #     species = Species.query.get(closest_id)
-        #     species.version_latest = 1
+    #     if status.status_name == 'Amber':
+    #         self.version_latest = 0
+    #         self.version_ok = 0
+    #         original_version_children = self.version.original_version[0].child_versions
+    #         original_species_children = [s.species for s in self.version.original_version[0].child_versions]
+    #         green = Status.query.filter_by(status_name='Green').first()
+    #         this_version = [v.version_number]
+    #         green_statuses = [child.version_number for child in original_version_children if child.statuses is green and child.version_number not in this_version]
+    #         closest_green_status = min(green_statuses, key=lambda x:abs(x-this_version[0]))
+    #         closest_id = [child for child in original_version_children if child.version_number is closest_green_status][0].species_id
+    #         species = Species.query.get(closest_id)
+    #         species.version_latest = 1
  
     @staticmethod
     def migrate():
@@ -2708,7 +2708,7 @@ class Population(db.Model):
         
     altitude = db.Column(db.Float())
     pop_size = db.Column(db.Text())
-    within_site_replication = db.Column(db.String(200))
+    within_site_replication = db.Column(db.Text())
 
     matrices = db.relationship("Matrix", backref="population", passive_deletes=True)
 
