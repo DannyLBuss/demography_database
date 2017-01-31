@@ -872,8 +872,8 @@ def deploy():
     print "Meta tables migrated"
 
     print "Initial migration of our current version of database..."
-    migrate_comadre()
-    # migrate_both()
+    # migrate_comadre()
+    migrate_all()
 
 
 if __name__ == '__main__':
