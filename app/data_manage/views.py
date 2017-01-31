@@ -16,12 +16,14 @@ from ..decorators import admin_required, permission_required, crossdomain
 # Data management forms
 
 # editing species information #updated 25/1/17
+# edit_or_new is a string that is either "edit" or "new"
+# id is an integer that is the id of the object being edited, if a new object is being created id = 0
 @data_manage.route('/species/<string:edit_or_new>/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def species_form(id,edit_or_new):
     
     if edit_or_new == "edit":
-        species = Species.query.get_or_404(id)
+        species = Species.query.filter_by(id=id).filter_by(version_latest=1).first_or_404()
         form = SpeciesForm(species=species)
     else:
         species = Species()
@@ -74,18 +76,17 @@ def species_edit_history(id):
 @data_manage.route('/taxonomy/<string:edit_or_new>/<int:id>/species=<int:species_id>', methods=['GET', 'POST'])
 @login_required
 def taxonomy_form(id,species_id,edit_or_new):
-    # needs checks to make sure you can't create 2 taxonomies for the same species
     
-    species = Species.query.get_or_404(species_id)
+    species = Species.query.get_or_404(species_id) #needs to filter by version_latest = 1
     
-    if edit_or_new == "edit":
+    if edit_or_new == "edit": # if you are editing, get taxonomy object and create form
         taxonomy = Taxonomy.query.get_or_404(id)
         form = TaxonomyForm(taxonomy=taxonomy)
-    else:
+    else: # if you are creating new, create empty taxonomy object and create form
         taxonomy = Taxonomy()
         form = TaxonomyForm()
     
-    if form.validate_on_submit():
+    if form.validate_on_submit(): #what happens when you press submit
         if edit_or_new == "new":  
             taxonomy.species_id = species.id
         taxonomy.authority = form.authority.data
@@ -102,11 +103,11 @@ def taxonomy_form(id,species_id,edit_or_new):
         taxonomy.col_check_ok = form.col_check_ok.data #
         taxonomy.col_check_date = form.col_check_date.data #
         
-        taxonomy.save(current_user = current_user) # not yet implemented
+        taxonomy.save(current_user = current_user) # not yet implemented for taxonomy
         flash('The taxonomy has been updated.')
         return redirect(url_for('.species_page',id=species.id))
     
-    if edit_or_new == "edit":
+    if edit_or_new == "edit": #if you are editing a taxonomy, you need to fill the form with the data already available
         form.authority.data = taxonomy.authority
         form.tpl_version.data = taxonomy.tpl_version
         form.infraspecies_accepted.data = taxonomy.infraspecies_accepted
@@ -121,9 +122,10 @@ def taxonomy_form(id,species_id,edit_or_new):
         form.col_check_ok.data = taxonomy.col_check_ok
         form.col_check_date.data = taxonomy.col_check_date
 
-    if edit_or_new == "edit":
+    #Actually rendering the page
+    if edit_or_new == "edit": # if you are editing, render the form with taxonomy
         return render_template('data_manage/generic_form.html', form=form, taxonomy= taxonomy, species=species)
-    else:
+    else: #if you are creating new, render the form without taxonomy
         return render_template('data_manage/generic_form.html', form=form, species=species)
 
 # taxonomy edit history
