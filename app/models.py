@@ -2055,11 +2055,11 @@ class Species(db.Model):
         db.session.add(s)
         db.session.commit()
 
-        # if version exists...
-        status = Status.query.filter_by(status_name="Amber").first()
-
-        original_version = self.version.original_version
-        version = {
+        status = Status.query.filter_by(status_name="Amber").first() #get an amber status from the metatable
+        
+        try:
+            original_version = self.version.original_version
+            version = {
             'version_number' : self.find_version(original_version),
             'original_version_id' : self.version.original_version[0].id,
             'checked' : 0,
@@ -2068,7 +2068,20 @@ class Species(db.Model):
             'version_user_id' : current_user.id, #needs to get user id
             'database_id' : 1,
             'species_id' : s.id
-        }
+            }   
+        except AttributeError:
+            version = {
+            'version_number' : 1,
+            'original_version_id' : 1, #not correct
+            'checked' : 0,
+            'status_id' : status.id,
+            'checked_count' : 0,
+            'version_user_id' : current_user.id, #needs to get user id
+            'database_id' : 1, # not correct
+            'species_id' : s.id
+            }
+            
+        
         v = Version(**version)
         db.session.add(v)
         db.session.commit()

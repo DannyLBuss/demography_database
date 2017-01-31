@@ -1,23 +1,76 @@
-from flask import render_template, redirect, url_for, abort, flash, request,\
-    current_app, make_response, jsonify
-from flask.ext.login import login_required, current_user
-from flask.ext.sqlalchemy import get_debug_queries
-from . import compadre
-from .. import db
-from forms import EntryForm, SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, StudyForm, MatrixForm
-from ..models import Permission, Role, User, \
-                    IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
-                    DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
-                    TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
-                    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Institute
-from ..decorators import admin_required, permission_required, crossdomain
+# Convert CSV headers
+def convert_all_headers(dict):
+    new_dict = {}
+    new_dict['additional_source_string'] = dict['AdditionalSource']
+    new_dict['matrix_end_season_id'] = dict['MatrixEndSeason']
+    new_dict['organism_type_id'] = dict['GrowthType']
+    new_dict['geometries_lat_sec'] = dict['LatSec']
+    new_dict['study_duration'] = dict['StudyDuration']
+    new_dict['matrix_values_c'] = dict['matrixC']
+    new_dict['geometries_lat_we'] = dict['LonWE']
+    new_dict['journal'] = dict['Journal']
+    new_dict['infraspecies_accepted'] = dict['InfraspecificAccepted']
+    new_dict['matrix_values_a'] = dict['matrixA']
+    new_dict['matrix_a_string'] = dict['matrixA']
+    new_dict['matrix_start_year'] = dict['MatrixStartYear']
+    new_dict['kingdom'] = dict['Kingdom']
+    new_dict['DOI_ISBN'] = dict['DOI.ISBN']
+    new_dict['genus'] = dict['Genus']
+    new_dict['species_epithet_accepted'] = dict['SpeciesEpithetAccepted']
+    new_dict['name'] = dict['MatrixPopulation']
+    new_dict['geometries_lat_ns'] = dict['LatNS']
+    new_dict['number_populations'] = dict['NumberPopulations']
+    new_dict['matrix_fec'] = dict['MatrixFec']
+    new_dict['matrix_criteria_size'] = dict['CriteriaSize']
+    new_dict['geometries_lon_min'] = dict['LonMin']
+    new_dict['matrix_start_month'] = dict['MatrixStartMonth']
+    new_dict['authors'] = dict['Authors']
+    new_dict['geometries_lon_sec'] = dict['LonSec']
+    new_dict['matrix_dimension'] = dict['MatrixDimension']
+    new_dict['geometries_altitude'] = dict['Altitude']
+    new_dict['geometries_lat_min'] = dict['LatMin']
+    new_dict['observations'] = dict['Observation']
+    new_dict['study_start'] = dict['StudyStart']
+    new_dict['country'] = dict['Country']
+    new_dict['survival_issue'] = dict['SurvivalIssue']
+    new_dict['geometries_lat_deg'] = dict['LatDeg']
+    new_dict['dicot_monoc_id'] = dict['DicotMonoc']
+    new_dict['angio_gymno_id'] = dict['AngioGymno']
+    new_dict['matrix_criteria_ontogeny'] = dict['CriteriaOntogeny']
+    new_dict['year'] = dict['YearPublication']
+    new_dict['species_accepted'] = dict['SpeciesAccepted']
+    new_dict['periodicity'] = dict['AnnualPeriodicity']
+    new_dict['matrix_end_year'] = dict['MatrixEndYear']
+    new_dict['tax_order'] = dict['Order']
+    new_dict['studied_sex_id'] = dict['StudiedSex']
+    new_dict['geometries_lon_deg'] = dict['LonDeg']
+    new_dict['genus_accepted'] = dict['GenusAccepted']
+    new_dict['family'] = dict['Family']
+    new_dict['matrix_end_month'] = dict['MatrixEndMonth']
+    new_dict['matrix_composition_id'] = dict['MatrixComposite']
+    new_dict['matrix_values_a'] = dict['matrixF']
+    new_dict['matrix_start_season_id'] = dict['MatrixStartSeason']
+    new_dict['populations_name'] = dict['MatrixPopulation']
+    new_dict['species_author'] = dict['SpeciesAuthor']
+    new_dict['tax_class'] = dict['Class']
+    new_dict['continent_id'] = dict['Continent']
+    new_dict['treatment_id'] = dict['MatrixTreatment']
+    new_dict['matrix_class_string'] = dict['classnames']
+    new_dict['phylum'] = dict['Phylum']
+    new_dict['tpl_version'] = dict['TPLVersion']
+    new_dict['matrix_criteria_age'] = dict['CriteriaAge']
+    new_dict['study_end'] = dict['StudyEnd']
+    new_dict['captivity_id'] = dict['MatrixCaptivity']
+    new_dict['ecoregion_id'] = dict['Ecoregion']
+    new_dict['matrix_values_a'] = dict['matrixU']
+    new_dict['authority'] = dict['Authority']
+    new_dict['matrix_split'] = dict['MatrixSplit']
 
+    return new_dict
+
+# MIGRATION FUNCTIONS
+# Are these even used?
 '''Migration functions, etc.'''
-# Function to determine similarity between string a and b
-def similar(a, b):
-    from difflib import SequenceMatcher
-    return SequenceMatcher(None, a, b).ratio()
 
 # Function to create Unique ID from FORM VALUES
 def create_uid(form):
@@ -129,11 +182,6 @@ def create_id_string(dict):
     }
     return return_con(new_dict)
 
-# determines the similary between two values
-def similar(a, b):
-    from difflib import SequenceMatcher
-    return SequenceMatcher(None, a, b).ratio()
-
 # this is to check one object against all others, returning jsonified similar records above 96% similarity
 def check_for_duplicate_single(obj):
     uid_string = create_id_string(obj)    
@@ -167,80 +215,12 @@ def add_to_classes(data):
     
     return entry.submit_to_database()
 
-# Convert CSV headers
-def convert_all_headers(dict):
-    new_dict = {}
-    new_dict['additional_source_string'] = dict['AdditionalSource']
-    new_dict['matrix_end_season_id'] = dict['MatrixEndSeason']
-    new_dict['organism_type_id'] = dict['GrowthType']
-    new_dict['geometries_lat_sec'] = dict['LatSec']
-    new_dict['study_duration'] = dict['StudyDuration']
-    new_dict['matrix_values_c'] = dict['matrixC']
-    new_dict['geometries_lat_we'] = dict['LonWE']
-    new_dict['journal'] = dict['Journal']
-    new_dict['infraspecies_accepted'] = dict['InfraspecificAccepted']
-    new_dict['matrix_values_a'] = dict['matrixA']
-    new_dict['matrix_a_string'] = dict['matrixA']
-    new_dict['matrix_start_year'] = dict['MatrixStartYear']
-    new_dict['kingdom'] = dict['Kingdom']
-    new_dict['DOI_ISBN'] = dict['DOI.ISBN']
-    new_dict['genus'] = dict['Genus']
-    new_dict['species_epithet_accepted'] = dict['SpeciesEpithetAccepted']
-    new_dict['name'] = dict['MatrixPopulation']
-    new_dict['geometries_lat_ns'] = dict['LatNS']
-    new_dict['number_populations'] = dict['NumberPopulations']
-    new_dict['matrix_fec'] = dict['MatrixFec']
-    new_dict['matrix_criteria_size'] = dict['CriteriaSize']
-    new_dict['geometries_lon_min'] = dict['LonMin']
-    new_dict['matrix_start_month'] = dict['MatrixStartMonth']
-    new_dict['authors'] = dict['Authors']
-    new_dict['geometries_lon_sec'] = dict['LonSec']
-    new_dict['matrix_dimension'] = dict['MatrixDimension']
-    new_dict['geometries_altitude'] = dict['Altitude']
-    new_dict['geometries_lat_min'] = dict['LatMin']
-    new_dict['observations'] = dict['Observation']
-    new_dict['study_start'] = dict['StudyStart']
-    new_dict['country'] = dict['Country']
-    new_dict['survival_issue'] = dict['SurvivalIssue']
-    new_dict['geometries_lat_deg'] = dict['LatDeg']
-    new_dict['dicot_monoc_id'] = dict['DicotMonoc']
-    new_dict['angio_gymno_id'] = dict['AngioGymno']
-    new_dict['matrix_criteria_ontogeny'] = dict['CriteriaOntogeny']
-    new_dict['year'] = dict['YearPublication']
-    new_dict['species_accepted'] = dict['SpeciesAccepted']
-    new_dict['periodicity'] = dict['AnnualPeriodicity']
-    new_dict['matrix_end_year'] = dict['MatrixEndYear']
-    new_dict['tax_order'] = dict['Order']
-    new_dict['studied_sex_id'] = dict['StudiedSex']
-    new_dict['geometries_lon_deg'] = dict['LonDeg']
-    new_dict['genus_accepted'] = dict['GenusAccepted']
-    new_dict['family'] = dict['Family']
-    new_dict['matrix_end_month'] = dict['MatrixEndMonth']
-    new_dict['matrix_composition_id'] = dict['MatrixComposite']
-    new_dict['matrix_values_a'] = dict['matrixF']
-    new_dict['matrix_start_season_id'] = dict['MatrixStartSeason']
-    new_dict['populations_name'] = dict['MatrixPopulation']
-    new_dict['species_author'] = dict['SpeciesAuthor']
-    new_dict['tax_class'] = dict['Class']
-    new_dict['continent_id'] = dict['Continent']
-    new_dict['treatment_id'] = dict['MatrixTreatment']
-    new_dict['matrix_class_string'] = dict['classnames']
-    new_dict['phylum'] = dict['Phylum']
-    new_dict['tpl_version'] = dict['TPLVersion']
-    new_dict['matrix_criteria_age'] = dict['CriteriaAge']
-    new_dict['study_end'] = dict['StudyEnd']
-    new_dict['captivity_id'] = dict['MatrixCaptivity']
-    new_dict['ecoregion_id'] = dict['Ecoregion']
-    new_dict['matrix_values_a'] = dict['matrixU']
-    new_dict['authority'] = dict['Authority']
-    new_dict['matrix_split'] = dict['MatrixSplit']
 
-    return new_dict
 '''End Migration functions, etc.'''
 
 '''Routing webpages'''
 # This blueprint handles the validation, error checking and duplicates. Basically ensuring that the database runs smoothly.
-@compadre.route('/', methods=['GET', 'POST'])
+@data_manage.route('/', methods=['GET', 'POST'])
 def homepage():
     form = EntryForm()
     similar = None
@@ -262,46 +242,8 @@ def homepage():
 
     return render_template('test.html', form=form, similar=similar, exact=exact)
 
-@compadre.route('/export/csv')
-def csv_export(): 
-    import csv      
-    # First, grab all matrices, as these will be each 'row'
-    all_matrices = Matrix.query.all()
 
-    # Use this function to merge
-    def merge_dicts(*dict_args):
-        result = {}
-        for dictionary in dict_args:
-            result.update(dictionary)
-        return result
-
-    for i, matrix in enumerate(all_matrices):
-        # Grab all of the parent objects
-        matrix = matrix
-        fixed = matrix.fixed[0]
-        population = matrix.population
-        publication = population.publication
-        study = population.study
-        species = population.species
-        traits = species.traits[0]
-        taxonomy = species.taxonomies[0]
-        version = matrix.version
-
-        # Merge all of them to one single dict, as dicts
-        entry = merge_dicts(vars(species), vars(taxonomy), vars(traits), vars(publication), vars(study), vars(population), vars(matrix),  vars(fixed), vars(version))
-
-        #If this is the first matrix, construct the headers too
-        if i == 0:
-            headings = [key for key in entry.keys()]
-            with open('export_test.csv', 'wb') as outcsv:
-                writer = csv.DictWriter(outcsv, fieldnames=headings)
-                writer.writeheader()
-        
-                writer.writerow(entry)
-    
-        
-
-    return "Hello"
-
-
-''' End Routing '''
+# Function to determine similarity between string a and b
+def similar(a, b):
+    from difflib import SequenceMatcher
+    return SequenceMatcher(None, a, b).ratio()
