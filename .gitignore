@@ -43,11 +43,19 @@ nosetests.xml
 
 # Virtual environment
 venv
+bin/
+lib/
+local/
+.Python
+include/
+
+*.wsgi
 
 ext/schema.jar
 ext/mysql-connector-java-5.1.38-bin.jar
 
 migrations/*
+migrations/
 
 database_schema/
 database_schema/
@@ -59,6 +67,8 @@ application_tasks/schema/*
 !application_tasks/schema/schema.sh
 
 application_tasks/mysql_dump/archives/*
+
+
 
 
 
