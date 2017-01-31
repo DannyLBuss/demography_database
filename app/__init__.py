@@ -58,7 +58,7 @@ def create_app(config_name):
     from .user_guide import user_guide as user_guide_blueprint
     app.register_blueprint(user_guide_blueprint, url_prefix='/user-guide')
 
-    from .compadre import compadre as compadre_blueprint
-    app.register_blueprint(compadre_blueprint, url_prefix='/compadre')
+    from .data_manage import data_manage as data_manage_blueprint
+    app.register_blueprint(data_manage_blueprint, url_prefix='/data-manage')
 
     return app

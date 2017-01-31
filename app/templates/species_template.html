@@ -11,7 +11,7 @@
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
         <ul class="dropdown-menu dropdown-menu-right">
             <li class="dropdown-header">Species information</li>
-            <li><a href="/species/{{species.id}}/edit">Edit</a></li>
+            <li><a href="../../data-manage/species/edit/{{species.id}}" >Edit</a></li>
             <li><a href="/species/{{species.id}}/edit-history">View edits</a></li>
             <li><a href="/delete/taxonomy/{{species.id}}">Delete Species</a></li>
             <li class="dropdown-header">Taxonomy</li> {% if species.taxonomies %} {% for taxonomy in species.taxonomies %}

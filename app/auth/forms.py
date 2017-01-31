@@ -5,7 +5,7 @@ from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
 from ..models import User, Role, Institute
 
-
+# loggin in
 class LoginForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
@@ -13,7 +13,7 @@ class LoginForm(Form):
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Log In')
 
-
+# registration
 class RegistrationForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                            Email()])
@@ -37,7 +37,7 @@ class RegistrationForm(Form):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already in use.')
 
-
+# change password, for when you remember the original password
 class ChangePasswordForm(Form):
     old_password = PasswordField('Old password', validators=[Required()])
     password = PasswordField('New password', validators=[
@@ -45,13 +45,13 @@ class ChangePasswordForm(Form):
     password2 = PasswordField('Confirm new password', validators=[Required()])
     submit = SubmitField('Update Password')
 
-
+# request change of password, where you enter your email and it sends you a change password link
 class PasswordResetRequestForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
     submit = SubmitField('Reset Password')
 
-
+# password reset form, where they actualy enter the new passwword
 class PasswordResetForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
@@ -64,7 +64,7 @@ class PasswordResetForm(Form):
         if User.query.filter_by(email=field.data).first() is None:
             raise ValidationError('Unknown email address.')
 
-
+# change email form
 class ChangeEmailForm(Form):
     email = StringField('New Email', validators=[Required(), Length(1, 64),
                                                  Email()])

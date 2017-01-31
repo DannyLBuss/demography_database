@@ -12,8 +12,9 @@
     <h2 style="text-align:center;">Incorporating COMPADRE & COMADRE</h2>
     <br>
 </div>
+
 <div class="info_box">
-    <h3>Welcome {% if current_user.is_authenticated %}back, {{ current_user.username }}!{% else %}to the database!{% endif %}</h3>
+    <h3>Introduction</h3>
     <p>COMPADRE and COMADRE contain matrix population models of hundreds of plant and animal species...</p>
     <div class="row">
         <div class="col-sm-4">
@@ -44,29 +45,26 @@
 </div>
 
 <div class="info_box">
-    <h3>Featured species in COMPADRE:</h3>
-    <div class="row">
-        <div class="col-sm-4">
-            <a href="/species/1354/overview"><div class="species-image-container-index" style="background-image:url('http://media.eol.org/content/2012/07/04/05/74013_580_360.jpg');"></div></a>
-            <p><i>Collinsia verna</i></p>
-        </div>
-        <div class="col-sm-4">
-            <a href="species/1560/overview"><div class="species-image-container-index" style="background-image:url('http://media.eol.org/content/2009/09/08/02/11530_580_360.jpg');"> </div></a>
-            <p><i>Heracleum mantegazzianum</i></p>
-        </div>
-        
-        <div class="col-sm-4">
-            <a href="/species/1768/overview"><div class="species-image-container-index" style="background-image:url('http://media.eol.org/content/2011/10/06/01/05362_orig.jpg');"></div></a>
-            <p><i>Ambrosia dumosa</i></p>
-        </div>
-        
-    </div>
+    <h3>Quicklinks</h3>
+    <p></p>
 </div>
+
 <div class="info_box">
-    <h3>Featured species in COMADRE:</h3>
+<h3>Explore the Demography Database</h3>
+    
+        
+            <div class="row">
+                {% for species in species2 %}
+                <div class="col-xs-3"><a href="/species/{{species.id}}/overview"><div class="species-image-container" style="background-image:url('{{ species.image_path }}');"></div>
+                    <p>{{species.species_accepted}}</p></a>
+                
+                
+                
+                </div>
+                {% endfor %}
+            </div>
+            
 </div>
-
-
 
 {% endblock %}
 
