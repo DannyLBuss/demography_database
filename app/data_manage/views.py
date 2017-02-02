@@ -62,6 +62,8 @@ def species_form(id,edit_or_new):
         
         if edit_or_new == "new":
             db.session.flush()
+            db.session.add(species)
+            db.session.commit()
             
             # COPY CODE BLOCK
             species.add_to_logger(current_user,'species_accepted',species_old.species_accepted,form.species_accepted.data,'edit')
@@ -76,9 +78,6 @@ def species_form(id,edit_or_new):
             species.add_to_logger(current_user,'image_path',species_old.image_path,form.image_path.data,'edit')
             species.add_to_logger(current_user,'image_path2',species_old.image_path2,form.image_path2.data,'edit')
             #END COPY CODE BLOCK
-            
-            db.session.add(species)
-            db.session.commit()
         
         flash('The species infomation has been updated.')
         return redirect(url_for('main.species_page',id=species.id))
@@ -110,18 +109,35 @@ def species_edit_history(id):
 @login_required
 def taxonomy_form(id,species_id,edit_or_new):
     
-    species = Species.query.get_or_404(species_id)
-    
     if edit_or_new == "edit": # if you are editing, get taxonomy object and create form
         taxonomy = Taxonomy.query.get_or_404(id)
+        taxonomy_old = Taxonomy.query.get_or_404(id)
         form = TaxonomyForm(taxonomy=taxonomy)
+        species = Species.query.filter_by(id=species_id).first_or_404()
     else: # if you are creating new, create empty taxonomy object and create form
         taxonomy = Taxonomy()
+        taxonomy_old = Taxonomy()
         form = TaxonomyForm()
+        species = Species.query.filter_by(id=species_id).first_or_404()
     
     if form.validate_on_submit(): #what happens when you press submit
-        if edit_or_new == "new":  
-            taxonomy.species_id = species.id
+        if edit_or_new == "edit":
+            # COPY CODE BLOCK
+            taxonomy.add_to_logger(current_user,'authority',taxonomy_old.authority,form.authority.data,'edit')
+            taxonomy.add_to_logger(current_user,'tpl_version',taxonomy_old.tpl_version,form.tpl_version.data,'edit')
+            taxonomy.add_to_logger(current_user,'infraspecies_accepted',taxonomy_old.infraspecies_accepted,form.infraspecies_accepted.data,'edit')
+            taxonomy.add_to_logger(current_user,'species_epithet_accepted',taxonomy_old.species_epithet_accepted,form.species_epithet_accepted.data,'edit')
+            taxonomy.add_to_logger(current_user,'genus_accepted',taxonomy_old.genus_accepted,form.genus_accepted.data,'edit')
+            taxonomy.add_to_logger(current_user,'genus',taxonomy_old.genus,form.genus.data,'edit')
+            taxonomy.add_to_logger(current_user,'family',taxonomy_old.family,form.family.data,'edit')
+            taxonomy.add_to_logger(current_user,'tax_order',taxonomy_old.tax_order,form.tax_order.data,'edit')
+            taxonomy.add_to_logger(current_user,'tax_class',taxonomy_old.tax_class,form.tax_class.data,'edit')
+            taxonomy.add_to_logger(current_user,'phylum',taxonomy_old.phylum,form.phylum.data,'edit')
+            taxonomy.add_to_logger(current_user,'kingdom',taxonomy_old.kingdom,form.kingdom.data,'edit')
+            taxonomy.add_to_logger(current_user,'col_check_ok',taxonomy_old.col_check_ok,form.col_check_ok.data,'edit')
+            #taxonomy.add_to_logger(current_user,'col_check_date',taxonomy_old.col_check_date,form.col_check_date.data,'edit')
+            #END COPY CODE BLOCK
+            
         taxonomy.authority = form.authority.data
         taxonomy.tpl_version = form.tpl_version.data
         taxonomy.infraspecies_accepted = form.infraspecies_accepted.data
@@ -134,10 +150,32 @@ def taxonomy_form(id,species_id,edit_or_new):
         taxonomy.phylum = form.phylum.data
         taxonomy.kingdom = form.kingdom.data
         taxonomy.col_check_ok = form.col_check_ok.data #
-        taxonomy.col_check_date = form.col_check_date.data #
-        #taxonomy.save(current_user = current_user) # not yet implemented for taxonomy
+        #taxonomy.col_check_date = form.col_check_date.data #
+        
+        if edit_or_new == "new":
+            taxonomy.species_id = species.id
+            
+            db.session.flush()
+            db.session.add(taxonomy)
+            db.session.commit()
+            # COPY CODE BLOCK
+            taxonomy.add_to_logger(current_user,'authority',taxonomy_old.authority,form.authority.data,'edit')
+            taxonomy.add_to_logger(current_user,'tpl_version',taxonomy_old.tpl_version,form.tpl_version.data,'edit')
+            taxonomy.add_to_logger(current_user,'infraspecies_accepted',taxonomy_old.infraspecies_accepted,form.infraspecies_accepted.data,'edit')
+            taxonomy.add_to_logger(current_user,'species_epithet_accepted',taxonomy_old.species_epithet_accepted,form.species_epithet_accepted.data,'edit')
+            taxonomy.add_to_logger(current_user,'genus_accepted',taxonomy_old.genus_accepted,form.genus_accepted.data,'edit')
+            taxonomy.add_to_logger(current_user,'genus',taxonomy_old.genus,form.genus.data,'edit')
+            taxonomy.add_to_logger(current_user,'family',taxonomy_old.family,form.family.data,'edit')
+            taxonomy.add_to_logger(current_user,'tax_order',taxonomy_old.tax_order,form.tax_order.data,'edit')
+            taxonomy.add_to_logger(current_user,'tax_class',taxonomy_old.tax_class,form.tax_class.data,'edit')
+            taxonomy.add_to_logger(current_user,'phylum',taxonomy_old.phylum,form.phylum.data,'edit')
+            taxonomy.add_to_logger(current_user,'kingdom',taxonomy_old.kingdom,form.kingdom.data,'edit')
+            taxonomy.add_to_logger(current_user,'col_check_ok',taxonomy_old.col_check_ok,form.col_check_ok.data,'edit')
+            #taxonomy.add_to_logger(current_user,'col_check_date',taxonomy_old.col_check_date,form.col_check_date.data,'edit')
+            #END COPY CODE BLOCK            
+            
         flash('The taxonomy has been updated.')
-        return redirect(url_for('.species_page',id=species.id))
+        return redirect(url_for('main.species_page',id=species.id))
     
     if edit_or_new == "edit": #if you are editing a taxonomy, you need to fill the form with the data already available
         form.authority.data = taxonomy.authority
@@ -152,20 +190,18 @@ def taxonomy_form(id,species_id,edit_or_new):
         form.phylum.data = taxonomy.phylum
         form.kingdom.data = taxonomy.kingdom
         form.col_check_ok.data = taxonomy.col_check_ok
-        form.col_check_date.data = taxonomy.col_check_date
+        #form.col_check_date.data = 
 
     #Actually rendering the page
-    if edit_or_new == "edit": # if you are editing, render the form with taxonomy
-        return render_template('data_manage/generic_form.html', form=form, taxonomy= taxonomy, species=species)
-    else: #if you are creating new, render the form without taxonomy
-        return render_template('data_manage/generic_form.html', form=form, species=species)
+    return render_template('data_manage/generic_form.html', form=form, taxonomy = taxonomy, species=species)
 
-# taxonomy edit history
 @data_manage.route('/taxonomy/<int:id>/edit-history')
 @login_required
 def taxonomy_edit_history(id):
     taxonomy = Taxonomy.query.get_or_404(id)
-    return render_template('edit_history.html', taxonomy=taxonomy)
+    species = Species.query.get_or_404(taxonomy.species_id)
+    logged_changes = ChangeLogger.query.filter_by(object_type = "taxonomy",object_id = id)
+    return render_template('edit_history.html',taxonomy=taxonomy, species = species, logged_changes = logged_changes)
 
 # editing traits
 @data_manage.route('/traits/<string:edit_or_new>/<int:id>/species=<int:species_id>', methods=['GET', 'POST'])

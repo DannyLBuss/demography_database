@@ -2323,6 +2323,25 @@ class Taxonomy(db.Model):
 
     def __repr__(self):
         return '<Taxonomy %r>' % self.id
+    
+    def add_to_logger(self,current_user,field_name,content_before,content_after,new_edit_delete):
+        changelogger = {
+            'user_id' : current_user.id,
+            'object_type' : "taxonomy",
+            'field_name' : field_name,
+            'object_id' : self.id,
+            'content_before' : content_before,
+            'content_after' : content_after,
+            'new_edit_delete' : new_edit_delete
+        }
+        
+        cl = ChangeLogger(**changelogger)
+        if cl.content_before != cl.content_after:
+            if cl.content_before == None:
+                cl.new_edit_delete = "new"
+
+            db.session.add(cl)
+            db.session.commit()
 
 
 class Trait(db.Model):
@@ -2400,6 +2419,25 @@ class Trait(db.Model):
 
     def __repr__(self):
         return '<Trait %r>' % self.id
+    
+    def add_to_logger(self,current_user,field_name,content_before,content_after,new_edit_delete):
+        changelogger = {
+            'user_id' : current_user.id,
+            'object_type' : "trait",
+            'field_name' : field_name,
+            'object_id' : self.id,
+            'content_before' : content_before,
+            'content_after' : content_after,
+            'new_edit_delete' : new_edit_delete
+        }
+        
+        cl = ChangeLogger(**changelogger)
+        if cl.content_before != cl.content_after:
+            if cl.content_before == None:
+                cl.new_edit_delete = "new"
+
+            db.session.add(cl)
+            db.session.commit()
 
 class Publication(db.Model):
     #query_class = VersionQuery
@@ -2510,6 +2548,25 @@ class Publication(db.Model):
 
     def __repr__(self):
         return '<Publication %r>' % self.id
+    
+    def add_to_logger(self,current_user,field_name,content_before,content_after,new_edit_delete):
+        changelogger = {
+            'user_id' : current_user.id,
+            'object_type' : "publication",
+            'field_name' : field_name,
+            'object_id' : self.id,
+            'content_before' : content_before,
+            'content_after' : content_after,
+            'new_edit_delete' : new_edit_delete
+        }
+        
+        cl = ChangeLogger(**changelogger)
+        if cl.content_before != cl.content_after:
+            if cl.content_before == None:
+                cl.new_edit_delete = "new"
+
+            db.session.add(cl)
+            db.session.commit()
 
 
 class Study(db.Model):
@@ -2827,6 +2884,25 @@ class Population(db.Model):
         }
 
         return population
+    
+    def add_to_logger(self,current_user,field_name,content_before,content_after,new_edit_delete):
+        changelogger = {
+            'user_id' : current_user.id,
+            'object_type' : "population",
+            'field_name' : field_name,
+            'object_id' : self.id,
+            'content_before' : content_before,
+            'content_after' : content_after,
+            'new_edit_delete' : new_edit_delete
+        }
+        
+        cl = ChangeLogger(**changelogger)
+        if cl.content_before != cl.content_after:
+            if cl.content_before == None:
+                cl.new_edit_delete = "new"
+
+            db.session.add(cl)
+            db.session.commit()
 
 
     @staticmethod
@@ -3287,6 +3363,25 @@ class Matrix(db.Model):
 
     def __repr__(self):
         return '<Matrix %r>' % self.id
+    
+    def add_to_logger(self,current_user,field_name,content_before,content_after,new_edit_delete):
+        changelogger = {
+            'user_id' : current_user.id,
+            'object_type' : "matrix",
+            'field_name' : field_name,
+            'object_id' : self.id,
+            'content_before' : content_before,
+            'content_after' : content_after,
+            'new_edit_delete' : new_edit_delete
+        }
+        
+        cl = ChangeLogger(**changelogger)
+        if cl.content_before != cl.content_after:
+            if cl.content_before == None:
+                cl.new_edit_delete = "new"
+
+            db.session.add(cl)
+            db.session.commit()
 
 ''' This table only applies to mean matrices, to identify the intervals that the mean values are derived from '''
 class Interval(db.Model):
@@ -3392,6 +3487,25 @@ class Fixed(db.Model):
 
     def __repr__(self):
         return str(self.matrix_id)
+    
+    def add_to_logger(self,current_user,field_name,content_before,content_after,new_edit_delete):
+        changelogger = {
+            'user_id' : current_user.id,
+            'object_type' : "fixed",
+            'field_name' : field_name,
+            'object_id' : self.id,
+            'content_before' : content_before,
+            'content_after' : content_after,
+            'new_edit_delete' : new_edit_delete
+        }
+        
+        cl = ChangeLogger(**changelogger)
+        if cl.content_before != cl.content_after:
+            if cl.content_before == None:
+                cl.new_edit_delete = "new"
+
+            db.session.add(cl)
+            db.session.commit()
 
 class Seed(db.Model):
     __tablename__ = 'seeds'

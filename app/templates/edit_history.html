@@ -23,17 +23,19 @@
           <th>User</th>
           <th>Field</th>
           <th>Content before</th>
+          <th></th>
           <th>Content after</th>
         </tr>
     </thead>
     <tbody>
-        {% for change in logged_changes %}
+        {% for change in logged_changes |reverse %}
         <tr>
             <td>{{ change.new_edit_delete }}</td>
             <td>{{ change.time_of_edit }}</td>
             <td>{{ change.user.name }}</td>
             <td>{{ change.field_name }}</td>
             <td>{{ change.content_before }}</td>
+            <td>→</td>
             <td>{{ change.content_after }}</td>
         
         </tr>

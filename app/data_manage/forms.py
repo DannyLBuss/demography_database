@@ -91,7 +91,7 @@ class TaxonomyForm(Form):
     phylum = StringField('Phylum', validators=[Required()])
     kingdom = StringField('Kingdom', validators=[Required()])
     col_check_ok = BooleanField('Col Check OK')
-    col_check_date = DateField('Col Check Date')
+    #col_check_date = DateField('Col Check Date')
 
     submit = SubmitField('Submit')
     
