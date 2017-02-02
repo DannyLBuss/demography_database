@@ -3,7 +3,8 @@ from flask import render_template, redirect, url_for, abort, flash, request,\
 from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import main
-from .forms import EditProfileForm, EditProfileAdminForm
+from .forms import EditProfileForm, EditProfileAdminForm, ContactForm
+from flask_mail import Mail, Message
 
 from ..data_manage.forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, MatrixForm, PublicationForm, StudyForm, DeleteForm
 
@@ -266,6 +267,49 @@ def publications():
     return render_template('about/publications.html')
 
 ###############################################################################################################################
+### Become a Compadrino Form and HTML page
+@main.route('/become-a-compadrino', methods=('GET', 'POST'))
+def become_a_compadrino():
+    form = ContactForm()
+
+    if request.method == 'POST':
+        if form.validate() == False:
+            return 'Please fill in all fields <p><a href="/become-a-compadrino">Try Again!!!</a></p>'
+        else:
+            msg = Message("Message from your visitor" + form.name.data,
+                          sender='YourUser@NameHere',
+                          recipients=['compadre@gmail.com', 'spandex.ex@gmail.com'])
+            msg.body = """
+            From: %s <%s>,
+            %s
+            """ % (form.name.data, form.email.data, form.message.data)
+            mail.send(msg)
+            return "Successfully  sent message!"
+    elif request.method == 'GET':
+        return render_template('become_a_compadrino.html', form=form)
+
+
+### Help Develop Site Form
+@main.route('/help-develop-site', methods=('GET', 'POST'))
+def help_develop_site():
+    form = ContactForm()
+
+    if request.method == 'POST':
+        if form.validate() == False:
+            return 'Please fill in all fields <p><a href="/help-develop-site">Try Again!!!</a></p>'
+        else:
+            msg = Message("Message from your visitor" + form.name.data,
+                          sender='YourUser@NameHere',
+                          recipients=['spandex.ex@gmail.com', 'd.l.buss@exeter.ac.uk'])
+            msg.body = """
+            From: %s <%s>,
+            %s
+            """ % (form.name.data, form.email.data, form.message.data)
+            mail.send(msg)
+            return "Successfully  sent message!"
+    elif request.method == 'GET':
+        return render_template('help_develop_site.html', form=form)
+
 ### NEW DATA INPUT FORMS
 
 @main.route('/species/new', methods=['GET', 'POST'])

@@ -17,38 +17,53 @@
 
 <div class="info_box">
     <h3>Introduction</h3>
-    <p>COMPADRE and COMADRE contain matrix population models of hundreds of plant and animal species...</p>
+    <p>COMPADRE and COMADRE contain matrix population models of hundreds of plant and animal species. 
+        <br><br>
+        Matrix population models:
+         <li>summarize the life cycle components of survival, growth and reproduction</li> 
+         <li>acknowledge size or age variation of individuals within a population</li>
+        <li>can be used to compare traits across species and populations</li> 
+        <li>can be used to calculate a multitude of demographic traits: including, population growth rates, mean life expectancies and reproductive rates of each stage class </li>
+    </p>
     <div class="row">
         <div class="col-sm-4">
             <h3>Explore</h3>
             <ul>
-                <li>Search by Species</li>
-                <li>Search by Publication</li>
-                <li>Taxonomic Explorer</li>
+                <li><a href="">Search by Species</a></li>
+                <li><a href="">Search by Publication</a></li>
+                <li><a href="">Taxonomic Explorer</a></li>
             </ul>
         </div>
         <div class="col-sm-4">
             <h3>About</h3>
             <ul>
-                <li>What is COMPADRE & COMPADRE</li>
-                <li>Core comittee</li>
-                <li>compadre-db.org</li>
+                <li><a href="">What is COMPADRE & COMADRE</a></li>
+                <li><a href="">Core comittee</a></li>
+                <li><a href="http://www.compadre-db.org"target="_blank">compadre-db.org</a></li>
             </ul>
         </div>
         <div class="col-sm-4">
             <h3>Collaborate</h3>
             <ul>
-                <li>Contribute your data</li>
-                <li>Become a Compadrino</li>
-                <li>Help develop this site</li>
+                <li><a href="{{ url_for('main.contribute_data') }}">Contribute your data</a></li>
+                <li><a href="{{ url_for('main.become_a_compadrino') }}">Become a Compadrino</a></li>
+                <li><a href="{{ url_for('main.help_develop_site') }}">Help develop this site</a></li>
             </ul>
         </div>
     </div>
 </div>
-
 <div class="info_box">
     <h3>Quicklinks</h3>
+    <p><a href="http://onlinelibrary.wiley.com/doi/10.1111/1365-2745.12334/abstract;jsessionid=E81509E7DBF840A800EC5701CA22E17B.f04t03" target="_blank">The COMPADRE Plant Matrix Database: an open online repository for plant demography</a></p>
+    <p><a href="http://onlinelibrary.wiley.com/doi/10.1111/1365-2656.12482/full" target="_blank">COMADRE: a global database of animal demography</a></p>
     <p></p>
+</div>
+
+<div class="info_box">
+    <h3>Meet the teams</h3>
+    <p><a href="http://lifecycle.ex.ac.uk/spandex/" target="_blank">Meet the Spand_Ex team at Exeter</a></p>
+    <p><a href="https://sites.google.com/site/robresearchsite/" target="_blank">Meet the SalGo team at Sheffield</a></p>
+    <p><a href="https://www.demogr.mpg.de/en/laboratories/evolutionary_biodemography_1171/projects/compadre_plant_matrix_database_comadre_animal_matrix_database_1867.htm" target="_blank">Meet the MPIDR team at Rostock</a></p>
 </div>
 <!--
 <div class="info_box">
