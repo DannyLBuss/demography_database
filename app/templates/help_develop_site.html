@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<!DOCTYPE html>
+<div class="page-header">
+    <meta charset="UTF-8">
+    <h1>Would you like to help with website development?</h1>
+</div>
+<div class = "info_box">
+    <h3>Are you a computer programmer fanatic? Do you love coding? Do you want to help us develop some fun tools to explore the world of matrix models? Then please fill in the contact form below:</h3>
+<body>
+    <h3>Contact Form:</h3>
+
+    <form action="/help-develop-site" method="post">
+          {{ form.hidden_tag() }}
+        <p>
+          {{ form.name.label }}
+          {{ form.name }}
+        </p>
+        <p>
+          {{ form.email.label }}
+          {{ form.email }}
+        </p>
+        <p>
+          {{ form.message.label }}
+          {{ form.message }}
+        </p>
+        <p>
+          {{ form.submit }}
+        </p>
+      </form>
+</body>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

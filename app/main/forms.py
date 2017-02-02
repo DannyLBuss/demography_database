@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
-    SubmitField
+    SubmitField, validators
 from wtforms.validators import Required, Length, Email, Regexp
 from wtforms import ValidationError
 from flask.ext.pagedown.fields import PageDownField
@@ -43,5 +43,16 @@ class EditProfileAdminForm(Form):
         if field.data != self.user.username and \
                 User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already in use.')
+
+#Create contact form class
+def CheckNameLength(form, field):
+  if len(field.data) < 3:
+    raise ValidationError('Name must have more then 2 characters')
+
+class ContactForm(Form):
+    name = StringField('Name:', [validators.DataRequired(), CheckNameLength])
+    email = StringField('E-mail address:', [validators.DataRequired(), validators.Email('your@email.com')])
+    message = TextAreaField('Your message:', [validators.DataRequired()])
+    submit = SubmitField('Send Message')
 
     
