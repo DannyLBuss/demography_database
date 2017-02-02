@@ -1,6 +1,45 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
 
-<p>Edit history will go here!</p>
+<div class="page-header">
+    <h1>Edit History</h1>
+    {% if population %}
+    <a type="button" class="btn btn-default" href="../../../publication/{{population.publication_id}}">Go back to publication overview</a>
+    {% endif %}
+    {% if publication %}
+    <h3><strong>Publication:</strong> {{publication.authors}} <small><a href="../../../publication/{{publication.id}}">Go back to publication overview</a></small></h3>
+    {% endif %}
+    {% if species %}
+    <h3><strong>Species:</strong> <i>{{species.species_accepted}}</i> <small><a href="../../../species/{{species.id}}/overview">Go back to species overview</a></small></h3>
+    {% endif %}
+    
+</div>
+
+
+<table class="table">
+    <thead>
+      <tr>
+          <th></th>
+          <th>Time</th>
+          <th>User</th>
+          <th>Field</th>
+          <th>Content before</th>
+          <th>Content after</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for change in logged_changes %}
+        <tr>
+            <td>{{ change.new_edit_delete }}</td>
+            <td>{{ change.time_of_edit }}</td>
+            <td>{{ change.user.name }}</td>
+            <td>{{ change.field_name }}</td>
+            <td>{{ change.content_before }}</td>
+            <td>{{ change.content_after }}</td>
+        
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}
 
@@ -9,58 +48,5 @@
 {{ super() }}
 {{ pagedown.include_pagedown() }}
 
-<script>
-    // Change matrix strings into tables
-    var divs = document.getElementsByClassName("matA");
-    for (var ii = 0; ii < divs.length; ii++) {
-        var matrix_string = divs[ii].innerHTML;
-        var matrix_string = matrix_string.replace(" [", "");
-        var matrix_string = matrix_string.replace("] ", "");
-        var matrix_string_array = matrix_string.split(" ");
-        matSize = Math.sqrt(matrix_string_array.length);
-        var table_new = document.createElement('TABLE');
-        table_new.className = 'table table-bordered';
-        var tableBody = document.createElement('TBODY');
-        table_new.appendChild(tableBody);
-        var index = 0;
-        for (var i = 0; i < matSize; i++) {
-            var tr = document.createElement('TR');
-            tableBody.appendChild(tr);
-            for (var j = 0; j < matSize; j++) {
-                var td = document.createElement('TD');
-                td.appendChild(document.createTextNode(matrix_string_array[index]));
-                tr.appendChild(td);
-                index = index + 1;
-            }
-        }
-        divs[ii].innerHTML = "";
-        divs[ii].appendChild(table_new);
-    }
-</script>
-
-<script>
-    // Change class strings into tables
-    var divs = document.getElementsByClassName("matClasses");
-    for (var ii = 0; ii < divs.length; ii++) {
-        var matrix_string = divs[ii].innerHTML;
-        var matrix_string_array = matrix_string.split("|");
-        numberOfClasses= matrix_string_array.length;
-        var table_new = document.createElement('TABLE');
-        table_new.className = 'table table-bordered';
-        var tableBody = document.createElement('TBODY');
-        table_new.appendChild(tableBody);
-        var index = 0;
-        var tr = document.createElement('TR');
-        tableBody.appendChild(tr);
-            for (var j = 0; j < numberOfClasses; j++) {
-                var td = document.createElement('TD');
-                td.appendChild(document.createTextNode(matrix_string_array[index]));
-                tr.appendChild(td);
-                index = index + 1;
-            }
-        divs[ii].innerHTML = "";
-        divs[ii].appendChild(table_new);
-    }
-</script>
 
 {% endblock %}

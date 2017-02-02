@@ -15,7 +15,7 @@ from ..models import Permission, Role, User, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
                     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, PurposeEndangered, PurposeWeed, Trait, \
                     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Institute, Status, Version
+                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Institute, Status, Version, ChangeLogger
 from ..decorators import admin_required, permission_required, crossdomain
 
 
@@ -43,14 +43,14 @@ def after_request(response):
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    species = Species.query.filter_by(version_latest=1).filter(Species.image_path != None).all()
-    number = len(species)
-    species2 = []
-    for i in range(1,5):
-        random_int = random.randint(1,number)
-        s = species[random_int]
-        species2.append(s)
-    return render_template('index.html', species2 = species2)
+#    species = Species.query.filter_by(version_latest=1).filter(Species.image_path != None).all()
+#    number = len(species)
+#    species2 = []
+#    for i in range(1,5):
+#        random_int = random.randint(0,number-1)
+#        s = species[random_int]
+#        species2.append(s)
+    return render_template('index.html') #,species2 = species2)
 
 
 @main.route('/meta-tables/')
@@ -134,26 +134,26 @@ def publications_table():
 # @login_required
 def species_page(id):
     #get species
-    species = Species.query.filter_by(id=id).filter_by(version_latest=1).first_or_404()
+    species = Species.query.filter_by(id=id).first_or_404()
     print(species) #check
     
     #get taxonomy
-    taxonomy = Taxonomy.query.filter_by(species_id=species.id).filter_by(version_latest=1).first()
+    taxonomy = Taxonomy.query.filter_by(species_id=species.id).first()
     print(taxonomy) #check
     
     #get traits
-    trait = Trait.query.filter_by(species_id=species.id).filter_by(version_latest=1).first()
+    trait = Trait.query.filter_by(species_id=species.id).first()
     print(trait) #check
     
     # querying studies returns a weird thing so I have to do this first
-    all_studies = Study.query.filter_by(species_id=species.id).filter_by(version_latest=1)
+    all_studies = Study.query.filter_by(species_id=species.id)
     
     # generate empty lists to store studies and publications
     studies = []
     publications = []
     for study in all_studies:
         studies.append(study)
-        publications.append(Publication.query.filter_by(id=study.publication_id).filter_by(version_latest=1).first())
+        publications.append(Publication.query.filter_by(id=study.publication_id).first())
     # remove duplicates in publications
     publications = list(set(publications))
     
@@ -163,7 +163,7 @@ def species_page(id):
     #get populations
     populations = []
     for study in studies:
-        populations_temp = (Population.query.filter_by(study_id=study.id).filter_by(version_latest=1))
+        populations_temp = (Population.query.filter_by(study_id=study.id))
         for populations_i in populations_temp:
             populations.append(populations_i)
     print(populations)
@@ -171,7 +171,7 @@ def species_page(id):
     #get matrices
     matrices = []
     for population in populations:
-        matrices_temp = Matrix.query.filter_by(population_id=population.id).filter_by(version_latest=1)
+        matrices_temp = Matrix.query.filter_by(population_id=population.id)
         for matrices_i in matrices_temp:
             matrices.append(matrices_i)
     print(matrices)

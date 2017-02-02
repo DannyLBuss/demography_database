@@ -15,28 +15,28 @@ from sqlalchemy.inspection import inspect
 from sqlalchemy import or_
 from flask_sqlalchemy import SQLAlchemy, BaseQuery
 
-class VersionQuery(BaseQuery):
-    def all_versions(self): #was overwriting the original all() function
-        return [s for s in self.filter_by(version_ok=1)]
-    def original(self):
-        return [s for s in self.filter_by(version_original=1)]
-    def latest(self):
-        return [s for s in self.filter_by(version_latest=1)]
-    def all_checked(self):
-        # This is slow
-        amber = Status.query.filter(Status.status_name=='Amber').first()
-        green = Status.query.filter(Status.status_name=='Green').first()
-        return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).filter(Version.checked == True).order_by(Version.version_number.desc())]
-    def all_checked_unchecked(self):
-        # This is slow
-        amber = Status.query.filter(Status.status_name=='Amber').first()
-        green = Status.query.filter(Status.status_name=='Green').first()
-        return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).order_by(Version.version_number.desc())]
-    def all_v(self):
-        return [s for s in self]
-    def version_number(self, id):
-        # This has potential to be slow too
-        return self.filter(Version.version_number == id).all()
+#class VersionQuery(BaseQuery):
+#    def all_versions(self): #was overwriting the original all() function
+#        return [s for s in self.filter_by(version_ok=1)]
+#    def original(self):
+#        return [s for s in self.filter_by(version_original=1)]
+#    def latest(self):
+#        return [s for s in self.filter_by(version_latest=1)]
+#    def all_checked(self):
+#        # This is slow
+#        amber = Status.query.filter(Status.status_name=='Amber').first()
+#        green = Status.query.filter(Status.status_name=='Green').first()
+#        return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).filter(Version.checked == True).order_by(Version.version_number.desc())]
+#    def all_checked_unchecked(self):
+#        # This is slow
+#        amber = Status.query.filter(Status.status_name=='Amber').first()
+#        green = Status.query.filter(Status.status_name=='Green').first()
+#        return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).order_by(Version.version_number.desc())]
+#    def all_v(self):
+#        return [s for s in self]
+#    def version_number(self, id):
+#        # This has potential to be slow too
+#        return self.filter(Version.version_number == id).all()
 
 class Permission:
     FOLLOW = 0x01
@@ -96,7 +96,7 @@ class Role(db.Model):
 
 
 class User(UserMixin, db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
@@ -116,6 +116,7 @@ class User(UserMixin, db.Model):
     institute_confirmed = db.Column(db.Boolean, default=False)
 
     versions = db.relationship("Version", backref="user")
+    changelogger = db.relationship("ChangeLogger", backref="user")
 
     @staticmethod
     def migrate_self():
@@ -285,7 +286,7 @@ class User(UserMixin, db.Model):
                 'member_since': self.member_since,
                 'last_seen': self.last_seen,
                 'institute' : self.institute.to_json_simple(key) if self.institute else None,
-                'institute_confirmed' : self.institute_confirmed,
+                'institute_confirmed' : self.institute_confirmed ,
                 'versions' : [version.to_json_simple(key) for version in self.versions]
             }
         }
@@ -901,7 +902,7 @@ class SourceType(db.Model):
         return self.source_name
 
 class Database(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'databases'
     id = db.Column(db.Integer, primary_key=True)
     database_name = db.Column(db.String(64), index=True)
@@ -1835,7 +1836,7 @@ class Captivity(db.Model):
 
 
 class Status(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'statuses'
     id = db.Column(db.Integer, primary_key=True)
     status_name = db.Column(db.String(64), index=True)
@@ -2002,8 +2003,22 @@ class CensusTiming(db.Model):
 
 ''' End Meta Tables '''
 
+class ChangeLogger(db.Model):
+    #query_class = VersionQuery
+    __tablename__ = 'changelogger'
+    id = db.Column(db.Integer, primary_key=True)
+    new_edit_delete = db.Column(db.String(6), default = "edit")
+    time_of_edit = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
+    object_type = db.Column(db.String(64))
+    field_name = db.Column(db.String(64))
+    object_id = db.Column(db.Integer)
+    content_before = db.Column(db.Text)
+    content_after = db.Column(db.Text)
+
+
 class Species(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'species'
     id = db.Column(db.Integer, primary_key=True)
     # subspecies = db.Column(db.String(64))
@@ -2033,108 +2048,130 @@ class Species(db.Model):
         original = original[0]
         last = Version.query.filter_by(original_version_id=original.id).order_by(Version.version_number.desc()).first()
         return last.version_number + 1
-
-    def save(self,current_user):
-        species = {
-            'species_accepted' : self.species_accepted,
-            'species_common' : self.species_common,
-            'iucn_status_id' : self.iucn_status_id,
-            'esa_status_id' : self.esa_status_id,
-            'species_gisd_status' : self.species_gisd_status,
-            'invasive_status' : self.invasive_status,
-            'gbif_taxon_key' : self.gbif_taxon_key,
-            'species_iucn_taxonid' : self.species_iucn_taxonid,
-            'species_iucn_population_assessed' : self.species_iucn_population_assessed,
-            'image_path' : self.image_path,
-            'image_path2' : self.image_path2,
-            'version_latest' : 0,
-            'version_ok' : 0
+    
+    def add_to_logger(self,current_user,field_name,content_before,content_after,new_edit_delete):
+        changelogger = {
+            'user_id' : current_user.id,
+            'object_type' : "species",
+            'field_name' : field_name,
+            'object_id' : self.id,
+            'content_before' : content_before,
+            'content_after' : content_after,
+            'new_edit_delete' : new_edit_delete
         }
-
-        s = Species(**species)
-        db.session.add(s)
-        db.session.commit()
-
-        status = Status.query.filter_by(status_name="Amber").first() #get an amber status from the metatable
         
-        try:
-            original_version = self.version.original_version
-            version = {
-            'version_number' : self.find_version(original_version),
-            'original_version_id' : self.version.original_version[0].id,
-            'checked' : 0,
-            'status_id' : status.id,
-            'checked_count' : 0,
-            'version_user_id' : current_user.id, #needs to get user id
-            'database_id' : 1,
-            'species_id' : s.id
-            }   
-        except AttributeError:
-            version = {
-            'version_number' : 1,
-            'original_version_id' : 1, #not correct
-            'checked' : 0,
-            'status_id' : status.id,
-            'checked_count' : 0,
-            'version_user_id' : current_user.id, #needs to get user id
-            'database_id' : 1, # not correct
-            'species_id' : s.id
-            }
-            
-        
-        v = Version(**version)
-        db.session.add(v)
-        db.session.commit()
+        cl = ChangeLogger(**changelogger)
+        if cl.content_before != cl.content_after:
+            if cl.content_before == None:
+                cl.new_edit_delete = "new"
 
-        return s
-
-    def save_admin(self, current_user):
-        species = {
-            'species_accepted' : self.species_accepted,
-            'species_common' : self.species_common,
-            'iucn_status_id' : self.iucn_status_id,
-            'esa_status_id' : self.esa_status_id,
-            'species_gisd_status' : self.species_gisd_status,
-            'invasive_status' : self.invasive_status,
-            'gbif_taxon_key' : self.gbif_taxon_key,
-            'species_iucn_taxonid' : self.species_iucn_taxonid,
-            'species_iucn_population_assessed' : self.species_iucn_population_assessed,
-            'image_path' : self.image_path,
-            'image_path2' : self.image_path2,
-            'version_latest' : 1,
-            'version_ok' : 1
-        }
-
-        s = Species(**species)
-        db.session.add(s)
-        db.session.commit()
-
-        status = Status.query.filter_by(status_name="Green").first()
-        original_version = self.version.original_version
-
-        version = {
-            'version_number' : self.find_version(original_version),
-            'original_version_id' : self.version.original_version[0].id,
-            'checked' : 1,
-            'status_id' : status.id,
-            'checked_count' : self.version.checked_count + 1 if self.version.checked_count else 1,
-            'version_user_id' : current_user.id,
-            'database_id' : 1,
-            'species_id' : s.id
-        }
-
-        v = Version(**version)
-        db.session.add(v)
-        db.session.commit()
-
-        original_version_children = self.version.original_version[0].child_versions
-
-        for child in original_version_children:
-            child.version_latest = 0
-            db.session.add(child)
+            db.session.add(cl)
             db.session.commit()
 
-        return s
+#    def save(self,current_user):
+#        species = {
+#            'species_accepted' : self.species_accepted,
+#            'species_common' : self.species_common,
+#            'iucn_status_id' : self.iucn_status_id,
+#            'esa_status_id' : self.esa_status_id,
+#            'species_gisd_status' : self.species_gisd_status,
+#            'invasive_status' : self.invasive_status,
+#            'gbif_taxon_key' : self.gbif_taxon_key,
+#            'species_iucn_taxonid' : self.species_iucn_taxonid,
+#            'species_iucn_population_assessed' : self.species_iucn_population_assessed,
+#            'image_path' : self.image_path,
+#            'image_path2' : self.image_path2,
+#            'version_latest' : 1,
+#            'version_ok' : 0
+#        }
+#
+#        s = Species(**species)
+#        db.session.add(s)
+#        db.session.commit() # in the forms this creates 2 copys of everytinh, is this right, who knows?
+#
+#        status = Status.query.filter_by(status_name="Amber").first() #get an amber status from the metatable
+#        
+#        try:
+#            original_version = self.version.original_version
+#            version = {
+#            'version_number' : self.find_version(original_version),
+#            'original_version_id' : self.version.original_version[0].id,
+#            'checked' : 0,
+#            'status_id' : status.id,
+#            'checked_count' : 0,
+#            'version_user_id' : current_user.id, #needs to get user id
+#            'database_id' : 1,
+#            'species_id' : s.id
+#            }   
+#        except AttributeError, IntegrityError: # if a previous version doesn't exist: eg. you're creating a new object
+#            version = {
+#            'version_number' : 1,
+#            'original_version_id' : 0, # s: this causes an error because when creating a new version object, this has to have the same original_version_id as it's primary key, so when you commit it gets an int
+#            'checked' : 0,
+#            'status_id' : status.id,
+#            'checked_count' : 0,
+#            'version_user_id' : current_user.id, 
+#            'database_id' : 1, # what is this
+#            'species_id' : s.id
+#            }
+#            
+#        
+#        v = Version(**version)
+#        db.session.add(v)
+#        db.session.flush()
+#        if v.original_version_id == 0:
+#            v.original_version_id = v.id
+#        db.session.commit()
+#
+#        return s
+#
+#    def save_admin(self, current_user):
+#        species = {
+#            'species_accepted' : self.species_accepted,
+#            'species_common' : self.species_common,
+#            'iucn_status_id' : self.iucn_status_id,
+#            'esa_status_id' : self.esa_status_id,
+#            'species_gisd_status' : self.species_gisd_status,
+#            'invasive_status' : self.invasive_status,
+#            'gbif_taxon_key' : self.gbif_taxon_key,
+#            'species_iucn_taxonid' : self.species_iucn_taxonid,
+#            'species_iucn_population_assessed' : self.species_iucn_population_assessed,
+#            'image_path' : self.image_path,
+#            'image_path2' : self.image_path2,
+#            'version_latest' : 1,
+#            'version_ok' : 1
+#        }
+#
+#        s = Species(**species)
+#        db.session.add(s)
+#        db.session.commit()
+#
+#        status = Status.query.filter_by(status_name="Green").first()
+#        original_version = self.version.original_version
+#
+#        version = {
+#            'version_number' : self.find_version(original_version),
+#            'original_version_id' : self.version.original_version[0].id,
+#            'checked' : 1,
+#            'status_id' : status.id,
+#            'checked_count' : self.version.checked_count + 1 if self.version.checked_count else 1,
+#            'version_user_id' : current_user.id,
+#            'database_id' : 1,
+#            'species_id' : s.id
+#        }
+#
+#        v = Version(**version)
+#        db.session.add(v)
+#        db.session.commit()
+#
+#        original_version_children = self.version.original_version[0].child_versions
+#
+#        for child in original_version_children:
+#            child.version_latest = 0
+#            db.session.add(child)
+#            db.session.commit()
+#
+#        return s
 
     # def verify(self, status_colour, current_user):
     #     status = Status.query.filter_by(status_name=status_colour).first()
@@ -2172,9 +2209,6 @@ class Species(db.Model):
     def migrate():
         IUCNStatus.migrate()
         ESAStatus.migrate()
-
-    def save_as_version(self):
-        print self
 
     def to_json(self, key):
         species = {
@@ -2220,7 +2254,7 @@ class Species(db.Model):
         return '<Species %r>' % self.id
 
 class Taxonomy(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'taxonomies'
     id = db.Column(db.Integer, primary_key=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
@@ -2292,7 +2326,7 @@ class Taxonomy(db.Model):
 
 
 class Trait(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'traits'
     id = db.Column(db.Integer, primary_key=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
@@ -2368,7 +2402,7 @@ class Trait(db.Model):
         return '<Trait %r>' % self.id
 
 class Publication(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'publications'
     id = db.Column(db.Integer, primary_key=True)
     source_type_id = db.Column(db.Integer, db.ForeignKey('source_types.id',ondelete='CASCADE'))
@@ -2479,7 +2513,7 @@ class Publication(db.Model):
 
 
 class Study(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'studies'
     id = db.Column(db.Integer, primary_key=True)
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
@@ -2553,7 +2587,7 @@ class Study(db.Model):
         return '<Study %r>' % self.id
 
 class AuthorContact(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'author_contacts'
     id = db.Column(db.Integer, primary_key=True)
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
@@ -2609,7 +2643,7 @@ class AuthorContact(db.Model):
         return str(self.publication_id)
 
 class AdditionalSource(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'additional_sources'
     id = db.Column(db.Integer, primary_key=True)
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
@@ -2680,7 +2714,7 @@ class AdditionalSource(db.Model):
         return '<Additional Source %r>' % self.id
 
 class Population(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'populations'
     id = db.Column(db.Integer, primary_key=True, index=True)
     study_id = db.Column(db.Integer, db.ForeignKey('studies.id',ondelete='CASCADE'))
@@ -2806,7 +2840,7 @@ class Population(db.Model):
         return '<Population %r>' % self.id
 
 class Stage(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'stages'
     id = db.Column(db.Integer, primary_key=True, index=True)
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
@@ -2851,7 +2885,7 @@ class Stage(db.Model):
         return str(self.species_id)
 
 class StageType(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'stage_types'
     id = db.Column(db.Integer, primary_key=True, index=True)
     type_name = db.Column(db.Text())
@@ -2951,7 +2985,7 @@ class Treatment(db.Model):
         return self.treatment_name if self.treatment_name else ''
 
 class MatrixStage(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'matrix_stages'
     id = db.Column(db.Integer, primary_key=True)
     stage_order = db.Column(db.SmallInteger())
@@ -2992,7 +3026,7 @@ class MatrixStage(db.Model):
         return '<Matrix Stage %r>' % self.stage_order
 
 class MatrixValue(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'matrix_values'
     id = db.Column(db.Integer, primary_key=True)
     column_number = db.Column(db.SmallInteger())
@@ -3044,7 +3078,7 @@ class MatrixValue(db.Model):
         return self.column_number
 
 class Matrix(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'matrices'
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.String(200), index=True, unique=True)
@@ -3294,7 +3328,7 @@ class Interval(db.Model):
 
 ''' Secret & Important Fixed Stuff '''
 class Fixed(db.Model):
-    query_class = VersionQuery
+    #query_class = VersionQuery
     __tablename__ = 'fixed'
     id = db.Column(db.Integer, primary_key=True)
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id',ondelete='CASCADE'), index=True)

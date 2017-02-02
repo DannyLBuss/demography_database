@@ -28,7 +28,7 @@
     
     
     <!-- page header -->
-    <h1><i>{{species.species_accepted}}</i> <small> {{species.id}}</small> <img src="../../static/statuses/{{species.version.statuses.id}}.png"> {{species.version}} </h1> 
+    <h1><i>{{species.species_accepted}}</i> <small> {{species.id}}</small> </h1> 
     {% if species.species_common %}
     <p><b>Common name(s):</b> 
         {{species.species_common}}</p>
@@ -64,7 +64,7 @@
     
     <!-- Right side information with taxonom and traits -->
     <div class="col-sm-4"> {% if taxonomy %}
-        <h3>Taxonomy <small> {{taxonomy.id}}</small>  {{taxonomy.version}} </h3>
+        <h3>Taxonomy <small> {{taxonomy.id}}</small>  </h3>
         <table style="width:100%" class="table">
             <tbody>
                 <tr>
@@ -110,7 +110,7 @@
         <h3>Taxonomy</h3>
         <div class="info_box_empty">
             <p>Not entered</p> <a href="../../taxonomy/new/species={{species.id}}">Add taxonomic information</a> </div> {% endif %} {% if trait %}
-        <h3>Traits <small> {{trait.id}}</small> {{trait.version}}</h3>
+        <h3>Traits <small> {{trait.id}}</small></h3>
         <table style="width:100%" class="table">
             <tr>
                 <td> <strong>Growth type: </strong> </td>
