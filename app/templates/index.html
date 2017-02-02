@@ -29,16 +29,16 @@
         <div class="col-sm-4">
             <h3>Explore</h3>
             <ul>
-                <li><a href="">Search by Species</a></li>
-                <li><a href="">Search by Publication</a></li>
-                <li><a href="">Taxonomic Explorer</a></li>
+                <li><a href="{{ url_for('main.comingsoon') }}">Search by Species</a></li>
+                <li><a href="{{ url_for('main.comingsoon') }}">Search by Publication</a></li>
+                <li><a href="{{ url_for('main.history') }}">Taxonomic Explorer</a></li>
             </ul>
         </div>
         <div class="col-sm-4">
             <h3>About</h3>
             <ul>
-                <li><a href="">What is COMPADRE & COMADRE</a></li>
-                <li><a href="">Core comittee</a></li>
+                <li><a href="{{ url_for('main.history') }}">What is COMPADRE & COMADRE</a></li>
+                <li><a href="{{ url_for('main.team') }}">Core comittee</a></li>
                 <li><a href="http://www.compadre-db.org"target="_blank">compadre-db.org</a></li>
             </ul>
         </div>

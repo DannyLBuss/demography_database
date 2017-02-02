@@ -266,6 +266,11 @@ def funding():
 def publications():
     return render_template('about/publications.html')
 
+#coming soon page
+@main.route('/comingsoon')
+def comingsoon():
+    return render_template('coming_soon.html')
+
 ###############################################################################################################################
 ### Become a Compadrino Form and HTML page
 @main.route('/become-a-compadrino', methods=('GET', 'POST'))
