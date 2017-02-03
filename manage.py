@@ -194,18 +194,19 @@ def data_clean(data):
     kwargs = {key: val for key, val in data.items() if val != 'NDY'}
     amber = Status.query.filter_by(status_name="Amber").first()
     green = Status.query.filter_by(status_name="Green").first()
-    kwargs['version_ok'] = 0 if incomplete else 1
-    kwargs['version_original'] = 1
-    kwargs['version_latest'] = 1
+    #kwargs['version_ok'] = 0 if incomplete else 1
+    #kwargs['version_original'] = 1
+    #kwargs['version_latest'] = 1
     return {'kwargs' : kwargs, 'status' : amber if incomplete else green}
 
 def version_data(cleaned):
     version =  {'checked' : True, 
     'checked_count' : 1, 
-    'statuses' : cleaned['status'],
-    'version_number' : 1,
-    'user' : User.query.filter_by(username='admin').first(), 
-    'database' : Database.query.filter_by(database_name='COMPADRE 4').first()}
+    'statuses' : cleaned['status']#,
+    #'version_number' : 1,
+    #'user' : User.query.filter_by(username='admin').first(), 
+    #'database' : Database.query.filter_by(database_name='COMPADRE 4').first()
+               }
     return version
 
 @manager.command

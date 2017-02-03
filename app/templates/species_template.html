@@ -20,10 +20,10 @@
             <li><a href="../../data-manage/delete/taxonomy/{{taxonomy.id}}">Delete taxonomy</a></li>{% else %}
             <li><a href="../../data-manage/taxonomy/new/0/species={{species.id}}">Add taxonomy</a></li> {% endif %}
             <li class="dropdown-header">Species Traits</li> {% if trait %}
-            <li><a href="../../data-manage/traits/edit/{{trait.id}}">Edit</a></li>
+            <li><a href="../../data-manage/traits/edit/{{trait.id}}/species={{species.id}}">Edit</a></li>
             <li><a href="../../data-manage/traits/{{trait.id}}/edit-history">View edits</a></li>
             <li><a href="../../data-manage/delete/traits/{{trait.id}}">Delete species traits</a></li> {% else %}
-            <li><a href="../../data-manage/traits/new/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
+            <li><a href="../../data-manage/traits/new/0/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
     </div> {% endif %}
     
     
@@ -109,7 +109,7 @@
         </table> {% else %}
         <h3>Taxonomy</h3>
         <div class="info_box_empty">
-            <p>Not entered</p> <a href="../../taxonomy/new/species={{species.id}}">Add taxonomic information</a> </div> {% endif %} {% if trait %}
+            <p>Not entered</p> <a href="">Add taxonomic information</a> </div> {% endif %} {% if trait %}
         <h3>Traits <small> {{trait.id}}</small></h3>
         <table style="width:100%" class="table">
             <tr>
@@ -143,7 +143,7 @@
         <h3>Traits</h3>
         <div class="info_box_empty">
             <p>Not entered</p>
-            <p><a href="../../traits/new/species={{species.id}}">Add traits</a></p>
+            <p><a href="">Add traits</a></p>
         </div> {% endif %} </div>
 </div>
 <!-- End of top section (species, taxonomy, traits models)) -->
@@ -190,7 +190,7 @@
                 <tr>
                     <td>
                         <p>No publications</p>
-                        <p><a href="{{ url_for('main.new_publication_form') }}">Add new publication</a>.</p>
+                        <p><a href="">Add new publication</a>.</p>
                     </td>
                     <td> </td>
                     <td> </td>
@@ -339,7 +339,7 @@
     <div class="info_box_empty">
         <p>There are no populations attatched to this species, new populations are added via the publication overview:</p>
         <p><a href="{{ url_for('main.publications_table') }}">Search existing publications</a></p>
-        <p><a href="{{ url_for('main.new_publication_form') }}">Add new publication</a></p>
+        <p><a href="">Add new publication</a></p>
     </div> {% endif %}
     
 </div> {% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }}

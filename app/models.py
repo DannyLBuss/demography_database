@@ -15,28 +15,28 @@ from sqlalchemy.inspection import inspect
 from sqlalchemy import or_
 from flask_sqlalchemy import SQLAlchemy, BaseQuery
 
-#class VersionQuery(BaseQuery):
-#    def all_versions(self): #was overwriting the original all() function
-#        return [s for s in self.filter_by(version_ok=1)]
-#    def original(self):
-#        return [s for s in self.filter_by(version_original=1)]
-#    def latest(self):
-#        return [s for s in self.filter_by(version_latest=1)]
-#    def all_checked(self):
-#        # This is slow
-#        amber = Status.query.filter(Status.status_name=='Amber').first()
-#        green = Status.query.filter(Status.status_name=='Green').first()
-#        return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).filter(Version.checked == True).order_by(Version.version_number.desc())]
-#    def all_checked_unchecked(self):
-#        # This is slow
-#        amber = Status.query.filter(Status.status_name=='Amber').first()
-#        green = Status.query.filter(Status.status_name=='Green').first()
-#        return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).order_by(Version.version_number.desc())]
-#    def all_v(self):
-#        return [s for s in self]
-#    def version_number(self, id):
-#        # This has potential to be slow too
-#        return self.filter(Version.version_number == id).all()
+class VersionQuery(BaseQuery):
+    def all_versions(self): #was overwriting the original all() function
+        return [s for s in self.filter_by(version_ok=1)]
+    def original(self):
+        return [s for s in self.filter_by(version_original=1)]
+    def latest(self):
+        return [s for s in self.filter_by(version_latest=1)]
+    def all_checked(self):
+        # This is slow
+        amber = Status.query.filter(Status.status_name=='Amber').first()
+        green = Status.query.filter(Status.status_name=='Green').first()
+        return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).filter(Version.checked == True).order_by(Version.version_number.desc())]
+    def all_checked_unchecked(self):
+        # This is slow
+        amber = Status.query.filter(Status.status_name=='Amber').first()
+        green = Status.query.filter(Status.status_name=='Green').first()
+        return [s for s in self.filter(or_(Version.statuses == amber, Version.statuses == green)).order_by(Version.version_number.desc())]
+    def all_v(self):
+        return [s for s in self]
+    def version_number(self, id):
+        # This has potential to be slow too
+        return self.filter(Version.version_number == id).all()
 
 class Permission:
     FOLLOW = 0x01
@@ -115,7 +115,7 @@ class User(UserMixin, db.Model):
     institute_id = db.Column(db.Integer, db.ForeignKey('institutes.id'))
     institute_confirmed = db.Column(db.Boolean, default=False)
 
-    versions = db.relationship("Version", backref="user")
+    #versions = db.relationship("Version", backref="user")
     changelogger = db.relationship("ChangeLogger", backref="user")
 
     @staticmethod
@@ -146,28 +146,6 @@ class User(UserMixin, db.Model):
     @staticmethod
     def migrate():
         Institute.migrate()
-
-    @staticmethod
-    def generate_fake(count=100):
-        from sqlalchemy.exc import IntegrityError
-        from random import seed
-        import forgery_py
-
-        seed()
-        for i in range(count):
-            u = User(email=forgery_py.internet.email_address(),
-                     username=forgery_py.internet.user_name(True),
-                     password=forgery_py.lorem_ipsum.word(),
-                     confirmed=True,
-                     name=forgery_py.name.full_name(),
-                     location=forgery_py.address.city(),
-                     about_me=forgery_py.lorem_ipsum.sentence(),
-                     member_since=forgery_py.date.date(True))
-            db.session.add(u)
-            try:
-                db.session.commit()
-            except IntegrityError:
-                db.session.rollback()
 
 
     def __init__(self, **kwargs):
@@ -914,7 +892,7 @@ class Database(db.Model):
     database_number_matrices = db.Column(db.Integer())
     database_agreement = db.Column(db.String(64))
 
-    version = db.relationship("Version", backref="database")
+    #version = db.relationship("Version", backref="database")
     version_latest = db.Column(db.String(64))
     version_original = db.Column(db.Boolean())
     version_ok = db.Column(db.Boolean)
@@ -2039,15 +2017,15 @@ class Species(db.Model):
     studies = db.relationship("Study", backref="species", passive_deletes=True)
 
     version = db.relationship("Version", backref="species", uselist=False, passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
-    @staticmethod
-    def find_version(original):
-        original = original[0]
-        last = Version.query.filter_by(original_version_id=original.id).order_by(Version.version_number.desc()).first()
-        return last.version_number + 1
+#    @staticmethod
+#    def find_version(original):
+#        original = original[0]
+#        last = Version.query.filter_by(original_version_id=original.id).order_by(Version.version_number.desc()).first()
+#        return last.version_number + 1
     
     def add_to_logger(self,current_user,field_name,content_before,content_after,new_edit_delete):
         changelogger = {
@@ -2274,9 +2252,9 @@ class Taxonomy(db.Model):
     col_check_date = db.Column(db.Date())
 
     version = db.relationship("Version", backref="taxonomy", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     @staticmethod
     def migrate():
@@ -2349,7 +2327,7 @@ class Trait(db.Model):
     __tablename__ = 'traits'
     id = db.Column(db.Integer, primary_key=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
-    max_height = db.Column(db.Float()) #This should be a double, eventually
+    #max_height = db.Column(db.Float()) #This should be a double, eventually
     organism_type_id = db.Column(db.Integer, db.ForeignKey('organism_types.id',ondelete='CASCADE'))
     growth_form_raunkiaer_id = db.Column(db.Integer, db.ForeignKey('growth_forms_raunkiaer.id',ondelete='CASCADE')) 
     reproductive_repetition_id = db.Column(db.Integer, db.ForeignKey('reproductive_repetition.id',ondelete='CASCADE'))
@@ -2358,9 +2336,9 @@ class Trait(db.Model):
     spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id',ondelete='CASCADE')) 
 
     version = db.relationship("Version", backref="trait", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     @staticmethod
     def migrate():
@@ -2474,9 +2452,9 @@ class Publication(db.Model):
     studies = db.relationship("Study", backref="publication", passive_deletes=True)
 
     version = db.relationship("Version", backref="publication", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     @staticmethod
     def migrate():
@@ -2588,9 +2566,9 @@ class Study(db.Model):
     number_populations = db.Column(db.Integer()) #could verify with populations.count()
 
     version = db.relationship("Version", backref="study", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     @staticmethod
     def migrate():
@@ -2658,9 +2636,9 @@ class AuthorContact(db.Model):
     author_reply = db.Column(db.Text())
 
     version = db.relationship("Version", backref="author_contact", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
 
     @staticmethod
@@ -2721,9 +2699,9 @@ class AdditionalSource(db.Model):
     description = db.Column(db.Text())
 
     version = db.relationship("Version", backref="additional_source", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     def to_json(self, key):
         additional_source = {
@@ -2804,9 +2782,9 @@ class Population(db.Model):
     matrices = db.relationship("Matrix", backref="population", passive_deletes=True)
 
     version = db.relationship("Version", backref="population", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
 #    def geometries_dec(self):
 #        geo = json.loads(self.geometries)
@@ -2926,9 +2904,9 @@ class Stage(db.Model):
     matrix_stages = db.relationship("MatrixStage", backref="stage", passive_deletes=True)
 
     version = db.relationship("Version", backref="stage", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     def to_json(self, key):
         stage = {
@@ -2970,9 +2948,9 @@ class StageType(db.Model):
     stages = db.relationship("Stage", backref="stage_types", passive_deletes=True)
 
     version = db.relationship("Version", backref="stage_type", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     def to_json(self, key):
         stage_type = {
@@ -3070,9 +3048,9 @@ class MatrixStage(db.Model):
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id',ondelete='CASCADE'))
 
     version = db.relationship("Version", backref="matrix_stage", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     def to_json(self, key):
         matrix_stage = {
@@ -3113,9 +3091,9 @@ class MatrixValue(db.Model):
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id',ondelete='CASCADE'))
 
     version = db.relationship("Version", backref="matrix_value", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     @staticmethod
     def migrate():
@@ -3213,9 +3191,9 @@ class Matrix(db.Model):
 
     # Versioning
     version = db.relationship("Version", backref="matrix", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     @staticmethod
     def migrate():
@@ -3437,9 +3415,9 @@ class Fixed(db.Model):
     #fixed_independence_flag
 
     version = db.relationship("Version", backref="fixed", passive_deletes=True)
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     @staticmethod
     def migrate():
@@ -3546,20 +3524,20 @@ class Version(db.Model):
     version_number = db.Column(db.Integer(), default=0)
 
     #version of is the ID of the previous version, so each version can refer back to it
-    original_version_id = db.Column(db.Integer, db.ForeignKey('versions.id', ondelete='CASCADE')) 
-    version_date_added = db.Column(db.Date())
-    version_timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
+    #original_version_id = db.Column(db.Integer, db.ForeignKey('versions.id', ondelete='CASCADE')) 
+    #version_date_added = db.Column(db.Date())
+    #version_timestamp_created = db.Column(db.DateTime, default=datetime.utcnow)
     
     # If this is the original version, it will have other versions
-    original_version = db.relationship("Version", backref="child_versions", remote_side="Version.id", uselist=True)
+    #original_version = db.relationship("Version", backref="child_versions", remote_side="Version.id", uselist=True)
     checked = db.Column(db.Boolean())
     
     status_id = db.Column(db.Integer, db.ForeignKey('statuses.id',ondelete='CASCADE'))
     checked_count = db.Column(db.Integer(), default=0)
 
     # Utility relationships
-    version_user_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
-    database_id = db.Column(db.Integer, db.ForeignKey('databases.id',ondelete='CASCADE'))
+    #version_user_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
+    #database_id = db.Column(db.Integer, db.ForeignKey('databases.id',ondelete='CASCADE'))
 
     # Demography relationships
     species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
@@ -3571,6 +3549,7 @@ class Version(db.Model):
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id',ondelete='CASCADE'))
     fixed_id = db.Column(db.Integer, db.ForeignKey('fixed.id',ondelete='CASCADE'))
 
+    #these are defunct
     stage_id = db.Column(db.Integer, db.ForeignKey('stages.id',ondelete='CASCADE'))
     stage_type_id = db.Column(db.Integer, db.ForeignKey('stage_types.id',ondelete='CASCADE'))
 

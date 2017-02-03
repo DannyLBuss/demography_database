@@ -78,6 +78,7 @@ def species_form(id,edit_or_new):
             species.add_to_logger(current_user,'image_path',species_old.image_path,form.image_path.data,'edit')
             species.add_to_logger(current_user,'image_path2',species_old.image_path2,form.image_path2.data,'edit')
             #END COPY CODE BLOCK
+            
         
         flash('The species infomation has been updated.')
         return redirect(url_for('main.species_page',id=species.id))
@@ -206,29 +207,64 @@ def taxonomy_edit_history(id):
 # editing traits
 @data_manage.route('/traits/<string:edit_or_new>/<int:id>/species=<int:species_id>', methods=['GET', 'POST'])
 @login_required
-def trait_form(id):
-    trait = Trait.query.get_or_404(id)
-    species = Species.query.get_or_404(trait.species_id)
-    form = TraitForm(trait=trait)
+def trait_form(id,edit_or_new,species_id):
     
+    if edit_or_new == "edit": # if you are editing, get trait object and create form
+        trait = Trait.query.get_or_404(id)
+        trait_old = Trait.query.get_or_404(id)
+        form = TraitForm(trait=trait)
+        species = Species.query.filter_by(id=species_id).first_or_404()
+    else: # if you are creating new, create empty trait object and create form
+        trait = Trait()
+        trait_old = Trait()
+        form = TraitForm()
+        species = Species.query.filter_by(id=species_id).first_or_404()
+        
     if form.validate_on_submit():
-        trait.max_height = form.max_height.data
+        if edit_or_new == "edit":
+            # COPY CODE BLOCK
+            trait.add_to_logger(current_user,'organism_type',trait_old.organism_type,form.organism_type.data,'edit')
+            trait.add_to_logger(current_user,'growth_form_raunkiaer',trait_old.growth_form_raunkiaer,form.growth_form_raunkiaer.data,'edit')
+            trait.add_to_logger(current_user,'reproductive_repetition',trait_old.reproductive_repetition,form.reproductive_repetition.data,'edit')
+            trait.add_to_logger(current_user,'dicot_monoc',trait_old.dicot_monoc,form.dicot_monoc.data,'edit')
+            trait.add_to_logger(current_user,'angio_gymno',trait_old.angio_gymno,form.angio_gymno.data,'edit')
+            trait.add_to_logger(current_user,'spand_ex_growth_types',trait_old.spand_ex_growth_types,form.spand_ex_growth_types.data,'edit')
+            # END CODE BLOCK
+            
         trait.organism_type = form.organism_type.data
         trait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
         trait.reproductive_repetition = form.reproductive_repetition.data
         trait.dicot_monoc = form.dicot_monoc.data
         trait.angio_gymno = form.angio_gymno.data
         trait.spand_ex_growth_types = form.spand_ex_growth_types.data
+        
+        if edit_or_new == "new":
+            trait.species_id = species.id
+            
+            db.session.flush()
+            db.session.add(trait)
+            db.session.commit()
+            # COPY CODE BLOCK
+            trait.add_to_logger(current_user,'organism_type',trait_old.organism_type,form.organism_type.data,'edit')
+            trait.add_to_logger(current_user,'growth_form_raunkiaer',trait_old.growth_form_raunkiaer,form.growth_form_raunkiaer.data,'edit')
+            trait.add_to_logger(current_user,'reproductive_repetition',trait_old.reproductive_repetition,form.reproductive_repetition.data,'edit')
+            trait.add_to_logger(current_user,'dicot_monoc',trait_old.dicot_monoc,form.dicot_monoc.data,'edit')
+            trait.add_to_logger(current_user,'angio_gymno',trait_old.angio_gymno,form.angio_gymno.data,'edit')
+            trait.add_to_logger(current_user,'spand_ex_growth_types',trait_old.spand_ex_growth_types,form.spand_ex_growth_types.data,'edit')
+            # END CODE BLOCK
+        
         flash('The trait infomation has been updated.')
-        return redirect(url_for('.species_page',id=species.id))
+        return redirect(url_for('main.species_page',id=species.id))
     
-    form.max_height.data = trait.max_height
+    
+    
     form.organism_type.data = trait.organism_type
     form.growth_form_raunkiaer.data = trait.growth_form_raunkiaer
     form.reproductive_repetition.data = trait.reproductive_repetition
     form.dicot_monoc.data = trait.dicot_monoc
     form.angio_gymno.data = trait.angio_gymno
     form.spand_ex_growth_types.data = trait.spand_ex_growth_types
+    
     return render_template('data_manage/generic_form.html', form=form, trait=trait,species = species)
 
 # traits edit history
@@ -236,16 +272,29 @@ def trait_form(id):
 @login_required
 def trait_edit_history(id):
     trait = Trait.query.get_or_404(id)
-    return render_template('edit_history.html', trait=trait)
+    species = Species.query.get_or_404(trait.species_id)
+    logged_changes = ChangeLogger.query.filter_by(object_type = "trait",object_id = id)
+    return render_template('edit_history.html',trait=trait, species = species, logged_changes = logged_changes)
 
 # editing publication
 @data_manage.route('/publication/<string:edit_or_new>/<int:id>', methods=['GET', 'POST'])
 @login_required
 def publication_form(id):
-    publication = Publication.query.get_or_404(id)
-    form = PublicationForm()
+    if edit_or_new == "edit":
+        publicication = Publication.query.filter_by(id=id).first_or_404()
+        publication_old = Publication.query.filter_by(id=id).first_or_404()
+        form = PublicationForm(publication=publication)
+    else:
+        publication = Publication()
+        publication_old = Publication()
+        form = PublicationForm()
     
     if form.validate_on_submit():
+        
+        #if edit_or_new == "edit":
+            # COPY CODE BLOCK
+            # END CODE BLOCK
+            
         publication.source_type = form.source_type.data
         publication.authors = form.authors.data 
         publication.editors = form.editors.data
@@ -265,7 +314,16 @@ def publication_form(id):
         publication.purposes_id = form.purposes.data
         publication.embargo = form.embargo.data
         publication.missing_data = form.missing_data.data
-        publication.additional_source_string = form.additional_source_string.data   
+        publication.additional_source_string = form.additional_source_string.data
+        
+        if edit_or_new == "new":
+            
+            db.session.flush()
+            db.session.add(publication)
+            db.session.commit()
+            # COPY CODE BLOCK
+            # END CODE BLOCK
+            
         flash('The publication infomation has been updated.')
         return redirect(url_for('.publication_page',id=id))
     
@@ -290,15 +348,15 @@ def publication_form(id):
     form.missing_data.data = publication.missing_data
     form.additional_source_string.data = publication.additional_source_string
     
-    
     return render_template('data_manage/publication_form.html', form=form, publication=publication)
 
 # publication edit history
 @data_manage.route('/publication/<int:id>/edit-history')
 @login_required
 def publication_edit_history(id):
-    publication = Publication.query.get_or_404(id)
-    return render_template('edit_history.html', publication=publication)
+    publication = Publication.query.filter_by(id=id).first_or_404()
+    logged_changes = ChangeLogger.query.filter_by(object_type = "publication",object_id = id)
+    return render_template('edit_history.html',publication = publication, logged_changes = logged_changes)
 
 # editing population infomation
 # NEEDS UPDATE

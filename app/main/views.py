@@ -317,143 +317,143 @@ def help_develop_site():
 
 ### NEW DATA INPUT FORMS
 
-@main.route('/species/new', methods=['GET', 'POST'])
-def species_new_form():
-    form = SpeciesForm()
-    if form.validate_on_submit():
-        species = Species()
-        
-        species.species_accepted = form.species_accepted.data
-        species.species_common = form.species_common.data
-        species.iucn_status = form.iucn_status.data
-        species.esa_status = form.esa_status.data
-        species.invasive_status = form.invasive_status.data
-        species.gbif_taxon_key = form.gbif_taxon_key.data
-        species.image_path = form.image_path.data
-        species.image_path2 = form.image_path2.data
-        
-        db.session.add(species)
-        db.session.commit()
-
-        return redirect(url_for('.species_page',id=species.id))
-    
-    return render_template('data_entry/generic_form.html', form=form)
-
-@main.route('/taxonomy/new/species=<int:id_sp>', methods=['GET', 'POST'])
-def taxonomy_new_form(id_sp):
-    species = Species.query.get_or_404(id_sp)
-    form = TaxonomyForm()
-    
-    if form.validate_on_submit():
-        taxonomy = Taxonomy()
-        taxonomy.species_id = species.id
-        taxonomy.species_author = form.species_author.data
-        taxonomy.authority = form.authority.data
-        taxonomy.taxonomic_status = form.taxonomic_status.data
-        taxonomy.tpl_version = form.tpl_version.data
-        taxonomy.infraspecies_accepted = form.infraspecies_accepted.data
-        taxonomy.species_epithet_accepted = form.species_epithet_accepted.data 
-        taxonomy.genus_accepted = form.genus_accepted.data
-        taxonomy.genus = form.genus.data
-        taxonomy.family = form.family.data
-        taxonomy.tax_order = form.tax_order.data
-        taxonomy.tax_class = form.tax_class.data
-        taxonomy.phylum = form.phylum.data
-        taxonomy.kingdom = form.kingdom.data
-        
-        db.session.add(taxonomy)
-        db.session.commit()
-        
-        return redirect(url_for('.species_page',id=id_sp))
-    
-    return render_template('data_entry/generic_form.html', form=form,species = species)
-
-@main.route('/traits/new/species=<int:id_sp>', methods=['GET', 'POST'])
-def trait_new_form(id_sp):
-    species = Species.query.get_or_404(id_sp)
-    form = TraitForm()
-    
-    if form.validate_on_submit():
-        Trait = Trait()
-        trait.species_id = species.id
-        
-        trait.max_height = form.max_height.data
-        trait.organism_type = form.organism_type.data
-        trait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
-        trait.reproductive_repetition = form.reproductive_repetition.data
-        trait.dicot_monoc = form.dicot_monoc.data
-        trait.angio_gymno = form.angio_gymno.data
-        return redirect(url_for('.species_page',id=id_sp))
-    
-    return render_template('data_entry/generic_form.html', form=form,species = species)
-
-@main.route('/publication/new', methods=['GET', 'POST'])
-def new_publication_form():
-    form = PublicationForm()
-    
-    if form.validate_on_submit():
-        publication = Publication()
-        
-        publication.source_type = form.source_type.data
-        publication.authors = form.authors.data 
-        publication.editors = form.editors.data
-        publication.pub_title = form.pub_title.data
-        publication.journal_book_conf = form.journal_book_conf.data
-        publication.year = form.year.data
-        publication.volume = form.volume.data
-        publication.pages = form.pages.data
-        publication.publisher = form.publisher.data
-        publication.city = form.city.data
-        publication.country = form.country.data
-        publication.institution = form.institution.data
-        publication.DOI_ISBN = form.DOI_ISBN.data
-        publication.name = form.pub_name.data
-        publication.corresponding_author = form.corresponding_author.data
-        publication.email = form.email.data
-        publication.purposes_id = form.purposes.data
-        publication.embargo = form.embargo.data
-        publication.missing_data = form.missing_data.data
-        publication.additional_source_string = form.additional_source_string.data  
-        
-        db.session.add(publication)
-        db.session.commit()
-        
-        return redirect(url_for('.publication_page',id=publication.id))
-    
-    return render_template('data_entry/publication_form.html',form=form)
-
-@main.route('/population/new/publication=<int:id_pub>/choose_species', methods=['GET'])
-def choose_species(id_pub):
-    publication = Publication.query.get_or_404(id_pub)
-    species = Species.query.all()
-    
-    return render_template('data_entry/choose_species.html',publication=publication,species=species)
-    
-@main.route('/population/new/publication=<int:id_pub>/species=<int:id_sp>', methods=['GET', 'POST'])
-def population_new_form(id_pub,id_sp):
-    publication = Publication.query.get_or_404(id_pub)
-    species = Species.query.get_or_404(id_sp)
-    form = PopulationForm()
-    
-    if form.validate_on_submit():
-        population = Population()
-        population.publication_id = id_pub
-        population.species_id = id_sp
-        
-        population.name = form.name.data
-        population.ecoregion = form.ecoregion.data
-        population.country = form.country.data
-        population.continent = form.continent.data
-        population.latitude = form.latitude.data
-        population.longitude = form.longitude.data
-        population.altitude = form.altitude.data
-        
-        db.session.add(population)
-        db.session.commit()
-        
-        return redirect(url_for('.publication_page',id=id_pub))
-    
-    return render_template('data_entry/generic_form.html', form=form, publication=publication, species=species)
+#@main.route('/species/new', methods=['GET', 'POST'])
+#def species_new_form():
+#    form = SpeciesForm()
+#    if form.validate_on_submit():
+#        species = Species()
+#        
+#        species.species_accepted = form.species_accepted.data
+#        species.species_common = form.species_common.data
+#        species.iucn_status = form.iucn_status.data
+#        species.esa_status = form.esa_status.data
+#        species.invasive_status = form.invasive_status.data
+#        species.gbif_taxon_key = form.gbif_taxon_key.data
+#        species.image_path = form.image_path.data
+#        species.image_path2 = form.image_path2.data
+#        
+#        db.session.add(species)
+#        db.session.commit()
+#
+#        return redirect(url_for('.species_page',id=species.id))
+#    
+#    return render_template('data_entry/generic_form.html', form=form)
+#
+#@main.route('/taxonomy/new/species=<int:id_sp>', methods=['GET', 'POST'])
+#def taxonomy_new_form(id_sp):
+#    species = Species.query.get_or_404(id_sp)
+#    form = TaxonomyForm()
+#    
+#    if form.validate_on_submit():
+#        taxonomy = Taxonomy()
+#        taxonomy.species_id = species.id
+#        taxonomy.species_author = form.species_author.data
+#        taxonomy.authority = form.authority.data
+#        taxonomy.taxonomic_status = form.taxonomic_status.data
+#        taxonomy.tpl_version = form.tpl_version.data
+#        taxonomy.infraspecies_accepted = form.infraspecies_accepted.data
+#        taxonomy.species_epithet_accepted = form.species_epithet_accepted.data 
+#        taxonomy.genus_accepted = form.genus_accepted.data
+#        taxonomy.genus = form.genus.data
+#        taxonomy.family = form.family.data
+#        taxonomy.tax_order = form.tax_order.data
+#        taxonomy.tax_class = form.tax_class.data
+#        taxonomy.phylum = form.phylum.data
+#        taxonomy.kingdom = form.kingdom.data
+#        
+#        db.session.add(taxonomy)
+#        db.session.commit()
+#        
+#        return redirect(url_for('.species_page',id=id_sp))
+#    
+#    return render_template('data_entry/generic_form.html', form=form,species = species)
+#
+#@main.route('/traits/new/species=<int:id_sp>', methods=['GET', 'POST'])
+#def trait_new_form(id_sp):
+#    species = Species.query.get_or_404(id_sp)
+#    form = TraitForm()
+#    
+#    if form.validate_on_submit():
+#        Trait = Trait()
+#        trait.species_id = species.id
+#        
+#        trait.max_height = form.max_height.data
+#        trait.organism_type = form.organism_type.data
+#        trait.growth_form_raunkiaer = form.growth_form_raunkiaer.data
+#        trait.reproductive_repetition = form.reproductive_repetition.data
+#        trait.dicot_monoc = form.dicot_monoc.data
+#        trait.angio_gymno = form.angio_gymno.data
+#        return redirect(url_for('.species_page',id=id_sp))
+#    
+#    return render_template('data_entry/generic_form.html', form=form,species = species)
+#
+#@main.route('/publication/new', methods=['GET', 'POST'])
+#def new_publication_form():
+#    form = PublicationForm()
+#    
+#    if form.validate_on_submit():
+#        publication = Publication()
+#        
+#        publication.source_type = form.source_type.data
+#        publication.authors = form.authors.data 
+#        publication.editors = form.editors.data
+#        publication.pub_title = form.pub_title.data
+#        publication.journal_book_conf = form.journal_book_conf.data
+#        publication.year = form.year.data
+#        publication.volume = form.volume.data
+#        publication.pages = form.pages.data
+#        publication.publisher = form.publisher.data
+#        publication.city = form.city.data
+#        publication.country = form.country.data
+#        publication.institution = form.institution.data
+#        publication.DOI_ISBN = form.DOI_ISBN.data
+#        publication.name = form.pub_name.data
+#        publication.corresponding_author = form.corresponding_author.data
+#        publication.email = form.email.data
+#        publication.purposes_id = form.purposes.data
+#        publication.embargo = form.embargo.data
+#        publication.missing_data = form.missing_data.data
+#        publication.additional_source_string = form.additional_source_string.data  
+#        
+#        db.session.add(publication)
+#        db.session.commit()
+#        
+#        return redirect(url_for('.publication_page',id=publication.id))
+#    
+#    return render_template('data_entry/publication_form.html',form=form)
+#
+#@main.route('/population/new/publication=<int:id_pub>/choose_species', methods=['GET'])
+#def choose_species(id_pub):
+#    publication = Publication.query.get_or_404(id_pub)
+#    species = Species.query.all()
+#    
+#    return render_template('data_entry/choose_species.html',publication=publication,species=species)
+#    
+#@main.route('/population/new/publication=<int:id_pub>/species=<int:id_sp>', methods=['GET', 'POST'])
+#def population_new_form(id_pub,id_sp):
+#    publication = Publication.query.get_or_404(id_pub)
+#    species = Species.query.get_or_404(id_sp)
+#    form = PopulationForm()
+#    
+#    if form.validate_on_submit():
+#        population = Population()
+#        population.publication_id = id_pub
+#        population.species_id = id_sp
+#        
+#        population.name = form.name.data
+#        population.ecoregion = form.ecoregion.data
+#        population.country = form.country.data
+#        population.continent = form.continent.data
+#        population.latitude = form.latitude.data
+#        population.longitude = form.longitude.data
+#        population.altitude = form.altitude.data
+#        
+#        db.session.add(population)
+#        db.session.commit()
+#        
+#        return redirect(url_for('.publication_page',id=id_pub))
+#    
+#    return render_template('data_entry/generic_form.html', form=form, publication=publication, species=species)
 
 # USER + PROFILE PAGES
 # User

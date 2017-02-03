@@ -97,7 +97,7 @@ class TaxonomyForm(Form):
     
 #trait form, up to date 30/1/17
 class TraitForm(Form):
-    max_height = FloatField('Max Height')
+    #max_height = FloatField('Max Height')
     organism_type = QuerySelectField('Organism type',
             query_factory=lambda: OrganismType.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.type_name)
