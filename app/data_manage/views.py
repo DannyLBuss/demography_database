@@ -81,7 +81,7 @@ def species_form(id,edit_or_new):
             
         
         flash('The species infomation has been updated.')
-        return redirect(url_for('main.species_page',id=species.id))
+        return redirect(url_for('main.species_page',species_id=species.id,pubs_ids="all"))
     
     form.species_accepted.data = species.species_accepted
     form.species_common.data = species.species_common
@@ -176,7 +176,7 @@ def taxonomy_form(id,species_id,edit_or_new):
             #END COPY CODE BLOCK            
             
         flash('The taxonomy has been updated.')
-        return redirect(url_for('main.species_page',id=species.id))
+        return redirect(url_for('main.species_page',species_id=species.id,pubs_ids="all"))
     
     if edit_or_new == "edit": #if you are editing a taxonomy, you need to fill the form with the data already available
         form.authority.data = taxonomy.authority
@@ -254,7 +254,7 @@ def trait_form(id,edit_or_new,species_id):
             # END CODE BLOCK
         
         flash('The trait infomation has been updated.')
-        return redirect(url_for('main.species_page',id=species.id))
+        return redirect(url_for('main.species_page',species_id=species.id,pubs_ids="all"))
     
     
     
@@ -279,9 +279,9 @@ def trait_edit_history(id):
 # editing publication
 @data_manage.route('/publication/<string:edit_or_new>/<int:id>', methods=['GET', 'POST'])
 @login_required
-def publication_form(id):
+def publication_form(id,edit_or_new):
     if edit_or_new == "edit":
-        publicication = Publication.query.filter_by(id=id).first_or_404()
+        publication = Publication.query.filter_by(id=id).first_or_404()
         publication_old = Publication.query.filter_by(id=id).first_or_404()
         form = PublicationForm(publication=publication)
     else:
@@ -291,15 +291,32 @@ def publication_form(id):
     
     if form.validate_on_submit():
         
-        #if edit_or_new == "edit":
+        if edit_or_new == "edit":
             # COPY CODE BLOCK
+            publication.add_to_logger(current_user,'source_type',publication_old.source_type,form.source_type.data,'edit')
+            publication.add_to_logger(current_user,'authors',publication_old.authors,form.authors.data,'edit')
+            publication.add_to_logger(current_user,'editors',publication_old.editors,form.editors.data,'edit')
+            publication.add_to_logger(current_user,'pub_title,year',publication_old.pub_title,form.pub_title.data,'edit')
+            publication.add_to_logger(current_user,'pub_title,year',publication_old.year,form.year.data,'edit')
+            publication.add_to_logger(current_user,'volume,pages',publication_old.volume,form.volume.data,'edit')
+            publication.add_to_logger(current_user,'volume,pages',publication_old.pages,form.pages.data,'edit')
+            publication.add_to_logger(current_user,'publisher',publication_old.publisher,form.publisher.data,'edit')
+            publication.add_to_logger(current_user,'city',publication_old.city,form.city.data,'edit')
+            publication.add_to_logger(current_user,'country',publication_old.country,form.country.data,'edit')
+            publication.add_to_logger(current_user,'institution',publication_old.institution,form.institution.data,'edit')
+            publication.add_to_logger(current_user,'DOI_ISBN',publication_old.DOI_ISBN,form.DOI_ISBN.data,'edit')
+            publication.add_to_logger(current_user,'journal_name',publication_old.journal_name,form.journal_name.data,'edit')
+            publication.add_to_logger(current_user,'date_digitised',publication_old.date_digitised,form.date_digitised.data,'edit')
+            publication.add_to_logger(current_user,'embargo',publication_old.embargo,form.embargo.data,'edit')
+            publication.add_to_logger(current_user,'additional_source_string',publication_old.additional_source_string,form.additional_source_string.data,'edit')
+            publication.add_to_logger(current_user,'student',publication_old.student,form.student.data,'edit')
+            publication.add_to_logger(current_user,'study_notes',publication_old.study_notes,form.study_notes.data,'edit')
             # END CODE BLOCK
             
         publication.source_type = form.source_type.data
         publication.authors = form.authors.data 
         publication.editors = form.editors.data
         publication.pub_title = form.pub_title.data
-        publication.journal_book_conf = form.journal_book_conf.data
         publication.year = form.year.data
         publication.volume = form.volume.data
         publication.pages = form.pages.data
@@ -308,13 +325,18 @@ def publication_form(id):
         publication.country = form.country.data
         publication.institution = form.institution.data
         publication.DOI_ISBN = form.DOI_ISBN.data
-        publication.name = form.pub_name.data
-        publication.corresponding_author = form.corresponding_author.data
-        publication.email = form.email.data
-        publication.purposes_id = form.purposes.data
+        publication.journal_name = form.journal_name.data
+        #publication.corresponding_author = form.corresponding_author.data
+        #publication.email = form.email.data
+        publication.purposes = form.purposes.data
+        publication.date_digitised = form.date_digitised.data
         publication.embargo = form.embargo.data
-        publication.missing_data = form.missing_data.data
+        #publication.missing_data = form.missing_data.data
         publication.additional_source_string = form.additional_source_string.data
+        publication.study_notes = form.study_notes.data
+        publication.student = form.student.data
+        
+        print(publication.purposes)
         
         if edit_or_new == "new":
             
@@ -322,16 +344,33 @@ def publication_form(id):
             db.session.add(publication)
             db.session.commit()
             # COPY CODE BLOCK
+            publication.add_to_logger(current_user,'source_type',publication_old.source_type,form.source_type.data,'edit')
+            publication.add_to_logger(current_user,'authors',publication_old.authors,form.authors.data,'edit')
+            publication.add_to_logger(current_user,'editors',publication_old.editors,form.editors.data,'edit')
+            publication.add_to_logger(current_user,'pub_title,year',publication_old.pub_title,form.pub_title.data,'edit')
+            publication.add_to_logger(current_user,'pub_title,year',publication_old.year,form.year.data,'edit')
+            publication.add_to_logger(current_user,'volume,pages',publication_old.volume,form.volume.data,'edit')
+            publication.add_to_logger(current_user,'volume,pages',publication_old.pages,form.pages.data,'edit')
+            publication.add_to_logger(current_user,'publisher',publication_old.publisher,form.publisher.data,'edit')
+            publication.add_to_logger(current_user,'city',publication_old.city,form.city.data,'edit')
+            publication.add_to_logger(current_user,'country',publication_old.country,form.country.data,'edit')
+            publication.add_to_logger(current_user,'institution',publication_old.institution,form.institution.data,'edit')
+            publication.add_to_logger(current_user,'DOI_ISBN',publication_old.DOI_ISBN,form.DOI_ISBN.data,'edit')
+            publication.add_to_logger(current_user,'journal_name',publication_old.journal_name,form.journal_name.data,'edit')
+            publication.add_to_logger(current_user,'date_digitised',publication_old.date_digitised,form.date_digitised.data,'edit')
+            publication.add_to_logger(current_user,'embargo',publication_old.embargo,form.embargo.data,'edit')
+            publication.add_to_logger(current_user,'additional_source_string',publication_old.additional_source_string,form.additional_source_string.data,'edit')
+            publication.add_to_logger(current_user,'student',publication_old.student,form.student.data,'edit')
+            publication.add_to_logger(current_user,'study_notes',publication_old.study_notes,form.study_notes.data,'edit')
             # END CODE BLOCK
             
         flash('The publication infomation has been updated.')
-        return redirect(url_for('.publication_page',id=id))
+        return redirect(url_for('main.species_page',species_id="all",pubs_ids=publication.id))
     
     form.source_type.data = publication.source_type
     form.authors.data = publication.authors
     form.editors.data = publication.editors
     form.pub_title.data = publication.pub_title
-    form.journal_book_conf.data = publication.journal_book_conf
     form.year.data = publication.year
     form.volume.data = publication.volume
     form.pages.data = publication.pages
@@ -340,13 +379,17 @@ def publication_form(id):
     form.country.data = publication.country
     form.institution.data = publication.institution
     form.DOI_ISBN.data = publication.DOI_ISBN
-    form.pub_name.data = publication.name
-    form.corresponding_author.data = publication.corresponding_author
-    form.email.data = publication.email
-    form.purposes.data = publication.purposes_id
+    form.journal_name.data = publication.journal_name
+    #form.corresponding_author.data = publication.corresponding_author
+    #form.email.data = publication.email
+    form.purposes.data = publication.purposes
+    form.date_digitised.data = publication.date_digitised
     form.embargo.data = publication.embargo
-    form.missing_data.data = publication.missing_data
+    #form.missing_data.data = publication.missing_data
     form.additional_source_string.data = publication.additional_source_string
+    form.study_notes.data = publication.study_notes
+    form.student.data = publication.student
+    
     
     return render_template('data_manage/publication_form.html', form=form, publication=publication)
 
@@ -363,6 +406,7 @@ def publication_edit_history(id):
 @data_manage.route('/population/<string:edit_or_new>/<int:id>', methods=['GET', 'POST'])
 @login_required
 def population_form(id):
+
     population = Population.query.get_or_404(id)
     species = Species.query.get_or_404(population.species_id)
     form = PopulationForm(population=population)
@@ -376,7 +420,7 @@ def population_form(id):
         population.longitude = form.longitude.data
         population.altitude = form.altitude.data
         flash('The population infomation has been updated.')
-        return redirect(url_for('.species_page',id=species.id))
+        return redirect(url_for('main.species_page',species_id=species.id,pubs_ids="all"))
         
     form.name.data = population.name
     form.ecoregion.data = population.ecoregion
@@ -462,7 +506,7 @@ def matrix_form(id):
         matrix.matrix_dimension = form.matrix_dimension.data
         matrix.observations = form.observations.data
         flash('The matrix infomation has been updated.')
-        return redirect(url_for('.species_page',id=species.id))
+        return redirect(url_for('main.species_page',species_id=species.id,pubs_ids="all"))
         
     form.treatment.data = matrix.treatment.treatment_name
     form.matrix_split.data = matrix.matrix_split
@@ -500,58 +544,58 @@ def matrix_edit_history(id):
     matrix = Matrix.query.get_or_404(id)
     return render_template('edit_history.html', matrix= matrix)
 
-# delete things
-@data_manage.route('/delete/<thing_to_delete>/<int:id_obj>', methods=['GET', 'POST'])
-@login_required
-def delete_object(thing_to_delete,id_obj):
-    form = DeleteForm()
-    
-    if thing_to_delete == "population":
-        population = Population.query.get_or_404(id_obj)
-        
-    if thing_to_delete == "species":
-        species = Species.query.get_or_404(id_obj)
-        populations = Population.query.filter_by(species_id=id_obj)
-        taxonomy = Taxonomy(species_id=id_obj)
-        traits = Traits(species_id=id_obj)
-    
-    if thing_to_delete == "publication":
-        publication = Publication.query.get_or_404(id_obj)
-        populations = Population.query.filter_by(publication_id=id_obj)
-        
-    if thing_to_delete == "matrix":
-        matrix = Matrix.query.get_or_404(id_obj)
-        
-        
-    if form.validate_on_submit() and thing_to_delete == "population":
-        db.session.delete(population)
-        db.session.commit()
-        flash('The population has been deleted')
-        return redirect(url_for('.publication_page',id=population.publication_id))
-    
-    if form.validate_on_submit() and thing_to_delete == "species":
-        db.session.delete(species)
-        for p in populations:
-            db.session.delete(p)
-        db.session.commit()
-        flash('The species has been deleted')
-        return redirect(url_for('.species_table'))
-    
-    if form.validate_on_submit() and thing_to_delete == "publication":
-        db.session.delete(publication)
-        for p in populations:
-            db.session.delete(p)
-        db.session.commit()
-        flash('The publication has been deleted')
-        return redirect(url_for('.publications_table'))
-    
-    if form.validate_on_submit() and thing_to_delete == "matrix":
-        db.session.delete(matrix)
-        db.session.commit()
-        flash('The matrix has been deleted')
-        return redirect(url_for('.publication_page',id=matrix.publication_id))
-    
-    return render_template('data_manage/delete_confirm.html', form=form)
+## delete things
+#@data_manage.route('/delete/<thing_to_delete>/<int:id_obj>', methods=['GET', 'POST'])
+#@login_required
+#def delete_object(thing_to_delete,id_obj):
+#    form = DeleteForm()
+#    
+#    if thing_to_delete == "population":
+#        population = Population.query.get_or_404(id_obj)
+#        
+#    if thing_to_delete == "species":
+#        species = Species.query.get_or_404(id_obj)
+#        populations = Population.query.filter_by(species_id=id_obj)
+#        taxonomy = Taxonomy(species_id=id_obj)
+#        traits = Traits(species_id=id_obj)
+#    
+#    if thing_to_delete == "publication":
+#        publication = Publication.query.get_or_404(id_obj)
+#        populations = Population.query.filter_by(publication_id=id_obj)
+#        
+#    if thing_to_delete == "matrix":
+#        matrix = Matrix.query.get_or_404(id_obj)
+#        
+#        
+#    if form.validate_on_submit() and thing_to_delete == "population":
+#        db.session.delete(population)
+#        db.session.commit()
+#        flash('The population has been deleted')
+#        return redirect(url_for('.publication_page',id=population.publication_id))
+#    
+#    if form.validate_on_submit() and thing_to_delete == "species":
+#        db.session.delete(species)
+#        for p in populations:
+#            db.session.delete(p)
+#        db.session.commit()
+#        flash('The species has been deleted')
+#        return redirect(url_for('.species_table'))
+#    
+#    if form.validate_on_submit() and thing_to_delete == "publication":
+#        db.session.delete(publication)
+#        for p in populations:
+#            db.session.delete(p)
+#        db.session.commit()
+#        flash('The publication has been deleted')
+#        return redirect(url_for('.publications_table'))
+#    
+#    if form.validate_on_submit() and thing_to_delete == "matrix":
+#        db.session.delete(matrix)
+#        db.session.commit()
+#        flash('The matrix has been deleted')
+#        return redirect(url_for('.publication_page',id=matrix.publication_id))
+#    
+#    return render_template('data_manage/delete_confirm.html', form=form)
 
 # CSV EXPORT, work in progress
 @data_manage.route('/export/csv')

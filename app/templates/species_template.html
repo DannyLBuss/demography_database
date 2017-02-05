@@ -1,9 +1,58 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
-<div class="page-header">
+
+<!-- list of publications -->
+<div id="publication_filter">
+    <div class="info_box">
+        <table style="width:100%" class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <h4><strong>Publications:</strong></h4></td>
+                    <td></td>
+                    <td>
+                        <h4>Filter</h4></td>
+                </tr>
+            </thead> {% if publications %}
+            <tbody> {% for publication in publications %}
+                
+                <tr class="remove_duplicates publication_row" style="border-left-color:{{ publication.colour }};">
+                    <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.name }}" in <i>{{ publication.pub_title }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> <small> {{publication.id}}</small> 
+                        <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}</p>
+                        {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}</p>{% endif %}
+                        {% if publication.date_digitised %}<p><b>Date Digitised:</b> {{ publication.date_digitised.strftime('%Y-%m-%d') }}</p>{% endif %}
+                        <p><strong>Species studied:</strong> </p>
+                        <ul>{% for studyz in publication.studies %}<li>{{ studyz.species.species_accepted }}: {{ studyz.populations | length }} population(s)</li>{% endfor %}</ul>
+                    </td>
+                    <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source</a>{% endif %}</td>
+                    <td>
+                        <input type="checkbox" class="filter" data-value="id{{publication.id}}"> </td>
+                </tr> {% endfor %} </tbody>
+            {% else %}
+            <tbody>
+                <tr>
+                    <td>
+                        <p>No publications</p>
+                        <p><a href="">Add new publication</a>.</p>
+                    </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+            </tbody> {% endif %} </table>
+    </div> 
+    
+    <div class="info_box">
+        <h4><strong>Species:</strong></h4>
+    </div>
+    
+    <div id="dist_map"></div>
+    <br>
+    
+    {% for species in all_species %}
+    
     <!-- BREADCRUMB -->
-    <div class="breadcrumb"> {% if taxonomy %}
-        <p>You are at: <a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> > <i>{{species.species_accepted}}</i></p> {% else %}
-        <p>No taxonomy</p> {% endif %} </div> 
+    <div class="breadcrumb"> {% for taxonomy in species.taxonomy %}
+        <p><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> > <i>{{species.species_accepted}}</i></p> {% else %}
+        <p>No taxonomy</p> {% endfor %} </div> 
     
     <!-- compadrino actions for top part of page -->
     {% if current_user.is_authenticated %} 
@@ -40,7 +89,6 @@
 <p>gbif_taxon_key: {{ gbif_taxon_key }}</p>
 <p>species_iucn_taxonid: {{ species_iucn_taxonid }}</p>
 
-</div>
 
 <!-- Top page section (species, taxonomy, traits models)-->
 <div class="row">
@@ -56,14 +104,14 @@
                     <div class="species-image-container">Image 2</div> {% endif %} </div>
             </div>
             <br>
-            <div id="dist_map"></div> {% if species.gbif_taxon_key %}
+             {% if species.gbif_taxon_key %}
             <p><a href="http://www.gbif.org/species/{{ species.gbif_taxon_key}}" target="_blank"> Species occurence data from GBIF. </a> For use as a guide only.</p> {% else %}
             <p>No occurence data available from GBIF.</p> {% endif %} 
         </div>
     </div>
     
     <!-- Right side information with taxonom and traits -->
-    <div class="col-sm-4"> {% if taxonomy %}
+    <div class="col-sm-4"> {% if species.taxonomy %} {% for taxonomy in species.taxonomy %}
         <h3>Taxonomy <small> {{taxonomy.id}}</small>  </h3>
         <table style="width:100%" class="table">
             <tbody>
@@ -106,10 +154,10 @@
                 </tr>
                 {% endif %}
             </tbody>
-        </table> {% else %}
+        </table> {% endfor %} {% else %}
         <h3>Taxonomy</h3>
         <div class="info_box_empty">
-            <p>Not entered</p> <a href="">Add taxonomic information</a> </div> {% endif %} {% if trait %}
+            <p>Not entered</p> <a href="">Add taxonomic information</a> </div> {% endif %} {% if species.trait %} {% for trait in species.trait %}
         <h3>Traits <small> {{trait.id}}</small></h3>
         <table style="width:100%" class="table">
             <tr>
@@ -139,7 +187,7 @@
                 <td> {{ trait.spandex_growth_type_id.spandex_growth_types }} </td>
             </tr>
             {% endif %}
-        </table> {% else %}
+        </table> {% endfor %} {% else %} 
         <h3>Traits</h3>
         <div class="info_box_empty">
             <p>Not entered</p>
@@ -160,54 +208,17 @@
 
 <br>
 
-<!-- list of publications -->
-<div id="publication_filter">
-    <div class="info_box">
-        <table style="width:100%" class="table">
-            <thead>
-                <tr>
-                    <td>
-                        <h4><strong>Publications:</strong></h4></td>
-                    <td></td>
-                    <td>
-                        <h4>Filter</h4></td>
-                </tr>
-            </thead> {% if publications %}
-            <tbody> {% for publication in publications %}
-                
-                <tr class="remove_duplicates publication_row" style="border-left-color:{{ publication.colour }};">
-                    <td> <a href="../../publication/{{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.name }}" in <i>{{ publication.pub_title }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> <small> {{publication.id}}</small> 
-                        <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}</p>
-                        {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}</p>{% endif %}
-                        <p><b>Date Digitised:</b> {{ publication.date_digitised.strftime('%Y-%m-%d') }}</p>
-                    </td>
-                    <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source</a>{% endif %}</td>
-                    <td>
-                        <input type="checkbox" class="filter" data-value="id{{publication.id}}"> </td>
-                </tr> {% endfor %} </tbody>
-            {% else %}
-            <tbody>
-                <tr>
-                    <td>
-                        <p>No publications</p>
-                        <p><a href="">Add new publication</a>.</p>
-                    </td>
-                    <td> </td>
-                    <td> </td>
-                </tr>
-            </tbody> {% endif %} </table>
-    </div> 
+
 
     
     <!-- populations + matrices section -->
-    {%if populations%}
+    {%if species.studies %}
     <div class="list"> 
         
         <!-- looping through populations -->
         {% for study in studies %}
-        {{ study.id }}
-        {% for population in populations %}
-        {% if population.study_id == study.id %}
+        {% if study.species_id == species.id %}
+        {% for population in study.populations %}
         <div class="population_box {{ study.publication.colour }}" style="border-left-color:{{ study.publication.colour }};">
             <div class="population" data-value="id{{study.publication.id}}"></div> 
             
@@ -246,7 +257,7 @@
                 <p style="text-align: center;">Click on the sections below to view individual matrix models</p> 
                 
                 <!-- looping through matrices -->
-                {% for matrix in matrices %}
+                {% for matrix in population.matrices %}
                 {% if matrix.population_id == population.id %}
                 <div class="panel-group">
                     <div class="panel panel-default">
@@ -332,7 +343,7 @@
                         </div>
                     </div>
                 </div> {% endif %} {% endfor %}  </div>
-        </div> {% endif %} {% endfor %} {% endfor %} </div> 
+        </div> {% endfor %} {% endif %} {% endfor %} </div> 
     
     <!-- what to show if there are no populations -->
     {% else %}
@@ -341,6 +352,8 @@
         <p><a href="{{ url_for('main.publications_table') }}">Search existing publications</a></p>
         <p><a href="">Add new publication</a></p>
     </div> {% endif %}
+    
+    {% endfor %}
     
 </div> {% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }}
 <!-- JAVASCRIPT -->
@@ -423,18 +436,19 @@
 <script src="{{ url_for('static', filename='oms.min.js') }}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='leaflet-vector-markers.css') }}">
 <script>
-    // draw empty map
-    var mymap = L.map('dist_map').setView([20, 20], 1);
+     //draw empty map
+    {%for species in all_species %}
+    var mymap = L.map('dist_map').setView([20, 20], 2);
     var Esri_WorldPhysical = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service'
         , maxZoom: 8
-        , minZoom: 1
-    }).addTo(mymap); {% if species.gbif_taxon_key %}
+        , minZoom: 2
+    }).addTo(mymap);  {% if species.gbif_taxon_key %}
     L.tileLayer('http://api.gbif.org/v1/map/density/tile?x={x}&y={y}&z={z}&type=TAXON&key={{species.gbif_taxon_key}}&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds', {
         attribution: ''
         , maxZoom: 8
-        , minZoom: 1
-    , }).addTo(mymap); {% endif %}
+        , minZoom: 2
+    , }).addTo(mymap); {% endif %} {% endfor %}
 </script>
 <script>
     // remove duplicate publications

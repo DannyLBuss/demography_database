@@ -4,12 +4,13 @@ from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
 from wtforms.validators import Required, Length, Email, Regexp, Optional
 from wtforms import ValidationError
 from flask.ext.pagedown.fields import PageDownField
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 from ..models import IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute
+    
 
 def stringFromText(string):
     #Formatting string and separating for use as a list
@@ -120,6 +121,7 @@ class TraitForm(Form):
    
 # not up to data
 class PublicationForm(Form):
+    
     source_type = QuerySelectField('Source Type',
             query_factory=lambda: SourceType.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.source_name, a.source_description))	
@@ -135,13 +137,17 @@ class PublicationForm(Form):
     country = StringField('Publication Country')
     institution = StringField('Publication Institution')
     DOI_ISBN = StringField('DOI/ISBN')
-    pub_name = StringField('Publication Title')
-    corresponding_author = StringField('Corresponding Author')
-    email = StringField('Email Address', validators=[Email(),Optional()])
-    purposes = QuerySelectField('Purposes',query_factory=lambda: Purpose.query.all(), get_pk=lambda a: a.id,get_label=lambda a:'{} - {}'.format(a.purpose_name, a.purpose_description))
+    journal_name = StringField('Publication Title')
+    #corresponding_author = StringField('Corresponding Author')
+    #email = StringField('Email Address', validators=[Email(),Optional()])
+    #purposes = QuerySelectField('Purposes',query_factory=lambda: Purpose.query.all(), get_pk=lambda a: a.id,get_label=lambda a:'{} - {}'.format(a.purpose_name, a.purpose_description))
+    purposes = QuerySelectMultipleField(query_factory=lambda: Purpose.query.all(), get_pk=lambda a: a.id,get_label=lambda a:'{} - {}'.format(a.purpose_name, a.purpose_description))
+    date_digitised = DateField('Date digitized',validators=[Optional()])
     embargo = DateField('Embargo',validators=[Optional()])
-    missing_data = QuerySelectField('Missing Data',query_factory=lambda: MissingData.query.all(), get_pk=lambda a: a.id,get_label=lambda a:'{} - {}'.format(a.missing_code, a.missing_description))
+    #missing_data = QuerySelectField('Missing Data',query_factory=lambda: MissingData.query.all(), get_pk=lambda a: a.id,get_label=lambda a:'{} - {}'.format(a.missing_code, a.missing_description))
     additional_source_string = StringField('Additional Source')
+    study_notes = StringField('Additional notes')
+    student = StringField('Student')
     # author_contacts # Fkey#additional_sources # Fkey
     submit = SubmitField('Submit')
 

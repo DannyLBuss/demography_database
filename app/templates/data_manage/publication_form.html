@@ -7,7 +7,7 @@
 {% block page_content %}
 <div class="page-header">
     {% if publication %}
-    <a type="button" class="btn btn-default" href="../../publication/{{publication.id}}">Go back to publication overview</a>
+    <a type="button" class="btn btn-default" href="../../../species=all/publications={{publication.id}}">Go back to publication overview</a>
     <h3>Editing infomation for <i>{{publication.authors}}</i></h3>
     {% endif %}
 </div>
@@ -46,16 +46,14 @@
             {{ wtf.form_field(form.city) }}
             {{ wtf.form_field(form.country) }}
             {{ wtf.form_field(form.institution) }}
-            {{ wtf.form_field(form.pub_name) }}
+            {{ wtf.form_field(form.journal_name) }}
         </div>
         <div class="info_box">
             <h3>Must be input manually</h3>
-            {{ wtf.form_field(form.corresponding_author) }}
-            {{ wtf.form_field(form.email) }}
             {{ wtf.form_field(form.purposes) }}
             {{ wtf.form_field(form.embargo) }}
-            {{ wtf.form_field(form.missing_data) }}
             {{ wtf.form_field(form.additional_source_string) }}
+            {{ wtf.form_field(form.study_notes) }}
         </div>
     </div>
 

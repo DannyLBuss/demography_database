@@ -131,53 +131,53 @@ def publications_table():
 ###############################################################################################################################
 ### OVERVIEW PAGES
 # species overview page
-@main.route('/species/<int:id>/overview')
-# @login_required
-def species_page(id):
+@main.route('/species=<list:species_ids>/publications=<list:pub_ids>')
+def species_page(species_ids,pub_ids):
+    if species_ids[0] == "all" and pub_ids[0] == "all":
+        abort(404)
+        
     #get species
-    species = Species.query.filter_by(id=id).first_or_404()
-    print(species) #check
+    all_species = []
+    if species_ids[0] != "all":
+        for id in species_ids:
+            all_species.append((Species.query.filter_by(id=id)).first())
+        all_studies_species = []
+        for species in all_species:
+                all_studies_species.extend(Study.query.filter_by(species_id=species.id).all())
     
-    #get taxonomy
-    taxonomy = Taxonomy.query.filter_by(species_id=species.id).first()
-    print(taxonomy) #check
+    #get pubs
+    all_pubs = []
+    if pub_ids[0] != "all":
+        for id in pub_ids:
+            all_pubs.append((Publication.query.filter_by(id=id)).first())
+
+        all_studies_pubs = []
+        for publications in all_pubs:
+                all_studies_pubs.extend(Study.query.filter_by(publication_id=publications.id).all())
+      
+    # Pick the right studies + get stuff
+    if species_ids[0] == "all":
+        studies = all_studies_pubs
+    elif pub_ids[0] == "all":
+        studies = all_studies_species
+    else:
+        studies = set(all_studies_species).intersection(all_studies_pubs)
     
-    #get traits
-    trait = Trait.query.filter_by(species_id=species.id).first()
-    print(trait) #check
-    
-    # querying studies returns a weird thing so I have to do this first
-    all_studies = Study.query.filter_by(species_id=species.id)
-    
-    # generate empty lists to store studies and publications
-    studies = []
     publications = []
-    for study in all_studies:
-        studies.append(study)
-        publications.append(Publication.query.filter_by(id=study.publication_id).first())
-    # remove duplicates in publications
-    publications = list(set(publications))
-    
-    print(studies) # check
-    print(publications) #check
-    
-    #get populations
-    populations = []
+    all_species = []
     for study in studies:
-        populations_temp = (Population.query.filter_by(study_id=study.id))
-        for populations_i in populations_temp:
-            populations.append(populations_i)
-    print(populations)
+        publications.append(Publication.query.filter_by(id=study.publication_id).first())
+        all_species.append(Species.query.filter_by(id=study.species_id).first())
+        
+    # remove duplicates    
+    studies = list(set(studies))
+    all_species = list(set(all_species))    
+    publications = list(set(publications))
+        
+    print(publications)
+    print(all_species)
     
-    #get matrices
-    matrices = []
-    for population in populations:
-        matrices_temp = Matrix.query.filter_by(population_id=population.id)
-        for matrices_i in matrices_temp:
-            matrices.append(matrices_i)
-    print(matrices)
-    
-    return render_template('species_template.html',species = species, taxonomy = taxonomy, trait = trait, publications = publications, studies = studies, populations = populations, matrices = matrices)
+    return render_template('species_template.html',all_species = all_species, publications = publications, studies = studies)
 
 # publication overview page
 # NEEDS UPDATE OR MERGER INTO SPECIES OVERVIEW TEMPLATE

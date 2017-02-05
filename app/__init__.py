@@ -6,6 +6,9 @@ from flask.ext.login import LoginManager
 from flask.ext.pagedown import PageDown
 from config import config
 from flask_sqlalchemy import SQLAlchemy
+from .util import ListConverter
+ 
+
 
 # from sqlalchemy.orm.query import Query
 # from sqlalchemy import *
@@ -26,11 +29,15 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
 
+
+
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    app.url_map.converters['list'] = ListConverter
 
     bootstrap.init_app(app)
     mail.init_app(app)
