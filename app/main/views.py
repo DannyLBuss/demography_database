@@ -226,46 +226,6 @@ def explorer(taxon_level,taxon):
 def contribute_data():
     return render_template('contribute_data.html')
 
-#education
-@main.route('/education')
-def education():
-    return render_template('about/education.html')
-
-# education ppm
-@main.route('/education_ppm')
-def education_ppm():
-    return render_template('education_pages/education_matrix_modelling.html')
-
-#news
-@main.route('/news')
-def news():
-    return render_template('about/news.html')
-
-#team
-@main.route('/team')
-def team():
-    return render_template('about/team.html')
-
-#faqs
-@main.route('/FAQs')
-def FAQs():
-    return render_template('about/FAQs.html')
-
-#history
-@main.route('/history')
-def history():
-    return render_template('about/history.html')
-
-# funding
-@main.route('/funding')
-def funding():
-    return render_template('about/funding.html')
-
-#publications
-@main.route('/publications')
-def publications():
-    return render_template('about/publications.html')
-
 #coming soon page
 @main.route('/comingsoon')
 def comingsoon():
