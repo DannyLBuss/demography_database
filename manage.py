@@ -23,7 +23,7 @@ from app.models import User, Role, Permission, \
     IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
-    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
+    Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Version, Institute, EndSeason, ChangeLogger
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
@@ -49,7 +49,7 @@ def make_shell_context():
                 AuthorContact=AuthorContact, ContentEmail=ContentEmail, Population=Population, Ecoregion=Ecoregion, Continent=Continent, \
                 StageType=StageType, StageTypeClass=StageTypeClass, TransitionType=TransitionType, MatrixValue=MatrixValue, \
                 MatrixComposition=MatrixComposition, StartSeason=StartSeason, StudiedSex=StudiedSex, Captivity=Captivity, MatrixStage=MatrixStage,\
-                Matrix=Matrix, Interval=Interval, Fixed=Fixed, Small=Small, CensusTiming=CensusTiming, Study=Study, Status=Status, InvasiveStatusStudy=InvasiveStatusStudy, InvasiveStatusElsewhere=InvasiveStatusElsewhere, \
+                Matrix=Matrix, Interval=Interval, Fixed=Fixed, Small=Small, CensusTiming=CensusTiming, Status=Status, InvasiveStatusStudy=InvasiveStatusStudy, InvasiveStatusElsewhere=InvasiveStatusElsewhere, \
                 PurposeEndangered=PurposeEndangered, PurposeWeed=PurposeWeed, Version=Version, Institute=Institute, EndSeason=EndSeason, ChangeLogger = ChangeLogger)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
@@ -98,8 +98,7 @@ def delete_table_data():
         Version.query.delete()
         Taxonomy.query.delete()
         Matrix.query.delete()
-        Population.query.delete()
-        Study.query.delete()    
+        Population.query.delete() 
         Publication.query.delete()    
         Trait.query.delete()
         Species.query.delete()
@@ -410,44 +409,44 @@ def submit_new(data):
 
     ''' Study '''
     # What if all none? Will they be grouped together?
-    study = Study.query.filter_by(publication_id=publication.id, study_start=data["study_start"], study_end=data["study_end"]).first()
-    if study == None:
-        purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
-
-        purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_weed_id"]
-        database_source = Institute.query.filter_by(institution_name=data["study_database_source"]).first()# if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
-        
-        study_dict = {'study_duration' : data["study_duration"],
-        'study_start' : data["study_start"], 
-        'study_end' :  data["study_end"], 
-        'number_populations' : data["study_number_populations"], 
-        'purpose_endangered_id' : purpose_endangered.id if purpose_endangered else None, 
-        'purpose_weed_id' : purpose_weed.id if purpose_weed else None,
-        'database_source' : database_source}
-
-        study_cleaned = data_clean(study_dict)
-
-        # if not all(value == None for key, value in study_cleaned["kwargs"].items() if key not in ignore_keys) and population_present:
-        study = Study(**study_cleaned["kwargs"])
-        db.session.add(study)
-        db.session.commit()
-
-        study.publication_id = publication.id
-        study.species_id = species.id
-        db.session.add(study)
-        db.session.commit()
-
-
-        ''' Study Version '''
-        version = version_data(study_cleaned)
-        study_version = Version(**version)
-        study_version.version_number = 1
-        study_version.study = study    
-        db.session.add(study_version) 
-        db.session.commit()
-        study_version.original_version_id = study_version.id
-        db.session.add(study_version)
-        db.session.commit()
+#    study = Study.query.filter_by(publication_id=publication.id, study_start=data["study_start"], study_end=data["study_end"]).first()
+#    if study == None:
+#        purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
+#
+#        purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_weed_id"]
+#        database_source = Institute.query.filter_by(institution_name=data["study_database_source"]).first()# if data["study_purpose_weed_id"] else data["study_purpose_endangered_id"]
+#        
+#        study_dict = {'study_duration' : data["study_duration"],
+#        'study_start' : data["study_start"], 
+#        'study_end' :  data["study_end"], 
+#        'number_populations' : data["study_number_populations"], 
+#        'purpose_endangered_id' : purpose_endangered.id if purpose_endangered else None, 
+#        'purpose_weed_id' : purpose_weed.id if purpose_weed else None,
+#        'database_source' : database_source}
+#
+#        study_cleaned = data_clean(study_dict)
+#
+#        # if not all(value == None for key, value in study_cleaned["kwargs"].items() if key not in ignore_keys) and population_present:
+#        study = Study(**study_cleaned["kwargs"])
+#        db.session.add(study)
+#        db.session.commit()
+#
+#        study.publication_id = publication.id
+#        study.species_id = species.id
+#        db.session.add(study)
+#        db.session.commit()
+#
+#
+#        ''' Study Version '''
+#        version = version_data(study_cleaned)
+#        study_version = Version(**version)
+#        study_version.version_number = 1
+#        study_version.study = study    
+#        db.session.add(study_version) 
+#        db.session.commit()
+#        study_version.original_version_id = study_version.id
+#        db.session.add(study_version)
+#        db.session.commit()
 
     
     ''' Population '''
@@ -456,9 +455,14 @@ def submit_new(data):
     invasive_status_elsewhere = InvasiveStatusStudy.query.filter_by(status_name=data["population_invasive_status_elsewhere_id"]).first()
     ecoregion = Ecoregion.query.filter_by(ecoregion_code=data["population_ecoregion_id"]).first()
     continent = Continent.query.filter_by(continent_name=data["population_continent_id"]).first()
+    
+    purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
+
+    purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_weed_id"]
+    database_source = Institute.query.filter_by(institution_name=data["study_database_source"]).first()
 
     
-    pop = Population.query.filter_by(population_name=data["population_name"], study_id=study.id).first()
+    pop = Population.query.filter_by(population_name=data["population_name"], publication_id=publication.id).first()
 
     if pop == None:
         pop_dict = {'population_name' : data["population_name"],       
@@ -481,7 +485,15 @@ def submit_new(data):
         'invasive_status_elsewhere_id' : invasive_status_elsewhere.id if invasive_status_elsewhere else None,
         'ecoregion' : ecoregion, 
         'continent' : continent,
-        'within_site_replication' : data['population_within_site_replication']
+        'within_site_replication' : data['population_within_site_replication'],
+                    
+        'study_duration' : data["study_duration"],
+        'study_start' : data["study_start"], 
+        'study_end' :  data["study_end"], 
+        'number_populations' : data["study_number_populations"], 
+        'purpose_endangered_id' : purpose_endangered.id if purpose_endangered else None, 
+        'purpose_weed_id' : purpose_weed.id if purpose_weed else None,
+        'database_source' : database_source
         }
 
         pop_cleaned = data_clean(pop_dict)
@@ -493,7 +505,8 @@ def submit_new(data):
         db.session.commit()
 
         pop.species_author = data["species_author"]
-        pop.study_id = study.id
+        pop.publication_id = publication.id
+        pop.species_id = species.id
 
         db.session.add(pop)
         db.session.commit()
@@ -807,7 +820,7 @@ def migrate_meta():
     IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
-    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
+    Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute
 
     print "Migrating Meta Tables..."
@@ -823,7 +836,6 @@ def migrate_meta():
         MatrixValue.migrate()
         Matrix.migrate()
         Fixed.migrate()
-        Study.migrate()
         User.migrate()
         Version.migrate()
         Institute.migrate()
@@ -847,7 +859,7 @@ def model_version(model):
 
 @manager.command
 def version_current():
-    models = [Species(), Taxonomy(), Trait(), Publication(), AuthorContact(), Population(), StageType(), MatrixValue(),Matrix(), Fixed(), Study(), Institute()]
+    models = [Species(), Taxonomy(), Trait(), Publication(), AuthorContact(), Population(), StageType(), MatrixValue(),Matrix(), Fixed(), Institute()]
     
     for model in models:
         model_version(model)

@@ -6,7 +6,7 @@ from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, ContactForm
 from flask_mail import Mail, Message
 
-from ..data_manage.forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, MatrixForm, PublicationForm, StudyForm, DeleteForm
+from ..data_manage.forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, MatrixForm, PublicationForm, DeleteForm
 
 import random
 
@@ -15,7 +15,7 @@ from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
                     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, PurposeEndangered, PurposeWeed, Trait, \
-                    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
+                    Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Institute, Status, Version, ChangeLogger
 from ..decorators import admin_required, permission_required, crossdomain
 
@@ -63,11 +63,10 @@ def meta_tables_json():
                    "Species" : {"IUCNStatus" : [], "ESAStatus" : []}, "Taxonomy" : {}, "Trait" : {"OrganismType" : [], \
                    "GrowthFormRaunkiaer" : [], "ReproductiveRepetition" : [], "DicotMonoc" : [], "AngioGymno" : [], "SpandExGrowthType" : [] }, \
                    "Publication" : {"SourceType" : [], "Database" : [], "Purpose" : [], "MissingData" : [] }, \
-                   "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] , "InvasiveStatusStudy" : [], "InvasiveStatusElsewhere" : []}, \
+                   "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] , "InvasiveStatusStudy" : [], "InvasiveStatusElsewhere" : [], "PurposeEndangered": [], "PurposeWeed" : []}, \
                    "StageType" : { "StageTypeClass" : [] }, "MatrixValue" : { "TransitionType" : [] }, \
                    "Matrix" : {"MatrixComposition" : [], "StartSeason" : [], "EndSeason" : [], "StudiedSex" : [], "Captivity" : []}, \
-                   "Fixed" : { "Small": [], "CensusTiming" : [] },
-                   "Study" : { "PurposeEndangered": [], "PurposeWeed" : []}}
+                   "Fixed" : { "Small": [], "CensusTiming" : [] }}
 
     meta_tables["User"]["Institute"].extend(Institute.query.all())
     meta_tables["Species"]["IUCNStatus"].extend(IUCNStatus.query.all())
@@ -87,6 +86,8 @@ def meta_tables_json():
     meta_tables["Population"]["Continent"].extend(Continent.query.all())
     meta_tables["Population"]["InvasiveStatusStudy"].extend(InvasiveStatusStudy.query.all())
     meta_tables["Population"]["InvasiveStatusElsewhere"].extend(InvasiveStatusElsewhere.query.all())
+    meta_tables["Population"]["PurposeEndangered"].extend(PurposeEndangered.query.all())
+    meta_tables["Population"]["PurposeWeed"].extend(PurposeWeed.query.all())
     meta_tables["StageType"]["StageTypeClass"].extend(StageTypeClass.query.all())
     meta_tables["MatrixValue"]["TransitionType"].extend(TransitionType.query.all())
     meta_tables["Matrix"]["MatrixComposition"].extend(MatrixComposition.query.all())
@@ -96,8 +97,7 @@ def meta_tables_json():
     meta_tables["Matrix"]["Captivity"].extend(Captivity.query.all())
     meta_tables["Fixed"]["Small"].extend(Small.query.all())
     meta_tables["Fixed"]["CensusTiming"].extend(CensusTiming.query.all())
-    meta_tables["Study"]["PurposeEndangered"].extend(PurposeEndangered.query.all())
-    meta_tables["Study"]["PurposeWeed"].extend(PurposeWeed.query.all())
+    
 
     print meta_tables
 
@@ -141,9 +141,9 @@ def species_page(species_ids,pub_ids):
     if species_ids[0] != "all":
         for id in species_ids:
             all_species.append((Species.query.filter_by(id=id)).first())
-        all_studies_species = []
+        all_populations_species = []
         for species in all_species:
-                all_studies_species.extend(Study.query.filter_by(species_id=species.id).all())
+                all_populations_species.extend(Population.query.filter_by(species_id=species.id).all())
     
     #get pubs
     all_pubs = []
@@ -151,33 +151,33 @@ def species_page(species_ids,pub_ids):
         for id in pub_ids:
             all_pubs.append((Publication.query.filter_by(id=id)).first())
 
-        all_studies_pubs = []
+        all_populations_pubs = []
         for publications in all_pubs:
-                all_studies_pubs.extend(Study.query.filter_by(publication_id=publications.id).all())
+                all_populations_pubs.extend(Population.query.filter_by(publication_id=publications.id).all())
       
-    # Pick the right studies + get stuff
+    # Pick the right populations + get stuff
     if species_ids[0] == "all":
-        studies = all_studies_pubs
+        populations = all_populations_pubs
     elif pub_ids[0] == "all":
-        studies = all_studies_species
+        populations = all_populations_species
     else:
-        studies = set(all_studies_species).intersection(all_studies_pubs)
+        populations = set(all_populations_species).intersection(all_populations_pubs)
     
     publications = []
     all_species = []
-    for study in studies:
-        publications.append(Publication.query.filter_by(id=study.publication_id).first())
-        all_species.append(Species.query.filter_by(id=study.species_id).first())
+    for population in populations:
+        publications.append(Publication.query.filter_by(id=population.publication_id).first())
+        all_species.append(Species.query.filter_by(id=population.species_id).first())
         
     # remove duplicates    
-    studies = list(set(studies))
+    populations = list(set(populations))
     all_species = list(set(all_species))    
     publications = list(set(publications))
         
     print(publications)
     print(all_species)
     
-    return render_template('species_template.html',all_species = all_species, publications = publications, studies = studies)
+    return render_template('species_template.html',all_species = all_species, publications = publications, populations = populations)
 
 # publication overview page
 # NEEDS UPDATE OR MERGER INTO SPECIES OVERVIEW TEMPLATE

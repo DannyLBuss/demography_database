@@ -1,5 +1,31 @@
 {
 	"Population": {
+        "PurposeEndangered": [{
+            "purpose_name": "True",
+            "purpose_description": "The species was studied because the species was under threat"
+        }, {
+            "purpose_name": "False",
+            "purpose_description": "The study was carried out but the species were NOT under threat"
+        }, {
+            "purpose_name": "NA",
+            "purpose_description": "Not applicable"
+        }, {
+            "purpose_name": "NATS",
+            "purpose_description": "No access to source"
+        }],
+        "PurposeWeed": [{
+            "purpose_name": "True",
+            "purpose_description": "The study was carried out because a species posed a threat"
+        }, {
+            "purpose_name": "False",
+            "purpose_description": "The study was not carried out because a species posed a threat"
+        }, {
+            "purpose_name": "NA",
+            "purpose_description": "Not applicable"
+        }, {
+            "purpose_name": "NATS",
+            "purpose_description": "No access to source"
+        }],
 		"Ecoregion": [{
 			"ecoregion_code": "TMB",
 			"ecoregion_description": "Tropical and subtropical moist broadleaf forests"

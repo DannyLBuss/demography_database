@@ -4,12 +4,12 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import data_manage
 from .. import db
-from forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, StudyForm, MatrixForm
+from forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, MatrixForm
 from ..models import Permission, Role, User, \
                     IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
                     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
-                    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
+                    Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Institute, ChangeLogger
 from ..decorators import admin_required, permission_required, crossdomain
 
@@ -440,33 +440,33 @@ def population_edit_history(id):
     return render_template('edit_history.html', population=population)
 
 # edting study infomation
-# NEEDS UPDATE, possible merge into population
-@data_manage.route('/study/<int:id>/edit', methods=['GET', 'POST'])
-@login_required
-def study_form(id):
-    study = Study.query.get_or_404(id)
-    publication = study.publication_id
-    form = StudyForm(study=study)
-    
-    if form.validate_on_submit():
-        study.study_duration = form.study_duration.data
-        study.study_start = form.study_start.data
-        study.study_end = form.study_end.data
-        flash('The study infomation has been updated.')
-        return redirect(url_for('.publication_page',id=species.id))
-        
-    form.study_duration.data = study.study_duration
-    form.study_start.data = study.study_start
-    form.study_end.data = study.study_end
-    
-    return render_template('data_manage/generic_form.html', form=form, study=study)
+# merge into population
+#@data_manage.route('/study/<int:id>/edit', methods=['GET', 'POST'])
+#@login_required
+#def study_form(id):
+#    study = Study.query.get_or_404(id)
+#    publication = study.publication_id
+#    form = StudyForm(study=study)
+#    
+#    if form.validate_on_submit():
+#        study.study_duration = form.study_duration.data
+#        study.study_start = form.study_start.data
+#        study.study_end = form.study_end.data
+#        flash('The study infomation has been updated.')
+#        return redirect(url_for('.publication_page',id=species.id))
+#        
+#    form.study_duration.data = study.study_duration
+#    form.study_start.data = study.study_start
+#    form.study_end.data = study.study_end
+#    
+#    return render_template('data_manage/generic_form.html', form=form, study=study)
 
 # study edit history
-@data_manage.route('/study/<int:id>/edit-history')
-@login_required
-def study_edit_history(id):
-    study = Study.query.get_or_404(id)
-    return render_template('edit_history.html', study=study)
+#@data_manage.route('/study/<int:id>/edit-history')
+#@login_required
+#def study_edit_history(id):
+#    study = Study.query.get_or_404(id)
+#    return render_template('edit_history.html', study=study)
 
 # editing matrix
 # NEEDS UPDATE

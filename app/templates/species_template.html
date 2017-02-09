@@ -21,7 +21,6 @@
                         {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}</p>{% endif %}
                         {% if publication.date_digitised %}<p><b>Date Digitised:</b> {{ publication.date_digitised.strftime('%Y-%m-%d') }}</p>{% endif %}
                         <p><strong>Species studied:</strong> </p>
-                        <ul>{% for studyz in publication.studies %}<li>{{ studyz.species.species_accepted }}: {{ studyz.populations | length }} population(s)</li>{% endfor %}</ul>
                     </td>
                     <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source</a>{% endif %}</td>
                     <td>
@@ -212,15 +211,14 @@
 
     
     <!-- populations + matrices section -->
-    {%if species.studies %}
+    {%if species.populations %}
     <div class="list"> 
         
         <!-- looping through populations -->
-        {% for study in studies %}
-        {% if study.species_id == species.id %}
-        {% for population in study.populations %}
-        <div class="population_box {{ study.publication.colour }}" style="border-left-color:{{ study.publication.colour }};">
-            <div class="population" data-value="id{{study.publication.id}}"></div> 
+        {% for population in populations %}
+        {% if population.species_id == species.id %}
+        <div class="population_box {{ population.publication.colour }}" style="border-left-color:{{ population.publication.colour }};">
+            <div class="population" data-value="id{{population.publication.id}}"></div> 
             
             <!-- compadrino actions box -->
             {% if current_user.is_authenticated %}
@@ -247,9 +245,6 @@
                 {% else %}
                     <li>No coordinates given</li> 
                 {% endif %}
-                <li>invasive_status_study_id</li>
-                <li>invasive_status_elsewhere_id</li>
-                <li>pop_size</li>
             </ul>
 
             <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> Show/hide matrices </button>
@@ -343,7 +338,7 @@
                         </div>
                     </div>
                 </div> {% endif %} {% endfor %}  </div>
-        </div> {% endfor %} {% endif %} {% endfor %} </div> 
+        </div> {% endif %} {% endfor %} </div> 
     
     <!-- what to show if there are no populations -->
     {% else %}

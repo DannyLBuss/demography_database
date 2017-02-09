@@ -340,7 +340,7 @@ class Institute(db.Model):
     website = db.Column(db.String(200))
 
     users = db.relationship("User", backref="institute")
-    studies = db.relationship("Study", backref="database_source")
+    populations = db.relationship("Population", backref="database_source")
 
     @staticmethod
     def migrate():
@@ -1135,20 +1135,20 @@ contact_contents = db.Table('contact_contents', db.Model.metadata,
 )
 ''' End Meta Tables for Author Contact '''
 
-''' Meta Tables for Study'''
+''' Meta Tables for Population'''
 class PurposeEndangered(db.Model):
     __tablename__ = 'purposes_endangered'
     id = db.Column(db.Integer, primary_key=True)
     purpose_name = db.Column(db.String(64), index=True)
     purpose_description = db.Column(db.Text())
 
-    studies = db.relationship("Study", backref="purpose_endangered")
+    studies = db.relationship("Population", backref="purpose_endangered")
 
     @staticmethod
     def migrate():
         with open('app/data-migrate/studies.json') as d_file:
             data = json.load(d_file)
-            json_data = data["Study"]
+            json_data = data["Population"]
             nodes = json_data["PurposeEndangered"]
 
             for node in nodes:
@@ -1196,13 +1196,13 @@ class PurposeWeed(db.Model):
     purpose_name = db.Column(db.String(64), index=True)
     purpose_description = db.Column(db.Text())
 
-    studies = db.relationship("Study", backref="purpose_weed")
+    studies = db.relationship("Population", backref="purpose_weed")
 
     @staticmethod
     def migrate():
         with open('app/data-migrate/studies.json') as d_file:
             data = json.load(d_file)
-            json_data = data["Study"]
+            json_data = data["Population"]
             nodes = json_data["PurposeWeed"]
 
             for node in nodes:
@@ -1245,7 +1245,7 @@ class PurposeWeed(db.Model):
     def __repr__(self):
         return self.purpose_name
 
-''' End Meta Tables for Study '''
+''' End Meta Tables for Population '''
 
 ''' Meta Tables for Population '''
 class Ecoregion(db.Model):
@@ -2014,7 +2014,7 @@ class Species(db.Model):
     
     taxonomy = db.relationship("Taxonomy", backref="species", passive_deletes=True)
     trait = db.relationship("Trait", backref="species", passive_deletes=True)
-    studies = db.relationship("Study", backref="species", passive_deletes=True)
+    populations = db.relationship("Population", backref="species", passive_deletes=True)
 
     version = db.relationship("Version", backref="species", uselist=False, passive_deletes=True)
     #version_latest = db.Column(db.String(64))
@@ -2449,7 +2449,7 @@ class Publication(db.Model):
     # Establishing one to many relationships between tables
     author_contacts = db.relationship("AuthorContact", backref="publication", passive_deletes=True)
     additional_sources = db.relationship("AdditionalSource", backref="publication", passive_deletes=True)
-    studies = db.relationship("Study", backref="publication", passive_deletes=True)
+    populations = db.relationship("Population", backref="publication", passive_deletes=True)
 
     version = db.relationship("Version", backref="publication", passive_deletes=True)
     #version_latest = db.Column(db.String(64))
@@ -2548,78 +2548,78 @@ class Publication(db.Model):
 
 
 class Study(db.Model):
-    #query_class = VersionQuery
+#    #query_class = VersionQuery
     __tablename__ = 'studies'
     id = db.Column(db.Integer, primary_key=True)
-    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
-    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
-    study_duration = db.Column(db.Integer(), index=True)
-    study_start = db.Column(db.Integer())
-    study_end = db.Column(db.Integer())
-
-    purpose_endangered_id = db.Column(db.Integer, db.ForeignKey('purposes_endangered.id',ondelete='CASCADE'))
-    purpose_weed_id = db.Column(db.Integer, db.ForeignKey('purposes_weed.id',ondelete='CASCADE'))
-
-    database_source_id = db.Column(db.Integer, db.ForeignKey('institutes.id',ondelete='CASCADE'))
-
-    populations = db.relationship("Population", backref="study", passive_deletes=True)
-    number_populations = db.Column(db.Integer()) #could verify with populations.count()
-
-    version = db.relationship("Version", backref="study", passive_deletes=True)
-    #version_latest = db.Column(db.String(64))
-    #version_original = db.Column(db.Boolean())
-    #version_ok = db.Column(db.Boolean)
-
-    @staticmethod
-    def migrate():
-        PurposeEndangered.migrate()
-        PurposeWeed.migrate()
-
-    def to_json(self, key):
-        study = {
-            'request_url' : url_for('api.get_one_entry', id=self.id, model='studies', key=key,
-                                      _external=False),
-            'data' : {
-                    'publication' : self.publication.to_json_simple(key),
-                    'study_duration' : self.study_duration,
-                    'study_start' : self.study_start,
-                    'study_end' : self.study_end,
-                    'number_populations' : self.number_populations,           
-                    'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices],
-                    'populations' : [population.to_json_simple(key) for population in self.populations],
-                    'versions' : [version.to_json_simple(key) for version in self.versions]
-                }
-            }
-
-        user = User.query.filter_by(api_hash=key).first()
-        if user is not None and user.institute.institution_name == "University of Exeter":
-            study['data']['purpose_endangered'] = self.purpose_endangered.to_json_simple(key) if self.purpose_endangered else None
-            study['data']['purpose_weed'] = self.purpose_weed.to_json_simple(key) if self.purpose_weed else None
-        
-        return study
-
-    def to_json_simple(self, key):
-        study = {
-            'request_url' : url_for('api.get_one_entry', id=self.id, model='studies', key=key,
-                                      _external=False),
-            'data' : {
-                    'publication_doi' : self.publication.DOI_ISBN,
-                    'study_duration' : self.study_duration,
-                    'study_start' : self.study_start,
-                    'study_end' : self.study_end,
-                    'number_populations' : self.number_populations,           
-                    'matrices_len' : len(self.matrices),
-                    'populations_len' : len(self.populations),
-                    'versions_len' : len(self.versions)
-                }
-            }
-        return study
-
-    def __getitem__(self, key):
-        return getattr(self, key)
-
-    def __repr__(self):
-        return '<Study %r>' % self.id
+#    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
+#    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
+#    study_duration = db.Column(db.Integer(), index=True)
+#    study_start = db.Column(db.Integer())
+#    study_end = db.Column(db.Integer())
+#
+#    purpose_endangered_id = db.Column(db.Integer, db.ForeignKey('purposes_endangered.id',ondelete='CASCADE'))
+#    purpose_weed_id = db.Column(db.Integer, db.ForeignKey('purposes_weed.id',ondelete='CASCADE'))
+#
+#    database_source_id = db.Column(db.Integer, db.ForeignKey('institutes.id',ondelete='CASCADE'))
+#
+#    populations = db.relationship("Population", backref="study", passive_deletes=True)
+#    number_populations = db.Column(db.Integer()) #could verify with populations.count()
+#
+#    version = db.relationship("Version", backref="study", passive_deletes=True)
+#    #version_latest = db.Column(db.String(64))
+#    #version_original = db.Column(db.Boolean())
+#    #version_ok = db.Column(db.Boolean)
+#
+#    @staticmethod
+#    def migrate():
+#        PurposeEndangered.migrate()
+#        PurposeWeed.migrate()
+#
+#    def to_json(self, key):
+#        study = {
+#            'request_url' : url_for('api.get_one_entry', id=self.id, model='studies', key=key,
+#                                      _external=False),
+#            'data' : {
+#                    'publication' : self.publication.to_json_simple(key),
+#                    'study_duration' : self.study_duration,
+#                    'study_start' : self.study_start,
+#                    'study_end' : self.study_end,
+#                    'number_populations' : self.number_populations,           
+#                    'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices],
+#                    'populations' : [population.to_json_simple(key) for population in self.populations],
+#                    'versions' : [version.to_json_simple(key) for version in self.versions]
+#                }
+#            }
+#
+#        user = User.query.filter_by(api_hash=key).first()
+#        if user is not None and user.institute.institution_name == "University of Exeter":
+#            study['data']['purpose_endangered'] = self.purpose_endangered.to_json_simple(key) if self.purpose_endangered else None
+#            study['data']['purpose_weed'] = self.purpose_weed.to_json_simple(key) if self.purpose_weed else None
+#        
+#        return study
+#
+#    def to_json_simple(self, key):
+#        study = {
+#            'request_url' : url_for('api.get_one_entry', id=self.id, model='studies', key=key,
+#                                      _external=False),
+#            'data' : {
+#                    'publication_doi' : self.publication.DOI_ISBN,
+#                    'study_duration' : self.study_duration,
+#                    'study_start' : self.study_start,
+#                    'study_end' : self.study_end,
+#                    'number_populations' : self.number_populations,           
+#                    'matrices_len' : len(self.matrices),
+#                    'populations_len' : len(self.populations),
+#                    'versions_len' : len(self.versions)
+#                }
+#            }
+#        return study
+#
+#    def __getitem__(self, key):
+#        return getattr(self, key)
+#
+#    def __repr__(self):
+#        return '<Study %r>' % self.id
 
 class AuthorContact(db.Model):
     #query_class = VersionQuery
@@ -2752,7 +2752,8 @@ class Population(db.Model):
     #query_class = VersionQuery
     __tablename__ = 'populations'
     id = db.Column(db.Integer, primary_key=True, index=True)
-    study_id = db.Column(db.Integer, db.ForeignKey('studies.id',ondelete='CASCADE'))
+    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
+    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
     species_author = db.Column(db.String(64))
     population_name = db.Column(db.Text())
     ecoregion_id = db.Column(db.Integer, db.ForeignKey('ecoregions.id',ondelete='CASCADE'))
@@ -2778,7 +2779,20 @@ class Population(db.Model):
     altitude = db.Column(db.Float())
     pop_size = db.Column(db.Text())
     within_site_replication = db.Column(db.Text())
+    
+    #from study
+    study_duration = db.Column(db.Integer(), index=True)
+    study_start = db.Column(db.Integer())
+    study_end = db.Column(db.Integer())
 
+    purpose_endangered_id = db.Column(db.Integer, db.ForeignKey('purposes_endangered.id',ondelete='CASCADE'))
+    purpose_weed_id = db.Column(db.Integer, db.ForeignKey('purposes_weed.id',ondelete='CASCADE'))
+
+    database_source_id = db.Column(db.Integer, db.ForeignKey('institutes.id',ondelete='CASCADE'))
+
+    number_populations = db.Column(db.Integer())
+    #from study end
+    
     matrices = db.relationship("Matrix", backref="population", passive_deletes=True)
 
     version = db.relationship("Version", backref="population", passive_deletes=True)
@@ -2823,7 +2837,6 @@ class Population(db.Model):
             'data' : {
                 'species' : self.species.to_json_simple(key),
                 'publication' : self.publication.to_json_simple(key),
-                'study' : self.study.to_json(key),
                 'species_author' : self.species_author,
                 'population_name' : self.population_name,
                 'ecoregion' : self.ecoregion.to_json_simple(key) if self.ecoregion else None,
@@ -2889,6 +2902,8 @@ class Population(db.Model):
         Continent.migrate()
         InvasiveStatusStudy.migrate()
         InvasiveStatusElsewhere.migrate()
+        PurposeEndangered.migrate()
+        PurposeWeed.migrate()
 
     def __repr__(self):
         return '<Population %r>' % self.id
@@ -3149,7 +3164,6 @@ class Matrix(db.Model):
     matrix_criteria_size = db.Column(db.String(200))
     matrix_criteria_ontogeny = db.Column(db.Boolean())
     matrix_criteria_age = db.Column(db.Boolean())
-    study_id = db.Column(db.Integer, db.ForeignKey('studies.id',ondelete='CASCADE'))
     matrix_start_year = db.Column(db.Integer)
     matrix_start_month = db.Column(db.Integer())
     matrix_end_year = db.Column(db.Integer)
@@ -3247,7 +3261,6 @@ class Matrix(db.Model):
                                   _external=False),
             'data' : {
                 'population' : self.population.to_json_simple(key),
-                'study' : self.study.to_json_simple(key),
                 'treatment' : self.treatment.to_json_simple(key),
                 'matrix_split' : self.matrix_split,
                 'matrix_composition' : self.matrix_composition.to_json_simple(key),
@@ -3544,7 +3557,6 @@ class Version(db.Model):
     taxonomy_id = db.Column(db.Integer, db.ForeignKey('taxonomies.id',ondelete='CASCADE'))
     trait_id = db.Column(db.Integer, db.ForeignKey('traits.id',ondelete='CASCADE'))
     publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
-    study_id = db.Column(db.Integer, db.ForeignKey('studies.id',ondelete='CASCADE'))
     population_id = db.Column(db.Integer, db.ForeignKey('populations.id',ondelete='CASCADE'))
     matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id',ondelete='CASCADE'))
     fixed_id = db.Column(db.Integer, db.ForeignKey('fixed.id',ondelete='CASCADE'))
@@ -3598,7 +3610,6 @@ class Version(db.Model):
             'taxonomy_id' : self.taxonomy_id,
             'trait_id' : self.trait_id,
             'publication_id' : self.publication_id,
-            'study_id' : self.study_id, 
             'population_id' : self.population_id,
             'matrix_id' : self.matrix_id, 
             'fixed_id' : self.fixed_id, 

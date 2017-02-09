@@ -8,7 +8,7 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleF
 from ..models import IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
-    Publication, Study, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
+    Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute
     
 
@@ -152,10 +152,10 @@ class PublicationForm(Form):
     submit = SubmitField('Submit')
 
 # Study form, not up to date - possible merge with population
-class StudyForm(Form):
-	study_duration = IntegerField('Study Duration')
-	study_start = IntegerField('Study Start')
-	study_end = IntegerField('Study End')
+#class StudyForm(Form):
+#	study_duration = IntegerField('Study Duration')
+#	study_start = IntegerField('Study Start')
+#	study_end = IntegerField('Study End')
 
 # population form, not up to date
 class PopulationForm(Form):
