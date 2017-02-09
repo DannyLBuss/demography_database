@@ -119,7 +119,7 @@ class User(UserMixin, db.Model):
     changelogger = db.relationship("ChangeLogger", backref="user")
 
     @staticmethod
-    def migrate_self():
+    def migrate():
         with open('app/data-migrate/users.json') as user_file:
             data = json.load(user_file)
             user = data["User"]
@@ -130,6 +130,7 @@ class User(UserMixin, db.Model):
                 u = User.query.filter_by(email=us['email']).first()
                 if u is None:
                     u = User()
+                    
 
                 u.email = us['email']
                 u.username = us['username']
@@ -138,14 +139,15 @@ class User(UserMixin, db.Model):
                 u.confirmed = us['confirmed']
                 u.institute_id = us['institute_id']
                 u.institute_confirmed = us['institute_confirmed']
+                
 
                 db.session.add(u)
                 db.session.commit()
 
 
-    @staticmethod
-    def migrate():
-        Institute.migrate()
+#    @staticmethod
+#    def migrate():
+#        Institute.migrate()
 
 
     def __init__(self, **kwargs):
@@ -888,7 +890,6 @@ class Database(db.Model):
     database_master_version = db.Column(db.String(64))
     database_date_created = db.Column(db.Date())
     database_number_species_accepted = db.Column(db.Integer())
-    database_number_studies = db.Column(db.Integer())
     database_number_matrices = db.Column(db.Integer())
     database_agreement = db.Column(db.String(64))
 
@@ -914,7 +915,6 @@ class Database(db.Model):
                 i.database_master_version = None
                 i.database_date_created = None
                 i.database_number_species_accepted = None
-                i.database_number_studies = None
                 i.database_number_matrices = None
                 i.database_agreement = None
 
@@ -932,7 +932,6 @@ class Database(db.Model):
                 'database_master_version' : self.database_master_version,
                 'database_date_created' : self.database_date_created,
                 'database_number_species_accepted' : self.database_number_species_accepted,
-                'database_number_studies' : self.database_number_studies,
                 'database_number_matrices' : self.database_number_matrices,
                 'database_agreement' : self.database_agreement,
                 'versions' : [version.to_json(key) for version in self.versions]
@@ -950,7 +949,6 @@ class Database(db.Model):
                 'database_master_version' : self.database_master_version,
                 'database_date_created' : self.database_date_created,
                 'database_number_species_accepted' : self.database_number_species_accepted,
-                'database_number_studies' : self.database_number_studies,
                 'database_number_matrices' : self.database_number_matrices,
                 'database_agreement' : self.database_agreement
             }
@@ -1142,11 +1140,11 @@ class PurposeEndangered(db.Model):
     purpose_name = db.Column(db.String(64), index=True)
     purpose_description = db.Column(db.Text())
 
-    studies = db.relationship("Population", backref="purpose_endangered")
+    populations = db.relationship("Population", backref="purpose_endangered")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/studies.json') as d_file:
+        with open('app/data-migrate/populations.json') as d_file:
             data = json.load(d_file)
             json_data = data["Population"]
             nodes = json_data["PurposeEndangered"]
@@ -1196,11 +1194,11 @@ class PurposeWeed(db.Model):
     purpose_name = db.Column(db.String(64), index=True)
     purpose_description = db.Column(db.Text())
 
-    studies = db.relationship("Population", backref="purpose_weed")
+    populations = db.relationship("Population", backref="purpose_weed")
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/studies.json') as d_file:
+        with open('app/data-migrate/populations.json') as d_file:
             data = json.load(d_file)
             json_data = data["Population"]
             nodes = json_data["PurposeWeed"]

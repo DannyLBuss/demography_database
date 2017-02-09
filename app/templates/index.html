@@ -80,7 +80,7 @@
         
             <div class="row">
                 {% for species in species2 %}
-                <div class="col-xs-3"><a href="/species/{{species.id}}/overview"><div class="species-image-container" style="background-image:url('{{ species.image_path }}');"></div>
+                <div class="col-xs-3"><a href="/species={{species.id}}/publications=all"><div class="species-image-container" style="background-image:url('{{ species.image_path }}');"></div>
                     <p>{{species.species_accepted}}</p></a>
                 
                 

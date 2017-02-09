@@ -44,14 +44,14 @@ def after_request(response):
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-#    species = Species.query.filter_by(version_latest=1).filter(Species.image_path != None).all()
-#    number = len(species)
-#    species2 = []
-#    for i in range(1,5):
-#        random_int = random.randint(0,number-1)
-#        s = species[random_int]
-#        species2.append(s)
-    return render_template('index.html') #,species2 = species2)
+    species = Species.query.filter(Species.image_path != None).all()
+    number = len(species)
+    species2 = []
+    for i in range(1,5):
+        random_int = random.randint(0,number-1)
+        s = species[random_int]
+        species2.append(s)
+    return render_template('index.html',species2 = species2)
 
 
 @main.route('/meta-tables/')

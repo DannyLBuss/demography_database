@@ -824,26 +824,20 @@ def migrate_meta():
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute
 
     print "Migrating Meta Tables..."
-    try:
-        Role.insert_roles()
-        Species.migrate()        
-        Taxonomy.migrate()
-        Trait.migrate()
-        Publication.migrate()
-        AuthorContact.migrate()
-        Population.migrate()
-        StageType.migrate()
-        MatrixValue.migrate()
-        Matrix.migrate()
-        Fixed.migrate()
-        User.migrate()
-        Version.migrate()
-        Institute.migrate()
-        User.migrate_self()
-    except:
-        "Error migrating metadata"
-    else:
-        "Done + good"
+    Role.insert_roles()
+    Species.migrate()        
+    Taxonomy.migrate()
+    Trait.migrate()
+    Publication.migrate()
+    AuthorContact.migrate()
+    Population.migrate()
+    StageType.migrate()
+    MatrixValue.migrate()
+    Matrix.migrate()
+    Fixed.migrate()
+    Version.migrate()
+    Institute.migrate()
+    User.migrate()
    
     return
 
