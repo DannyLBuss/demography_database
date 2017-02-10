@@ -16,10 +16,10 @@
             <tbody> {% for publication in publications %}
                 
                 <tr class="remove_duplicates publication_row" style="border-left-color:{{ publication.colour }};">
-                    <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.name }}" in <i>{{ publication.pub_title }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> <small> {{publication.id}}</small> 
-                        <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}</p>
-                        {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}</p>{% endif %}
-                        {% if publication.date_digitised %}<p><b>Date Digitised:</b> {{ publication.date_digitised.strftime('%Y-%m-%d') }}</p>{% endif %}
+                    <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.name }}" in <i>{{ publication.pub_title }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> <small> {{publication.id}}</small>
+                        
+                        <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}
+                        {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}{% endif %}</p>
                         <p><strong>Species studied:</strong> </p>
                     </td>
                     <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source</a>{% endif %}</td>
@@ -45,13 +45,27 @@
     
     <div id="dist_map"></div>
     <br>
-    
+    <div class="list">
     {% for species in all_species %}
+    <div>
+    
+    <hr>
+    <h1><i>{{species.species_accepted}}</i> <small> {{species.id}}</small> </h1> 
+    {% if species.species_common %}
+    <p><b>Common name(s):</b> 
+        {{species.species_common}}</p>
+    {% endif %}
     
     <!-- BREADCRUMB -->
-    <div class="breadcrumb"> {% for taxonomy in species.taxonomy %}
-        <p><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> > <i>{{species.species_accepted}}</i></p> {% else %}
-        <p>No taxonomy</p> {% endfor %} </div> 
+    {% for taxonomy in species.taxonomy %}
+    <div class="row">
+        <div class="col-xs-8">
+            <p><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a></p> 
+        </div>
+        <div class="col-xs-4">
+            <p>Authority: {{ taxonomy.authority }}{% if taxonomy.kingdom == "Plantae" %} TPL version: {{ taxonomy.tpl_version }}{% endif %}  {% else %} No taxonomy</p> {% endfor %} 
+        </div>
+</div>
     
     <!-- compadrino actions for top part of page -->
     {% if current_user.is_authenticated %} 
@@ -74,26 +88,11 @@
             <li><a href="../../data-manage/traits/new/0/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
     </div> {% endif %}
     
-    
-    <!-- page header -->
-    <h1><i>{{species.species_accepted}}</i> <small> {{species.id}}</small> </h1> 
-    {% if species.species_common %}
-    <p><b>Common name(s):</b> 
-        {{species.species_common}}</p>
-    {% endif %}
-
-<p> iucn_status_id: {{ iucn_status_id }}</p>
-<p>esa_status_id: {{ esa_status_id }}</p>
-<p>invasive_status: {{ invasive_status }}</p>
-<p>gbif_taxon_key: {{ gbif_taxon_key }}</p>
-<p>species_iucn_taxonid: {{ species_iucn_taxonid }}</p>
-
 
 <!-- Top page section (species, taxonomy, traits models)-->
 <div class="row">
     
     <div class="col-sm-8"> <!-- Left side infobox with pictures and map -->
-        <div class="info_box">
             <div class="row">
                 <div class="col-xs-6"> {% if species.image_path %}
                     <div class="species-image-container" style="background-image:url('{{ species.image_path }}');"></div> {% else %}
@@ -102,61 +101,10 @@
                     <div class="species-image-container" style="background-image:url('{{ species.image_path2 }}');"></div> {% else %}
                     <div class="species-image-container">Image 2</div> {% endif %} </div>
             </div>
-            <br>
-             {% if species.gbif_taxon_key %}
-            <p><a href="http://www.gbif.org/species/{{ species.gbif_taxon_key}}" target="_blank"> Species occurence data from GBIF. </a> For use as a guide only.</p> {% else %}
-            <p>No occurence data available from GBIF.</p> {% endif %} 
-        </div>
     </div>
     
     <!-- Right side information with taxonom and traits -->
-    <div class="col-sm-4"> {% if species.taxonomy %} {% for taxonomy in species.taxonomy %}
-        <h3>Taxonomy <small> {{taxonomy.id}}</small>  </h3>
-        <table style="width:100%" class="table">
-            <tbody>
-                <tr>
-                    <td><strong>Kingdom:</strong></td>
-                    <td>{{ taxonomy.kingdom }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Phylum:</strong></td>
-                    <td>{{ taxonomy.phylum }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Class:</strong></td>
-                    <td>{{ taxonomy.tax_class }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Order:</strong></td>
-                    <td>{{ taxonomy.tax_order }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Family:</strong></td>
-                    <td>{{ taxonomy.family }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Genus:</strong></td>
-                    <td>{{ taxonomy.genus }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Species:</strong></td>
-                    <td><i>{{species.species_accepted}}</i></td>
-                </tr>
-                <tr>
-                    <td>Authority: </td>
-                    <td>{{ taxonomy.authority }}</td>
-                </tr>
-                {% if taxonomy.kingdom == "Plantae" %}
-                <tr>
-                    <td>TPL version: </td>
-                    <td>{{ taxonomy.tpl_version }}</td>
-                </tr>
-                {% endif %}
-            </tbody>
-        </table> {% endfor %} {% else %}
-        <h3>Taxonomy</h3>
-        <div class="info_box_empty">
-            <p>Not entered</p> <a href="">Add taxonomic information</a> </div> {% endif %} {% if species.trait %} {% for trait in species.trait %}
+    <div class="col-sm-4">  {% if species.trait %} {% for trait in species.trait %}
         <h3>Traits <small> {{trait.id}}</small></h3>
         <table style="width:100%" class="table">
             <tr>
@@ -191,10 +139,11 @@
         <div class="info_box_empty">
             <p>Not entered</p>
             <p><a href="">Add traits</a></p>
-        </div> {% endif %} </div>
-</div>
+        </div> {% endif %}
+    </div>
 <!-- End of top section (species, taxonomy, traits models)) -->
-
+</div>
+<br>
 <!-- External sources line with buttons  (species model)--> 
 <div id="external-sources"> Search external sources:
     <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://media.eol.org//assets/favicon-9de6ee8ce10b9ad7b2662236411f4539.ico" class="little_logo"> Enyclopedia of Life</a>
@@ -204,19 +153,20 @@
     <a href="https://scholar.google.co.uk/scholar?q={{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://scholar.google.co.uk/favicon-png.ico" class="little_logo"> Scholar</a>
 </div>
 <!-- end of external sources  (species model)-->
-
 <br>
+</div>
 
 
 
     
     <!-- populations + matrices section -->
     {%if species.populations %}
-    <div class="list"> 
+     
         
         <!-- looping through populations -->
         {% for population in populations %}
         {% if population.species_id == species.id %}
+        <a class="anchor" name = "anchor_{{population.id}}"></a>
         <div class="population_box {{ population.publication.colour }}" style="border-left-color:{{ population.publication.colour }};">
             <div class="population" data-value="id{{population.publication.id}}"></div> 
             
@@ -239,7 +189,7 @@
                 <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
                 <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }} 
                     {% if population.altitude %}
-                    <li><strong>Location: </strong><span class="coordinates {{species.species_accepted}}">{{ population.latitude }}, {{ population.longitude }}</span></li>
+                    <li><strong>Location: </strong><span class="coordinates {{species.species_accepted}} {{ population.matrices | length }} {{ population.id }}">{{ population.latitude }}, {{ population.longitude }}</span></li>
                     <li><strong>Altitude: </strong><span>{{ population.altitude }}m</span></li> 
                     {% if population.population_nautical_miles %}<li><strong>Nautical miles:</strong>  {{ population_nautical_miles }} </li>{% endif %}
                 {% else %}
@@ -338,7 +288,7 @@
                         </div>
                     </div>
                 </div> {% endif %} {% endfor %}  </div>
-        </div> {% endif %} {% endfor %} </div> 
+        </div> {% endif %} {% endfor %}  
     
     <!-- what to show if there are no populations -->
     {% else %}
@@ -349,6 +299,7 @@
     </div> {% endif %}
     
     {% endfor %}
+        </div>
     
 </div> {% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }}
 <!-- JAVASCRIPT -->
@@ -474,6 +425,8 @@
     });
 </script>
 <script>
+    
+    
     // add map markers
     $('.coordinates').each(function () {
         var txt = $(this).text();
@@ -488,6 +441,9 @@
         });
         
         var species_name = $(this).attr("class").split(' ')[1];
+        var mat_num = $(this).attr("class").split(' ')[2];
+        if (mat_num == "1") { mat_num = mat_num + " matrix";} else { mat_num = mat_num + " matrices";}
+        var pop_id = $(this).attr("class").split(' ')[3];
         
         hexMarker.options.shadowSize = [0, 0];
         hexMarker.options.iconSize = [32, 32];
@@ -496,7 +452,7 @@
             icon: hexMarker
         });
         
-        marker.bindPopup(species_name).openPopup();
+        marker.bindPopup("<strong>" + species_name + "</strong> <br> "+mat_num+" <br> <a href='#anchor_" + pop_id + "' class='btn btn-default'>Go to population</a>").openPopup();
         
         mymap.addLayer(marker);
         oms.addMarker(marker);
