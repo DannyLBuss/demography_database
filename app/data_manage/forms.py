@@ -69,9 +69,9 @@ class SpeciesForm(Form):
                             get_label=lambda a:'{} - {}'.format(a.status_code, a.status_name))
     species_gisd_status = BooleanField('GISD Status')
     invasive_status = BooleanField('Invasive Status')
-    species_iucn_taxonid = IntegerField('IUCN Taxon key')
+    species_iucn_taxonid = IntegerField('IUCN Taxon key', validators=[Optional()])
     species_iucn_population_assessed = StringField('IUCN Population assessed')   
-    gbif_taxon_key = IntegerField('GBIF Taxon Key')
+    gbif_taxon_key = IntegerField('GBIF Taxon Key', validators=[Optional()])
     image_path = StringField('Path to image')
     image_path2 = StringField('Path to image')
     
@@ -92,7 +92,7 @@ class TaxonomyForm(Form):
     phylum = StringField('Phylum', validators=[Required()])
     kingdom = StringField('Kingdom', validators=[Required()])
     col_check_ok = BooleanField('Col Check OK')
-    #col_check_date = DateField('Col Check Date')
+    col_check_date = DateField('Col Check Date', validators=[Optional()])
 
     submit = SubmitField('Submit')
     
@@ -119,7 +119,7 @@ class TraitForm(Form):
                             get_label=lambda a:a.type_name)
     submit = SubmitField('Submit')
    
-# not up to data
+# up to date 12/1/16
 class PublicationForm(Form):
     
     source_type = QuerySelectField('Source Type',
@@ -127,7 +127,7 @@ class PublicationForm(Form):
                             get_label=lambda a:'{} - {}'.format(a.source_name, a.source_description))	
     authors = StringField('Publication Authors *', validators=[Required()])
     editors = StringField('Publication Editors')
-    pub_title = StringField('Jorunal/Publication Title (ie J Ecol) *', validators=[Required()])
+    journal_name = StringField('Jorunal/Publication Title (ie J Ecol) *', validators=[Required()])
     journal_book_conf = StringField('Journal/Book Conf')
     year = IntegerField('Year Publication Published *', validators=[Required()])
     volume = StringField('Journal/Publication Volume')
@@ -137,7 +137,7 @@ class PublicationForm(Form):
     country = StringField('Publication Country')
     institution = StringField('Publication Institution')
     DOI_ISBN = StringField('DOI/ISBN')
-    journal_name = StringField('Publication Title')
+    pub_title = StringField('Publication_title')
     #corresponding_author = StringField('Corresponding Author')
     #email = StringField('Email Address', validators=[Email(),Optional()])
     #purposes = QuerySelectField('Purposes',query_factory=lambda: Purpose.query.all(), get_pk=lambda a: a.id,get_label=lambda a:'{} - {}'.format(a.purpose_name, a.purpose_description))
@@ -151,30 +151,51 @@ class PublicationForm(Form):
     # author_contacts # Fkey#additional_sources # Fkey
     submit = SubmitField('Submit')
 
-# Study form, not up to date - possible merge with population
-#class StudyForm(Form):
-#	study_duration = IntegerField('Study Duration')
-#	study_start = IntegerField('Study Start')
-#	study_end = IntegerField('Study End')
-
 # population form, not up to date
 class PopulationForm(Form):
-    name = StringField('Population Name *', validators=[Required()])
+    
+    species_author = StringField('Species Author')
+    population_name = StringField('Population Name *', validators=[Required()])
     ecoregion = QuerySelectField('Ecoregion',
             query_factory=lambda: Ecoregion.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.ecoregion_code, a.ecoregion_description))
     country = StringField('Country')
+    population_nautical_miles = IntegerField('Population nautical miles',validators=[Optional()])
     continent = QuerySelectField('Continent',
             query_factory=lambda: Continent.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.continent_name)
-    latitude = FloatField('Decimal latitude')
-    longitude = FloatField('Decimal longitude')
-    altitude = FloatField('Altitude in metres')
+    lat_ns = StringField('Latitude N or S',validators=[Optional()])
+    lat_deg = IntegerField('Latitude degrees',validators=[Optional()])
+    lat_min = IntegerField('Latitude minutes',validators=[Optional()])
+    lat_sec = IntegerField('Latitude seconds',validators=[Optional()])
+    lon_ew = StringField('Longitude E or W',validators=[Optional()])
+    lon_deg = IntegerField('Longitude degrees',validators=[Optional()])
+    lon_min = IntegerField('Longitude minutes',validators=[Optional()])
+    lon_sec = IntegerField('Longitude seconds',validators=[Optional()])
+    altitude = FloatField('Altitude in metres',validators=[Optional()])
+    pop_size = StringField('Population size')
+    within_site_replication = StringField('Within site replication')
+    study_start = IntegerField('Study start (year)',validators=[Optional()])
+    study_end = IntegerField('Study end (year)',validators=[Optional()])
+    invasive_status_study = QuerySelectField('Invasive status in study',
+            query_factory=lambda: InvasiveStatusStudy.query.all(), get_pk=lambda a: a.id,
+                            get_label=lambda a:a.status_description)
+    invasive_status_elsewhere = QuerySelectField('Invasive status elsewhere',
+            query_factory=lambda: InvasiveStatusElsewhere.query.all(), get_pk=lambda a: a.id,
+                            get_label=lambda a:a.status_description)
+    purpose_endangered = QuerySelectField('Purpose endangered',
+            query_factory=lambda: PurposeEndangered.query.all(), get_pk=lambda a: a.id,
+                            get_label=lambda a:a.purpose_description)
+    purpose_weed = QuerySelectField('Purpose weed',
+            query_factory=lambda: PurposeWeed.query.all(), get_pk=lambda a: a.id,
+                            get_label=lambda a:a.purpose_description)
+    #database_source = QuerySelectField('Database source',query_factory=lambda: Database.query.all(), get_pk=lambda a: a.id,get_label=lambda a:a.database_description)
     submit = SubmitField('Submit')
 
 
 #  matrix form, not up to date    
 class MatrixForm(Form):
+    
     treatment = StringField('Treatment *', validators=[Required()])
     matrix_split = BooleanField('Matrix Split')
     matrix_composition = QuerySelectField('Matrix Composition *',

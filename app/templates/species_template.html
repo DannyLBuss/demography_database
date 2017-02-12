@@ -16,13 +16,24 @@
             <tbody> {% for publication in publications %}
                 
                 <tr class="remove_duplicates publication_row" style="border-left-color:{{ publication.colour }};">
-                    <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.name }}" in <i>{{ publication.pub_title }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> <small> {{publication.id}}</small>
-                        
+                    <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> {{publication.version[0]}} <small> {{publication.id}}</small>
+                        {% if current_user.is_authenticated %} 
+    <div class="dropdown pull-right">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right">
+
+            <li><a href="../../data-manage/publication/edit/{{publication.id}}" > <span class="	glyphicon glyphicon-pencil"></span> Edit publication</a></li>
+            <li><a href="../../data-manage/publication/{{publication.id}}/edit-history">View edits</a></li>
+        </ul>
+    </div> {% endif %}
                         <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}
                         {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}{% endif %}</p>
-                        <p><strong>Species studied:</strong> </p>
+                        
+                        <p><strong>Species studied:</strong>{% for spec in all_species %} {{spec.species_accepted}} {%endfor%}</p>
+                        <p><a href="../data-manage/population/new/publication={{publication.id}}/choose_species"><span class="glyphicon glyphicon-plus-sign"></span> Add a new population</a></p>
+                        
                     </td>
-                    <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source</a>{% endif %}</td>
+                    <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source <span class="glyphicon glyphicon-new-window"></span></a>{% endif %}</td>
                     <td>
                         <input type="checkbox" class="filter" data-value="id{{publication.id}}"> </td>
                 </tr> {% endfor %} </tbody>
@@ -31,17 +42,14 @@
                 <tr>
                     <td>
                         <p>No publications</p>
-                        <p><a href="">Add new publication</a>.</p>
                     </td>
                     <td> </td>
                     <td> </td>
                 </tr>
             </tbody> {% endif %} </table>
+        <p><a href="../data-manage/publication/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new publication</a></p>
+        <p><a href="../data-manage/species/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new species</a></p>
     </div> 
-    
-    <div class="info_box">
-        <h4><strong>Species:</strong></h4>
-    </div>
     
     <div id="dist_map"></div>
     <br>
@@ -50,43 +58,39 @@
     <div>
     
     <hr>
+        <!-- compadrino actions for top part of page -->
+    {% if current_user.is_authenticated %} 
+    <div class="dropdown pull-right">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right">
+            <li class="dropdown-header">Species information</li>
+            <li><a href="../../data-manage/species/edit/{{species.id}}" ><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
+            <li><a href="../../data-manage/species/{{species.id}}/edit-history">View edits</a></li>
+            <li class="dropdown-header">Taxonomy</li> {% if species.taxonomy %}
+            <li><a href="../../data-manage/taxonomy/edit/{{species.taxonomy.id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
+            <li><a href="../../data-manage/taxonomy/{{species.taxonomy.id}}/edit-history">View edits</a></li>{% else %}
+            <li><a href="../../data-manage/taxonomy/new/0/species={{species.id}}">Add taxonomy</a></li> {% endif %}
+            <li class="dropdown-header">Species Traits</li> {% if species.trait %}
+            <li><a href="../../data-manage/traits/edit/{{species.trait.id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
+            <li><a href="../../data-manage/traits/{{species.trait.id}}/edit-history">View edits</a></li>{% else %}
+            <li><a href="../../data-manage/traits/new/0/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
+    </div> {% endif %}
     <h1><i>{{species.species_accepted}}</i> <small> {{species.id}}</small> </h1> 
     {% if species.species_common %}
     <p><b>Common name(s):</b> 
         {{species.species_common}}</p>
     {% endif %}
+        
     
     <!-- BREADCRUMB -->
     {% for taxonomy in species.taxonomy %}
-    <div class="row">
-        <div class="col-xs-8">
-            <p><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a></p> 
-        </div>
-        <div class="col-xs-4">
-            <p>Authority: {{ taxonomy.authority }}{% if taxonomy.kingdom == "Plantae" %} TPL version: {{ taxonomy.tpl_version }}{% endif %}  {% else %} No taxonomy</p> {% endfor %} 
-        </div>
-</div>
+
+            <p><b>Taxonomy: </b><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> &nbsp;&nbsp;&nbsp;&nbsp;  Authority: {{ taxonomy.authority }} &nbsp;&nbsp;&nbsp;&nbsp;{% if taxonomy.kingdom == "Plantae" %} TPL version: {{ taxonomy.tpl_version }}{% endif %}</p>  
+        {% else %}
+        <div class="info_box_empty"><p>No taxonomy</p>  <p> <a href="../../data-manage/taxonomy/new/0/species={{species.id}}"><span class="glyphicon glyphicon-plus-sign"></span> Add taxonomy information</a></p> </div>
+        {% endfor %} 
+   
     
-    <!-- compadrino actions for top part of page -->
-    {% if current_user.is_authenticated %} 
-    <div class="dropdown pull-right">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
-        <ul class="dropdown-menu dropdown-menu-right">
-            <li class="dropdown-header">Species information</li>
-            <li><a href="../../data-manage/species/edit/{{species.id}}" >Edit</a></li>
-            <li><a href="../../data-manage/species/{{species.id}}/edit-history">View edits</a></li>
-            <li><a href="../../data-manage/delete/taxonomy/{{species.id}}">Delete Species</a></li>
-            <li class="dropdown-header">Taxonomy</li> {% if taxonomy %}
-            <li><a href="../../data-manage/taxonomy/edit/{{taxonomy.id}}/species={{species.id}}">Edit</a></li>
-            <li><a href="../../data-manage/taxonomy/{{taxonomy.id}}/edit-history">View edits</a></li>
-            <li><a href="../../data-manage/delete/taxonomy/{{taxonomy.id}}">Delete taxonomy</a></li>{% else %}
-            <li><a href="../../data-manage/taxonomy/new/0/species={{species.id}}">Add taxonomy</a></li> {% endif %}
-            <li class="dropdown-header">Species Traits</li> {% if trait %}
-            <li><a href="../../data-manage/traits/edit/{{trait.id}}/species={{species.id}}">Edit</a></li>
-            <li><a href="../../data-manage/traits/{{trait.id}}/edit-history">View edits</a></li>
-            <li><a href="../../data-manage/delete/traits/{{trait.id}}">Delete species traits</a></li> {% else %}
-            <li><a href="../../data-manage/traits/new/0/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
-    </div> {% endif %}
     
 
 <!-- Top page section (species, taxonomy, traits models)-->
@@ -138,7 +142,7 @@
         <h3>Traits</h3>
         <div class="info_box_empty">
             <p>Not entered</p>
-            <p><a href="">Add traits</a></p>
+            <p><a href=""><span class="glyphicon glyphicon-plus-sign"></span> Add traits</a></p>
         </div> {% endif %}
     </div>
 <!-- End of top section (species, taxonomy, traits models)) -->
@@ -166,25 +170,24 @@
         <!-- looping through populations -->
         {% for population in populations %}
         {% if population.species_id == species.id %}
-        <a class="anchor" name = "anchor_{{population.id}}"></a>
+        <a class="anchor" name = "population={{population.id}}"></a>
         <div class="population_box {{ population.publication.colour }}" style="border-left-color:{{ population.publication.colour }};">
             <div class="population" data-value="id{{population.publication.id}}"></div> 
             
             <!-- compadrino actions box -->
             {% if current_user.is_authenticated %}
             <div class="dropdown pull-right">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="../../data-manage/population/edit/{{population.id}}">Edit population</a></li>
+                    <li><a href="../../data-manage/population/edit/{{population.id}}/species={{population.species.id}}/publication={{population.publication.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit population</a></li>
                     <li><a href="../../data-manage/population/{{population.id}}/edit-history">View edits</a></li>
-                    <li><a href="../../data-manage/delete/population/{{population.id}}">Delete population</a></li>
                     <li class="disabled"><a href="#">Add new matrix</a></li>
                 </ul>
             </div> 
             {% endif %}
             
             <!-- population information -->
-            <h4><strong>Population Name: </strong>{{ population.name }} <small> {{ population.id }}</small> </h4>
+            <h4><strong>Population Name: </strong>{{ population.population_name }} <small> {{ population.id }}</small> </h4>
             <ul>
                 <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
                 <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }} 
@@ -197,9 +200,9 @@
                 {% endif %}
             </ul>
 
-            <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> Show/hide matrices </button>
+            <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> <span class="glyphicon glyphicon-th-list"></span> Show/hide matrices </button>
             <div id="population_{{ population.id }}" class='panel-collapse collapse'>
-                <p style="text-align: center;">Click on the sections below to view individual matrix models</p> 
+                <p style="text-align: center;"><span class="glyphicon glyphicon-hand-down"></span> Click on the sections below to view individual matrix models </p> 
                 
                 <!-- looping through matrices -->
                 {% for matrix in population.matrices %}
@@ -241,11 +244,10 @@
                                     <li><a data-toggle="pill" href="#menu_{{matrix.id}}_3">Clonal Matrix</a></li>
                                     <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li> {% if current_user.is_authenticated %}
                                     <div class="dropdown pull-right">
-                                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Compadrino actions<span class="caret"></span></button>
+                                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a href="../../data-manage/matrix/edit/{{matrix.id}}">Edit matrix</a></li>
+                                            <li><a href="../../data-manage/matrix/edit/{{matrix.id}}/population={{population.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit matrix</a></li>
                                             <li><a href="../../data-manage/matrix/{{matrix.id}}/edit-history">View edits</a></li>
-                                            <li><a href="../../data-manage/delete/matrix/{{matrix.id}}">Delete matrix</a></li>
                                         </ul>
                                     </div> {% endif %} </ul>
                                 <div class="tab-content">
@@ -290,14 +292,24 @@
                 </div> {% endif %} {% endfor %}  </div>
         </div> {% endif %} {% endfor %}  
     
-    <!-- what to show if there are no populations -->
-    {% else %}
-    <div class="info_box_empty">
-        <p>There are no populations attatched to this species, new populations are added via the publication overview:</p>
-        <p><a href="{{ url_for('main.publications_table') }}">Search existing publications</a></p>
-        <p><a href="">Add new publication</a></p>
-    </div> {% endif %}
     
+    <div class="info_box_empty">
+        {% for publication in publications %}
+        <p><a href="../data-manage/population/new/0/species={{species.id}}/publication={{publication.id}}"><span class="glyphicon glyphicon-plus-sign"></span> Add a new population</a> of <em>{{ species.species_accepted }}</em> as published in <span class="	glyphicon glyphicon-asterisk" style="color:{{publication.colour}}"></span> {{ publication.authors }} ({{ publication.year }}). "{{ publication.name }}" in <i>{{ publication.pub_title }}</i> {{ publication.volume }}, {{ publication.pages }}</p>
+        {% endfor %}
+    </div>
+    {% else %}
+        {% if publication %}
+    <div class="info_box_empty">
+        <a href="../data-manage/population/new/0/species={{species.id}}/publication={{publication.id}}">Add new population</a>
+    </div> 
+        {% else %}
+        <div class="info_box_empty">
+            <p>Populations can only be created from a page that contains a publication. The current page only contains information about species.</p>
+        </div> 
+        {% endif %}
+    {% endif %}
+
     {% endfor %}
         </div>
     
@@ -452,7 +464,7 @@
             icon: hexMarker
         });
         
-        marker.bindPopup("<strong>" + species_name + "</strong> <br> "+mat_num+" <br> <a href='#anchor_" + pop_id + "' class='btn btn-default'>Go to population</a>").openPopup();
+        marker.bindPopup("<strong>" + species_name + "</strong> <br> "+mat_num+" <br> <a href='#population=" + pop_id + "' class='btn btn-default'>Go to population</a>").openPopup();
         
         mymap.addLayer(marker);
         oms.addMarker(marker);

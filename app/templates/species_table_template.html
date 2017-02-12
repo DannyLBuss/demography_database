@@ -51,23 +51,25 @@
         </thead>
         <tbody class="list">
             {% for s in species %}
-                {% for taxonomy in s.taxonomies %}
-                    <tr>
-                        {% for trait in s.traits %}
-                        <td class="growthtype">{{ trait.organism_type.type_name }}</td>
-                        {% endfor %}
-                        <td class="kingdom" onClick="addTextTag('{{ taxonomy.kingdom }}');">{{ taxonomy.kingdom }}</td>
-                        <td class="phylum">{{ taxonomy.phylum }}</td>
-                        <td class="class">{{ taxonomy.tax_class }}</td>
-                        <td class="order">{{ taxonomy.tax_order }}</td>
-                        <td class="family">{{ taxonomy.family }}</td>
-                        <td class="species"><a href="../species/{{ s.id }}/overview"><em>{{ s.species_accepted }}</em></a></td>
-                    </tr>
-                {% endfor %}
+                <tr>
+                    {% for trait in s.trait %}
+                    <td class="growthtype">{{ trait.organism_type }}</td>
+                    {% endfor %}
+                    {% for taxonomy in s.taxonomy %}
+                    <td class="kingdom" onClick="addTextTag('{{ taxonomy.kingdom }}');">{{ taxonomy.kingdom }}</td>
+                    <td class="phylum">{{ taxonomy.phylum }}</td>
+                    <td class="class">{{ taxonomy.tax_class }}</td>
+                    <td class="order">{{ taxonomy.tax_order }}</td>
+                    <td class="family">{{ taxonomy.family }}</td>
+                    {% endfor %}
+                    <td class="species"><a href="../species={{ s.id }}/publications=all"><em>{{ s.species_accepted }}</em></a></td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
+    <!--
     <ul class="pagination"></ul>
+-->
 </div>
 
 

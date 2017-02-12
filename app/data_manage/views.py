@@ -13,6 +13,11 @@ from ..models import Permission, Role, User, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Institute, ChangeLogger
 from ..decorators import admin_required, permission_required, crossdomain
 
+import random
+def gen_hex_code():
+    r = lambda: random.randint(0,255)
+    return('#%02X%02X%02X' % (r(),r(),r()))
+
 # Data management forms
 
 # editing species information #updated 25/1/17
@@ -79,9 +84,10 @@ def species_form(id,edit_or_new):
             species.add_to_logger(current_user,'image_path2',species_old.image_path2,form.image_path2.data,'edit')
             #END COPY CODE BLOCK
             
+            species_id = str(species.id)
         
         flash('The species infomation has been updated.')
-        return redirect(url_for('main.species_page',species_id=species.id,pubs_ids="all"))
+        return redirect("../species="+species_id+"/publications=all")
     
     form.species_accepted.data = species.species_accepted
     form.species_common.data = species.species_common
@@ -175,8 +181,9 @@ def taxonomy_form(id,species_id,edit_or_new):
             #taxonomy.add_to_logger(current_user,'col_check_date',taxonomy_old.col_check_date,form.col_check_date.data,'edit')
             #END COPY CODE BLOCK            
             
+        species_id = str(species.id)
         flash('The taxonomy has been updated.')
-        return redirect(url_for('main.species_page',species_id=species.id,pubs_ids="all"))
+        return redirect("../species="+species_id+"/publications=all") #url_for always gave me a build error
     
     if edit_or_new == "edit": #if you are editing a taxonomy, you need to fill the form with the data already available
         form.authority.data = taxonomy.authority
@@ -253,8 +260,9 @@ def trait_form(id,edit_or_new,species_id):
             trait.add_to_logger(current_user,'spand_ex_growth_types',trait_old.spand_ex_growth_types,form.spand_ex_growth_types.data,'edit')
             # END CODE BLOCK
         
+        species_id = str(species.id)
         flash('The trait infomation has been updated.')
-        return redirect(url_for('main.species_page',species_id=species.id,pubs_ids="all"))
+        return redirect("../species="+species_id+"/publications=all")
     
     
     
@@ -296,20 +304,21 @@ def publication_form(id,edit_or_new):
             publication.add_to_logger(current_user,'source_type',publication_old.source_type,form.source_type.data,'edit')
             publication.add_to_logger(current_user,'authors',publication_old.authors,form.authors.data,'edit')
             publication.add_to_logger(current_user,'editors',publication_old.editors,form.editors.data,'edit')
-            publication.add_to_logger(current_user,'pub_title,year',publication_old.pub_title,form.pub_title.data,'edit')
-            publication.add_to_logger(current_user,'pub_title,year',publication_old.year,form.year.data,'edit')
-            publication.add_to_logger(current_user,'volume,pages',publication_old.volume,form.volume.data,'edit')
-            publication.add_to_logger(current_user,'volume,pages',publication_old.pages,form.pages.data,'edit')
+            publication.add_to_logger(current_user,'pub_title',publication_old.pub_title,form.pub_title.data,'edit')
+            publication.add_to_logger(current_user,'year',publication_old.year,form.year.data,'edit')
+            publication.add_to_logger(current_user,'volume',publication_old.volume,form.volume.data,'edit')
+            publication.add_to_logger(current_user,'pages',publication_old.pages,form.pages.data,'edit')
             publication.add_to_logger(current_user,'publisher',publication_old.publisher,form.publisher.data,'edit')
             publication.add_to_logger(current_user,'city',publication_old.city,form.city.data,'edit')
             publication.add_to_logger(current_user,'country',publication_old.country,form.country.data,'edit')
             publication.add_to_logger(current_user,'institution',publication_old.institution,form.institution.data,'edit')
             publication.add_to_logger(current_user,'DOI_ISBN',publication_old.DOI_ISBN,form.DOI_ISBN.data,'edit')
             publication.add_to_logger(current_user,'journal_name',publication_old.journal_name,form.journal_name.data,'edit')
-            publication.add_to_logger(current_user,'date_digitised',publication_old.date_digitised,form.date_digitised.data,'edit')
+            #publication.add_to_logger(current_user,'purposes',publication_old.purposes,form.purposes.data,'edit')
+            #publication.add_to_logger(current_user,'date_digitised',publication_old.date_digitised,form.date_digitised.data,'edit')
             publication.add_to_logger(current_user,'embargo',publication_old.embargo,form.embargo.data,'edit')
             publication.add_to_logger(current_user,'additional_source_string',publication_old.additional_source_string,form.additional_source_string.data,'edit')
-            publication.add_to_logger(current_user,'student',publication_old.student,form.student.data,'edit')
+            #publication.add_to_logger(current_user,'student',publication_old.student,form.student.data,'edit')
             publication.add_to_logger(current_user,'study_notes',publication_old.study_notes,form.study_notes.data,'edit')
             # END CODE BLOCK
             
@@ -329,17 +338,18 @@ def publication_form(id,edit_or_new):
         #publication.corresponding_author = form.corresponding_author.data
         #publication.email = form.email.data
         publication.purposes = form.purposes.data
-        publication.date_digitised = form.date_digitised.data
+        #publication.date_digitised = form.date_digitised.data
         publication.embargo = form.embargo.data
         #publication.missing_data = form.missing_data.data
         publication.additional_source_string = form.additional_source_string.data
         publication.study_notes = form.study_notes.data
-        publication.student = form.student.data
+        #publication.student = form.student.data
+        
         
         print(publication.purposes)
         
         if edit_or_new == "new":
-            
+            publication.colour = gen_hex_code()
             db.session.flush()
             db.session.add(publication)
             db.session.commit()
@@ -347,25 +357,28 @@ def publication_form(id,edit_or_new):
             publication.add_to_logger(current_user,'source_type',publication_old.source_type,form.source_type.data,'edit')
             publication.add_to_logger(current_user,'authors',publication_old.authors,form.authors.data,'edit')
             publication.add_to_logger(current_user,'editors',publication_old.editors,form.editors.data,'edit')
-            publication.add_to_logger(current_user,'pub_title,year',publication_old.pub_title,form.pub_title.data,'edit')
-            publication.add_to_logger(current_user,'pub_title,year',publication_old.year,form.year.data,'edit')
-            publication.add_to_logger(current_user,'volume,pages',publication_old.volume,form.volume.data,'edit')
-            publication.add_to_logger(current_user,'volume,pages',publication_old.pages,form.pages.data,'edit')
+            publication.add_to_logger(current_user,'pub_title',publication_old.pub_title,form.pub_title.data,'edit')
+            publication.add_to_logger(current_user,'year',publication_old.year,form.year.data,'edit')
+            publication.add_to_logger(current_user,'volume',publication_old.volume,form.volume.data,'edit')
+            publication.add_to_logger(current_user,'pages',publication_old.pages,form.pages.data,'edit')
             publication.add_to_logger(current_user,'publisher',publication_old.publisher,form.publisher.data,'edit')
             publication.add_to_logger(current_user,'city',publication_old.city,form.city.data,'edit')
             publication.add_to_logger(current_user,'country',publication_old.country,form.country.data,'edit')
             publication.add_to_logger(current_user,'institution',publication_old.institution,form.institution.data,'edit')
             publication.add_to_logger(current_user,'DOI_ISBN',publication_old.DOI_ISBN,form.DOI_ISBN.data,'edit')
             publication.add_to_logger(current_user,'journal_name',publication_old.journal_name,form.journal_name.data,'edit')
-            publication.add_to_logger(current_user,'date_digitised',publication_old.date_digitised,form.date_digitised.data,'edit')
+            #publication.add_to_logger(current_user,'purposes',publication_old.purposes,form.purposes.data,'edit')
+            #publication.add_to_logger(current_user,'date_digitised',publication_old.date_digitised,form.date_digitised.data,'edit')
             publication.add_to_logger(current_user,'embargo',publication_old.embargo,form.embargo.data,'edit')
             publication.add_to_logger(current_user,'additional_source_string',publication_old.additional_source_string,form.additional_source_string.data,'edit')
-            publication.add_to_logger(current_user,'student',publication_old.student,form.student.data,'edit')
+            #publication.add_to_logger(current_user,'student',publication_old.student,form.student.data,'edit')
             publication.add_to_logger(current_user,'study_notes',publication_old.study_notes,form.study_notes.data,'edit')
             # END CODE BLOCK
             
+        publication_id = str(publication.id)
+            
         flash('The publication infomation has been updated.')
-        return redirect(url_for('main.species_page',species_id="all",pubs_ids=publication.id))
+        return redirect("../species=all/publications="+publication_id)
     
     form.source_type.data = publication.source_type
     form.authors.data = publication.authors
@@ -383,12 +396,12 @@ def publication_form(id,edit_or_new):
     #form.corresponding_author.data = publication.corresponding_author
     #form.email.data = publication.email
     form.purposes.data = publication.purposes
-    form.date_digitised.data = publication.date_digitised
+    #form.date_digitised.data = publication.date_digitised
     form.embargo.data = publication.embargo
     #form.missing_data.data = publication.missing_data
     form.additional_source_string.data = publication.additional_source_string
     form.study_notes.data = publication.study_notes
-    form.student.data = publication.student
+    #form.student.data = publication.student
     
     
     return render_template('data_manage/publication_form.html', form=form, publication=publication)
@@ -401,82 +414,122 @@ def publication_edit_history(id):
     logged_changes = ChangeLogger.query.filter_by(object_type = "publication",object_id = id)
     return render_template('edit_history.html',publication = publication, logged_changes = logged_changes)
 
+@data_manage.route('/population/new/publication=<int:id_pub>/choose_species', methods=['GET'])
+@login_required
+def choose_species(id_pub):
+    publication = Publication.query.get_or_404(id_pub)
+    species = Species.query.all()
+    
+    return render_template('data_manage/choose_species.html',publication=publication,species=species)
+
 # editing population infomation
 # NEEDS UPDATE
-@data_manage.route('/population/<string:edit_or_new>/<int:id>', methods=['GET', 'POST'])
+@data_manage.route('/population/<string:edit_or_new>/<int:id>/species=<int:species_id>/publication=<int:publication_id>', methods=['GET', 'POST'])
 @login_required
-def population_form(id):
+def population_form(id,edit_or_new,species_id,publication_id):
 
-    population = Population.query.get_or_404(id)
-    species = Species.query.get_or_404(population.species_id)
-    form = PopulationForm(population=population)
+    if edit_or_new == "edit":
+        population = Population.query.get_or_404(id)
+        population_old = Population.query.get_or_404(id)
+        species = Species.query.get_or_404(species_id)
+        publication = Publication.query.get_or_404(publication_id)
+        form = PopulationForm(population=population)
+    else:
+        population = Population()
+        population_old = Population()
+        species = Species.query.get_or_404(species_id)
+        publication = Publication.query.get_or_404(publication_id)
+        form = PopulationForm()
     
     if form.validate_on_submit():
-        population.name = form.name.data
+        population.species_id = species_id
+        population.publication_id = publication_id
+        population.species_author = form.species_author.data
+        population.population_name = form.population_name.data
         population.ecoregion = form.ecoregion.data
+        population.invasive_status_study = form.invasive_status_study.data
+        population.invasive_status_elsewhere = form.invasive_status_elsewhere.data
         population.country = form.country.data
+        population.population_nautical_miles = form.population_nautical_miles.data
         population.continent = form.continent.data
-        population.latitude = form.latitude.data
-        population.longitude = form.longitude.data
+        population.lat_ns = form.lat_ns.data
+        population.lat_deg = form.lat_deg.data
+        population.lat_min = form.lat_min.data
+        population.lat_sec = form.lat_sec.data
+        #population.latitude = float(population.lat_deg) + float(population.lat_min)/60 + float(population.lat_sec)/3600
+        population.lon_ew = form.lon_ew.data
+        population.lon_deg = form.lon_deg.data
+        population.lon_min = form.lon_min.data
+        population.lon_sec = form.lon_sec.data
+        #population.longitude = float(population.lon_deg) + float(population.lon_min)/60 + float(population.lon_sec)/3600
         population.altitude = form.altitude.data
+        population.pop_size = form.pop_size.data
+        population.within_site_replication = form.within_site_replication.data
+        population.study_start = form.study_start.data
+        population.study_end = form.study_end.data
+        #population.study_duration = population.study_end - population.study_start
+        population.purpose_endangered = form.purpose_endangered.data
+        population.purpose_weed = form.purpose_weed.data
+        #population.database_source = form.database_source.data #Not sure what this is
         flash('The population infomation has been updated.')
-        return redirect(url_for('main.species_page',species_id=species.id,pubs_ids="all"))
         
-    form.name.data = population.name
-    form.ecoregion.data = population.ecoregion
-    form.country.data = population.country
-    form.continent.data = population.continent
-    form.latitude.data = population.latitude
-    form.longitude.data = population.longitude
-    form.altitude.data = population.altitude
-    
-    return render_template('data_manage/generic_form.html', form=form, population=population,species = species)
+        publication_id = str(publication.id)
+        return redirect("../species=all/publications="+publication_id)
+        
+    form.species_author.data = population.species_author  
+    form.population_name.data = population.population_name  
+    form.ecoregion.data = population.ecoregion  
+    form.invasive_status_study.data = population.invasive_status_studies
+    form.invasive_status_elsewhere.data = population.invasive_status_elsewhere  
+    form.country.data = population.country  
+    form.population_nautical_miles.data = population.population_nautical_miles  
+    form.continent.data = population.continent  
+    form.lat_ns.data = population.lat_ns  
+    form.lat_deg.data = population.lat_deg  
+    form.lat_min.data = population.lat_min  
+    form.lat_sec.data = population.lat_sec  
+    form.lon_ew.data = population.lon_ew  
+    form.lon_deg.data = population.lon_deg  
+    form.lon_min.data = population.lon_min  
+    form.lon_sec.data = population.lon_sec  
+    form.altitude.data = population.altitude  
+    form.pop_size.data = population.pop_size 
+    form.within_site_replication.data = population.within_site_replication
+    form.study_start.data = population.study_start  
+    form.study_end.data = population.study_end 
+    form.purpose_endangered.data = population.purpose_endangered 
+    form.purpose_weed.data = population.purpose_weed  
+    #form.database_source.data = population.database_source  
+
+    return render_template('data_manage/generic_form.html', form=form, population=population,species = species,publication = publication)
 
 # population edit history
 @data_manage.route('/population/<int:id>/edit-history')
 @login_required
 def population_edit_history(id):
     population = Population.query.get_or_404(id)
+    logged_changes = ChangeLogger.query.filter_by(object_type = "population",object_id = id)
     return render_template('edit_history.html', population=population)
-
-# edting study infomation
-# merge into population
-#@data_manage.route('/study/<int:id>/edit', methods=['GET', 'POST'])
-#@login_required
-#def study_form(id):
-#    study = Study.query.get_or_404(id)
-#    publication = study.publication_id
-#    form = StudyForm(study=study)
-#    
-#    if form.validate_on_submit():
-#        study.study_duration = form.study_duration.data
-#        study.study_start = form.study_start.data
-#        study.study_end = form.study_end.data
-#        flash('The study infomation has been updated.')
-#        return redirect(url_for('.publication_page',id=species.id))
-#        
-#    form.study_duration.data = study.study_duration
-#    form.study_start.data = study.study_start
-#    form.study_end.data = study.study_end
-#    
-#    return render_template('data_manage/generic_form.html', form=form, study=study)
-
-# study edit history
-#@data_manage.route('/study/<int:id>/edit-history')
-#@login_required
-#def study_edit_history(id):
-#    study = Study.query.get_or_404(id)
-#    return render_template('edit_history.html', study=study)
 
 # editing matrix
 # NEEDS UPDATE
-@data_manage.route('/matrix/<string:edit_or_new>/<int:id>', methods=['GET', 'POST'])
+@data_manage.route('/matrix/<string:edit_or_new>/<int:id>/population=<int:pop_id>', methods=['GET', 'POST'])
 @login_required
-def matrix_form(id):
-    matrix = Matrix.query.get_or_404(id)
-    population = Population.query.get_or_404(matrix.population_id)
-    species = Species.query.get_or_404(population.species_id)
-    form = MatrixForm(matrix=matrix)
+def matrix_form(id,edit_or_new,pop_id):
+    if edit_or_new == "edit":
+        matrix = Matrix.query.get_or_404(id)
+        matrix_old = Matrix.query.get_or_404(id)
+        population = Population.query.get_or_404(pop_id)
+        species = Species.query.get_or_404(population.species_id)
+        publication = Publication.query.get_or_404(population.publication_id)
+        form = MatrixForm(matrix=matrix)
+    else:
+        matrix = Matrix()
+        matrix_old = Matrix()
+        population = Population.query.get_or_404(pop_id)
+        species = Species.query.get_or_404(population.species_id)
+        publication = Publication.query.get_or_404(population.publication_id)
+        form = MatrixForm()
     
     if form.validate_on_submit():
         matrix.treatment = form.treatment.data

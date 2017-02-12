@@ -41,7 +41,7 @@ def after_request(response):
 #    shutdown()
 #    return 'Shutting down...'
 
-
+# HOMEPAGE
 @main.route('/', methods=['GET', 'POST'])
 def index():
     species = Species.query.filter(Species.image_path != None).all()
@@ -134,58 +134,58 @@ def publications_table():
 @main.route('/species=<list:species_ids>/publications=<list:pub_ids>')
 def species_page(species_ids,pub_ids):
     if species_ids[0] == "all" and pub_ids[0] == "all":
+        flash('Loading all species and publications is not allowed, sorry.')
         abort(404)
         
     #get species
     all_species = []
-    if species_ids[0] != "all":
+    if species_ids[0] != "all": # aka if species are filtered
         for id in species_ids:
             all_species.append((Species.query.filter_by(id=id)).first())
+            
         all_populations_species = []
         for species in all_species:
-                all_populations_species.extend(Population.query.filter_by(species_id=species.id).all())
-    
+            all_populations_species.extend(Population.query.filter_by(species_id=species.id).all())
+                
     #get pubs
     all_pubs = []
-    if pub_ids[0] != "all":
+    if pub_ids[0] != "all": # aka if publications are being filtered
         for id in pub_ids:
             all_pubs.append((Publication.query.filter_by(id=id)).first())
 
         all_populations_pubs = []
         for publications in all_pubs:
-                all_populations_pubs.extend(Population.query.filter_by(publication_id=publications.id).all())
+            all_populations_pubs.extend(Population.query.filter_by(publication_id=publications.id).all())  
+        
       
     # Pick the right populations + get stuff
-    if species_ids[0] == "all":
+    if species_ids[0] == "all": # aka if species are filtered 
         populations = all_populations_pubs
-    elif pub_ids[0] == "all":
+    elif pub_ids[0] == "all": # aka if publications are being filtered
         populations = all_populations_species
-    else:
+    else: # aka if publications AND species are being filtered
         populations = set(all_populations_species).intersection(all_populations_pubs)
     
-    publications = []
-    all_species = []
-    for population in populations:
-        publications.append(Publication.query.filter_by(id=population.publication_id).first())
-        all_species.append(Species.query.filter_by(id=population.species_id).first())
+    
+    if species_ids[0] != "all":  #aka if species are filtered 
+        all_pubs = []
+        for population in populations:
+            all_pubs.append(Publication.query.filter_by(id=population.publication_id).first())
         
-    # remove duplicates    
+    if pub_ids[0] != "all": # aka if publications are being filtered
+        all_species = []
+        for population in populations:
+            all_species.append(Species.query.filter_by(id=population.species_id).first())
+        
+    # remove duplicates 
+    
+    
     populations = list(set(populations))
-    all_species = list(set(all_species))    
-    publications = list(set(publications))
-        
-    print(publications)
-    print(all_species)
+    all_species = list(set(all_species))
+
+    publications = list(set(all_pubs))
     
     return render_template('species_template.html',all_species = all_species, publications = publications, populations = populations)
-
-# publication overview page
-# NEEDS UPDATE OR MERGER INTO SPECIES OVERVIEW TEMPLATE
-@main.route('/publication/<int:id>')
-# @login_required
-def publication_page(id):
-    publication = Publication.query.filter_by(id=id).first_or_404()
-    return render_template('source_template.html',publication = publication)
 
 # Taxonomic explorer
 # NEEDS FIX AT SPECIES LEVEL
@@ -198,24 +198,24 @@ def explorer(taxon_level,taxon):
         next_taxon_level = "kingdom"
         tax_pos = 0
     elif taxon_level == "kingdom":
-        taxon_list = Taxonomy.query.filter_by(kingdom=taxon)
+        taxon_list = Taxonomy.query.filter_by(kingdom=taxon).all()
         next_taxon_level = "phylum"
         tax_pos = 1
     elif taxon_level == "phylum":
-        taxon_list = Taxonomy.query.filter_by(phylum=taxon)
+        taxon_list = Taxonomy.query.filter_by(phylum=taxon).all()
         next_taxon_level = "class" 
         tax_pos = 2
     elif taxon_level == "class":
-        taxon_list = Taxonomy.query.filter_by(tax_class=taxon)
+        taxon_list = Taxonomy.query.filter_by(tax_class=taxon).all()
         next_taxon_level = "order"
         tax_pos = 3
     elif taxon_level == "order":
-        taxon_list = Taxonomy.query.filter_by(tax_order=taxon)
+        taxon_list = Taxonomy.query.filter_by(tax_order=taxon).all()
         next_taxon_level = "family"
         tax_pos = 4
     elif taxon_level == "family":
-        taxon_list = Taxonomy.query.filter_by(family=taxon)
-        next_taxon_level = "Species"
+        taxon_list = Taxonomy.query.filter_by(family=taxon).all()
+        next_taxon_level = "species"
         tax_pos = 5
     
     

@@ -12,16 +12,6 @@
     <h2 style="text-align:center;">Incorporating COMPADRE & COMADRE</h2>
     <br>
 </div>
-<p>test links</p>
-<p><a href="../data-manage/species/new/0">Make a new species</a></p>
-<p><a href="../data-manage/publication/new/0">Make a new publication</a></p>
-
-<p>Matrix overview pages are now at /species=.../publication=...</p>
-
-<p>where ... can be a number (eg. 3), a list of numbers eg. (2+4+5+7) or all</p>
-<p> eg.</p>
-<p><a href = "/species=4/publications=all">/species=4/publications=all</a></p>
-<p><a href = "/species=all/publications=6">/species=all/publications=6</a></p>
 
 <div class="info_box">
     <h3>Introduction</h3>
@@ -37,9 +27,9 @@
         <div class="col-sm-4">
             <h3>Explore</h3>
             <ul>
-                <li><a href="{{ url_for('main.comingsoon') }}">Search by Species</a></li>
-                <li><a href="{{ url_for('main.comingsoon') }}">Search by Publication</a></li>
-                <li><a href="{{ url_for('about.history') }}">Taxonomic Explorer</a></li>
+                <li><a href="{{ url_for('main.species_table') }}">Search by Species</a></li>
+                <li><a href="{{ url_for('main.publications_table') }}">Search by Publication</a></li>
+                <li><a href="../../explorer/life/asweknowit">Taxonomic Explorer</a></li>
             </ul>
         </div>
         <div class="col-sm-4">
@@ -60,11 +50,35 @@
         </div>
     </div>
 </div>
+
+<div class="info_box">
+<h3>Explore the Demography Database</h3>
+    
+        
+            <div class="row">
+                {% for species in species2 %}
+                <div class="col-xs-3"><a href="/species={{species.id}}/publications=all"><div class="species-image-container" style="background-image:url('{{ species.image_path }}');"></div>
+                    <h4>{{species.species_accepted}}</h4></a>
+                    {% if species.populations | count == 1 %}
+                    <p>{{ species.populations | count }} population</p>
+                    {% else %}
+                    <p>{{ species.populations | count }} populations</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            
+</div>
+
 <div class="info_box">
     <h3>Quicklinks</h3>
     <p><a href="http://onlinelibrary.wiley.com/doi/10.1111/1365-2745.12334/abstract;jsessionid=E81509E7DBF840A800EC5701CA22E17B.f04t03" target="_blank">The COMPADRE Plant Matrix Database: an open online repository for plant demography</a></p>
     <p><a href="http://onlinelibrary.wiley.com/doi/10.1111/1365-2656.12482/full" target="_blank">COMADRE: a global database of animal demography</a></p>
     <p></p>
+</div>
+
+<div class="info_box">
+    <h3>Social media feeds</h3>
 </div>
 
 <div class="info_box">
@@ -74,22 +88,7 @@
     <p><a href="https://www.demogr.mpg.de/en/laboratories/evolutionary_biodemography_1171/projects/compadre_plant_matrix_database_comadre_animal_matrix_database_1867.htm" target="_blank">Meet the MPIDR team at Rostock</a></p>
 </div>
 
-<div class="info_box">
-<h3>Explore the Demography Database</h3>
-    
-        
-            <div class="row">
-                {% for species in species2 %}
-                <div class="col-xs-3"><a href="/species={{species.id}}/publications=all"><div class="species-image-container" style="background-image:url('{{ species.image_path }}');"></div>
-                    <p>{{species.species_accepted}}</p></a>
-                
-                
-                
-                </div>
-                {% endfor %}
-            </div>
-            
-</div>
+
 
 
 {% endblock %}

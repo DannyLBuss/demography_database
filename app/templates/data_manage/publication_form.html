@@ -38,7 +38,7 @@
             <h3>Autofilled via DOI or ISBN</h3>
             {{ wtf.form_field(form.authors) }}
             {{ wtf.form_field(form.editors) }}
-            {{ wtf.form_field(form.pub_title)}}
+            {{ wtf.form_field(form.journal_name)}}
             {{ wtf.form_field(form.year) }}
             {{ wtf.form_field(form.volume) }}
             {{ wtf.form_field(form.pages) }}
@@ -46,7 +46,7 @@
             {{ wtf.form_field(form.city) }}
             {{ wtf.form_field(form.country) }}
             {{ wtf.form_field(form.institution) }}
-            {{ wtf.form_field(form.journal_name) }}
+            {{ wtf.form_field(form.pub_title) }}
         </div>
         <div class="info_box">
             <h3>Must be input manually</h3>
@@ -101,7 +101,7 @@
             }
             
             document.getElementById("editors").value = "NA";
-            document.getElementById("pub_title").value = data.message["container-title"][0];
+            document.getElementById("journal_name").value = data.message["container-title"][0];
             
             if (data.message["issued"]){
                 document.getElementById("year").value = data.message["issued"]["date-parts"][0];
@@ -124,8 +124,8 @@
             document.getElementById("country").value = "NA";
             document.getElementById("institution").value = "NA";
             document.getElementById("DOI_ISBN").value = doi_given;
-            document.getElementById("pub_name").value = data.message.title;
-            document.getElementById("pub_name").value = toTitleCase(document.getElementById("pub_name").value)
+            document.getElementById("pub_title").value = data.message.title;
+            document.getElementById("pub_title").value = toTitleCase(document.getElementById("pub_name").value)
             console.log("Received data...")
             
         });
