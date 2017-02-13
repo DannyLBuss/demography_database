@@ -470,60 +470,60 @@ class IUCNStatus(db.Model):
     def __repr__(self):
         return self.status_code
 
-class ESAStatus(db.Model):
-    __tablename__ = 'esa_statuses'
-    id = db.Column(db.Integer, primary_key=True)
-    status_code = db.Column(db.String(64), index=True, unique=True)
-    status_name = db.Column(db.String(64))
-    status_description = db.Column(db.Text())
-
-    species = db.relationship("Species", backref="esa_status")
-
-    @staticmethod
-    def migrate():
-        with open('app/data-migrate/species.json') as species_file:
-            data = json.load(species_file)
-            species = data["Species"]
-            esa = species["ESAStatus"]
-
-            for ea in esa:
-                i = ESAStatus.query.filter_by(status_code=ea['status_code']).first()
-                if i is None:
-                    i = ESAStatus()
-
-                i.status_code = ea['status_code']
-                i.status_name = ea['status_name']
-
-                db.session.add(i)
-                db.session.commit()
-
-    def to_json(self, key):
-        esa_status = {
-            'request_url' : url_for('api.get_one_entry', id=self.id, model='esa_statuses', key=key,
-                                      _external=False),
-            'data' : {
-                'status_code': self.status_code,
-                'status_name' : self.status_name,
-                'status_description' : self.status_description,
-                'species' : [species.to_json_simple() for species in self.species]
-                }
-
-        }
-        return esa_status
-
-    def to_json_simple(self, key):
-        esa_status = {
-            'request_url' : url_for('api.get_one_entry', id=self.id, model='esa_statuses', key=key,
-                                      _external=False),
-            'data' : {
-                'status_code': self.status_code,
-                'status_name' : self.status_name
-                }
-        }
-        return esa_status
-
-    def __repr__(self):
-        return self.status_code
+#class ESAStatus(db.Model):
+#    __tablename__ = 'esa_statuses'
+#    id = db.Column(db.Integer, primary_key=True)
+#    status_code = db.Column(db.String(64), index=True, unique=True)
+#    status_name = db.Column(db.String(64))
+#    status_description = db.Column(db.Text())
+#
+#    species = db.relationship("Species", backref="esa_status")
+#
+#    @staticmethod
+#    def migrate():
+#        with open('app/data-migrate/species.json') as species_file:
+#            data = json.load(species_file)
+#            species = data["Species"]
+#            esa = species["ESAStatus"]
+#
+#            for ea in esa:
+#                i = ESAStatus.query.filter_by(status_code=ea['status_code']).first()
+#                if i is None:
+#                    i = ESAStatus()
+#
+#                i.status_code = ea['status_code']
+#                i.status_name = ea['status_name']
+#
+#                db.session.add(i)
+#                db.session.commit()
+#
+#    def to_json(self, key):
+#        esa_status = {
+#            'request_url' : url_for('api.get_one_entry', id=self.id, model='esa_statuses', key=key,
+#                                      _external=False),
+#            'data' : {
+#                'status_code': self.status_code,
+#                'status_name' : self.status_name,
+#                'status_description' : self.status_description,
+#                'species' : [species.to_json_simple() for species in self.species]
+#                }
+#
+#        }
+#        return esa_status
+#
+#    def to_json_simple(self, key):
+#        esa_status = {
+#            'request_url' : url_for('api.get_one_entry', id=self.id, model='esa_statuses', key=key,
+#                                      _external=False),
+#            'data' : {
+#                'status_code': self.status_code,
+#                'status_name' : self.status_name
+#                }
+#        }
+#        return esa_status
+#
+#    def __repr__(self):
+#        return self.status_code
 
 ''' End Meta Tables for Species '''
 
@@ -2001,12 +2001,12 @@ class Species(db.Model):
     species_accepted = db.Column(db.String(64))
     species_common = db.Column(db.String(200))
     iucn_status_id = db.Column(db.Integer, db.ForeignKey('iucn_status.id',ondelete='CASCADE'))
-    esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id',ondelete='CASCADE'))
+    #esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id',ondelete='CASCADE'))
     species_gisd_status = db.Column(db.Boolean())
-    invasive_status = db.Column(db.Boolean())
+    #invasive_status = db.Column(db.Boolean())
     gbif_taxon_key = db.Column(db.Integer)
     species_iucn_taxonid = db.Column(db.Integer())
-    species_iucn_population_assessed = db.Column(db.String(200))
+    #species_iucn_population_assessed = db.Column(db.String(200))
     image_path = db.Column(db.Text)
     image_path2 = db.Column(db.Text)
     
@@ -2184,7 +2184,6 @@ class Species(db.Model):
     @staticmethod
     def migrate():
         IUCNStatus.migrate()
-        ESAStatus.migrate()
 
     def to_json(self, key):
         species = {
@@ -2775,7 +2774,7 @@ class Population(db.Model):
     lon_sec = db.Column(db.Integer())
         
     altitude = db.Column(db.Float())
-    pop_size = db.Column(db.Text())
+    #pop_size = db.Column(db.Text())
     within_site_replication = db.Column(db.Text())
     
     #from study
@@ -3176,9 +3175,9 @@ class Matrix(db.Model):
     matrix_difficulty = db.Column(db.String(64))
     matrix_complete = db.Column(db.Boolean())
     independence_origin = db.Column(db.Text())
-    n_plots = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, will need your help with plots too - not quite sure what they are.
-    plot_size = db.Column(db.Float()) # Schema states, 'R convert to m^2'
-    n_individuals = db.Column(db.Integer()) # Schema states, 'total number of individuals observed'
+    #n_plots = db.Column(db.SmallInteger()) # Danny/Jenni/Dave, will need your help with plots too - not quite sure what they are.
+    #plot_size = db.Column(db.Float()) # Schema states, 'R convert to m^2'
+    #n_individuals = db.Column(db.Integer()) # Schema states, 'total number of individuals observed'
     studied_sex_id = db.Column(db.Integer, db.ForeignKey('studied_sex.id',ondelete='CASCADE'))
     captivity_id = db.Column(db.Integer, db.ForeignKey('captivities.id',ondelete='CASCADE'))
     matrix_dimension = db.Column(db.Integer()) # dimension of matrix population A   
@@ -3188,7 +3187,7 @@ class Matrix(db.Model):
     class_author = db.Column(db.Text())
     class_number = db.Column(db.Text())
 
-    vectors_includes_na = db.Column(db.Text())
+    #vectors_includes_na = db.Column(db.Text())
     matrix_lambda = db.Column(db.Float())
     
     independent = db.Column(db.Boolean())
@@ -3274,8 +3273,8 @@ class Matrix(db.Model):
                 'matrix_a_string' : self.matrix_a_string,
                 'matrix_u_string' : self.matrix_u_string,
                 'matrix_f_string' : self.matrix_f_string,
-                'n_plots' : self.n_plots,
-                'plot_size' : self.plot_size,
+                #'n_plots' : self.n_plots,
+                #'plot_size' : self.plot_size,
                 'studied_sex' : self.studied_sex.to_json_simple(key),
                 'captivities' : self.captivities.to_json_simple(key) if self.captivities else None,
                 'matrix_dimension' : self.matrix_dimension,
@@ -3288,7 +3287,7 @@ class Matrix(db.Model):
                 'matrix_end_year' : self.matrix_end_year,
                 'matrix_end_month' : self.matrix_end_month,
                 
-                'n_individuals' : self.n_individuals,
+                #'n_individuals' : self.n_individuals,
                 'class_organized' : self.class_organized,
                 'class_author' : self.class_author,
                 'class_number' : self.class_number,
@@ -3305,7 +3304,7 @@ class Matrix(db.Model):
             matrix['data']['matrix_difficulty'] = self.matrix_difficulty #
             matrix['data']['matrix_complete'] = self.matrix_complete #
             matrix['data']['independence_origin'] = self.independence_origin #
-            matrix['data']['vectors_includes_na'] = self.vectors_includes_na #
+            #matrix['data']['vectors_includes_na'] = self.vectors_includes_na #
             matrix['data']['independent'] = self.independent #
             matrix['data']['non_independence'] = self.non_independence #
             matrix['data']['non_independence_author'] = self.non_independence_author #
@@ -3343,7 +3342,7 @@ class Matrix(db.Model):
             matrix['data']['matrix_difficulty'] = self.matrix_difficulty, #
             matrix['data']['matrix_complete'] = self.matrix_complete, #
             matrix['data']['independence_origin'] = self.independence_origin, #
-            matrix['data']['vectors_includes_na'] = self.vectors_includes_na, #
+            #matrix['data']['vectors_includes_na'] = self.vectors_includes_na, #
             matrix['data']['independent'] = self.independent, #
             matrix['data']['non_independence'] = self.non_independence, #
             matrix['data']['non_independence_author'] = self.non_independence_author, #

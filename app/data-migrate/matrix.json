@@ -6,8 +6,6 @@
 			"comp_name": "Mean"
 		}, {
 			"comp_name": "Pooled"
-		}, {
-			"comp_name": "Seasonal"
 		}],
 		"Season": [{
 			"season_name": "Spring"

@@ -20,7 +20,7 @@ if os.path.exists('.env'):
 
 from app import create_app, db
 from app.models import User, Role, Permission, \
-    IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
+    IUCNStatus,  OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
@@ -42,7 +42,7 @@ migrate = Migrate(app, db)
 
 def make_shell_context():
     return dict(app=app, db=db, User=User, Role=Role,
-                Permission=Permission, IUCNStatus=IUCNStatus, ESAStatus=ESAStatus, Species=Species, \
+                Permission=Permission, IUCNStatus=IUCNStatus, Species=Species, \
                 Taxonomy=Taxonomy, OrganismType=OrganismType, GrowthFormRaunkiaer=GrowthFormRaunkiaer, \
                 ReproductiveRepetition=ReproductiveRepetition, DicotMonoc=DicotMonoc, AngioGymno=AngioGymno, SpandExGrowthType=SpandExGrowthType, Trait=Trait, \
                 Publication=Publication, SourceType=SourceType, Database=Database, Purpose=Purpose, MissingData=MissingData, \
@@ -115,13 +115,18 @@ def delete_table_data():
 
 # This can be padded out for future stuff...
 def coerce_boolean(string):
-    true = ['Yes', 'Divided']
-    false = ['No', 'Undivided']
+    true = ['Yes', 'Divided','TRUE','T']
+    false = ['No', 'Undivided','FALSE','F']
 
     if string in true:
         return True
     elif string in false:
         return False
+    elif string == "NA":
+        print "it's NA mate"
+    else:
+        print "you've got an error mate"
+        print string
 
 
 def return_con(obj):
@@ -315,7 +320,7 @@ def submit_new(data):
         'species_iucn_taxonid': data["species_iucn_taxonid"], 
         'species_accepted' : data["species_accepted"], 
         'species_common' :  data["species_common"], 
-        'species_gisd_status' : 1 if data["species_gisd_status"] else 0, 
+        'species_gisd_status' : coerce_boolean(data["species_gisd_status"]), 
         'iucn_status_id' : iucn.id if iucn else None, 
         'image_path' : data["image_path"], 
         'image_path2' : data["image_path2"]}
@@ -479,7 +484,7 @@ def submit_new(data):
         'lon_sec' : data["lon_sec"],           
      
         'altitude' : data["population_altitude"],
-        'pop_size' : data["population_pop_size"],
+        #'pop_size' : data["population_pop_size"],
         'country' : data["population_country"],
         'invasive_status_study_id' : invasive_status_study.id if invasive_status_study else None,
         'invasive_status_elsewhere_id' : invasive_status_elsewhere.id if invasive_status_elsewhere else None,
@@ -557,14 +562,13 @@ def submit_new(data):
     'matrix_dimension' : data["matrix_dimension"],
     'non_independence_author' : data["matrix_non_independence_author"],
     'matrix_complete' : coerce_boolean(data["matrix_complete"]),
-    'vectors_includes_na' : data["matrix_vectors_includes_na"],
     'class_number' : data["matrix_class_number"],
     'observations' : data["matrix_observations"],
     'captivities' : Captivity.query.filter_by(cap_code=data["matrix_captivity_id"]).first(),
     'class_author' : data["matrix_class_author"],
     'class_organized' : data["matrix_class_organized"],
     'matrix_difficulty' : data["matrix_difficulty"],
-    'independent' : coerce_boolean(data["matrix_seasonal"]),
+    'seasonal' : coerce_boolean(data["matrix_seasonal"]),
     'survival_issue' : calc_surv_issue(data["matrix_u_string"]),
     'matrix_irreducible' : is_matrix_irreducible(data["matrix_a_string"]),
     'matrix_primitive' : is_matrix_primitive(data["matrix_a_string"]),
@@ -604,7 +608,8 @@ def submit_new(data):
         fixed_dict = {'matrix' : matrix,
         'census_timings' : CensusTiming.query.filter_by(census_name=data["fixed_census_timing_id"]).first(),
         'seed_stage_error' : coerce_boolean(data["fixed_seed_stage_error"]),
-        'smalls' : Small.query.filter_by(small_name=data["fixed_small_id"]).first()
+        'smalls' : Small.query.filter_by(small_name=data["fixed_small_id"]).first(),
+        'vector_str' : data["matrix_vectors_includes_na"]
         }
 
         fixed_cleaned = data_clean(fixed_dict)
@@ -743,7 +748,7 @@ def convert_all_headers_new(dict):
     new_dict["matrix_class_author"] = dict["matrix_class_author"]
     new_dict["matrix_class_number"] = dict["matrix_class_number"]
     new_dict["matrix_vectors_includes_na"] = dict["matrix_vectors_includes_na"]
-    new_dict["population_pop_size"] = dict["population_pop_size"]
+    #new_dict["population_pop_size"] = dict["population_pop_size"]
     new_dict["species_iucn_status_id"] = dict["species_iucn_status"]
     new_dict["publication_date_digitization"] = dict["publication_date_digitization"]
     # new_dict["species_esa_status_id"] = dict["species_esa_status"]
@@ -791,11 +796,6 @@ def convert_all_headers_new(dict):
     new_dict['study_database_source'] = dict["study_database_source"]
     new_dict['publication_study_notes'] = dict["publication_study_notes"]
     
-    # not in migration script yet
-    
-    
-    
-
     for key, value in new_dict.iteritems():
         if value == "NA":
             new_dict[key] = None
@@ -817,7 +817,7 @@ def convert_all_headers_new(dict):
 @manager.command
 def migrate_meta():
     from app.models import User, Role, Permission, \
-    IUCNStatus, ESAStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
+    IUCNStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
