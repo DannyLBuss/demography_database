@@ -463,7 +463,7 @@ def population_form(id,edit_or_new,species_id,publication_id):
         population.lon_sec = form.lon_sec.data
         #population.longitude = float(population.lon_deg) + float(population.lon_min)/60 + float(population.lon_sec)/3600
         population.altitude = form.altitude.data
-        population.pop_size = form.pop_size.data
+        #population.pop_size = form.pop_size.data
         population.within_site_replication = form.within_site_replication.data
         population.study_start = form.study_start.data
         population.study_end = form.study_end.data
@@ -493,7 +493,7 @@ def population_form(id,edit_or_new,species_id,publication_id):
     form.lon_min.data = population.lon_min  
     form.lon_sec.data = population.lon_sec  
     form.altitude.data = population.altitude  
-    form.pop_size.data = population.pop_size 
+    #form.pop_size.data = population.pop_size 
     form.within_site_replication.data = population.within_site_replication
     form.study_start.data = population.study_start  
     form.study_end.data = population.study_end 

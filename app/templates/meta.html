@@ -26,10 +26,6 @@
     {% for iucn in meta.Species.IUCNStatus %}
     	<code>{{ iucn.status_code }} ({{ iucn.status_name }})</code> : {{ iucn.status_description }} <br/>
     {% endfor %}
-    <h3>ESA Status</h3>
-    {% for esa in meta.Species.ESAStatus %}
-    	<code>{{ esa.status_code }} ({{ esa.status_name }})</code><br/>
-    {% endfor %}
 
     <hr/>
 

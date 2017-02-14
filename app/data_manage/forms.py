@@ -173,7 +173,6 @@ class PopulationForm(Form):
     lon_min = IntegerField('Longitude minutes',validators=[Optional()])
     lon_sec = IntegerField('Longitude seconds',validators=[Optional()])
     altitude = FloatField('Altitude in metres',validators=[Optional()])
-    pop_size = StringField('Population size')
     within_site_replication = StringField('Within site replication')
     study_start = IntegerField('Study start (year)',validators=[Optional()])
     study_end = IntegerField('Study end (year)',validators=[Optional()])

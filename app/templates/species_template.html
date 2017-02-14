@@ -30,7 +30,9 @@
                         {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}{% endif %}</p>
                         
                         <p><strong>Species studied:</strong>{% for spec in all_species %} {{spec.species_accepted}} {%endfor%}</p>
+                        {% if current_user.is_authenticated %}
                         <p><a href="../data-manage/population/new/publication={{publication.id}}/choose_species"><span class="glyphicon glyphicon-plus-sign"></span> Add a new population</a></p>
+                        {% endif %}
                         
                     </td>
                     <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source <span class="glyphicon glyphicon-new-window"></span></a>{% endif %}</td>
@@ -47,8 +49,10 @@
                     <td> </td>
                 </tr>
             </tbody> {% endif %} </table>
+        {% if current_user.is_authenticated %}
         <p><a href="../data-manage/publication/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new publication</a></p>
         <p><a href="../data-manage/species/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new species</a></p>
+        {% endif %}
     </div> 
     
     <div id="dist_map"></div>
@@ -292,21 +296,26 @@
                 </div> {% endif %} {% endfor %}  </div>
         </div> {% endif %} {% endfor %}  
     
-    
+    {% if current_user.is_authenticated %}
     <div class="info_box_empty">
+        
         {% for publication in publications %}
         <p><a href="../data-manage/population/new/0/species={{species.id}}/publication={{publication.id}}"><span class="glyphicon glyphicon-plus-sign"></span> Add a new population</a> of <em>{{ species.species_accepted }}</em> as published in <span class="	glyphicon glyphicon-asterisk" style="color:{{publication.colour}}"></span> {{ publication.authors }} ({{ publication.year }}). "{{ publication.name }}" in <i>{{ publication.pub_title }}</i> {{ publication.volume }}, {{ publication.pages }}</p>
         {% endfor %}
+        
     </div>
+    {% endif %}
     {% else %}
         {% if publication %}
     <div class="info_box_empty">
         <a href="../data-manage/population/new/0/species={{species.id}}/publication={{publication.id}}">Add new population</a>
     </div> 
         {% else %}
+        {% if current_user.is_authenticated %}
         <div class="info_box_empty">
             <p>Populations can only be created from a page that contains a publication. The current page only contains information about species.</p>
-        </div> 
+        </div>
+        {% endif %}
         {% endif %}
     {% endif %}
 

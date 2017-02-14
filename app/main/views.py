@@ -70,7 +70,6 @@ def meta_tables_json():
 
     meta_tables["User"]["Institute"].extend(Institute.query.all())
     meta_tables["Species"]["IUCNStatus"].extend(IUCNStatus.query.all())
-    meta_tables["Species"]["ESAStatus"].extend(ESAStatus.query.all())
     meta_tables["Trait"]["OrganismType"].extend(OrganismType.query.all())
     meta_tables["Trait"]["GrowthFormRaunkiaer"].extend(GrowthFormRaunkiaer.query.all())
     meta_tables["Trait"]["ReproductiveRepetition"].extend(ReproductiveRepetition.query.all())

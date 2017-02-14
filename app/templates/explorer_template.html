@@ -62,7 +62,7 @@
         </div>
     {% elif taxon_level == "family" %}
         <div class="remove_duplicates info_box" >
-            <a class="taxon_name" href="../../species/{{ taxons.species_id }}/overview"><h3><i>{{ taxons.species.species_accepted }}</i></h3></a>
+            <a class="taxon_name" href="../../species={{ taxons.species_id }}/publications=all"><h3><i>{{ taxons.species.species_accepted }}</i></h3></a>
             <div id="{{ taxons.species.species_accepted }}info"></div>
         </div>
     {% endif %}
