@@ -912,11 +912,11 @@ class Database(db.Model):
 
                 i.database_name = node['database_name']
                 i.database_description = node['database_description']
-                i.database_master_version = None
-                i.database_date_created = None
-                i.database_number_species_accepted = None
-                i.database_number_matrices = None
-                i.database_agreement = None
+                i.database_master_version = node['database_master_version']
+                i.database_date_created = node['database_date_created']
+                i.database_number_species_accepted = node['database_number_species_accepted']
+                i.database_number_matrices = node['database_number_matrices']
+                i.database_agreement = node['database_agreement']
 
                 db.session.add(i)
                 db.session.commit()

@@ -14,25 +14,34 @@
     <h4>Are you a computer programmer fanatic? Do you love coding? Do you want to help us develop some fun tools to explore the world of matrix models? Then please fill in the contact form below:</h4>
 <body>
     <h3>Contact Form:</h3>
-
+<table>
     <form action="/help-develop-site" method="post">
-          {{ form.hidden_tag() }}
-        <p>
+                    {{ form.hidden_tag() }}
+        <tr>
+          <td align="right"><p>
           {{ form.name.label }}
           {{ form.name }}
         </p>
-        <p>
+      </td></tr>
+        <tr>
+          <td align="right"><p>
           {{ form.email.label }}
           {{ form.email }}
         </p>
-        <p>
+        </td></tr>
+        <tr>
+          <td align="right"><p>
           {{ form.message.label }}
           {{ form.message }}
         </p>
-        <p>
+        </td></tr>
+        <tr>
+          <td align="left"><p>
           {{ form.submit }}
         </p>
+        </td></tr>
       </form>
+    </table>
 </body>
 </div>
 

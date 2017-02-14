@@ -780,8 +780,6 @@ def convert_all_headers_new(dict):
     new_dict["taxonomy_col_check_ok"] = dict["taxonomy_col_check_ok"]
     new_dict["taxonomy_col_check_date"]= dict["taxonomy_col_check_date"]
     new_dict["matrix_independence_origin"] = dict["matrix_independence_origin"]
-    
-    # newly added
     new_dict['image_path'] = dict["image_path"]
     new_dict['image_path2'] = dict["image_path2"]
     new_dict['species_iucn_taxonid'] = dict["species_iucn_taxonid"]

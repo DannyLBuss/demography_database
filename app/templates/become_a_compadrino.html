@@ -16,27 +16,35 @@
     <br>
     <div class = "info_box">
     <h4>Do you want to digitize data? Do you love matrix models? Do you want to become one of our fantastic compadrinos? Then please fill in the contact form below:</h4>
-    <br><br>
-
+    <h3>Contact Form:</h3><br>
+    <table>
     <form action="/become-a-compadrino" method="post">
           {{ form.hidden_tag() }}
-        <p>
+        <tr>
+          <td align="right"><p>
           {{ form.name.label }}
           {{ form.name }}
         </p>
-        <p>
+      </td></tr>
+        <tr>
+          <td align="right"><p>
           {{ form.email.label }}
           {{ form.email }}
         </p>
-        <br>
-        <p>
+        </td></tr>
+        <tr>
+          <td align="right"><p>
           {{ form.message.label }}
           {{ form.message }}
         </p>
-        <p>
+        </td></tr>
+        <tr>
+          <td align="left"><p>
           {{ form.submit }}
         </p>
+        </td></tr>
       </form>
+    </table>
 </body>
 </div>
 </html>
