@@ -330,12 +330,12 @@ def load_user(user_id):
 class Institute(db.Model):
     __tablename__ = 'institutes'
     id = db.Column(db.Integer, primary_key=True)
-    institution_name = db.Column(db.String(200))
-    institution_short = db.Column(db.String(64))
-    main_contact_email = db.Column(db.String(64))
-    main_contact_name = db.Column(db.String(64))
-    institution_address = db.Column(db.String(200))
-    research_group = db.Column(db.String(64))
+    institution_name = db.Column(db.String(400))
+    institution_short = db.Column(db.String(100))
+    main_contact_email = db.Column(db.String(100))
+    main_contact_name = db.Column(db.String(300))
+    institution_address = db.Column(db.String(300))
+    research_group = db.Column(db.String(300))
     date_joined = db.Column(db.Date(), default=datetime.now().date())
     department = db.Column(db.String(64))
     country = db.Column(db.String(64))

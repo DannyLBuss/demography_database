@@ -1,127 +1,55 @@
 {
 	"Version": {
 	    "Database": [{
-            "database_name": "Exeter",
-            "database_description": "Dave Hodgson",
-            "database_master_version" : "NA",
+            "database_name": "3.2.1",
+            "database_description": "Compadre Version 3.2 Released as 3.2.1",
+            "database_master_version" : "3.2.1",
+            "database_date_created" : "09/08/2015",
+            "database_number_species_accepted" : "NA",
+            "database_number_studies" : "NA",
+            "database_number_matrices" : "NA",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "4.0.0",
+            "database_description": "Compadre Version 4 Released as 4.0.0",
+            "database_master_version" : "4.0.0",
+            "database_date_created" : "08/12/2016",
+            "database_number_species_accepted" : "695",
+            "database_number_studies" : "819",
+            "database_number_matrices" : "7024",
+            "database_agreement" : "http://www.compadre-db.org/Compadre/UserAgreement"
+        }, {
+            "database_name": "Unreleased",
+            "database_description": "Unreleased data currently under edit by COMPADRINOs",
+            "database_master_version" : "X",
             "database_date_created" : "NA",
             "database_number_species_accepted" : "NA",
             "database_number_studies" : "NA",
             "database_number_matrices" : "NA",
             "database_agreement" : "NA"
         }, {
-            "database_name": "COMPADRE I",
-            "database_description": "Miguel Franco & Jonathan Silvertown",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
+            "database_name": "3.0.0",
+            "database_description": "Compadre Version 3 Released as 3.0.0",
+            "database_master_version" : "3.0.0",
+            "database_date_created" : "11.11.2014",
             "database_number_species_accepted" : "NA",
             "database_number_studies" : "NA",
             "database_number_matrices" : "NA",
             "database_agreement" : "NA"
         }, {
-            "database_name": "COMPADRE 4",
-            "database_description": "Rob Salguero-Gomez, Owen Jones & Collaborators",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
-            "database_number_species_accepted" : "NA",
-            "database_number_studies" : "NA",
-            "database_number_matrices" : "NA",
-            "database_agreement" : "NA"
+            "database_name": "2.0.1",
+            "database_description": "Comadre Version 2 Released as 2.0.1",
+            "database_master_version" : "2.0.1",
+            "database_date_created" : "08/12/2016",
+            "database_number_species_accepted" : "405",
+            "database_number_studies" : "508",
+            "database_number_matrices" : "1927",
+            "database_agreement" : "http://www.compadre-db.org/Compadre/UserAgreement"
         }, {
-            "database_name": "COMADRE 2",
-            "database_description": "Rob Salguero-Gomez, Owen Jones & Collaborators",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
-            "database_number_species_accepted" : "NA",
-            "database_number_studies" : "NA",
-            "database_number_matrices" : "NA",
-            "database_agreement" : "NA"
-        }, {
-            "database_name": "Ramula",
-            "database_description": "Satu Ramula",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
-            "database_number_species_accepted" : "NA",
-            "database_number_studies" : "NA",
-            "database_number_matrices" : "NA",
-            "database_agreement" : "NA"
-        }, {
-            "database_name": "NCEAS",
-            "database_description": "Jennifer Williams et al.",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
-            "database_number_species_accepted" : "NA",
-            "database_number_studies" : "NA",
-            "database_number_matrices" : "NA",
-            "database_agreement" : "NA"
-        }, {
-            "database_name": "UQ",
-            "database_description": "Yvonne Buckley and collaborators",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
-            "database_number_species_accepted" : "NA",
-            "database_number_studies" : "NA",
-            "database_number_matrices" : "NA",
-            "database_agreement" : "NA"
-        }, {
-            "database_name": "Lincoln Park Zoo",
-            "database_description": "Judy Che-Castaldo and collaborators",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
-            "database_number_species_accepted" : "NA",
-            "database_number_studies" : "NA",
-            "database_number_matrices" : "NA",
-            "database_agreement" : "NA"
-        }, {
-            "database_name": "Trinity College Dublin",
-            "database_description": "Yvonne Buckley and collaborators",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
-            "database_number_species_accepted" : "NA",
-            "database_number_studies" : "NA",
-            "database_number_matrices" : "NA",
-            "database_agreement" : "NA"
-        }, {
-            "database_name": "MPIDR",
-            "database_description": "Rob Salguero-Gomez, Alex Scheuerlein, Jim Vaupel and collaborators",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
-            "database_number_species_accepted" : "NA",
-            "database_number_studies" : "NA",
-            "database_number_matrices" : "NA",
-            "database_agreement" : "NA"
-        }, {
-            "database_name": "Southampton",
-            "database_description": "Tom Ezard and collaborators",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
-            "database_number_species_accepted" : "NA",
-            "database_number_studies" : "NA",
-            "database_number_matrices" : "NA",
-            "database_agreement" : "NA"
-        }, {
-            "database_name": "SDU",
-            "database_description": "Owen Jones and collaborators",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
-            "database_number_species_accepted" : "NA",
-            "database_number_studies" : "NA",
-            "database_number_matrices" : "NA",
-            "database_agreement" : "NA"
-        }, {
-            "database_name": "Sheffield",
-            "database_description": "Rob Salguero-Gomez and collaborators",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
-            "database_number_species_accepted" : "NA",
-            "database_number_studies" : "NA",
-            "database_number_matrices" : "NA",
-            "database_agreement" : "NA"
-        }, {
-            "database_name": "Other",
-            "database_description": "Independent Researchers",
-            "database_master_version" : "NA",
-            "database_date_created" : "NA",
+            "database_name": "1.0.0",
+            "database_description": "Comadre Version 1 Released as 1.0.0",
+            "database_master_version" : "1.0.0",
+            "database_date_created" : "09/08/2015",
             "database_number_species_accepted" : "NA",
             "database_number_studies" : "NA",
             "database_number_matrices" : "NA",
