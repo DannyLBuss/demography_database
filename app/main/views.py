@@ -54,53 +54,7 @@ def index():
     return render_template('index.html',species2 = species2)
 
 
-@main.route('/meta-tables/')
-# @login_required
-def meta_tables_json():
 
-    # Constructing dict for meta tables, ordering by main Class
-    meta_tables = {"User" : {"Institute" : []},
-                   "Species" : {"IUCNStatus" : [], "ESAStatus" : []}, "Taxonomy" : {}, "Trait" : {"OrganismType" : [], \
-                   "GrowthFormRaunkiaer" : [], "ReproductiveRepetition" : [], "DicotMonoc" : [], "AngioGymno" : [], "SpandExGrowthType" : [] }, \
-                   "Publication" : {"SourceType" : [], "Database" : [], "Purpose" : [], "MissingData" : [] }, \
-                   "AuthorContact" : { "ContentEmail" : [] }, "Population" : {"Ecoregion" : [], "Continent" : [] , "InvasiveStatusStudy" : [], "InvasiveStatusElsewhere" : [], "PurposeEndangered": [], "PurposeWeed" : []}, \
-                   "StageType" : { "StageTypeClass" : [] }, "MatrixValue" : { "TransitionType" : [] }, \
-                   "Matrix" : {"MatrixComposition" : [], "StartSeason" : [], "EndSeason" : [], "StudiedSex" : [], "Captivity" : []}, \
-                   "Fixed" : { "Small": [], "CensusTiming" : [] }}
-
-    meta_tables["User"]["Institute"].extend(Institute.query.all())
-    meta_tables["Species"]["IUCNStatus"].extend(IUCNStatus.query.all())
-    meta_tables["Trait"]["OrganismType"].extend(OrganismType.query.all())
-    meta_tables["Trait"]["GrowthFormRaunkiaer"].extend(GrowthFormRaunkiaer.query.all())
-    meta_tables["Trait"]["ReproductiveRepetition"].extend(ReproductiveRepetition.query.all())
-    meta_tables["Trait"]["DicotMonoc"].extend(DicotMonoc.query.all())
-    meta_tables["Trait"]["AngioGymno"].extend(AngioGymno.query.all())
-    meta_tables["Trait"]["SpandExGrowthType"].extend(SpandExGrowthType.query.all())
-    meta_tables["Publication"]["SourceType"].extend(SourceType.query.all())
-    meta_tables["Publication"]["Database"].extend(Database.query.all())
-    meta_tables["Publication"]["Purpose"].extend(Purpose.query.all())
-    meta_tables["Publication"]["MissingData"].extend(MissingData.query.all())
-    meta_tables["AuthorContact"]["ContentEmail"].extend(ContentEmail.query.all())
-    meta_tables["Population"]["Ecoregion"].extend(Ecoregion.query.all())
-    meta_tables["Population"]["Continent"].extend(Continent.query.all())
-    meta_tables["Population"]["InvasiveStatusStudy"].extend(InvasiveStatusStudy.query.all())
-    meta_tables["Population"]["InvasiveStatusElsewhere"].extend(InvasiveStatusElsewhere.query.all())
-    meta_tables["Population"]["PurposeEndangered"].extend(PurposeEndangered.query.all())
-    meta_tables["Population"]["PurposeWeed"].extend(PurposeWeed.query.all())
-    meta_tables["StageType"]["StageTypeClass"].extend(StageTypeClass.query.all())
-    meta_tables["MatrixValue"]["TransitionType"].extend(TransitionType.query.all())
-    meta_tables["Matrix"]["MatrixComposition"].extend(MatrixComposition.query.all())
-    meta_tables["Matrix"]["StartSeason"].extend(StartSeason.query.all())
-    meta_tables["Matrix"]["EndSeason"].extend(EndSeason.query.all())
-    meta_tables["Matrix"]["StudiedSex"].extend(StudiedSex.query.all())
-    meta_tables["Matrix"]["Captivity"].extend(Captivity.query.all())
-    meta_tables["Fixed"]["Small"].extend(Small.query.all())
-    meta_tables["Fixed"]["CensusTiming"].extend(CensusTiming.query.all())
-    
-
-    print meta_tables
-
-    return render_template('meta.html', meta=meta_tables)
 
 # now defunct 'display all data' page
 @main.route('/data/')

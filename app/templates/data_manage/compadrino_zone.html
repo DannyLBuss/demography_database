@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Compadrino Zone - Demography Database{% endblock %} {% block page_content %}
+<h1>Compadrino zone</h1>
+<hr>
+<h3>Hi {{current_user.name}}!</h3>
+<p>Node: {{current_user.institute.institution_name}}</p>
+<p>Your head compadrino is...</p>
+    
+<div class="row">
+    <div class="col-sm-3">
+        <div class="info_box">
+            <h3>Quick links:</h3>
+                <ul>
+                    <li>Protocol</li>
+                    <li>Slack</li>
+                    <li>PDF host</li>
+                </ul>
+        </div>
+        <div class="info_box">
+            <h3>Compadrino actions:</h3>
+            <p>List of unclaimed publications</p>
+            <p><a href="../data-manage/publication/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new publication</a></p>
+            <p>Search by species</p>
+            <p><a href="../data-manage/species/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new species</a></p>
+            <p>Track my edits</p>
+            <p>View my public profile</p>
+        </div>
+        {% if current_user.role_id == 1 %}
+        <div class="info_box">
+            <h3>Admin actions</h3>
+            <p>Recent compadrino actions</p>
+            <p>Edit institutions</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-sm-9">
+        <div class="info_box"> 
+            <h3>Your currently assigned publications:</h3>
+            <p><b>Publications entered</b></p>
+            <p>list of publications</p>
+            <p><b>Publications and species (+taxonomy and traits) entered</b></p>
+            <p>list of publications</p>
+            <p><b>Publications, species (+taxonomy and traits) and populations entered</b></p>
+            <p>list of publications</p>
+            <p><b>Publications, species (+taxonomy and traits), populations and matrices entered</b></p>
+            <p>list of publications</p>
+            <p><b>All information and metadata entered, but unchecked</b></p>
+            <p>list of publications</p>
+            <p><b>All information and metadata entered and checked, waiting for release</b></p>
+            <p>list of publications</p>
+        </div>
+        
+        
+    </div>
+</div>
+ {% endblock %} {% block scripts %}  {{ super() }} {{ pagedown.include_pagedown() }} {% endblock %}
