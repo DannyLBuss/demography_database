@@ -135,8 +135,11 @@ def species_page(species_ids,pub_ids):
     
     populations = list(set(populations))
     all_species = list(set(all_species))
-
     publications = list(set(all_pubs))
+    
+    print(publications)
+    publications.sort();
+    print(publications)
     
     return render_template('species_template.html',all_species = all_species, publications = publications, populations = populations)
 

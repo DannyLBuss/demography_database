@@ -1,67 +1,23 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
 
-<!-- list of publications -->
-<div id="publication_filter">
-    <div class="info_box">
-        <table style="width:100%" class="table">
-            <thead>
-                <tr>
-                    <td>
-                        <h4><strong>Publications:</strong></h4></td>
-                    <td></td>
-                    <td>
-                        <h4>Filter</h4></td>
-                </tr>
-            </thead> {% if publications %}
-            <tbody> {% for publication in publications %}
-                
-                <tr class="remove_duplicates publication_row" style="border-left-color:{{ publication.colour }};">
-                    <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> {{publication.version[0]}} <small> {{publication.id}}</small>
-                        {% if current_user.is_authenticated %} 
-    <div class="dropdown pull-right">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
-        <ul class="dropdown-menu dropdown-menu-right">
 
-            <li><a href="../../data-manage/publication/edit/{{publication.id}}" > <span class="	glyphicon glyphicon-pencil"></span> Edit publication</a></li>
-            <li><a href="../../data-manage/publication/{{publication.id}}/edit-history">View edits</a></li>
-        </ul>
-    </div> {% endif %}
-                        <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}
-                        {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}{% endif %}</p>
-                        
-                        <p><strong>Species studied:</strong>{% for spec in all_species %} {{spec.species_accepted}} {%endfor%}</p>
-                        {% if current_user.is_authenticated %}
-                        <p><a href="../data-manage/population/new/publication={{publication.id}}/choose_species"><span class="glyphicon glyphicon-plus-sign"></span> Add a new population</a></p>
-                        {% endif %}
-                        
-                    </td>
-                    <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source <span class="glyphicon glyphicon-new-window"></span></a>{% endif %}</td>
-                    <td>
-                        <input type="checkbox" class="filter" data-value="id{{publication.id}}"> </td>
-                </tr> {% endfor %} </tbody>
-            {% else %}
-            <tbody>
-                <tr>
-                    <td>
-                        <p>No publications</p>
-                    </td>
-                    <td> </td>
-                    <td> </td>
-                </tr>
-            </tbody> {% endif %} </table>
-        {% if current_user.is_authenticated %}
-        <p><a href="../data-manage/publication/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new publication</a></p>
-        <p><a href="../data-manage/species/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new species</a></p>
-        {% endif %}
-    </div> 
+<div id="publication_filter">
+    <button type="button" class="btn btn-xs btn-default" data-toggle="collapse" href="#mappo"> <span class="glyphicon glyphicon-globe"></span> Show/hide map </button>
+    <div id="mappo" class='panel-collapse in collapse'>
+        <div class = "row">
+            <div class="col-md-9">
+                <div id="dist_map"></div>
+                </div>
+            <div class="col-md-3">
+                <h3>Map legend</h3>
+            </div>
+        </div>
+    </div>
     
-    <div id="dist_map"></div>
-    <br>
     <div class="list">
-    {% for species in all_species %}
+    {% for species in all_species |sort(attribute='id')  %}
     <div>
     
-    <hr>
         <!-- compadrino actions for top part of page -->
     {% if current_user.is_authenticated %} 
     <div class="dropdown pull-right">
@@ -172,7 +128,7 @@
      
         
         <!-- looping through populations -->
-        {% for population in populations %}
+        {% for population in populations |sort(attribute='publication_id')  %}
         {% if population.species_id == species.id %}
         <a class="anchor" name = "population={{population.id}}"></a>
         <div class="population_box {{ population.publication.colour }}" style="border-left-color:{{ population.publication.colour }};">
@@ -191,25 +147,25 @@
             {% endif %}
             
             <!-- population information -->
-            <h4><strong>Population Name: </strong>{{ population.population_name }} <small> {{ population.id }}</small> </h4>
-            <ul>
-                <li><strong>Location: </strong> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </li>
-                <li><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }} 
-                    {% if population.altitude %}
-                    <li><strong>Location: </strong><span class="coordinates {{species.species_accepted}} {{ population.matrices | length }} {{ population.id }}">{{ population.latitude }}, {{ population.longitude }}</span></li>
-                    <li><strong>Altitude: </strong><span>{{ population.altitude }}m</span></li> 
+            <h4><strong>Population Name: </strong>{{ population.population_name }} <small> {{ population.id }}</small> <span class="label label-default">{{ population.matrices | count }} matrices</span> <span class="label label-default">{{ population.study_start }} - {{ population.study_end }}</span> <span class="label label-default"> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </span> </h4>
+            <table style="width:100%" class="table">
+                <tr>
+                    <td><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}   </td>
+                    <td>{% if population.longitude %}
+                    <strong>Location: </strong><span class="coordinates {{species.species_accepted}} {{ population.matrices | length }} {{ population.id }}">{{ population.latitude }}, {{ population.longitude }}</span>  </td>
+                    <td><strong>Altitude: </strong><span>{{ population.altitude }}m</span>
                     {% if population.population_nautical_miles %}<li><strong>Nautical miles:</strong>  {{ population_nautical_miles }} </li>{% endif %}
                 {% else %}
-                    <li>No coordinates given</li> 
-                {% endif %}
-            </ul>
-
-            <button type="button" class="btn btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> <span class="glyphicon glyphicon-th-list"></span> Show/hide matrices </button>
+                    No coordinates given
+                {% endif %}  </td>
+                </tr>
+            </table>
+            <button  type="button" class="btn btn-xs btn-default" data-toggle="collapse" href="#population_{{ population.id }}"> <span class="glyphicon glyphicon-th-list"></span> Show/hide matrices </button>
             <div id="population_{{ population.id }}" class='panel-collapse collapse'>
                 <p style="text-align: center;"><span class="glyphicon glyphicon-hand-down"></span> Click on the sections below to view individual matrix models </p> 
                 
                 <!-- looping through matrices -->
-                {% for matrix in population.matrices %}
+                {% for matrix in population.matrices |sort(attribute='matrix_start_year') %}
                 {% if matrix.population_id == population.id %}
                 <div class="panel-group">
                     <div class="panel panel-default">
@@ -321,6 +277,59 @@
 
     {% endfor %}
         </div>
+    
+    <div class="info_box">
+        <table style="width:100%" class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <h4><strong>Publications:</strong></h4></td>
+                    <td></td>
+                    <td>
+                        <h4>Filter</h4></td>
+                </tr>
+            </thead> {% if publications %}
+            <tbody> {% for publication in publications |sort(attribute='id') %}
+                
+                <tr class="publication_row" style="border-left-color:{{ publication.colour }};">
+                    <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> {{publication.version[0]}} <small> {{publication.id}}</small>
+                        {% if current_user.is_authenticated %} 
+    <div class="dropdown pull-right">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right">
+
+            <li><a href="../../data-manage/publication/edit/{{publication.id}}" > <span class="	glyphicon glyphicon-pencil"></span> Edit publication</a></li>
+            <li><a href="../../data-manage/publication/{{publication.id}}/edit-history">View edits</a></li>
+        </ul>
+    </div> {% endif %}
+                        <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}
+                        {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}{% endif %}</p>
+                        
+                        {% if current_user.is_authenticated %}
+                        <p><a href="../data-manage/population/new/publication={{publication.id}}/choose_species"><span class="glyphicon glyphicon-plus-sign"></span> Add a new population</a></p>
+                        {% endif %}
+                        
+                    </td>
+                    <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source <span class="glyphicon glyphicon-new-window"></span></a>{% endif %}</td>
+                    <td>
+                        <input type="checkbox" class="filter" data-value="id{{publication.id}}"> </td>
+                </tr> {% endfor %} </tbody>
+            {% else %}
+            <tbody>
+                <tr>
+                    <td>
+                        <p>No publications</p>
+                    </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+            </tbody> {% endif %} </table>
+        {% if current_user.is_authenticated %}
+        <p><a href="../data-manage/publication/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new publication</a></p>
+        <p><a href="../data-manage/species/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new species</a></p>
+        {% endif %}
+    </div> 
+    
     
 </div> {% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }}
 <!-- JAVASCRIPT -->
