@@ -108,9 +108,14 @@ def all_pops():
     all_pops_count = Population.query.count()
     return all_pops_count
 
+##Count all populations with green flag
+def all_pops_green():
+    all_pops_green = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").count()
+    return all_pops_green
+
 ##No. matrices in compadre (plants only)
 def count_plants():
-     count_compadre = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
+     count_plants = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
      return count_plants
 
 ##No. matrices in compadre (plants, fungi and algae)
@@ -118,7 +123,7 @@ def count_compadre():
      count_fungi = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
      count_chromista = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Chromista").count()
      count_chromalveolata = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Chromalveolata").count()
-     count_compadre_etc = count_plants() + count_fungi + count_chromista + count_chromalveolata
+     count_compadre = count_plants() + count_fungi + count_chromista + count_chromalveolata
      return count_compadre
 
 ##No. matrices in comadre (Animalia)
@@ -145,6 +150,10 @@ def count_comadre_pop():
     count_comadre_pop = Population.query.join(Species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Animalia").count()
     return count_comadre_pop
 
+def count_comadre_pop_green():
+    count_comadre_pop_green = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom=="Animalia").count()
+    return count_comadre_pop_green
+
 #####Count Species Functions######
 ##All species
 def species_total_count():
@@ -169,3 +178,7 @@ def species_comadre_count():
     species_comadre_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Animalia").count()
     return species_comadre_count
 
+##No. comadre species 
+def species_comadre_count_green():
+    species_comadre_count_green = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Animalia").count()
+    return species_comadre_count_green

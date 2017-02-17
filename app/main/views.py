@@ -5,7 +5,7 @@ from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, ContactForm
 from flask_mail import Mail, Message
-from app.matrix_functions import all_matrices, count_plants, count_comadre, count_compadre, all_pops, count_plants_pop, count_compadre_pop, count_comadre_pop, species_total_count, species_plant_count, species_compadre_count, species_comadre_count
+from app.matrix_functions import all_matrices, count_plants, count_comadre, count_compadre, all_pops, count_plants_pop, count_compadre_pop, count_comadre_pop, species_total_count, species_plant_count, species_compadre_count, species_comadre_count, count_comadre_pop_green, all_pops_green, species_comadre_count_green, count_comadre_pop_green
 from ..data_manage.forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, MatrixForm, PublicationForm, DeleteForm
 
 import random
@@ -46,24 +46,31 @@ def after_request(response):
 def index():
     species = Species.query.filter(Species.image_path != None).all()
 ##Matrix Stats
-    all_matrices = all_matrices()
+    count_matrices = all_matrices()
     comadre_count = count_comadre()
     compadre_count = count_compadre()
-    plantae_count = count_plants()
 ##Population Stats
-    all_pops = all_pops()
-    count_comadre_pop = count_comadre_pop()
-    count_compadre_pop = count_compadre_pop()
-    count_plants_pop = count_plants_pop()
-
-
+    count_pops = all_pops()
+    comadre_count_pop = count_comadre_pop()
+    compadre_count_pop = count_compadre_pop()
+    all_pops_green_2 = all_pops_green()
+    count_comadre_pop_green_2 = count_comadre_pop_green()
+##Species stats
+    species_count = species_total_count()
+    species_count_compadre = species_compadre_count()
+    species_count_comadre = species_comadre_count() 
+    species_comadre_count_green_2 = species_comadre_count_green()
     number = len(species)
     species2 = []
     for i in range(1,5):
         random_int = random.randint(0,number-1)
         s = species[random_int]
         species2.append(s)
-    return render_template('index.html',species2 = species2, comadre_count = comadre_count, compadre_count = compadre_count, compadre_count_etc = compadre_count_etc)
+    return render_template('index.html',species2 = species2, count_matrices = count_matrices, 
+           comadre_count = comadre_count, compadre_count = compadre_count, count_pops = count_pops, 
+           comadre_count_pop = comadre_count_pop, compadre_count_pop = compadre_count_pop, 
+           species_count = species_count, species_count_compadre = species_count_compadre, 
+           species_count_comadre = species_count_comadre, all_pops_green_2 = all_pops_green_2, species_comadre_count_green_2=species_comadre_count_green_2, count_comadre_pop_green_2=count_comadre_pop_green_2)
 
 
 
