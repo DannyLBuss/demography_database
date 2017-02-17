@@ -5,7 +5,7 @@ from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, ContactForm
 from flask_mail import Mail, Message
-from app.matrix_functions import count_comadre, count_compadre, count_compadre_etc
+from app.matrix_functions import all_matrices, count_plants, count_comadre, count_compadre, all_pops, count_plants_pop, count_compadre_pop, count_comadre_pop, species_total_count, species_plant_count, species_compadre_count, species_comadre_count
 from ..data_manage.forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, MatrixForm, PublicationForm, DeleteForm
 
 import random
@@ -45,9 +45,18 @@ def after_request(response):
 @main.route('/', methods=['GET', 'POST'])
 def index():
     species = Species.query.filter(Species.image_path != None).all()
+##Matrix Stats
+    all_matrices = all_matrices()
     comadre_count = count_comadre()
     compadre_count = count_compadre()
-    compadre_count_etc = count_compadre_etc()
+    plantae_count = count_plants()
+##Population Stats
+    all_pops = all_pops()
+    count_comadre_pop = count_comadre_pop()
+    count_compadre_pop = count_compadre_pop()
+    count_plants_pop = count_plants_pop()
+
+
     number = len(species)
     species2 = []
     for i in range(1,5):
