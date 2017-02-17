@@ -1,6 +1,5 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
 
-
 <div id="publication_filter">
     <button type="button" class="btn btn-xs btn-default" data-toggle="collapse" href="#mappo"> <span class="glyphicon glyphicon-globe"></span> Show/hide map </button>
     <div id="mappo" class='panel-collapse in collapse'>
@@ -17,7 +16,7 @@
     <div class="list">
     {% for species in all_species |sort(attribute='id')  %}
     <div>
-    
+        
         <!-- compadrino actions for top part of page -->
     {% if current_user.is_authenticated %} 
     <div class="dropdown pull-right">
@@ -245,6 +244,12 @@
                                         <p><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</p>
                                     </div>
                                     <p><strong>Observations: </strong> {{ matrix.observations }}</p>
+                                    <!-- Fixed model suff goes here -->
+                                    {% if current_user.institute.institution_short == "MPIDR" or "UoE" %}
+                                    <p>Fixed <a>Edit fixed data</a></p>
+                                    {{ matrix.fixed[0].vector_str }}
+                                    {{ matrix.fixed[0].vector_str }}
+                                    {% endif %}
                                 </div>
                             </li>
                         </div>

@@ -707,44 +707,59 @@ def meta_tables_json():
     return render_template('meta.html', meta=meta_tables)
 
 # CSV EXPORT, work in progress
-@data_manage.route('/export/csv')
-def csv_export(): 
-    import csv      
+@data_manage.route('/export/output.csv')
+def csv_export():   
+    import csv 
+    
     # First, grab all matrices, as these will be each 'row'
     all_matrices = Matrix.query.all()
-
-    # Use this function to merge
+    
+    #function to merge dictionaries to a super dictionary
     def merge_dicts(*dict_args):
         result = {}
         for dictionary in dict_args:
             result.update(dictionary)
         return result
+            
+    w_file = open('app/templates/output.csv','w')
 
+    #looping through rows
     for i, matrix in enumerate(all_matrices):
+        
         # Grab all of the parent objects
         matrix = matrix
         fixed = matrix.fixed[0]
         population = matrix.population
         publication = population.publication
-        study = population.study
         species = population.species
-        traits = species.traits[0]
-        taxonomy = species.taxonomies[0]
-        version = matrix.version
-
-        # Merge all of them to one single dict, as dicts
-        entry = merge_dicts(vars(species), vars(taxonomy), vars(traits), vars(publication), vars(study), vars(population), vars(matrix),  vars(fixed), vars(version))
-
+        traits = species.trait[0]
+        taxonomy = species.taxonomy[0]
+        
+        # Merge all of them to one single dict, as dict
+        entry = merge_dicts(vars(species), vars(taxonomy), vars(traits), vars(publication), vars(population), vars(matrix),  vars(fixed))
+        
         #If this is the first matrix, construct the headers too
         if i == 0:
+            #get all the headings from entry - the super dict
             headings = [key for key in entry.keys()]
-            with open('export_test.csv', 'wb') as outcsv:
-                writer = csv.DictWriter(outcsv, fieldnames=headings)
-                writer.writeheader()
+            headings = str(headings)
+            w_file.write(headings[1:-1] + '\n')
         
-                writer.writerow(entry)
+        # cleaning
+        # remove quotes from strings
+        # remove u from unicode strings
+        #  [<taxonomy 1l="">] to 1
+        # remove L from numbers
+        # study purposes
+        # remove fields we don't want
+        # date time
+        entry = str(entry.values())
+        
+        w_file.write(entry[1:-1] + '\n')
+                     
+    return render_template('output.csv')
 
-    return "Hello"
+
 
 
 
