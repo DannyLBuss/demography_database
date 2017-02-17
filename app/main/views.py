@@ -5,7 +5,7 @@ from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, ContactForm
 from flask_mail import Mail, Message
-
+from app.matrix_functions import count_comadre, count_compadre, count_compadre_etc
 from ..data_manage.forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, MatrixForm, PublicationForm, DeleteForm
 
 import random
@@ -45,13 +45,16 @@ def after_request(response):
 @main.route('/', methods=['GET', 'POST'])
 def index():
     species = Species.query.filter(Species.image_path != None).all()
+    comadre_count = count_comadre()
+    compadre_count = count_compadre()
+    compadre_count_etc = count_compadre_etc()
     number = len(species)
     species2 = []
     for i in range(1,5):
         random_int = random.randint(0,number-1)
         s = species[random_int]
         species2.append(s)
-    return render_template('index.html',species2 = species2)
+    return render_template('index.html',species2 = species2, comadre_count = comadre_count, compadre_count = compadre_count, compadre_count_etc = compadre_count_etc)
 
 
 
