@@ -98,9 +98,81 @@ def is_matrix_ergodic(matA):
     
 ###### Some functions to create summary statistics on the front-end
 #####Count Matrix Functions######
+###UnReleased and Unfinished### - Note these won't work yet until database is in the Population.model which it isn't atm
 
-###Count function for user areas###
-##Count all populations with green flag
+##Matrices that are unreleased and unfinished (amber)##
+def all_matrices_unreleased():
+    all_matrices_unreleased = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Amber").join(Population).join(Population.database).filter(Database.database_name=="Unreleased").count()
+    return all_matrices_unreleased
+
+##Populations that are unreleased and unfinished (amber)##
+def all_populations_unreleased():
+    all_populations_unreleased = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Amber").join(Database).filter(Database.database_name=="Unreleased").count()
+    return all_populations_unreleased
+
+##Species that are unreleased and unfinished (amber)##
+def all_species_unreleased():
+    all_species_unreleased = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Amber").join(Population).join(Population.database).filter(Database.database_name=="Unreleased").count()
+    return all_species_unreleased
+
+def all_matrices_unreleased_complete():
+    all_matrices_unreleased_complete = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="Unreleased").count()
+    return all_matrices_unreleased_complete
+
+def all_populations_unreleased_complete():
+    all_populations_unreleased_complete = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Database).filter(Database.database_name=="Unreleased").count()
+    return all_populations_unreleased_complete
+
+def all_species_unreleased_complete():
+    all_species_unreleased_complete = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="Unreleased").count()
+    return all_species_unreleased_complete
+
+###Green Flags and Released### 
+    ##COMPADRE##
+        ##Matrices##
+def all_matrices_released_compadre():
+    all_matrices_released_2 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.2.1").count()
+    all_matrices_released_3 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="4.0.1").count()
+    all_matrices_released_4 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.0.0").count()
+    all_matrices_released_compadre = all_matrices_released_2 + all_matrices_released_3 + all_matrices_released_4
+    return all_matrices_released_compadre
+        ##Population##
+def all_populations_released_compadre():
+    all_populations_released_2 = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Database).filter(Database.database_name=="3.2.1").count()
+    all_populations_released_3 = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Database).filter(Database.database_name=="4.0.1").count()
+    all_populations_released_4 = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Database).filter(Database.database_name=="3.0.0").count()
+    all_populations_released_compadre = all_populations_released_2 + all_populations_released_3 + all_populations_released_4
+    return all_populations_released_compadre
+        ##Species##
+def all_species_released_compadre():
+    all_species_released_2 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.2.1").count()
+    all_species_released_3 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="4.0.1").count()
+    all_species_released_4 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.0.0").count()
+    all_species_released_compadre = all_matrices_released_2 + all_matrices_released_3 + all_matrices_released_4
+    return all_species_released_compadre
+
+    ##COMADRE##
+        ##Matrices##
+def all_matrices_released_comadre():
+    all_matrices_released_5 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="2.0.1").count()
+    all_matrices_released_6 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="1.0.0").count()
+    all_matrices_released_comadre = all_matrices_released_5 + all_matrices_released_6
+    return all_matrices_released_comadre
+        ##Population##
+def all_populations_released_comadre():
+    all_populations_released_5 = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Database).filter(Database.database_name=="2.0.1").count()
+    all_populations_released_6 = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Database).filter(Database.database_name=="1.0.0").count()
+    all_populations_released_comadre = all_populations_released_5 + all_populations_released_6
+    return all_populations_released_comadre
+        ##Species##
+def all_species_released_comadre():
+    all_species_released_5 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="2.0.1").count()
+    all_species_released_6 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="1.0.0").count()
+    all_species_released_comadre = all_matrices_released_5 + all_matrices_released_6
+    return all_species_released_comadre
+
+###Green Flags###
+##Count all populations with green flag, for user and compadrino areas
 def all_matrices_green():
     all_matrices_green = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").count()
     return all_matrices_green
@@ -108,6 +180,10 @@ def all_matrices_green():
 def all_matrices_green_plants():
     all_matrices_green_plants = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").join(Version).join(Version.statuses).filter(Status.status_name=="Green").count()
     return all_matrices_green_plants
+
+def all_matrices_green_animals():
+    all_matrices_green_animals = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").join(Version).join(Version.statuses).filter(Status.status_name=="Green").count()
+    return all_matrices_green_animals
 
 def all_pops_green():
     all_pops_green = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").count()
