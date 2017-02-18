@@ -59,7 +59,7 @@ def index():
     species_count = species_total_count()
     species_count_compadre = species_compadre_count()
     species_count_comadre = species_comadre_count() 
-    species_comadre_count_green_2 = species_comadre_count_green()
+  #  species_comadre_count_green_2 = species_comadre_count_green()
     number = len(species)
     species2 = []
     for i in range(1,5):
@@ -70,8 +70,8 @@ def index():
            comadre_count = comadre_count, compadre_count = compadre_count, count_pops = count_pops, 
            comadre_count_pop = comadre_count_pop, compadre_count_pop = compadre_count_pop, 
            species_count = species_count, species_count_compadre = species_count_compadre, 
-           species_count_comadre = species_count_comadre, all_pops_green_2 = all_pops_green_2, species_comadre_count_green_2=species_comadre_count_green_2, count_comadre_pop_green_2=count_comadre_pop_green_2)
-
+           species_count_comadre = species_count_comadre, all_pops_green_2 = all_pops_green_2, count_comadre_pop_green_2=count_comadre_pop_green_2)
+#species_comadre_count_green_2=species_comadre_count_green_2, 
 
 
 

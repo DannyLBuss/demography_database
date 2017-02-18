@@ -115,14 +115,15 @@ def all_species_unreleased():
     all_species_unreleased = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Amber").join(Population).join(Population.database).filter(Database.database_name=="Unreleased").count()
     return all_species_unreleased
 
+##Matrices that are unreleased and ready to be deployed (Green)##
 def all_matrices_unreleased_complete():
     all_matrices_unreleased_complete = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="Unreleased").count()
     return all_matrices_unreleased_complete
-
+    ##Populations##
 def all_populations_unreleased_complete():
     all_populations_unreleased_complete = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Database).filter(Database.database_name=="Unreleased").count()
     return all_populations_unreleased_complete
-
+        ##Species##
 def all_species_unreleased_complete():
     all_species_unreleased_complete = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="Unreleased").count()
     return all_species_unreleased_complete
