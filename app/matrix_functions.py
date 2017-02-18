@@ -98,7 +98,26 @@ def is_matrix_ergodic(matA):
     
 ###### Some functions to create summary statistics on the front-end
 #####Count Matrix Functions######
-##All_matrices
+
+###Count function for user areas###
+##Count all populations with green flag
+def all_matrices_green():
+    all_matrices_green = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").count()
+    return all_matrices_green
+
+def all_matrices_green_plants():
+    all_matrices_green_plants = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").join(Version).join(Version.statuses).filter(Status.status_name=="Green").count()
+    return all_matrices_green_plants
+
+def all_pops_green():
+    all_pops_green = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").count()
+    return all_pops_green
+
+def all_species_green():
+    all_species_green = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").count()
+    return all_species_green
+
+###Count function for admin areas###
 def all_matrices():
     all_matrices_count = Matrix.query.count()
     return all_matrices_count
@@ -107,12 +126,6 @@ def all_matrices():
 def all_pops():
     all_pops_count = Population.query.count()
     return all_pops_count
-
-##Count all populations with green flag
-def all_pops_green():
-    all_pops_green = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").count()
-    return all_pops_green
-
 ##No. matrices in compadre (plants only)
 def count_plants():
      count_plants = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
@@ -180,5 +193,5 @@ def species_comadre_count():
 
 ##No. comadre species 
 def species_comadre_count_green():
-    species_comadre_count_green = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Animalia").count()
+    species_comadre_count_green = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom=="Animalia").count()
     return species_comadre_count_green
