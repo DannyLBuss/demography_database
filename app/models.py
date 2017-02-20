@@ -1567,6 +1567,7 @@ class MatrixComposition(db.Model):
     __tablename__ = 'matrix_compositions'
     id = db.Column(db.Integer, primary_key=True)
     comp_name = db.Column(db.String(64))
+    comp_description = db.Column(db.String(250), index=True)
 
     matrices = db.relationship("Matrix", backref="matrix_composition")
 
@@ -1583,6 +1584,7 @@ class MatrixComposition(db.Model):
                     i = MatrixComposition()
 
                 i.comp_name = node['comp_name']
+                i.comp_description = node['comp_description']
 
                 db.session.add(i)
                 db.session.commit()
@@ -1593,6 +1595,7 @@ class MatrixComposition(db.Model):
                                       _external=False),
             'data' : {
                 'comp_name' : self.comp_name,
+                'comp_description' : self.comp_description,
                 'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices]
             }
         }
@@ -1603,7 +1606,8 @@ class MatrixComposition(db.Model):
             'request_url' : url_for('api.get_one_entry', id=self.id, model='matrix_compositions', key=key,
                                       _external=False),
             'data' : {
-                'comp_name' : self.comp_name
+                'comp_name' : self.comp_name,
+                'comp_description' : self.comp_description,
             }
         }
         return matrix_composition
