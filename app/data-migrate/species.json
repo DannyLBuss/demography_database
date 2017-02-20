@@ -48,16 +48,23 @@
             "status_code": "LR/lc",
             "status_name": "Lower Risk/Least Concern",
             "status_description": "Indicates they have not been re-evaluated since 2000. Prior to 2001 'least concern' was a subcategory of the 'Lower Risk' category and assigned the code LR/lc or (lc)."
-        }],
-        "ESAStatus": [{
-            "status_code": "EN",
-            "status_name": "Endangered"
-        }, {
-            "status_code": "TH",
-            "status_name": "Threatened"
-        }, {
-            "status_code": "NA",
-            "status_name": "Not classified"
+        // }],
+        // "ESAStatus": [{
+        //     "status_code": "EN",
+        //     "status_name": "Endangered"
+        // }, {
+        //     "status_code": "TH",
+        //     "status_name": "Threatened"
+        // }, {
+        //     "status_code": "NA",
+        //     "status_name": "Not classified"
+        // }],
+        // "Species_Clonality": [{
+        //     "status_code": "R",
+        //     "status_name": "Ramet"
+        // }, { 
+        //     "status_code": "G",
+        //     "status_name": "Genet"
         }]
     }
 

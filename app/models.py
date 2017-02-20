@@ -470,6 +470,9 @@ class IUCNStatus(db.Model):
     def __repr__(self):
         return self.status_code
 
+''' Seedbank '''
+#Insert Robs new field - This defines whether the species should have a seedbank or not
+
 #class ESAStatus(db.Model):
 #    __tablename__ = 'esa_statuses'
 #    id = db.Column(db.Integer, primary_key=True)
