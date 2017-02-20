@@ -1,22 +1,25 @@
 {
 	"Matrix": {
 		"MatrixComposition": [{
-			"comp_name": "Individual"
+			"comp_name": "Individual",
+			"comp_description": "single population studied over a single time period, for example, over one year"
 		}, {
-			"comp_name": "Mean"
+			"comp_name": "Mean",
+			"comp_description": "a mean matrix was calculated by averaging across more than one population studied over a single time period, for example, over one year"
 		}, {
-			"comp_name": "Pooled"
+			"comp_name": "Pooled",
+			"comp_description": "a matrix was calculated by pooling data across more than one population studied over a single time period, for example, over one year"
 		}, {
-			"comp_name": "Seasonal"
+			"comp_name": "Spatial Mean",
+			"comp_description": "a mean matrix was calculated by averaging across multiple matrices associated with independent populations studied in differing locations over the same time period, for example, from 2015 to 2016"
         }, {
-			"comp_name": "Spatial Mean"
+			"comp_name": "Temporal Mean",
+			"comp_description": "a mean matrix was calculated by averaging across matrices associated with a single population that was studied in a single location over multiple time periods, for example, annually from 2010 to 2016"
         }, {
-			"comp_name": "Temporal Mean"
-        }, {
-			"comp_name": "Spatial-temporal Mean"
-		}, {
-			"comp_name": "C_Mean"
+			"comp_name": "Spatial-temporal Mean",
+			"comp_description": "a mean matrix was calculated by averaging across multiple matrices associated with independent populations studied in differing locations over multiple time periods, for example, populations a, b and c were studied annually from 2010 to 2016"
 		}],
+		
 		"Season": [{
 			"season_id" : 1,
 			"season_name": "Spring"
@@ -26,9 +29,6 @@
 		}, {
 			"season_id" : 3,
 			"season_name": "Autumn"
-		}, {
-			"season_id" : 5,
-			"season_name": "Fall"
 		}, {
 			"season_id" : 4,
 			"season_name": "Winter"
