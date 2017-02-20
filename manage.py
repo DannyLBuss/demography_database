@@ -662,7 +662,7 @@ def migrate_comadre():
 def migrate_all():
     import csv
     
-    print "Preparing to migrape COMPADRE and COMADRE"
+    print "Preparing to migrate COMPADRE and COMADRE"
     compadre = UnicodeDictReader(open("app/data-migrate/compadre_migration_2017.csv", "rU"))
     comadre = UnicodeDictReader(open("app/data-migrate/comadre_migration_2017.csv", "rU"))
     print "Migrating COMPADRE"
@@ -836,6 +836,7 @@ def migrate_meta():
     Version.migrate()
     Institute.migrate()
     User.migrate()
+    Database.migrate()
    
     return
 

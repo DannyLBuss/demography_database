@@ -244,12 +244,13 @@
                                         <p><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</p>
                                     </div>
                                     <p><strong>Observations: </strong> {{ matrix.observations }}</p>
-                                    <!-- Fixed model suff goes here -->
-                                    {% if current_user.institute.institution_short == "MPIDR" or "UoE" %}
+
+                                    <!-- Fixed model suff goes here - need to sort out this as was causing errors asking for different user permissions, even when commented out? -->
+<!--                                     if current_user.institute.institution_short == "MPIDR" or "UoE"
                                     <p>Fixed <a>Edit fixed data</a></p>
                                     {{ matrix.fixed[0].vector_str }}
                                     {{ matrix.fixed[0].vector_str }}
-                                    {% endif %}
+                                     endif  -->
                                 </div>
                             </li>
                         </div>

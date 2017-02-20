@@ -254,7 +254,7 @@ class User(UserMixin, db.Model):
 
     def to_json(self, key):
         user = {
-            'request_url' : url_for('api.get_one_entry', id=self.id, model='esa_statuses', key=key,
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='users', key=key,
                                       _external=False),
             'data' : {   
                 'email' : self.email,         
@@ -274,7 +274,7 @@ class User(UserMixin, db.Model):
 
     def to_json_simple(self, key):
         user = {
-            'request_url' : url_for('api.get_one_entry', id=self.id, model='esa_statuses', key=key,
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='users', key=key,
                                       _external=False),
             'data' : {   
                 'email' : self.email,         
@@ -881,10 +881,12 @@ class SourceType(db.Model):
     def __repr__(self):
         return self.source_name
 
-class Database(db.Model):
+##Not sure what this is for, but it was # in the database model below?
     #query_class = VersionQuery
+class Database(db.Model):
     __tablename__ = 'databases'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    population_id = db.Column(db.Integer, db.ForeignKey('populations.id',ondelete='CASCADE'))
     database_name = db.Column(db.String(64), index=True)
     database_description = db.Column(db.Text())
     database_master_version = db.Column(db.String(64))
@@ -893,16 +895,21 @@ class Database(db.Model):
     database_number_matrices = db.Column(db.Integer())
     database_agreement = db.Column(db.String(64))
 
+#    database_id = db.Column(db.Integer, db.ForeignKey('databases.id'))
+    populations = db.relationship("Population", backref="database")
+#    version = db.relationship("Version", backref="database", passive_deletes=True)
+
+###Not sure what these are for....
     #version = db.relationship("Version", backref="database")
-    version_latest = db.Column(db.String(64))
-    version_original = db.Column(db.Boolean())
-    version_ok = db.Column(db.Boolean)
+    #version_latest = db.Column(db.String(64))
+    #version_original = db.Column(db.Boolean())
+    #version_ok = db.Column(db.Boolean)
 
     @staticmethod
     def migrate():
-        with open('app/data-migrate/versions.json') as d_file:
+        with open('app/data-migrate/databases.json') as d_file:
             data = json.load(d_file)
-            json_data = data["Version"]
+            json_data = data["Databasess"]
             nodes = json_data["Database"]
 
             for node in nodes:
@@ -927,6 +934,7 @@ class Database(db.Model):
             'request_url' : url_for('api.get_one_entry', id=self.id, model='databases', key=key,
                                       _external=False),
             'data' : {
+                'population' : self.population.to_json_simple(key),
                 'database_name' : self.database_name,
                 'database_description' : self.database_description,
                 'database_master_version' : self.database_master_version,
@@ -934,7 +942,8 @@ class Database(db.Model):
                 'database_number_species_accepted' : self.database_number_species_accepted,
                 'database_number_matrices' : self.database_number_matrices,
                 'database_agreement' : self.database_agreement,
-                'versions' : [version.to_json(key) for version in self.versions]
+                'databases' : [database.to_json(key) for database in self.databases]
+#                'versions' : [version.to_json(key) for version in self.versions]
             }
         }
         return database
@@ -3409,7 +3418,7 @@ class Interval(db.Model):
     def __repr__(self):
         return '<Interval %r>' % self.id
 
-''' Secret & Important Fixed Stuff '''
+''' Fixed Stuff - Not yet agreed but CORE committee to be released'''
 class Fixed(db.Model):
     #query_class = VersionQuery
     __tablename__ = 'fixed'
@@ -3422,6 +3431,8 @@ class Fixed(db.Model):
     census_timing_id = db.Column(db.Integer, db.ForeignKey('census_timings.id',ondelete='CASCADE'))
     seed_stage_error = db.Column(db.Boolean())
     private = db.Column(db.Boolean(), default=True)
+
+    #
     #fixed_independence_flag
 
     version = db.relationship("Version", backref="fixed", passive_deletes=True)
@@ -3547,7 +3558,7 @@ class Version(db.Model):
 
     # Utility relationships
     #version_user_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
-    #database_id = db.Column(db.Integer, db.ForeignKey('databases.id',ondelete='CASCADE'))
+    database_id = db.Column(db.Integer, db.ForeignKey('databases.id',ondelete='CASCADE'))
 
     # Demography relationships
     species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))

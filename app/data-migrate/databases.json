@@ -1,0 +1,60 @@
+{
+	"Databasess": {
+	    "Database": [{
+            "database_name": "3.2.1",
+            "database_description": "Compadre Version 3.2 Released as 3.2.1",
+            "database_master_version" : "3.2.1",
+            "database_date_created" : "09/08/2015",
+            "database_date_created" : "2015-08-09",
+            "database_number_species_accepted" : "1",
+            "database_number_studies" : "1",
+            "database_number_matrices" : "1",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "4.0.0",
+            "database_description": "Compadre Version 4 Released as 4.0.0",
+            "database_master_version" : "4.0.0",
+            "database_date_created" : "2016-12-08",
+            "database_number_species_accepted" : "695",
+            "database_number_studies" : "819",
+            "database_number_matrices" : "7024",
+            "database_agreement" : "http://www.compadre-db.org/Compadre/UserAgreement"
+        }, {
+            "database_name": "Unreleased",
+            "database_description": "Unreleased data currently under edit by COMPADRINOs",
+            "database_master_version" : "X",
+            "database_date_created" : "1964-12-25",
+            "database_number_species_accepted" : "1",
+            "database_number_studies" : "1",
+            "database_number_matrices" : "1",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "3.0.0",
+            "database_description": "Compadre Version 3 Released as 3.0.0",
+            "database_master_version" : "3.0.0",
+            "database_date_created" : "2014-11-11",
+            "database_number_species_accepted" : "1",
+            "database_number_studies" : "1",
+            "database_number_matrices" : "1",
+            "database_agreement" : "NA"
+        }, {
+            "database_name": "2.0.1",
+            "database_description": "Comadre Version 2 Released as 2.0.1",
+            "database_master_version" : "2.0.1",
+            "database_date_created" : "2016-12-08",
+            "database_number_species_accepted" : "405",
+            "database_number_studies" : "508",
+            "database_number_matrices" : "1927",
+            "database_agreement" : "http://www.compadre-db.org/Compadre/UserAgreement"
+        }, {
+            "database_name": "1.0.0",
+            "database_description": "Comadre Version 1 Released as 1.0.0",
+            "database_master_version" : "1.0.0",
+            "database_date_created" : "2015-08-09",
+            "database_number_species_accepted" : "1",
+            "database_number_studies" : "1",
+            "database_number_matrices" : "1",
+            "database_agreement" : "NA"
+        }]
+    }
+}
