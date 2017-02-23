@@ -111,6 +111,7 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
     api_hash = db.Column(db.Text())
+    tokens = db.Column(db.Text)
 
     institute_id = db.Column(db.Integer, db.ForeignKey('institutes.id'))
     institute_confirmed = db.Column(db.Boolean, default=False)

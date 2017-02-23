@@ -1,12 +1,30 @@
 from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_user, logout_user, login_required, \
-    current_user
+    current_user, session
 from . import auth
 from .. import db
 from ..models import User, Role
+from ..google_auth_class import Auth
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm,\
     PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
+from requests_oauthlib import OAuth2Session
+import json
+    
+# google auth stuff
+def get_google_auth(state=None, token=None):
+    if token:
+        return OAuth2Session(Auth.CLIENT_ID, token=token)
+    if state:
+        return OAuth2Session(
+            Auth.CLIENT_ID,
+            state=state,
+            redirect_uri=Auth.REDIRECT_URI)
+    oauth = OAuth2Session(
+        Auth.CLIENT_ID,
+        redirect_uri=Auth.REDIRECT_URI,
+        scope=Auth.SCOPE)
+    return oauth
 
 # not sure what this does
 @auth.before_app_request
@@ -45,6 +63,58 @@ def login():
                     return redirect(request.args.get('next') or url_for('main.index'))
         flash('Invalid username or password.')
     return render_template('auth/login.html', form=form)
+
+#google open auth2 log in page
+@auth.route('/login_with_google')
+def login_with_google():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    google = get_google_auth()
+    auth_url, state = google.authorization_url(
+        Auth.AUTH_URI, access_type='offline')
+    session['oauth_state'] = state
+    return render_template('auth/login_google.html', auth_url=auth_url)
+
+# google auth callback
+@auth.route('/oauth2callback')
+def callback():
+    # Redirect user to home page if already logged in.
+    if current_user is not None and current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    if 'error' in request.args:
+        if request.args.get('error') == 'access_denied':
+            return 'You denied access.'
+        return 'Error encountered.'
+    if 'code' not in request.args and 'state' not in request.args:
+        return redirect(url_for('auth.login_with_google'))
+    else:
+        # Execution reaches here when user has
+        # successfully authenticated our app.
+        google = get_google_auth(state=session['oauth_state'])
+        try:
+            token = google.fetch_token(
+            Auth.TOKEN_URI,
+            client_secret=Auth.CLIENT_SECRET,
+            authorization_response=request.url)
+        except:
+            return 'HTTP Error occurred :('
+        google = get_google_auth(token=token)
+        resp = google.get(Auth.USER_INFO)
+        if resp.status_code == 200:
+            user_data = resp.json()
+            email = user_data['email']
+            user = User.query.filter_by(email=email).first()
+            if user is None:
+                user = User()
+                user.email = email
+            user.name = user_data['name']
+            print(token)
+            user.tokens = json.dumps(token)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user)
+            return redirect(url_for('main.index'))
+        return 'Could not fetch your information.'
 
 # log out page which redirects you to the homepage
 @auth.route('/logout')

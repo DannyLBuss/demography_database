@@ -42,6 +42,7 @@ def after_request(response):
 #    return 'Shutting down...'
 
 # HOMEPAGE
+
 @main.route('/', methods=['GET', 'POST'])
 def index():
     species = Species.query.filter(Species.image_path != None).all()

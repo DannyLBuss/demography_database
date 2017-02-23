@@ -1,0 +1,17 @@
+// }],
+        // "ESAStatus": [{
+        //     "status_code": "EN",
+        //     "status_name": "Endangered"
+        // }, {
+        //     "status_code": "TH",
+        //     "status_name": "Threatened"
+        // }, {
+        //     "status_code": "NA",
+        //     "status_name": "Not classified"
+        // }],
+        // "Species_Clonality": [{
+        //     "status_code": "R",
+        //     "status_name": "Ramet"
+        // }, { 
+        //     "status_code": "G",
+        //     "status_name": "Genet"
