@@ -1,0 +1,28 @@
+Priority variables
+The following is a list of variables that the COMPADRino team digitises to the best of its effort, contacting the author when the information is not available in the manuscript when necessary.
+¥	SpeciesAuthor
+¥	Authors
+¥	Email
+¥	Journal
+¥	YearPublication
+¥	DOI.ISBN
+¥	Ecoregion
+¥	GrowthFormRaunkiaer (only for COMPADRE)
+¥	Purposes
+¥	StudyDuration
+¥	AnnualPeriodicity
+¥	NumberPopulations
+¥	StudiedSex
+¥	Geolocation and Altitude
+¥	Continent
+¥	Country
+¥	The full taxonomy (Kingdom, Phylum, etc.)
+
+
+
+Contacted
+Record the date(s) when the publication author was contacted asking for information in US date format (mm/dd/yyyy). Authors should always be contacted from the compadre-contact@demogr.mpg.de email address rather than a personal email address.
+Procedure for lack of response depends on the YearPublication of the source:
+¥	For papers older than 1990: When the corresponding author does not reply to your third email, or you cannot find their email address (e.g. in old publication) or reach their coauthors, then change “Partly” to “Yes” in Transferred column.
+¥	For more recent papers (published after 1990): If the authors (and coauthors) do not reply after the third time you have contacted them, please pass the email address that you have sent them, together with a brief summary of the information you are after and the attached PDF to Owen and Rob. If they do not make successful contact with the authors, they will change “Partly” to “Yes” in Transferred column.
+If you were not able to find an email address of any of the authors of a paper (and also Rob and Owen don't know one), but that paper has a matrix population model that can be digitised – enter the matrix to the Matrix Stacked file and enter all information that are available from the paper into the Species Descriptor file, all missing information get an NA and we list the species as “transferred-Yes”, still enter the missing information into MissingData

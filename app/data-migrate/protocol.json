@@ -1,0 +1,144 @@
+{
+	"Protocols": {
+	    "Protocol": [{
+            "field_name": "DOI.ISBN",
+            "name_in_csv": "publication_DOI_ISBN",
+            "database_model":"publication",
+            "field_description": "This entry records the Digital Object Identifier (DOI) or International Standard Book Number (ISBN) codes that identify the source material. In more recent papers you may find the DOI somewhere at the beginning of the paper. You may also search for it in the Web of Knowledge. 
+            ; Step 1. Use the DOI resolution service at http://dx.doi.org/ to confirm the DOI of the paper you are digitizing. Do this by appending the DOI after this web page. For example, DOI 10.1111/1365-2745.12334 -> http://dx.doi.org/10.1111/1365-2745.12334 ; Step 2. Use the automated publication information tool to auto-complete the other publication fields. ; If no DOI is available use NA and complete the other publication fields by hand. Note. older references may not actually have a DOI.", 
+            "field_short_description": "Digital Object Identifier (DOI) or International Standard Book Number (ISBN) codes that identify the source material"
+        }, {
+            "field_name": "Journal",
+            "name_in_csv": "publication_journal_name",
+            "database_model":"publication",
+            "field_description": "Record the name of the journal from which data were sourced. We use the standard abbreviation of the journal using the BIOSIS Format. ; If the data were sourced from a book, thesis, report, or conference talk/poster, record that as appropriate. For journal abbreviations see list here: http://images.webofknowledge.com/WOK46/help/WOS/A_abrvjt.html. ; If no abbreviation is available in both of those list, take a look into the paper. Often there are abbreviations in the left corner of the paper or at the first page. For example, J. Ecol. for Journal of Ecology; ¥ Book - Matrices are from a book, or book chapter. Note: If our source is a book name the author of the related chapter in Authors, not the author of the book.
+                                  ; PhD thesis - Matrices are from a doctoral thesis. ; MSc thesis - Matrices are from a masters thesis. ; Report - Matrices are from a report. ; Conference talk - Matrices reported in a conference talk. ; Conference poster - Matrices reported in a conference poster.",
+            "field_short_description": "The name of the journal from which data were sourced"
+        },{
+            "field_name": "Authors",
+            "name_in_csv": "publication_authors",
+            "database_model":"publication",
+            "field_description": "Last name of all authors on the publication. Separate multiple names with ; Note that all authors named in the publication should be recorded in the same order as in the publication. E.g. for the Compadre-paper: Salguero-Gómez; Jones; Archer; Buckley; Che-Castaldo; Caswell; Scheuerlein; Conde; Baudisch; Brinks; de Buhr; Farack; Gottschalk; Hartmann; Henning; Hoppe; Römer; Runge; Ruoff T; Wille J; Zeh; Vieregg; Altwegg; Colchero; Dong; Hodgson; de Kroon; Lebreton; Metcalf; Neel; Parker; Takada; Valverde; Vélez-Espino; Wardle; Franco; Vaupel.",
+            "field_short_description": "Last name of all authors on the publication"
+        },{
+            "field_name": "Year Publication",
+            "name_in_csv": "publication_year",
+            "database_model":"publication",
+            "field_description": "Year of publication of the source publication. This should be recorded as YYYY (e.g. 2002).",
+            "field_short_description": "Year of publication of the source publication"
+        },{
+            "field_name": "Embargo",
+            "name_in_csv": "publication_embargo",
+            "database_model":"publication",
+            "field_description": "If the author does not wish to make personally communicated data available, the data will be under embargo until the following date. At that point, an automatic reminder will go out to the author. The data will not become public until explicit permission has been given by the author. The date should be recorded in US date format (mm.dd.yyyy), or as NA when there if no embargo.",
+            "field_short_description": "Date field for when data can be released to the public"
+        },{
+            "field_name": "Publication Purposes",
+            "name_in_csv": "publication_purpose_etc",
+            "database_model":"publication",
+            "field_description": "A true or false description of the purpose of the study detailed in the manuscript. Several purposes are possible per study and for each purpose TRUE or FALSE must be entered (representing that it was a purpose, or was not a purpose, respectively). ; This information is usually obvious from the abstract and the last paragraph of the intro. For more information on purposes please see the purposes meta-table.",
+            "field_short_description": "A true or false description of the purposes of the original study"
+        },{
+            "field_name": "Notes",
+            "name_in_csv": "publication_study_notes",
+            "database_model":"publication",
+            "field_description": "This column is intended to record any important issues or general notes about the data for the use of the COMPADRINO team. These entries should only include sensible informative key points that others can understand. As with all variables in the database, use English only.",
+            "field_short_description": "Notes on digitization issues with the publication or important information about the publication itself"
+        },{
+            "field_name": "Assigned Student",
+            "name_in_csv": "publication_student",
+            "database_model":"publication",
+            "field_description": "your compadrino user name that you set-up during log-in. This must contain your first name.",
+            "field_short_description": "username of assigned compadrino or moderator"
+        },{
+            "field_name": "Publication Additional Source",
+            "name_in_csv": "publication_additional_source_string",
+            "database_model": "publication",
+            "field_description": "Record additional source(s) used to reconstruct the matrix, or to obtain additional ancillary data. This should be formatted as Lastname Journal YearPublication additional information, e.g. Godinez-Alvarez Bot Rev 2003, or e.g. Schmidt J Ecol 2007 Appendix A1",
+            "field_short_description": "Supplementary data source"
+        },{
+            "field_name": "Corresponding Author Name",
+            "name_in_csv": "publication_corresponding_author",
+            "database_model":"publication",
+            "field_description": "Last name of corresponding author(s). Note that the corresponding author may not necessarily be the first author. When no author is named as the corresponding one in the paper we use the first author. Separate multiple names with ; when pertinent.",
+            "field_short_description": "Last name of corresponding author(s)"
+        },{
+            "field_name": "Corresponding Author Email",
+            "name_in_csv": "publication_corresponding_email",
+            "database_model":"publication",
+            "field_description": "For communication with the corresponding author record the email address. The author's email address can be obtained from the publication, from related papers, from internet searches, and personal communication etc. ; step 2. also enter the year in which the email address last worked or when the paper has been published to distinguish between old and new addresses. If email address doesn't work anymore enter dead instead of the year (note that this does not mean that the author is dead!). ",
+            "field_short_description": "Corresponding author's email address"
+        },{
+            "field_name": "Missing Data",
+            "name_in_csv": "publication_missing_data",
+            "database_model":"publication",
+            "field_description": "Data that is not yet available from the publication source or has not yet been digitized. For more information please see missing data meta-table.",
+            "field_short_description": "Data currently missing from source"
+        },{
+            "field_name": "Corresponding Author Reply",
+            "name_in_csv": "correspondence_author_reply",
+            "database_model":"publication",
+            "field_description": "Did the author reply to a request for further information. This should record a brief answer given by the author, or No (no response yet). Note: Always change Reply from NA/Nothing to No when author has been contacted, and update the entry as soon as a reply is received. Always reply to the author with a short thank-you note when a reply is received.",
+            "field_short_description": "Response from corresponding author after missing data request"
+        },{
+            "field_name": "Corresponding Author Content Email",
+            "name_in_csv": "correspondence_email_content",
+            "database_model":"publication",
+            "field_description": "Data that is not available from the publication source and the corresponding author has been contacted for. For more information please see contact author meta-table. If the author has been asked for something other than the standard missing information, a short note should be left in the extra content email field, e.g. is the species clonal?.",
+            "field_short_description": "Additional data that requested from the author via email."
+        },{
+            "field_name": "Corresponding Author Contacted",
+            "name_in_csv": "date_author_contacted",
+            "database_model":"publication",
+            "field_description": "Record the date when the publication author was first contacted asking for information. Authors should always be contacted from the compadre@gmail.com email address rather than a personal email address. For more information on contacting authors, please see the contact author meta-table.",
+            "field_short_description": "The date when the publication author was first contacted asking for additional information."
+        }, {
+            "field_name": "Corresponding Author Contacted Again",
+            "name_in_csv": "date_author_contacted_again",
+            "database_model":"publication",
+            "field_description": " ",
+            "field_short_description":
+        }, {
+            "field_name": "Corresponding Extra Content Email",
+            "name_in_csv": "extra_content_email ",
+            "database_model":"publication",
+            "field_description": "If the author has been asked for something other than the standard missing information (see contact author meta-table, a short note should be left in this field. For example, is the species clonal?.",
+            "field_short_description": "Author contacted for additional information not in contact author meta-table"
+        }, {
+            "field_name": "Date Digitized",
+            "name_in_csv": "publication_date_digitization",
+            "database_model":"publication",
+            "field_description": "This column records the date when the COMPADRINO started working on this publication. Specifically when the first matrix population model of that study was digitised. Dates should be recorded in the following date format: yyyy-mm-dd, e.g. 2015-12-25 for 25th Dec 2015.",
+            "field_short_description": "This column records the date when the COMPADRINO started working on this publication"
+        }],
+
+        "Common_values": [{
+                "common_value_name": "Not available",
+                "common_value_data": "NA",
+                "common_value_description": "The information is not available either because the author does not have it or because the information is not recognized as priority for the digitisation."
+        }, {
+                "common_value_name": "Asked for it",
+                "common_value_data": "AFI",
+                "common_value_description": "The information is not yet in the database, but the COMPADRino has already contacted the author requesting it (i.e. the author has not yet replied)."
+        }, {
+                "common_value_name": "Not digitized yet",
+                "common_value_data": "NDY",
+                "common_value_description": "The information has not yet been digitised. This is likely to occur when some priority information has been digitised for a given species, and the COMPADRino has moved onto another species without contacting an author for the missing information."
+        }, {
+                "common_value_name": "Not calculated",
+                "common_value_data": "NC",
+                "common_value_description": "Information was not calculated because its calculation is not sensible. For instance, latitudes and longitudes of various populations of the same species are not averaged and assigned to the grand-mean population matrix of the species. This is the same for ranges, where author provides a range of latitudes and longitudes for a given population. Ranges are instead noted in the observation column."
+        }, {
+                "common_value_name": "Laboratory",
+                "common_value_data": "LAB",
+                "common_value_description": "The author collected demographic data for the studied species in a laboratory or under greenhouse conditions. Controlled, typically indoor, conditions that mean the study population is not affected by the environmental conditions typical of the actual geographic location of the study. For these data we do not calculate averages or ranges but instead enter LAB (not NA)."
+        }, {
+                "common_value_name": "Frankenstein matrix",
+                "common_value_data": "FRANK",
+                "common_value_description": "Frankenstein matrices are MPMs where the author parameterised their model using demographic data from 2+ other papers/sources. These MPMs should be clearly indicated with FRANK in the observation column. Furthermore, for these matrices, temporal and geographic information is not useful for comparative analyses and therefore geographic location data, time information (start/end year, season etc.) should be recorded as FRANK (not NA)."
+        }, {
+                "common_value_name": "A simulated matrix",
+                "common_value_data": "Simulation",
+                "common_value_description": "The matrix model is a simulation, and perhaps only loosely based on a specific real species. Typically these simulated matrices are used to explore the behaviour of a population in a theoretical way. In those cases, there is no geographic location, ecoregion etc. For these data we do not calculate averages or ranges for locations and time periods but instead enter Simulation (not NA)."
+    }]
+}
