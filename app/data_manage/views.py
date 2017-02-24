@@ -34,6 +34,8 @@ def compadrino_zone():
 @data_manage.route('/species/<string:edit_or_new>/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def species_form(id,edit_or_new):
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
     
     if edit_or_new == "edit":
         species = Species.query.filter_by(id=id).first_or_404()
@@ -123,6 +125,8 @@ def species_edit_history(id):
 @data_manage.route('/taxonomy/<string:edit_or_new>/<int:id>/species=<int:species_id>', methods=['GET', 'POST'])
 @login_required
 def taxonomy_form(id,species_id,edit_or_new):
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
     
     if edit_or_new == "edit": # if you are editing, get taxonomy object and create form
         taxonomy = Taxonomy.query.get_or_404(id)
@@ -223,6 +227,8 @@ def taxonomy_edit_history(id):
 @data_manage.route('/traits/<string:edit_or_new>/<int:id>/species=<int:species_id>', methods=['GET', 'POST'])
 @login_required
 def trait_form(id,edit_or_new,species_id):
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
     
     if edit_or_new == "edit": # if you are editing, get trait object and create form
         trait = Trait.query.get_or_404(id)
@@ -296,6 +302,9 @@ def trait_edit_history(id):
 @data_manage.route('/publication/<string:edit_or_new>/<int:id>', methods=['GET', 'POST'])
 @login_required
 def publication_form(id,edit_or_new):
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
+    
     if edit_or_new == "edit":
         publication = Publication.query.filter_by(id=id).first_or_404()
         publication_old = Publication.query.filter_by(id=id).first_or_404()
@@ -425,6 +434,9 @@ def publication_edit_history(id):
 @data_manage.route('/population/new/publication=<int:id_pub>/choose_species', methods=['GET'])
 @login_required
 def choose_species(id_pub):
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
+        
     publication = Publication.query.get_or_404(id_pub)
     species = Species.query.all()
     
@@ -435,6 +447,8 @@ def choose_species(id_pub):
 @data_manage.route('/population/<string:edit_or_new>/<int:id>/species=<int:species_id>/publication=<int:publication_id>', methods=['GET', 'POST'])
 @login_required
 def population_form(id,edit_or_new,species_id,publication_id):
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
 
     if edit_or_new == "edit":
         population = Population.query.get_or_404(id)
@@ -524,6 +538,9 @@ def population_edit_history(id):
 @data_manage.route('/matrix/<string:edit_or_new>/<int:id>/population=<int:pop_id>', methods=['GET', 'POST'])
 @login_required
 def matrix_form(id,edit_or_new,pop_id):
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
+        
     if edit_or_new == "edit":
         matrix = Matrix.query.get_or_404(id)
         matrix_old = Matrix.query.get_or_404(id)

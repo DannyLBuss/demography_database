@@ -32,7 +32,7 @@ Demography Database
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav top-bar">
                 <li><a href="{{ url_for('main.index') }}">Home</a></li> {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li> {% endif %}
+                <li><a href="{{ url_for('main.user', username=current_user.username) }}">My Profile</a></li> {% endif %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Explore<b class="caret"></b> </a>
                     <ul class="dropdown-menu">
@@ -67,11 +67,20 @@ Demography Database
                         <li ><a href="{{ url_for('resources.publications') }}">Publications</a>
                     </ul>
                 </li>
+                {% if current_user.role_id == 1 %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b> </a>
+                    <ul class="dropdown-menu">
+                        <li ><a href="{{ url_for('admin.users_page') }}">Manage users</a>
+                    </ul>
+                </li>
+                {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right"> {% if current_user.is_authenticated %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="{{ current_user.gravatar(size=18) }}"> Account <b class="caret"></b> </a>
                     <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('main.edit_profile') }}">Edit profile</a></li>
                         <li><a href="{{ url_for('auth.change_password') }}">Change Password (old login)</a></li>
                         <li><a href="{{ url_for('auth.change_email_request') }}">Change Email (old login)</a></li>
                         <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>

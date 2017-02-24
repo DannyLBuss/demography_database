@@ -18,7 +18,7 @@
     <div>
         
         <!-- compadrino actions for top part of page -->
-    {% if current_user.is_authenticated %} 
+    {% if can_edit == True %} 
     <div class="dropdown pull-right">
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
         <ul class="dropdown-menu dropdown-menu-right">
@@ -134,7 +134,7 @@
             <div class="population" data-value="id{{population.publication.id}}"></div> 
             
             <!-- compadrino actions box -->
-            {% if current_user.is_authenticated %}
+            {% if can_edit == True %}
             <div class="dropdown pull-right">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-right">
@@ -201,7 +201,7 @@
                                     <li><a data-toggle="pill" href="#menu_{{matrix.id}}_1">Survival Matrix </a></li>
                                     <li><a data-toggle="pill" href="#menu_{{matrix.id}}_2">Fecundity Matrix</a></li>
                                     <li><a data-toggle="pill" href="#menu_{{matrix.id}}_3">Clonal Matrix</a></li>
-                                    <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li> {% if current_user.is_authenticated %}
+                                    <li><a data-toggle="pill" href="#menu_{{matrix.id}}_4">Additional Infomation</a></li> {% if can_edit == True %}
                                     <div class="dropdown pull-right">
                                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right">
@@ -258,7 +258,7 @@
                 </div> {% endif %} {% endfor %}  </div>
         </div> {% endif %} {% endfor %}  
     
-    {% if current_user.is_authenticated %}
+    {% if can_edit == True %}
     <div class="info_box_empty">
         
         {% for publication in publications %}
@@ -273,7 +273,7 @@
         <a href="../data-manage/population/new/0/species={{species.id}}/publication={{publication.id}}">Add new population</a>
     </div> 
         {% else %}
-        {% if current_user.is_authenticated %}
+        {% if can_edit == True %}
         <div class="info_box_empty">
             <p>Populations can only be created from a page that contains a publication. The current page only contains information about species.</p>
         </div>
@@ -299,7 +299,7 @@
                 
                 <tr class="publication_row" style="border-left-color:{{ publication.colour }};">
                     <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> {{publication.version[0]}} <small> {{publication.id}}</small>
-                        {% if current_user.is_authenticated %} 
+                        {% if can_edit == True %} 
     <div class="dropdown pull-right">
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
         <ul class="dropdown-menu dropdown-menu-right">
@@ -311,7 +311,7 @@
                         <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}
                         {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}{% endif %}</p>
                         
-                        {% if current_user.is_authenticated %}
+                        {% if can_edit == True %}
                         <p><a href="../data-manage/population/new/publication={{publication.id}}/choose_species"><span class="glyphicon glyphicon-plus-sign"></span> Add a new population</a></p>
                         {% endif %}
                         
@@ -330,7 +330,7 @@
                     <td> </td>
                 </tr>
             </tbody> {% endif %} </table>
-        {% if current_user.is_authenticated %}
+        {% if can_edit == True %}
         <p><a href="../data-manage/publication/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new publication</a></p>
         <p><a href="../data-manage/species/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new species</a></p>
         {% endif %}

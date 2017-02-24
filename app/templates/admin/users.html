@@ -22,6 +22,7 @@
             <th>Institute confirmed</th>
             <th>Member since</th>
             <th>Last online</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -34,12 +35,13 @@
             <td>{{ user.confirmed }}</td>
             <td>{{ user.institute }}</td>
             {% if user.institute_confirmed == 0 %}
-            <td><a class="btn btn-success btn-xs" target="_blank" href="">Confirm now</a></td>
+            <td><a class="btn btn-success btn-xs" href="edit-profile/{{user.id}}">Confirm now</a></td>
             {% else %}
             <td>{{ user.institute_confirmed }}</td>
             {% endif %}
             <td>{{ user.member_since.strftime('%Y-%m-%d') }}</td>
             <td>{{ user.last_seen.strftime('%Y-%m-%d') }}</td>
+            <td><a href="edit-profile/{{user.id}}">Edit</a></td>
         </tr>
         {% endfor %}
     </tbody>

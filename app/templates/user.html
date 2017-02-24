@@ -16,6 +16,7 @@
             {% endif %}
         </p>
         {% endif %}
+        <p>{{ user.role }}</p>
         {% if current_user.is_administrator() %}
         <p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
         {% endif %}
