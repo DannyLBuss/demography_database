@@ -135,7 +135,7 @@ class User(UserMixin, db.Model):
 
                 u.email = us['email']
                 u.username = us['username']
-                u.role_id = us['role_id']
+                u.role = Role.query.filter_by(id=us['role_id']).first()
                 u.password = generate_password_hash(us['password'])
                 u.confirmed = us['confirmed']
                 u.institute_id = us['institute_id']

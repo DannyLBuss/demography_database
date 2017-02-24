@@ -108,11 +108,11 @@ def callback():
                 user = User.query.filter_by(username=user_data['name'].replace(" ", "").lower()).first()
             if user is None:
                 user = User()
+                user.role = Role.query.filter_by(name="User").first()
                 user.email = email
             user.name = user_data['name']
             user.username = user_data['name'].replace(" ", "").lower()
             user.confirmed = 1
-            user.role_id = 5
             print user_data
             print(token)
             user.tokens = json.dumps(token)
