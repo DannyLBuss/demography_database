@@ -105,16 +105,54 @@ def callback():
             email = user_data['email']
             user = User.query.filter_by(email=email).first()
             if user is None:
+                user = User.query.filter_by(username=user_data['name'].replace(" ", "").lower()).first()
+            if user is None:
                 user = User()
                 user.email = email
             user.name = user_data['name']
+            user.username = user_data['name'].replace(" ", "").lower()
+            user.confirmed = 1
+            print user_data
             print(token)
             user.tokens = json.dumps(token)
             db.session.add(user)
             db.session.commit()
             login_user(user)
+            #if user.username:
             return redirect(url_for('main.index'))
+            #else:
+            #    user.username = "anon"
+            #    return redirect(url_for('auth.register_google'))
         return 'Could not fetch your information.'
+    
+#register google page
+@auth.route('/register', methods=['GET', 'POST'])
+def register_google(user = current_user):
+
+        
+    try:
+        account_type = request.cookies['account_type']
+    except KeyError:
+        account_type = ''
+        
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(email=form.email.data,
+                    username=form.username.data,
+                    password=form.password.data,
+                    name = form.name.data,
+                    role = form.role.data,
+                    institute = form.institute.data)
+
+        if account_type == 'developer':
+            user.role = Role.query.filter_by(name='Developer').first()
+            user.generate_auth_token(3600)
+
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect(url_for('auth.index'))
+    return render_template('auth/register.html', form=form, account_type=account_type)
 
 # log out page which redirects you to the homepage
 @auth.route('/logout')
