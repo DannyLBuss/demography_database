@@ -9,7 +9,7 @@ from ..models import IUCNStatus,  OrganismType, GrowthFormRaunkiaer, Reproductiv
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute
+    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute, Status
     
 
 def stringFromText(string):
@@ -56,6 +56,14 @@ def validate_dimension(matrix, classnames):
     squared = dimensionSquared(classnames, matrix)
     dimension = dimensionSize(classnames)
     return squared
+
+class VersionForm(Form):
+    checked = BooleanField('Has this field been checked?')
+    status = QuerySelectField('Status',
+            query_factory=lambda: Status.query.all(), get_pk=lambda a: a.id,
+                            get_label=lambda a:'{} ({})'.format(a.status_name, a.status_description))
+    checked_count = IntegerField('How many times has this been checked?')
+    submit = SubmitField('Submit')
 
 # Species form, up to date: 30/1/17
 class SpeciesForm(Form):

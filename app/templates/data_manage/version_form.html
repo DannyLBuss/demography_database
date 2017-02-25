@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Demography Database - Data Input{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Update status</h1>
+    <h3><a href="" onclick="goBack()">Go back to previous page</a></h3>
+
+</div>
+<div class="info_box">
+    {{ wtf.quick_form(form) }}
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+
+    
+<script>
+    //var submitto_button = document.getElementById("submit");
+    //submitto_button.setAttribute("onclick",'goBack()');
+
+    function goBack() {
+        window.history.go(-1);
+    }
+</script>
+{% endblock %}

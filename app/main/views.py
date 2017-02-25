@@ -45,22 +45,24 @@ def after_request(response):
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    species = Species.query.filter(Species.image_path != None).all()
-##Matrix Stats
+    
+    ##Matrix Stats
     count_matrices = all_matrices()
     comadre_count = count_comadre()
     compadre_count = count_compadre()
-##Population Stats
+    ##Population Stats
     count_pops = all_pops()
     comadre_count_pop = count_comadre_pop()
     compadre_count_pop = count_compadre_pop()
     all_pops_green_2 = all_pops_green()
     count_comadre_pop_green_2 = count_comadre_pop_green()
-##Species stats
+    ##Species stats
     species_count = species_total_count()
     species_count_compadre = species_compadre_count()
     species_count_comadre = species_comadre_count() 
-#    species_comadre_count_green_2 = species_comadre_count_green()
+    #   species_comadre_count_green_2 = species_comadre_count_green()
+    
+    species = Species.query.filter(Species.image_path != None).all()
     number = len(species)
     species2 = []
     for i in range(1,5):
@@ -86,9 +88,7 @@ def data():
 
 ### TABLE PAGES
 # the big table of species
-#doesn't work at the moment...
 @main.route('/species-table/')
-# @login_required
 def species_table():
     # species = Species.query.all()
     species = Species.query.all()
@@ -96,7 +96,6 @@ def species_table():
 
 # the big table of publications
 @main.route('/publications-table/')
-# @login_required
 def publications_table():
     publications = Publication.query.all()
     return render_template('publications_table_template.html', publications=publications)
@@ -171,7 +170,6 @@ def species_page(species_ids,pub_ids):
     return render_template('species_template.html',all_species = all_species, publications = publications, populations = populations,can_edit = can_edit)
 
 # Taxonomic explorer
-# NEEDS FIX AT SPECIES LEVEL
 # DOES NOT WORK IN FIREFOX
 @main.route('/explorer/<taxon_level>/<taxon>')
 # @login_required

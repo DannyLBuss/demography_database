@@ -4,13 +4,13 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import data_manage
 from .. import db
-from forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, MatrixForm
+from forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, MatrixForm, VersionForm
 from ..models import Permission, Role, User, \
                     IUCNStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
                     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
                     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Institute, ChangeLogger
+                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Institute, ChangeLogger, Version
 from ..decorators import admin_required, permission_required, crossdomain
 
 import random
@@ -24,9 +24,30 @@ def gen_hex_code():
 def compadrino_zone():
     return render_template('data_manage/compadrino_zone.html')
 
-
-
 # Data management forms
+
+@data_manage.route('/version/edit/<int:id>/', methods=['GET', 'POST'])
+@login_required
+def version_form(id):
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
+    
+    version = Version.query.filter_by(id=id).first_or_404()
+    form = VersionForm()
+    if form.validate_on_submit():
+        version.checked = form.checked.data
+        version.statuses = form.status.data
+        version.checked_count = form.checked_count.data
+        db.session.commit()
+        
+        flash('Version has been updated')
+        
+    form.checked.data = version.checked
+    form.status.data = version.statuses
+    form.checked_count.data = version.checked_count
+    
+    return render_template('data_manage/version_form.html', form=form, version=version)
+
 
 # editing species information #updated 25/1/17
 # edit_or_new is a string that is either "edit" or "new"

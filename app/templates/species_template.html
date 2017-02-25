@@ -25,16 +25,20 @@
             <li class="dropdown-header">Species information</li>
             <li><a href="../../data-manage/species/edit/{{species.id}}" ><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
             <li><a href="../../data-manage/species/{{species.id}}/edit-history">View edits</a></li>
+            <li><a target="_blank" href="../../data-manage/version/edit/{{species.version.id}}">Update status</a></li>
             <li class="dropdown-header">Taxonomy</li> {% if species.taxonomy %}
             <li><a href="../../data-manage/taxonomy/edit/{{species.taxonomy.id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
-            <li><a href="../../data-manage/taxonomy/{{species.taxonomy.id}}/edit-history">View edits</a></li>{% else %}
+            <li><a href="../../data-manage/taxonomy/{{species.taxonomy.id}}/edit-history">View edits</a></li>
+            <li><a target="_blank" href="../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}">Update status</a></li>{% else %}
             <li><a href="../../data-manage/taxonomy/new/0/species={{species.id}}">Add taxonomy</a></li> {% endif %}
             <li class="dropdown-header">Species Traits</li> {% if species.trait %}
             <li><a href="../../data-manage/traits/edit/{{species.trait.id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
-            <li><a href="../../data-manage/traits/{{species.trait.id}}/edit-history">View edits</a></li>{% else %}
+            <li><a href="../../data-manage/traits/{{species.trait.id}}/edit-history">View edits</a></li>
+            <li><a target="_blank" href="../../data-manage/version/edit/{{species.trait[0].version[0].id}}">Update status</a></li>{% else %}
             <li><a href="../../data-manage/traits/new/0/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
+            
     </div> {% endif %}
-    <h1><i>{{species.species_accepted}}</i> <small> {{species.id}}</small> </h1> 
+    <h1><i>{{species.species_accepted}}</i> {% if can_edit == True %} <small> {{species.id}}-{{species.version.statuses}}-{{species.version.checked}}</small> {%endif%} </h1> 
     {% if species.species_common %}
     <p><b>Common name(s):</b> 
         {{species.species_common}}</p>
@@ -44,7 +48,7 @@
     <!-- BREADCRUMB -->
     {% for taxonomy in species.taxonomy %}
 
-            <p><b>Taxonomy: </b><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> &nbsp;&nbsp;&nbsp;&nbsp;  Authority: {{ taxonomy.authority }} &nbsp;&nbsp;&nbsp;&nbsp;{% if taxonomy.kingdom == "Plantae" %} TPL version: {{ taxonomy.tpl_version }}{% endif %}</p>  
+            <p><b>Taxonomy: </b><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> &nbsp;&nbsp;&nbsp;&nbsp;  Authority: {{ taxonomy.authority }} &nbsp;&nbsp;&nbsp;&nbsp;{% if taxonomy.kingdom == "Plantae" %} TPL version: {{ taxonomy.tpl_version }}{% endif %} {% if can_edit == True %} <small> {{taxonomy.id}}-{{taxonomy.version[0].statuses}}-{{taxonomy.version[0].checked}}</small> {%endif%}</p>  
         {% else %}
         <div class="info_box_empty"><p>No taxonomy</p>  <p> <a href="../../data-manage/taxonomy/new/0/species={{species.id}}"><span class="glyphicon glyphicon-plus-sign"></span> Add taxonomy information</a></p> </div>
         {% endfor %} 
@@ -68,7 +72,7 @@
     
     <!-- Right side information with taxonom and traits -->
     <div class="col-sm-4">  {% if species.trait %} {% for trait in species.trait %}
-        <h3>Traits <small> {{trait.id}}</small></h3>
+        <h3>Traits {% if can_edit == True %} <small> {{trait.id}}-{{trait.version[0].statuses}}-{{trait.version[0].checked}}</small> {%endif%}</h3>
         <table style="width:100%" class="table">
             <tr>
                 <td> <strong>Growth type: </strong> </td>
@@ -140,13 +144,14 @@
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li><a href="../../data-manage/population/edit/{{population.id}}/species={{population.species.id}}/publication={{population.publication.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit population</a></li>
                     <li><a href="../../data-manage/population/{{population.id}}/edit-history">View edits</a></li>
+                    <li><a target="_blank" href="../../data-manage/version/edit/{{population.version[0].id}}">Update status</a></li>
                     <li class="disabled"><a href="#">Add new matrix</a></li>
                 </ul>
             </div> 
             {% endif %}
             
             <!-- population information -->
-            <h4><strong>Population Name: </strong>{{ population.population_name }} <small> {{ population.id }}</small> <span class="label label-default">{{ population.matrices | count }} matrices</span> <span class="label label-default">{{ population.study_start }} - {{ population.study_end }}</span> <span class="label label-default"> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </span> </h4>
+            <h4><strong>Population Name: </strong>{{ population.population_name }} {% if can_edit == True %} <small> {{population.id}}-{{population.version[0].statuses}}-{{population.version[0].checked}}</small> {%endif%} <span class="label label-default">{{ population.matrices | count }} matrices</span> <span class="label label-default">{{ population.study_start }} - {{ population.study_end }}</span> <span class="label label-default"> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </span> </h4>
             <table style="width:100%" class="table">
                 <tr>
                     <td><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}   </td>
@@ -189,7 +194,7 @@
                                 <span class="label label-default">{{ matrix.matrix_ergodic }}</span> 
                                 <span class="label label-default">{{ matrix.matrix_primitive }}</span> 
                                 <span class="label label-default">λ = {{ matrix.matrix_lambda }}</span> 
-                                <small>  {{matrix.id}}</small>
+                                {% if can_edit == True %} <small> {{matrix.id}}-{{matrix.version[0].statuses}}-{{matrix.version[0].checked}}</small> {%endif%}
                             </p>
                             </h4> 
                         </div>
@@ -207,6 +212,7 @@
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li><a href="../../data-manage/matrix/edit/{{matrix.id}}/population={{population.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit matrix</a></li>
                                             <li><a href="../../data-manage/matrix/{{matrix.id}}/edit-history">View edits</a></li>
+                                            <li><a target="_blank" href="../../data-manage/version/edit/{{matrix.version[0].id}}">Update status</a></li>
                                         </ul>
                                     </div> {% endif %} </ul>
                                 <div class="tab-content">
@@ -262,7 +268,7 @@
     <div class="info_box_empty">
         
         {% for publication in publications %}
-        <p><a href="../data-manage/population/new/0/species={{species.id}}/publication={{publication.id}}"><span class="glyphicon glyphicon-plus-sign"></span> Add a new population</a> of <em>{{ species.species_accepted }}</em> as published in <span class="	glyphicon glyphicon-asterisk" style="color:{{publication.colour}}"></span> {{ publication.authors }} ({{ publication.year }}). "{{ publication.name }}" in <i>{{ publication.pub_title }}</i> {{ publication.volume }}, {{ publication.pages }}</p>
+        <p><a href="../data-manage/population/new/0/species={{species.id}}/publication={{publication.id}}"><span class="glyphicon glyphicon-plus-sign"></span> Add a new population</a> of <em>{{ species.species_accepted }}</em> as published in <span class="glyphicon glyphicon-asterisk" style="color:{{publication.colour}}"></span> {{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}</p>
         {% endfor %}
         
     </div>
@@ -298,7 +304,7 @@
             <tbody> {% for publication in publications |sort(attribute='id') %}
                 
                 <tr class="publication_row" style="border-left-color:{{ publication.colour }};">
-                    <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> {{publication.version[0]}} <small> {{publication.id}}</small>
+                    <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> {% if can_edit == True %} <small> {{publication.id}}-{{publication.version[0].statuses}}-{{publication.version[0].checked}}</small> {%endif%}
                         {% if can_edit == True %} 
     <div class="dropdown pull-right">
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
@@ -306,6 +312,7 @@
 
             <li><a href="../../data-manage/publication/edit/{{publication.id}}" > <span class="	glyphicon glyphicon-pencil"></span> Edit publication</a></li>
             <li><a href="../../data-manage/publication/{{publication.id}}/edit-history">View edits</a></li>
+            <li><a target="_blank" href="../../data-manage/version/edit/{{publication.version[0].id}}">Update status</a></li>
         </ul>
     </div> {% endif %}
                         <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}
@@ -339,6 +346,12 @@
     
 </div> {% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }}
 <!-- JAVASCRIPT -->
+<script>
+    function openInNewTab(url) {
+      var win = window.open(url, '_blank');
+      win.focus();
+    }
+</script>
 <script>
     // Change matrix strings into tables
     var divs = document.getElementsByClassName("matA");
