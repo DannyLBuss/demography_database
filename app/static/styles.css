@@ -214,6 +214,15 @@ footer {
     color: #8e8e8e;
 }
 
+.info_box_compadrino{
+    padding: 1em;
+    margin-bottom: 20px;
+    border-width:3px;
+    border-style:solid;
+    border-color: #d0d0d0;
+    color: #8e8e8e;
+}
+
 .info_box_red{
     background-color: #f5e7de;
     padding: 1em;

@@ -127,7 +127,12 @@ def species_page(species_ids,pub_ids):
 
         all_populations_pubs = []
         for publications in all_pubs:
-            all_populations_pubs.extend(Population.query.filter_by(publication_id=publications.id).all())  
+            all_populations_pubs.extend(Population.query.filter_by(publication_id=publications.id).all())
+            
+    # variable for whether to show the compadrino info box at the top (when only 1 publication is selected)
+    compadrino_info = False
+    if species_ids[0] == "all" and len(pub_ids) == 1:
+        compadrino_info = True
         
       
     # Pick the right populations + get stuff
@@ -166,8 +171,16 @@ def species_page(species_ids,pub_ids):
             can_edit = True
     except:
         pass
+    
+    exeter_data = False
+    try:
+        if current_user.institute.institution_short == "UoE" and current_user.institute_confirmed == 1:
+            exeter_data = True
+    except:
+        pass
+    
          
-    return render_template('species_template.html',all_species = all_species, publications = publications, populations = populations,can_edit = can_edit)
+    return render_template('species_template.html',all_species = all_species, publications = publications, populations = populations,can_edit = can_edit,exeter_data = exeter_data,compadrino_info = compadrino_info)
 
 # Taxonomic explorer
 # DOES NOT WORK IN FIREFOX
@@ -419,8 +432,9 @@ def edit_profile():
         # unconfirming institure if they change institute (non admins)
         if user.institute != form.institute.data and user.role_id != 1:
             user.institute_confirmed = 0
-            user.institute = form.institute.data
-                
+            
+        user.institute = form.institute.data
+    
         flash('Your profile has been updated.')
         return redirect(url_for('.user', username=user.username))
     form.name.data = user.name

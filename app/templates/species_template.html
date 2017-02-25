@@ -1,5 +1,60 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
 
+{% if can_edit == true %}
+<button type="button" class="btn btn-primary pull-right" data-toggle="collapse" href="#compadrino_box"><span class="glyphicon glyphicon-wrench"></span> Show/hide publication summary </button>
+<div id="compadrino_box" class='panel-collapse collapse'>
+<div class="info_box_compadrino">
+    {% if compadrino_info == True %}
+    <h3>Compadrino information box</h3>
+    
+    {% for publication in publications %}
+    <p><b>Publication: </b>{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}</p>
+    <p><b>Assigned to:</b> </p>
+    <p><b>Checked by:</b> </p>
+    <ul>
+        <li>Publication-{{publication.id}}-{{publication.version[0].statuses}}-{{publication.version[0].checked}}</li>
+        
+        <ul>
+        {% for species in all_species %}
+            <li>Species-{{species.species_accepted}}-{{species.id}}-{{species.version.statuses}}-{{species.version.checked}}</li>
+            
+            <ul>
+            {% for population in species.populations %}
+                {% if population.publication_id == publication.id %}
+                <li>Population-{{population.population_name}}-{{population.id}}-{{population.version[0].statuses}}-{{population.version[0].checked}}</li>
+                
+                <ul>
+                {% for matrix in population.matrices %}
+                    <li>Matrix-{{matrix.id}}-{{matrix.version[0].statuses}}-{{matrix.version[0].checked}}</li>
+                {% endfor %}
+                    <br>
+                </ul>
+            
+                {% endif %}
+            {% endfor %}
+                <br>
+            </ul>
+            
+        {% endfor %}
+            <br>
+        </ul>
+            
+    </ul>
+    {% endfor %}
+
+
+    {% else %}
+
+    <p>Compadrino information is only available on pages showing information for one publication and all species</p>
+
+    {% endif %}
+
+
+
+</div>
+</div>
+{% endif %}
+
 <div id="publication_filter">
     <button type="button" class="btn btn-xs btn-default" data-toggle="collapse" href="#mappo"> <span class="glyphicon glyphicon-globe"></span> Show/hide map </button>
     <div id="mappo" class='panel-collapse in collapse'>
@@ -251,12 +306,11 @@
                                     </div>
                                     <p><strong>Observations: </strong> {{ matrix.observations }}</p>
 
-                                    <!-- Fixed model suff goes here - need to sort out this as was causing errors asking for different user permissions, even when commented out? -->
-<!--                                     if current_user.institute.institution_short == "MPIDR" or "UoE"
+                                    <!-- Fixed model suff goes here -->
+                                     {% if exeter_data %}
                                     <p>Fixed <a>Edit fixed data</a></p>
-                                    {{ matrix.fixed[0].vector_str }}
-                                    {{ matrix.fixed[0].vector_str }}
-                                     endif  -->
+                                    <p>Vector: {{ matrix.fixed[0].vector_str }}</p>
+                                     {% endif %}
                                 </div>
                             </li>
                         </div>
