@@ -40,3 +40,17 @@ class EditProfileAdminForm(Form):
         if field.data != self.user.username and \
                 User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already in use.')
+            
+class EditInstituteAdminForm(Form):
+    institution_name = StringField('Institution name')
+    institution_short = StringField('Institution short name')
+    main_contact_email = StringField('Institution contact email', validators = [Email()])
+    main_contact_name = StringField('Institution contact name')
+    institution_address = StringField('Institution address')
+    research_group = StringField('Research group')
+    #date_joined
+    department = StringField('Department')
+    country = StringField('Country')
+    website = StringField('Website')
+    submit = SubmitField('Submit')
+    

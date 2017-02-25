@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database - Institutes {% endblock %}
+
+{% block page_content %}
+
+<div class="page-header">
+    <h1>Database institutes</h1>
+</div>
+
+<p><a href="{{url_for('admin.new_institute_admin')}}"><span class="glyphicon glyphicon-plus-sign"></span> Add a new institute</a></p>
+
+<table class="table">
+    <thead>
+        <tr>
+<th>institution_name</th>
+<th>institution_short</th>
+<th>main_contact_email</th>
+<th>main_contact_name</th>
+<th>institution_address</th>
+<th>research_group</th>
+<th>date_joined</th>
+<th>department</th>
+<th>country</th>
+<th>website</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in institutes %}
+        <tr>
+            <td>{{ i.institution_name}}</td>
+            <td>{{ i.institution_short}}</td>
+            <td>{{ i.main_contact_email}}</td>
+            <td>{{ i.main_contact_name}}</td>
+            <td>{{ i.institution_address}}</td>
+            <td>{{ i.research_group}}</td>
+            <td>{{ i.date_joined}}</td>
+            <td>{{ i.department}}</td>
+            <td>{{ i.country}}</td>
+            <td>{{ i.website}}</td>
+            <td><a href="edit-institute/{{i.id}}">Edit</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

@@ -161,11 +161,13 @@ def species_page(species_ids,pub_ids):
     publications.sort();
     print(publications)
     
-    if current_user.role_id in [1,3,4,6]:
-        can_edit = True
-    else:
-        can_edit = False
-    
+    can_edit = False
+    try:
+        if current_user.role_id in [1,3,4,6]:
+            can_edit = True
+    except:
+        pass
+         
     return render_template('species_template.html',all_species = all_species, publications = publications, populations = populations,can_edit = can_edit)
 
 # Taxonomic explorer
@@ -407,24 +409,26 @@ def user(username):
 @main.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
+    user = current_user
+    print(user)
+    print(current_user)
+    form = EditProfileForm(user=user)
     if form.validate_on_submit():
-        current_user.name = form.name.data
-        current_user.username = form.username.data
-        current_user.about_me = form.about_me.data
-       
+        user.name = form.name.data
+        user.username = form.username.data
+        user.about_me = form.about_me.data
+    
         # unconfirming institure if they change institute (non admins)
-        if current_user.institute != form.institute.data and current_user.role_id != 1:
-            current_user.institute_confirmed = 0
-            current_user.institute = form.institute.data
+        if user.institute != form.institute.data and user.role_id != 1:
+            user.institute_confirmed = 0
+            user.institute = form.institute.data
                 
-        db.session.add(current_user)
         flash('Your profile has been updated.')
-        return redirect(url_for('.user', username=current_user.username))
-    form.name.data = current_user.name
-    form.username.data = current_user.username
-    form.about_me.data = current_user.about_me
-    form.institute.data = current_user.institute
+        return redirect(url_for('.user', username=user.username))
+    form.name.data = user.name
+    form.username.data = user.username
+    form.about_me.data = user.about_me
+    form.institute.data = user.institute
         
     return render_template('admin/user_form.html', form=form)
 
