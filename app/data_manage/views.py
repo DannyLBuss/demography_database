@@ -74,11 +74,9 @@ def species_form(id,edit_or_new):
             species.add_to_logger(current_user,'species_accepted',species_old.species_accepted,form.species_accepted.data,'edit')
             species.add_to_logger(current_user,'species_common',species_old.species_common,form.species_common.data,'edit')
             species.add_to_logger(current_user,'iucn_status',species_old.iucn_status,form.iucn_status.data,'edit')
-            species.add_to_logger(current_user,'esa_status',species_old.esa_status,form.esa_status.data,'edit')
             species.add_to_logger(current_user,'species_gisd_status',species_old.species_gisd_status,form.species_gisd_status.data,'edit')
             species.add_to_logger(current_user,'species_iucn_taxonid',species_old.species_iucn_taxonid,form.species_iucn_taxonid.data,'edit')
-            species.add_to_logger(current_user,'species_iucn_population_assessed',species_old.species_iucn_population_assessed,form.species_iucn_population_assessed.data,'edit')
-            species.add_to_logger(current_user,'invasive_status',species_old.invasive_status,form.invasive_status.data,'edit')
+            #species.add_to_logger(current_user,'invasive_status',species_old.invasive_status,form.invasive_status.data,'edit')
             species.add_to_logger(current_user,'gbif_taxon_key',species_old.gbif_taxon_key,form.gbif_taxon_key.data,'edit')
             species.add_to_logger(current_user,'image_path',species_old.image_path,form.image_path.data,'edit')
             species.add_to_logger(current_user,'image_path2',species_old.image_path2,form.image_path2.data,'edit')
@@ -87,11 +85,9 @@ def species_form(id,edit_or_new):
         species.species_accepted = form.species_accepted.data 
         species.species_common = form.species_common.data
         species.iucn_status = form.iucn_status.data
-        species.esa_status = form.esa_status.data
         species.species_gisd_status = form.species_gisd_status.data #
         species.species_iucn_taxonid = form.species_iucn_taxonid.data #
-        species.species_iucn_population_assessed = form.species_iucn_population_assessed.data #
-        species.invasive_status = form.invasive_status.data
+        #species.invasive_status = form.invasive_status.data
         species.gbif_taxon_key = form.gbif_taxon_key.data
         species.image_path = form.image_path.data
         species.image_path2 = form.image_path2.data                     
@@ -105,29 +101,33 @@ def species_form(id,edit_or_new):
             species.add_to_logger(current_user,'species_accepted',species_old.species_accepted,form.species_accepted.data,'edit')
             species.add_to_logger(current_user,'species_common',species_old.species_common,form.species_common.data,'edit')
             species.add_to_logger(current_user,'iucn_status',species_old.iucn_status,form.iucn_status.data,'edit')
-            species.add_to_logger(current_user,'esa_status',species_old.esa_status,form.esa_status.data,'edit')
             species.add_to_logger(current_user,'species_gisd_status',species_old.species_gisd_status,form.species_gisd_status.data,'edit')
             species.add_to_logger(current_user,'species_iucn_taxonid',species_old.species_iucn_taxonid,form.species_iucn_taxonid.data,'edit')
-            species.add_to_logger(current_user,'species_iucn_population_assessed',species_old.species_iucn_population_assessed,form.species_iucn_population_assessed.data,'edit')
-            species.add_to_logger(current_user,'invasive_status',species_old.invasive_status,form.invasive_status.data,'edit')
+            #species.add_to_logger(current_user,'invasive_status',species_old.invasive_status,form.invasive_status.data,'edit')
             species.add_to_logger(current_user,'gbif_taxon_key',species_old.gbif_taxon_key,form.gbif_taxon_key.data,'edit')
             species.add_to_logger(current_user,'image_path',species_old.image_path,form.image_path.data,'edit')
             species.add_to_logger(current_user,'image_path2',species_old.image_path2,form.image_path2.data,'edit')
             #END COPY CODE BLOCK
             
-            species_id = str(species.id)
+            #make associated version object
+            version = Version()
+            version.checked = 0
+            version.checked_count = 0
+            version.statuses = Status.query.filter_by(id=4).first()
+            version.species_id = species.id
+            db.session.add(version)
+            db.session.commit()
         
+        species_id = str(species.id)
         flash('The species infomation has been updated.')
         return redirect("../species="+species_id+"/publications=all")
     
     form.species_accepted.data = species.species_accepted
     form.species_common.data = species.species_common
     form.iucn_status.data = species.iucn_status
-    form.esa_status.data = species.esa_status
     form.species_gisd_status.data = species.species_gisd_status #
     form.species_iucn_taxonid.data = species.species_iucn_taxonid #
-    form.species_iucn_population_assessed.data = species.species_iucn_population_assessed #
-    form.invasive_status.data = species.invasive_status
+    #form.invasive_status.data = species.invasive_status
     form.gbif_taxon_key.data = species.gbif_taxon_key
     form.image_path.data = species.image_path
     form.image_path2.data = species.image_path2
@@ -212,7 +212,16 @@ def taxonomy_form(id,species_id,edit_or_new):
             taxonomy.add_to_logger(current_user,'kingdom',taxonomy_old.kingdom,form.kingdom.data,'edit')
             taxonomy.add_to_logger(current_user,'col_check_ok',taxonomy_old.col_check_ok,form.col_check_ok.data,'edit')
             #taxonomy.add_to_logger(current_user,'col_check_date',taxonomy_old.col_check_date,form.col_check_date.data,'edit')
-            #END COPY CODE BLOCK            
+            #END COPY CODE BLOCK
+            
+            #make associated version object
+            version = Version()
+            version.checked = 0
+            version.checked_count = 0
+            version.statuses = Status.query.filter_by(id=4).first()
+            version.taxonomy_id = taxonomy.id
+            db.session.add(version)
+            db.session.commit()
             
         species_id = str(species.id)
         flash('The taxonomy has been updated.')
@@ -294,6 +303,15 @@ def trait_form(id,edit_or_new,species_id):
             trait.add_to_logger(current_user,'angio_gymno',trait_old.angio_gymno,form.angio_gymno.data,'edit')
             trait.add_to_logger(current_user,'spand_ex_growth_types',trait_old.spand_ex_growth_types,form.spand_ex_growth_types.data,'edit')
             # END CODE BLOCK
+            
+            #make associated version object
+            version = Version()
+            version.checked = 0
+            version.checked_count = 0
+            version.statuses = Status.query.filter_by(id=4).first()
+            version.trait_id = trait.id
+            db.session.add(version)
+            db.session.commit()
         
         species_id = str(species.id)
         flash('The trait infomation has been updated.')
@@ -413,6 +431,15 @@ def publication_form(id,edit_or_new):
             publication.add_to_logger(current_user,'study_notes',publication_old.study_notes,form.study_notes.data,'edit')
             # END CODE BLOCK
             
+            #make associated version object
+            version = Version()
+            version.checked = 0
+            version.checked_count = 0
+            version.statuses = Status.query.filter_by(id=4).first()
+            version.publication_id = publication.id
+            db.session.add(version)
+            db.session.commit()
+            
         publication_id = str(publication.id)
             
         flash('The publication infomation has been updated.')
@@ -516,6 +543,21 @@ def population_form(id,edit_or_new,species_id,publication_id):
         #population.database_source = form.database_source.data #Not sure what this is
         flash('The population infomation has been updated.')
         
+        if edit_or_new == "new":
+            
+            db.session.flush()
+            db.session.add(population)
+            db.session.commit()
+            
+            #make associated version object
+            version = Version()
+            version.checked = 0
+            version.checked_count = 0
+            version.statuses = Status.query.filter_by(id=4).first()
+            version.population_id = population.id
+            db.session.add(version)
+            db.session.commit()
+        
         publication_id = str(publication.id)
         return redirect("../species=all/publications="+publication_id)
         
@@ -604,6 +646,18 @@ def matrix_form(id,edit_or_new,pop_id):
         matrix.captivity_id = form.captivity_id.data
         matrix.matrix_dimension = form.matrix_dimension.data
         matrix.observations = form.observations.data
+        
+        if edit_or_new == "new":
+            #make associated version object
+            version = Version()
+            version.checked = 0
+            version.checked_count = 0
+            version.statuses = Status.query.filter_by(id=4).first()
+            version.matrix_id = matrix.id
+            db.session.add(version)
+            db.session.commit()
+        
+        
         flash('The matrix infomation has been updated.')
         return redirect(url_for('main.species_page',species_id=species.id,pubs_ids="all"))
         

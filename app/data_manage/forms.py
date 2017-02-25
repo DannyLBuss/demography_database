@@ -72,13 +72,10 @@ class SpeciesForm(Form):
     iucn_status = QuerySelectField('IUCN Status',
             query_factory=lambda: IUCNStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {} ({})'.format(a.status_code, a.status_name, a.status_description))
-    esa_status = QuerySelectField('ESA Status',
-            query_factory=lambda: ESAStatus.query.all(), get_pk=lambda a: a.id,
-                            get_label=lambda a:'{} - {}'.format(a.status_code, a.status_name))
     species_gisd_status = BooleanField('GISD Status')
-    invasive_status = BooleanField('Invasive Status')
+    #invasive_status = BooleanField('Invasive Status')
     species_iucn_taxonid = IntegerField('IUCN Taxon key', validators=[Optional()])
-    species_iucn_population_assessed = StringField('IUCN Population assessed')   
+    #species_iucn_population_assessed = StringField('IUCN Population assessed')   
     gbif_taxon_key = IntegerField('GBIF Taxon Key', validators=[Optional()])
     image_path = StringField('Path to image')
     image_path2 = StringField('Path to image')
