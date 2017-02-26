@@ -4,11 +4,10 @@
 <button type="button" class="btn btn-primary pull-right" data-toggle="collapse" href="#compadrino_box"><span class="glyphicon glyphicon-wrench"></span> Show/hide publication summary </button>
 <div id="compadrino_box" class='panel-collapse collapse'>
 <div class="info_box_compadrino">
-    {% if compadrino_info == True %}
-    <h3>Compadrino information box</h3>
-    
+    {% if compadrino_info == True %}    
     {% for publication in publications %}
     <p><b>Publication: </b>{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}</p>
+    <p><b>Publication status:</b> </p>
     <p><b>Assigned to:</b> </p>
     <p><b>Checked by:</b> </p>
     <ul>

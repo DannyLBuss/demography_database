@@ -3174,6 +3174,7 @@ class Matrix(db.Model):
     matrix_irreducible = db.Column(db.Boolean())
     matrix_primitive = db.Column(db.Boolean())
     matrix_ergodic = db.Column(db.Boolean())
+    periodicity = db.Column(db.Float())
     n_intervals = db.Column(db.SmallInteger())
     matrix_criteria_size = db.Column(db.String(200))
     matrix_criteria_ontogeny = db.Column(db.Boolean())

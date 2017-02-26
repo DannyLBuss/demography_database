@@ -108,26 +108,29 @@ def species_page(species_ids,pub_ids):
     if species_ids[0] == "all" and pub_ids[0] == "all":
         flash('Loading all species and publications is not allowed, sorry.')
         abort(404)
-        
-    #get species
-    all_species = []
-    if species_ids[0] != "all": # aka if species are filtered
-        for id in species_ids:
-            all_species.append((Species.query.filter_by(id=id)).first())
-            
-        all_populations_species = []
-        for species in all_species:
-            all_populations_species.extend(Population.query.filter_by(species_id=species.id).all())
-                
-    #get pubs
-    all_pubs = []
-    if pub_ids[0] != "all": # aka if publications are being filtered
-        for id in pub_ids:
-            all_pubs.append((Publication.query.filter_by(id=id)).first())
+    
+    try:
+        #get species
+        all_species = []
+        if species_ids[0] != "all": # aka if species are filtered
+            for id in species_ids:
+                all_species.append((Species.query.filter_by(id=id)).first())
 
-        all_populations_pubs = []
-        for publications in all_pubs:
-            all_populations_pubs.extend(Population.query.filter_by(publication_id=publications.id).all())
+            all_populations_species = []
+            for species in all_species:
+                all_populations_species.extend(Population.query.filter_by(species_id=species.id).all())
+
+        #get pubs
+        all_pubs = []
+        if pub_ids[0] != "all": # aka if publications are being filtered
+            for id in pub_ids:
+                all_pubs.append((Publication.query.filter_by(id=id)).first())
+
+            all_populations_pubs = []
+            for publications in all_pubs:
+                all_populations_pubs.extend(Population.query.filter_by(publication_id=publications.id).all())
+    except:
+        abort(404)
             
     # variable for whether to show the compadrino info box at the top (when only 1 publication is selected)
     compadrino_info = False

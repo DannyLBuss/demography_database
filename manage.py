@@ -570,6 +570,7 @@ def submit_new(data):
     'matrix_difficulty' : data["matrix_difficulty"],
     'seasonal' : coerce_boolean(data["matrix_seasonal"]),
     'survival_issue' : calc_surv_issue(data["matrix_u_string"]),
+    'periodicity' : data["matrix_periodicity"],
     'matrix_irreducible' : is_matrix_irreducible(data["matrix_a_string"]),
     'matrix_primitive' : is_matrix_primitive(data["matrix_a_string"]),
     'matrix_ergodic' : is_matrix_ergodic(data["matrix_a_string"]),
