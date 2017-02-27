@@ -491,7 +491,7 @@ def choose_species(id_pub):
     return render_template('data_manage/choose_species.html',publication=publication,species=species)
 
 # editing population infomation
-# NEEDS UPDATE
+# requires changlogger
 @data_manage.route('/population/<string:edit_or_new>/<int:id>/species=<int:species_id>/publication=<int:publication_id>', methods=['GET', 'POST'])
 @login_required
 def population_form(id,edit_or_new,species_id,publication_id):
@@ -623,29 +623,37 @@ def matrix_form(id,edit_or_new,pop_id):
         matrix.treatment = form.treatment.data
         matrix.matrix_split = form.matrix_split.data
         matrix.matrix_composition = form.matrix_composition.data
-        matrix.survival_issue = form.survival_issue.data
         matrix.n_intervals = form.n_intervals.data
         matrix.periodicity = form.periodicity.data
         matrix.matrix_criteria_size = form.matrix_criteria_size.data
         matrix.matrix_criteria_ontogeny = form.matrix_criteria_ontogeny.data
         matrix.matrix_criteria_age = form.matrix_criteria_age.data
-        matrix.matrix_start = form.matrix_start.data
-        matrix.matrix_end = form.matrix_end.data
-        matrix.matrix_start_season_id = form.matrix_start_season_id.data
-        matrix.matrix_end_season_id = form.matrix_end_season_id.data
+        matrix.matrix_start_year = form.matrix_start_year.data
+        matrix.matrix_start_month = form.matrix_start_month.data
+        matrix.matrix_end_year = form.matrix_end_year.data
+        matrix.matrix_end_month = form.matrix_end_month.data
+        matrix.matrix_start_season_id = form.matrix_start_season.data
+        matrix.matrix_end_season_id = form.matrix_end_season.data
         matrix.matrix_fec = form.matrix_fec.data
         matrix.matrix_a_string = form.matrix_a_string.data
         matrix.matrix_u_string = form.matrix_u_string.data
         matrix.matrix_f_string = form.matrix_f_string.data
         matrix.matrix_c_string = form.matrix_c_string.data
-        matrix.matrix_class_string = form.matrix_class_string.data
-        matrix.n_plots = form.n_plots.data
-        matrix.plot_size = form.plot_size.data
-        matrix.n_individuals = form.n_individuals.data
+        matrix.class_author = form.class_author.data
+        matrix.class_organized = form.class_organized.data
+        matrix.class_number = form.class_number.data
         matrix.studied_sex = form.studied_sex.data
         matrix.captivity_id = form.captivity_id.data
         matrix.matrix_dimension = form.matrix_dimension.data
         matrix.observations = form.observations.data
+        
+        matrix.matrix_difficulty = form.matrix_difficulty.data
+        matrix.matrix_complete = form.matrix_complete.data
+        matrix.independence_origin = form.independence_origin.data
+        matrix.independent = form.independent.data
+        matrix.non_independence = form.non_independence.data
+        matrix.non_independence_author = form.non_independence_author.data
+        
         
         if edit_or_new == "new":
             #make associated version object
@@ -664,29 +672,34 @@ def matrix_form(id,edit_or_new,pop_id):
     form.treatment.data = matrix.treatment.treatment_name
     form.matrix_split.data = matrix.matrix_split
     form.matrix_composition.data = matrix.matrix_composition
-    form.survival_issue.data = matrix.survival_issue
     form.n_intervals.data = matrix.n_intervals
     form.periodicity.data = matrix.periodicity
     form.matrix_criteria_size.data = matrix.matrix_criteria_size
     form.matrix_criteria_ontogeny.data = matrix.matrix_criteria_ontogeny
     form.matrix_criteria_age.data = matrix.matrix_criteria_age
-    form.matrix_start.data = matrix.matrix_start
-    form.matrix_end.data = matrix.matrix_end 
-    form.matrix_start_season_id.data = matrix.matrix_start_season_id
-    form.matrix_end_season_id.data = matrix.matrix_end_season_id 
+    form.matrix_start_year.data = matrix.matrix_start_year
+    form.matrix_start_month.data = matrix.matrix_start_month
+    form.matrix_end_year.data = matrix.matrix_end_year
+    form.matrix_end_month.data = matrix.matrix_end_month
+    form.matrix_start_season.data = matrix.matrix_start_season_id
+    form.matrix_end_season.data = matrix.matrix_end_season_id
     form.matrix_fec.data = matrix.matrix_fec
     form.matrix_dimension.data = matrix.matrix_dimension
     form.matrix_a_string.data = matrix.matrix_a_string
     form.matrix_u_string.data = matrix.matrix_u_string
     form.matrix_f_string.data = matrix.matrix_f_string
     form.matrix_c_string.data = matrix.matrix_c_string
-    form.matrix_class_string.data = matrix.matrix_class_string
-    form.n_plots.data = matrix.n_plots
-    form.plot_size.data = matrix.plot_size 
-    form.n_individuals.data = matrix.n_individuals
+    form.class_author.data = matrix.class_author
     form.studied_sex.data = matrix.studied_sex
     form.captivity_id.data = matrix.captivity_id
     form.observations.data = matrix.observations
+    
+    form.matrix_difficulty.data = matrix.matrix_difficulty
+    form.matrix_complete.data = matrix.matrix_complete
+    form.independence_origin.data = matrix.independence_origin
+    form.independent.data = matrix.independent
+    form.non_independence.data = matrix.non_independence
+    form.non_independence_author.data = matrix.non_independence_author
     
     return render_template('data_manage/matrix_form.html', form=form, matrix=matrix,population=population,species = species)
 

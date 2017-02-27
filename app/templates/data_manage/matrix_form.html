@@ -6,10 +6,8 @@
 {% block page_content %}
 <div class="page-header">
     <h1>Matrix Editing Form</h1>
-    <a type="button" class="btn btn-default" href="../../species/{{species.id}}/overview">Go back to species overview</a>
-    <a type="button" class="btn btn-default" href="../../publication/{{population.publication.id}}">Go back to publication overview</a>
     <h1>Editing matrix #{{matrix.id}} for <i>{{species.species_accepted}}</i></h1>
-    <h3><strong>Population:</strong> {{population.name}}</h3>
+    <h3><strong>Population:</strong> {{population.population_name}}</h3>
     <h3><strong>Publication:</strong> {{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.pub_title }}" in <i>{{ population.publication.journal_book_conf }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}</h3>
 </div>
 <div >
@@ -26,25 +24,26 @@
                 {{ wtf.form_field(form.matrix_composition) }}
                 {{ wtf.form_field(form.n_intervals)}}
                 {{ wtf.form_field(form.captivity_id) }}
+                {{ wtf.form_field(form.matrix_split) }}
+                {{ wtf.form_field(form.matrix_criteria_size) }}
+                {{ wtf.form_field(form.matrix_complete) }}
+                {{ wtf.form_field(form.matrix_difficulty) }}
+                {{ wtf.form_field(form.independence_origin) }}
+                {{ wtf.form_field(form.independent) }}
+                {{ wtf.form_field(form.non_independence) }}
+                {{ wtf.form_field(form.non_independence_author) }}
             </div>
             <br>
 
             <div class="form form-inline">
                 <div class="row">
-                    <div class="col-sm-4">{{ wtf.form_field(form.matrix_criteria_size) }}</div>
-                    <div class="col-sm-4">{{ wtf.form_field(form.matrix_criteria_ontogeny) }}</div>
-                    <div class="col-sm-4">{{ wtf.form_field(form.matrix_criteria_age) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_criteria_age) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_criteria_ontogeny) }}</div>
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-sm-4">{{ wtf.form_field(form.n_individuals) }}</div>
+                    <div class="col-sm-4"></div>
                     <div class="col-sm-4">{{ wtf.form_field(form.studied_sex) }}</div>
-                    
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-4">{{ wtf.form_field(form.n_plots) }}</div>
-                    <div class="col-sm-4">{{ wtf.form_field(form.plot_size) }}</div>
                     
                 </div>
             </div>
@@ -54,22 +53,29 @@
             <h3>Timing</h3>
             <div class="form form-inline">
                 <div class="row">
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start) }}</div>
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start_month) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end_month) }}</div>
                 </div>
             </div>
             <br>
             <div class="form form-inline">
                 <div class="row">
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start_season_id) }}</div>
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end_season_id) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start_year) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end_year) }}</div>
+                </div>
+            </div>
+            <br>
+            <div class="form form-inline">
+                <div class="row">
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start_season) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end_season) }}</div>
                 </div>
             </div>
             <br>
             
         </div>
         <div class= info_box>
-            <h3>Matrix format infomation</h3>
+            <h3>Matrix format information</h3>
             <div class="form form-inline">
                 <div class="row">
                 <div class="col-sm-3">{{ wtf.form_field(form.matrix_split) }}</div>
@@ -82,9 +88,17 @@
             <div class="form">
                 <h3>Stage classes and matrices</h3>
                 
-                <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_class_')">Edit matrix classes</button>
-                {{ wtf.form_field(form.matrix_class_string)}}
-                <div id="matrix_class_smart-input"></div>
+                <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('class_author')">Edit matrix classes</button>
+                {{ wtf.form_field(form.class_author)}}
+                <div id="class_author_smart-input"></div>
+                
+                <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_class_organized_')">Edit matrix classes</button>
+                {{ wtf.form_field(form.class_organized)}}
+                <div id="matrix_class_organized_smart-input"></div>
+                
+                <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_class_number_')">Edit matrix classes</button>
+                {{ wtf.form_field(form.class_number)}}
+                <div id="matrix_class_number_smart-input"></div>
                 
                 <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_a_')">Edit matrix A</button>
                 {{ wtf.form_field(form.matrix_a_string) }}
@@ -143,11 +157,12 @@
             var matrix_string = $(('#').concat(whichmatrix.concat('string'))).val()
             var matrix_string = matrix_string.replace("[", "");
             var matrix_string = matrix_string.replace("]", "");
+            var matrix_string = matrix_string.replace(/;/g, " ");
             var matrix_string_array = matrix_string.split(" ");
         }
         
-        if (whichmatrix == 'matrix_class_' || whichmatrix =='matrix_class_organised_'){
-            var matrix_string = $(('#').concat(whichmatrix.concat('string'))).val()
+        if (whichmatrix == 'class_author' || whichmatrix =='matrix_class_organised_' || whichmatrix =='matrix_class_number_'){
+            var matrix_string = $(('#').concat(whichmatrix.concat(''))).val()
             var matrix_string_array = matrix_string.split("|");
         }
         
@@ -176,7 +191,7 @@
             }
         }
     
-        if (whichmatrix == 'matrix_class_' || whichmatrix =='matrix_class_organised_'){
+        if (whichmatrix == 'class_author' || whichmatrix =='matrix_class_organised_' || whichmatrix =='matrix_class_number_'){
             matSize = matrix_string_array.length
             var tableBody = document.createElement('TBODY');
             table_before_edit.appendChild(tableBody);
@@ -215,7 +230,7 @@
             }
         }
         
-        if (whichmatrix == 'matrix_class_' || whichmatrix =='matrix_class_organised_'){
+        if (whichmatrix == 'class_author' || whichmatrix =='matrix_class_organised_' || whichmatrix =='matrix_class_number_'){
             matSize = matrix_string_array.length
             var tableBody = document.createElement('TBODY');
             table.appendChild(tableBody);
@@ -232,6 +247,8 @@
         }
         
         // append everything into the div
+        
+        
         $(('#').concat(whichmatrix.concat('smart-input'))).append('<br>');
         $(('#').concat(whichmatrix.concat('smart-input'))).append("<p><strong>Before changes:</strong></p>")
         document.getElementById(whichmatrix.concat("smart-input")).appendChild(table_before_edit); //append table to div
@@ -307,7 +324,7 @@
             document.getElementById(whichmatrix.concat("smart-input")).innerHTML = "";
         }
         
-        if (whichmatrix == 'matrix_class_' || whichmatrix =='matrix_class_organised_'){
+        if (whichmatrix == 'class_author' || whichmatrix =='matrix_class_organised_' || whichmatrix =='matrix_class_number_'){
             // make it so that it concatonates with | symbol
             document.getElementById(whichmatrix.concat('string')).value = myTableArray;
             myTableArray = myTableArray.join("|");
@@ -395,7 +412,7 @@
                 }
             }
             
-            if (whichmatrix == 'matrix_class_' || whichmatrix =='matrix_class_organised_'){
+            if (whichmatrix == 'class_author' || whichmatrix =='matrix_class_organised_' || whichmatrix =='matrix_class_number_'){
                 matSize = afterEditArray.length;
                 document.getElementById(whichmatrix.concat("changes_note")).innerHTML = '<div class="alert alert-info">Changes have been highlighted, click <i>highlight changes</i> to refresh</div>';
                 

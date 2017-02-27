@@ -156,7 +156,7 @@ class PublicationForm(Form):
     # author_contacts # Fkey#additional_sources # Fkey
     submit = SubmitField('Submit')
 
-# population form, not up to date
+# population form, up to date
 class PopulationForm(Form):
     
     species_author = StringField('Species Author')
@@ -200,37 +200,37 @@ class PopulationForm(Form):
 #  matrix form, not up to date    
 class MatrixForm(Form):
     
-    treatment = StringField('Treatment *', validators=[Required()])
-    matrix_split = BooleanField('Matrix Split')
+    treatment = QuerySelectField('Matrix Treatment *',
+            query_factory=lambda: Treatment.query.all(), get_pk=lambda a: a.id,
+                            get_label=lambda a:a.treatment_name, validators=[Required()])
+    matrix_split = StringField('Matrix Split')
     matrix_composition = QuerySelectField('Matrix Composition *',
             query_factory=lambda: MatrixComposition.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.comp_name, validators=[Required()])
-    survival_issue = DecimalField('Survival Issue')
-    n_intervals = DecimalField('Number of Intervals')
-    periodicity = IntegerField('Periodicity')
-    matrix_criteria_size = BooleanField('Matrix Criteria Size')
+    n_intervals = IntegerField('Number of Intervals', validators=[Optional()])
+    periodicity = FloatField('Periodicity')
+    matrix_criteria_size = StringField('Matrix Criteria Size')
     matrix_criteria_ontogeny = BooleanField('Matrix Criteria Ontogeny')
     matrix_criteria_age = BooleanField('Matrix Criteria Age')
-    matrix_start = StringField('Matrix Start *')
-    #not working
-    #, validators=[Required(), Regexp('^(\d{1}[/-]\d{1,4})*$', 0, 'Must be M/YYYY')])
-    matrix_end = StringField('Matrix End')
-    matrix_start_season_id = QuerySelectField('Matrix Start Season',
+    matrix_start_year = IntegerField('Start Year', validators=[Optional()])
+    matrix_start_month = IntegerField('Start Month', validators=[Optional()])
+    matrix_end_year = IntegerField('End Year', validators=[Optional()])
+    matrix_end_month = IntegerField('End Month', validators=[Optional()])
+    matrix_start_season = QuerySelectField('Matrix Start Season',
             query_factory=lambda: StartSeason.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.season_id, a.season_name))
-    matrix_end_season_id = QuerySelectField('Matrix End Season',
+    matrix_end_season = QuerySelectField('Matrix End Season',
             query_factory=lambda: EndSeason.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.season_id, a.season_name))
     matrix_fec = BooleanField('Matrix Fecundity')
-    matrix_dimension = IntegerField('Matrix Dimension')
+    matrix_dimension = IntegerField('Matrix Dimension *', validators=[Required()])
     matrix_a_string = TextAreaField('Matrix A String *', validators=[Required()]) #Must be in specific format
     matrix_u_string = TextAreaField('Matrix U String *', validators=[Required()]) #Must be in specific format
     matrix_f_string = TextAreaField('Matrix F String *', validators=[Required()]) #Must be in specific format
     matrix_c_string = TextAreaField('Matrix C String *', validators=[Required()]) #Must be in specific format
-    matrix_class_string = TextAreaField('Matrix Class Names String *', validators=[Required()]) #Must be in specific format
-    n_plots = IntegerField('# Plots')
-    plot_size = IntegerField('Plot Size')
-    n_individuals = IntegerField('# Individuals')
+    matrix_difficulty = StringField('Matrix Difficult')
+    matrix_complete = BooleanField('Matrix complete')
+    independence_origin = StringField('Independence origin')
     studied_sex = QuerySelectField('Studied Sex',
             query_factory=lambda: StudiedSex.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.sex_code, a.sex_description))
@@ -238,7 +238,13 @@ class MatrixForm(Form):
             query_factory=lambda: Captivity.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.cap_code, a.cap_description))
 
-    observations = TextAreaField('Observations *', validators=[Required()])
+    observations = TextAreaField('Observations')
+    class_organized = StringField('Class organized')
+    class_author = StringField('Class as described by the author')
+    class_number = StringField('Class number')
+    independent = BooleanField('Independant')
+    non_independence = StringField('Non independence')
+    non_independence_author = StringField('Author of non-independence')
     submit = SubmitField('Submit')
     
 #Fixed form needs to be created
