@@ -76,7 +76,12 @@ def index():
            species_count_comadre = species_count_comadre, all_pops_green_2 = all_pops_green_2, count_comadre_pop_green_2=count_comadre_pop_green_2)
 #species_comadre_count_green_2=species_comadre_count_green_2, 
 
+# now defunct 'display all data' page
+@main.route('/onezoom')
+# @login_required
+def onezoom():
 
+    return render_template('onezoom/plants.htm')
 
 # now defunct 'display all data' page
 @main.route('/data/')
