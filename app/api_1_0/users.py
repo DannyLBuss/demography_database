@@ -72,7 +72,7 @@ def docs():
     schema = tables_columns
     return render_template('api_1_0/schema.html', tables=schema)
 
-''' GLORY '''
+''' API query '''
 @api.route('/<key>/query/<model>/<int:id>')
 @crossdomain(origin='*')
 def get_one_entry(key, id, model):

@@ -2210,12 +2210,10 @@ class Species(db.Model):
                 'species_accepted': self.species_accepted,
                 'species_gisd_status': self.species_gisd_status,
                 'species_common': self.species_common,
-                'taxonomy' : [taxonomy.to_json_simple(key) for taxonomy in self.taxonomies][0],
-                'traits' : [trait.to_json_simple(key) for trait in self.traits],
-                'stages' : [stages.to_json_simple(key) for stages in self.stages] if self.stages else [],
+                'taxonomy' : [taxonomy.to_json_simple(key) for taxonomy in self.taxonomy][0],
+                'traits' : [trait.to_json_simple(key) for trait in self.trait],
                 'populations' : [population.to_json_simple(key) for population in self.populations],
-                'number_populations' : len([population.to_json_simple(key) for population in self.populations]),
-                'versions' : [version.to_json_simple(key) for version in self.versions]
+                'number_populations' : len([population.to_json_simple(key) for population in self.populations])
             }
         }
 
@@ -2233,10 +2231,8 @@ class Species(db.Model):
                                       _external=False),
             'data' : {
                 'species_accepted': self.species_accepted,
-                'traits_len' : len(self.traits),
-                'stages_len' : len(self.stages),
                 'populations_len' : len(self.populations),
-                'versions' : len(self.versions)
+                #'versions' : len(self.versions)
             }
         }
         return species
@@ -2308,7 +2304,6 @@ class Taxonomy(db.Model):
                 'authority' : self.authority,
                 'genus' : self.genus,
                 'family' : self.family,
-                'versions_len' : len(self.versions)
             }
         }
         return taxonomy
@@ -2369,9 +2364,7 @@ class Trait(db.Model):
                                       _external=False),
             'data' : {
                 'species' : self.species.to_json_simple(key) if self.species else None,
-                'max_height' : self.max_height,
                 'organism_type' : self.organism_type.to_json_simple(key) if self.organism_type else None,
-                
                 'reproductive_repetition' : self.reproductive_repetition.to_json_simple(key) if self.reproductive_repetition else None,
                 'dicot_monoc' : self.dicot_monoc.to_json_simple(key) if self.dicot_monoc else None,
                 'angio_gymno' : self.angio_gymno.to_json_simple(key) if self.angio_gymno else None,
@@ -2393,12 +2386,10 @@ class Trait(db.Model):
                                       _external=False),
             'data' : {
                 'species' : self.species.species_accepted if self.species else None,
-                'max_height' : self.max_height,
                 'organism_type' : self.organism_type.to_json_simple(key) if self.organism_type else None,
                 'reproductive_repetition' : self.reproductive_repetition.to_json_simple(key) if self.reproductive_repetition else None,
                 'dicot_monoc' : self.dicot_monoc.to_json_simple(key) if self.dicot_monoc else None,
                 'angio_gymno' : self.angio_gymno.to_json_simple(key) if self.angio_gymno else None,
-                'versions_len' : len(self.versions)
                 }
         }
 
@@ -2524,16 +2515,13 @@ class Publication(db.Model):
                 'year' : self.year,
                 'DOI_ISBN' : self.DOI_ISBN,
                 'journal_name' : self.journal_name,
-                'purpose' : self.purpose.to_json_simple(key) if self.purpose else None,
+                #'purposes' : self.purposes.to_json_simple(key) if self.purposes else None,
                 'date_digitised' : self.date_digitised,
                 'embargo' : self.embargo,
                 'additional_source_string' : self.additional_source_string,
                 'additional_sources_len' : len(self.additional_sources),
-                'populations_len' : len(self.populations),
-                'stages_len' : len(self.stages),
-                'taxonomies_len' : len(self.taxonomies),
-                'studies_len' : len(self.studies),
-                'versions_len' : len(self.versions)
+                'populations_len' : len(self.populations)
+                #'versions_len' : len(self.versions)
             }
         }
         return publication
@@ -2859,10 +2847,9 @@ class Population(db.Model):
                 'continent' : self.continent.to_json_simple(key) if self.continent else None,
                 'longitude' : self.longitude,
                 'latitude' : self.latitude,
-                'exact_coordinates' : self.exact_coordinates,
                 'altitude' : self.altitude,
-                'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices] if self.matrices else None,
-                'versions' : [version.to_json_simple(key) for version in self.versions] if self.versions else None,
+                'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices] if self.matrices else None#,
+                #'versions' : [version.to_json_simple(key) for version in self.versions] if self.versions else None,
             }
            
         }
@@ -2883,7 +2870,6 @@ class Population(db.Model):
                 'ecoregion' : self.ecoregion.to_json_simple(key) if self.ecoregion else None,
                 'country' : self.country,
                 'matrices_len' : len(self.matrices),
-                'versions_len' : len(self.versions)
             }
            
         }
@@ -3312,8 +3298,8 @@ class Matrix(db.Model):
                 'intervals' : [interval.to_json_simple(key) for interval in self.intervals] if self.intervals else [],
                 'matrix_values' : [matrix_value.to_json_simple(key) for matrix_value in self.matrix_values] if self.matrix_values else [],
                 'matrix_stages' : [matrix_stage.to_json_simple(key) for matrix_stage in self.matrix_stages] if self.matrix_stages else [],
-                'seeds' : [seeds.to_json_simple(key) for seeds in self.seeds] if self.seeds else [],
-                'versions' : [versions.to_json_simple(key) for versions in self.versions] if self.versions else []
+                'seeds' : [seeds.to_json_simple(key) for seeds in self.seeds] if self.seeds else []
+                #'versions' : [versions.to_json_simple(key) for versions in self.versions] if self.versions else []
             }
         }
 
@@ -3337,7 +3323,7 @@ class Matrix(db.Model):
             'data' : {
                 'treatment' : self.treatment.to_json_simple(key),
                 'matrix_split' : self.matrix_split,
-                'matrix_composition' : self.matrix_composition.to_json_simple(key),
+                'matrix_composition' : self.matrix_composition.to_json_simple(key) if self.matrix_composition else None,
                 'survival_issue' : self.survival_issue,
                 'matrix_a_string' : self.matrix_a_string,
                 'matrix_dimension' : self.matrix_dimension,
@@ -3351,7 +3337,7 @@ class Matrix(db.Model):
                 'matrix_stages_len' : len(self.matrix_stages),
                 'fixed_len' : len(self.fixed),
                 'seeds_len' : len(self.seeds),
-                'versions_len' : len(self.versions)
+                #'versions_len' : len(self.versions)
             }
         }
 

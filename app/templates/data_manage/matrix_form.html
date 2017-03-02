@@ -6,7 +6,8 @@
 {% block page_content %}
 <div class="page-header">
     <h1>Matrix Editing Form</h1>
-    <h1>Editing matrix #{{matrix.id}} for <i>{{species.species_accepted}}</i></h1>
+    <h3><a href="" onclick="goBack()"> <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back to previous page - changes will NOT be saved</a></h3>
+    <h3>Editing matrix #{{matrix.id}} for <i>{{species.species_accepted}}</i></h3>
     <h3><strong>Population:</strong> {{population.population_name}}</h3>
     <h3><strong>Publication:</strong> {{ population.publication.authors }} ({{ population.publication.year }}). "{{ population.publication.pub_title }}" in <i>{{ population.publication.journal_book_conf }}</i> {{ population.publication.volume }}, {{ population.publication.pages }}</h3>
 </div>
@@ -437,6 +438,13 @@
             document.getElementById(whichmatrix.concat("matrixtable")).appendChild(tableBody);
             $(('#').concat(whichmatrix.concat('matrixtable'))).editableTableWidget();
         }
+    }
+</script>
+
+<script>
+
+    function goBack() {
+        window.history.go(-1);
     }
 </script>
 

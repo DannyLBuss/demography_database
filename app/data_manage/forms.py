@@ -10,6 +10,7 @@ from ..models import IUCNStatus,  OrganismType, GrowthFormRaunkiaer, Reproductiv
     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute, Status
+from wtforms.fields.html5 import DateField
     
 
 def stringFromText(string):

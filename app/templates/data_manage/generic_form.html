@@ -6,12 +6,15 @@
 {% block page_content %}
 <div class="page-header">
     <h1>Data Input Form</h1>
+    
+    <h3><a href="" onclick="goBack()"> <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back to previous page - changes will NOT be saved</a></h3>
+    
     {% if publication %}
-    <h3><strong>Publication:</strong> {{publication.authors}} <small><a href="../../../../../species=all/publications={{publication.id}}">Go back to publication overview</a></small></h3>
+    <h3><strong>Publication:</strong> {{publication.authors}} </h3>
     {% endif %}
     
     {% if species %}
-    <h3><strong>Species:</strong> <i>{{species.species_accepted}}</i> <small><a href="../../../../../species={{species.id}}/publications=all">Go back to species overview</a></small></h3>
+    <h3><strong>Species:</strong> <i>{{species.species_accepted}}</i></h3>
     {% endif %}
     
     {% if population %}
@@ -22,4 +25,11 @@
 <div class="info_box">
     {{ wtf.quick_form(form) }}
 </div>
+
+<script>
+
+    function goBack() {
+        window.history.go(-1);
+    }
+</script>
 {% endblock %}

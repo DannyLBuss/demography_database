@@ -68,7 +68,7 @@ def edit_institute_admin(id):
         institute.main_contact_name = form.main_contact_name.data
         institute.institution_address = form.institution_address.data
         institute.research_group = form.research_group.data
-        #institute.date_joined = form.email.data
+        institute.date_joined = form.email.data
         institute.department = form.department.data
         institute.country = form.country.data
         institute.website = form.website.data
@@ -83,7 +83,7 @@ def edit_institute_admin(id):
     form.main_contact_name.data = institute.main_contact_name
     form.institution_address.data = institute.institution_address
     form.research_group.data = institute.research_group
-    #form.email.data = institute.date_joined 
+    form.email.data = institute.date_joined 
     form.department.data = institute.department
     form.country.data = institute.country 
     form.website.data = institute.website 

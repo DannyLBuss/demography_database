@@ -6,8 +6,8 @@
 
 {% block page_content %}
 <div class="page-header">
+    <h3><a href="" onclick="goBack()"> <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back to previous page - changes will NOT be saved</a></h3>
     {% if publication %}
-    <a type="button" class="btn btn-default" href="../../../species=all/publications={{publication.id}}">Go back to publication overview</a>
     <h3>Editing infomation for <i>{{publication.authors}}</i></h3>
     {% endif %}
 </div>
@@ -131,5 +131,12 @@
         });
     }
               
+</script>
+
+<script>
+
+    function goBack() {
+        window.history.go(-1);
+    }
 </script>
 {% endblock %}

@@ -81,8 +81,8 @@
             <li><a href="../../data-manage/species/{{species.id}}/edit-history">View edits</a></li>
             <li><a target="_blank" href="../../data-manage/version/edit/{{species.version.id}}">Update status</a></li>
             <li class="dropdown-header">Taxonomy</li> {% if species.taxonomy %}
-            <li><a href="../../data-manage/taxonomy/edit/{{species.taxonomy.id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
-            <li><a href="../../data-manage/taxonomy/{{species.taxonomy.id}}/edit-history">View edits</a></li>
+            <li><a href="../../data-manage/taxonomy/edit/{{species.taxonomy[0].id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
+            <li><a href="../../data-manage/taxonomy/{{species.taxonomy[0].id}}/edit-history">View edits</a></li>
             <li><a target="_blank" href="../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}">Update status</a></li>{% else %}
             <li><a href="../../data-manage/taxonomy/new/0/species={{species.id}}">Add taxonomy</a></li> {% endif %}
             <li class="dropdown-header">Species Traits</li> {% if species.trait %}
@@ -405,6 +405,7 @@
       win.focus();
     }
 </script>
+
 <script>
     // Change matrix strings into tables
     var divs = document.getElementsByClassName("matA");
@@ -627,4 +628,9 @@
     // htmlreplace('None', 'Unknown');
     htmlreplace('&lt;', '<');
     htmlreplace('&gt;', '>');
+    
+    document.body.innerHTML = document.body.innerHTML.replace(/-Green-/g, '-<span class="glyphicon glyphicon-ok" style="color:green"></span>-');
+    document.body.innerHTML = document.body.innerHTML.replace(/-Amber-/g, '-<span class="glyphicon glyphicon-warning-sign"  style="color:Coral"></span>-');
+    document.body.innerHTML = document.body.innerHTML.replace(/-Pending-/g, '-<span class="glyphicon glyphicon-flag" style="color:DarkOrchid"></span>-');
+    document.body.innerHTML = document.body.innerHTML.replace(/-Red-/g, '-<span class="glyphicon glyphicon glyphicon-remove" style="color:red"></span>-');
 </script> {% endblock %}
