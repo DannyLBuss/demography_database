@@ -3655,7 +3655,7 @@ class Version(db.Model):
     @staticmethod
     def migrate():
         ###previously Database.migrate()
-        Version.migrate()
+        Status.migrate()
 
     def __repr__(self):
         return '<Version {} {} {}>'.format(str(self.id), self.statuses.status_name, self.checked)

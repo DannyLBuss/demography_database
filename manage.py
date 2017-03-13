@@ -824,7 +824,7 @@ def migrate_meta():
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute
+    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute, Version
 
     print "Migrating Meta Tables..."
     Role.insert_roles()
@@ -842,6 +842,7 @@ def migrate_meta():
     Institute.migrate()
     User.migrate()
     Database.migrate()
+    Status.migrate()
    
     return
 
