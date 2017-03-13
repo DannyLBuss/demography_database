@@ -460,11 +460,13 @@ def submit_new(data):
     invasive_status_elsewhere = InvasiveStatusStudy.query.filter_by(status_name=data["population_invasive_status_elsewhere_id"]).first()
     ecoregion = Ecoregion.query.filter_by(ecoregion_code=data["population_ecoregion_id"]).first()
     continent = Continent.query.filter_by(continent_name=data["population_continent_id"]).first()
+    ###Danny trying add database meta-table in correct location
+    database = Database.query.filter_by(database_master_version=data["population_database_id"]).first()
     
     purpose_endangered = PurposeEndangered.query.filter_by(purpose_name=data["study_purpose_endangered_id"]).first() if data["study_purpose_endangered_id"] else data["study_purpose_endangered_id"]
 
     purpose_weed = PurposeWeed.query.filter_by(purpose_name="study_purpose_weed_id").first() if data["study_purpose_weed_id"] else data["study_purpose_weed_id"]
-    database_source = Institute.query.filter_by(institution_name=data["study_database_source"]).first()
+    database_source = Institute.query.filter_by(institution_name=data["study_database_source_id"]).first()
 
     
     pop = Population.query.filter_by(population_name=data["population_name"], publication_id=publication.id).first()
@@ -490,6 +492,7 @@ def submit_new(data):
         'invasive_status_elsewhere_id' : invasive_status_elsewhere.id if invasive_status_elsewhere else None,
         'ecoregion' : ecoregion, 
         'continent' : continent,
+        'database' : database,
         'within_site_replication' : data['population_within_site_replication'],
                     
         'study_duration' : data["study_duration"],
@@ -772,7 +775,8 @@ def convert_all_headers_new(dict):
     new_dict["matrix_difficulty"] = dict["matrix_difficulty"]
     new_dict["matrix_complete"] = dict["matrix_complete"]
     new_dict["matrix_seasonal"] = dict["matrix_seasonal"]
-    new_dict["database_master_version"] = dict["database_master_version"]
+    #new_dict["database_master_version"] = dict["database_master_version"]
+    new_dict["population_database_id"] = dict["database_master_version"]
     #new_dict["database_date_created"] = dict["database_date_created"]
     #new_dict["database_number_species_accepted"] = dict["database_number_species_accepted"]
     #new_dict["database_number_studies"] = dict["database_number_studies"]
@@ -792,7 +796,7 @@ def convert_all_headers_new(dict):
     new_dict['population_within_site_replication'] = dict["within_site_replication"]
     new_dict['publication_missing_data'] = dict["publication_missing_data"]
     new_dict['publication_student'] = dict["publication_student"]
-    new_dict['study_database_source'] = dict["study_database_source"]
+    new_dict['study_database_source_id'] = dict["study_database_source"]
     new_dict['publication_study_notes'] = dict["publication_study_notes"]
     
     for key, value in new_dict.iteritems():

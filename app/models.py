@@ -889,11 +889,10 @@ class SourceType(db.Model):
     #query_class = VersionQuery
 class Database(db.Model):
     __tablename__ = 'databases'
-    id = db.Column(db.Integer, primary_key=True, index=True)
-    population_id = db.Column(db.Integer, db.ForeignKey('populations.id',ondelete='CASCADE'))
-    database_name = db.Column(db.String(64), index=True)
+    id = db.Column(db.Integer, primary_key=True)
+    database_name = db.Column(db.String(64))
     database_description = db.Column(db.Text())
-    database_master_version = db.Column(db.String(64))
+    database_master_version = db.Column(db.String(64), index=True)
     database_date_created = db.Column(db.Date())
     database_number_species_accepted = db.Column(db.Integer())
     database_number_matrices = db.Column(db.Integer())
@@ -917,7 +916,7 @@ class Database(db.Model):
             nodes = json_data["Database"]
 
             for node in nodes:
-                i = Database.query.filter_by(database_name=node['database_name']).first()
+                i = Database.query.filter_by(database_master_version=node['database_master_version']).first()
                 if i is None:
                     i = Database()
 
@@ -938,7 +937,6 @@ class Database(db.Model):
             'request_url' : url_for('api.get_one_entry', id=self.id, model='databases', key=key,
                                       _external=False),
             'data' : {
-                'population' : self.population.to_json_simple(key),
                 'database_name' : self.database_name,
                 'database_description' : self.database_description,
                 'database_master_version' : self.database_master_version,
@@ -946,7 +944,7 @@ class Database(db.Model):
                 'database_number_species_accepted' : self.database_number_species_accepted,
                 'database_number_matrices' : self.database_number_matrices,
                 'database_agreement' : self.database_agreement,
-                'databases' : [database.to_json(key) for database in self.databases]
+                'populations' : [population.to_json(key) for population in self.populations]
 #                'versions' : [version.to_json(key) for version in self.versions]
             }
         }
@@ -962,8 +960,7 @@ class Database(db.Model):
                 'database_master_version' : self.database_master_version,
                 'database_date_created' : self.database_date_created,
                 'database_number_species_accepted' : self.database_number_species_accepted,
-                'database_number_matrices' : self.database_number_matrices,
-                'database_agreement' : self.database_agreement
+                'database_number_matrices' : self.database_number_matrices
             }
         }
         return database
@@ -2759,6 +2756,8 @@ class Population(db.Model):
     species_author = db.Column(db.String(64))
     population_name = db.Column(db.Text())
     ecoregion_id = db.Column(db.Integer, db.ForeignKey('ecoregions.id',ondelete='CASCADE'))
+    ###Danny adding database stuff
+    database_id = db.Column(db.Integer, db.ForeignKey('databases.id',ondelete='CASCADE'))
     invasive_status_study_id = db.Column(db.Integer, db.ForeignKey('invasive_status_studies.id',ondelete='CASCADE')) #
     invasive_status_elsewhere_id = db.Column(db.Integer, db.ForeignKey('invasive_status_elsewhere.id',ondelete='CASCADE')) #
     country = db.Column(db.Text())
@@ -2843,6 +2842,7 @@ class Population(db.Model):
                 'population_name' : self.population_name,
                 'ecoregion' : self.ecoregion.to_json_simple(key) if self.ecoregion else None,
                 'country' : self.country,
+                'database' : self.database.to_json_simple(key) if self.database else None,
                 'population_nautical_miles' : self.population_nautical_miles,
                 'continent' : self.continent.to_json_simple(key) if self.continent else None,
                 'longitude' : self.longitude,
@@ -2900,6 +2900,7 @@ class Population(db.Model):
     def migrate():
         Ecoregion.migrate()
         Continent.migrate()
+        Database.migrate()
         InvasiveStatusStudy.migrate()
         InvasiveStatusElsewhere.migrate()
         PurposeEndangered.migrate()
@@ -3653,7 +3654,8 @@ class Version(db.Model):
 
     @staticmethod
     def migrate():
-        Database.migrate()
+        ###previously Database.migrate()
+        Version.migrate()
 
     def __repr__(self):
         return '<Version {} {} {}>'.format(str(self.id), self.statuses.status_name, self.checked)
