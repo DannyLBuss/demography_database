@@ -1089,7 +1089,7 @@ class PublicationsProtocol (db.Model):
     protocol_number = db.Column(db.Integer, index=True)
     name = db.Column(db.String(200))
     description = db.Column(db.Text())
-    
+
     publications = db.relationship("Publication", backref = "publications_protocol")
 
     @staticmethod
@@ -1106,7 +1106,7 @@ class PublicationsProtocol (db.Model):
 
                 i.protocol_number = node['protocol_number']
                 i.name = node['name']
-                i.desceription = node['description']
+                i.description = node['description']
 
                 db.session.add(i)
                 db.session.commit()
