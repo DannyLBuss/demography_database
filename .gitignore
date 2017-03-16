@@ -52,6 +52,9 @@ local/
 .Python
 include/
 
+# DS Store - silly mac R stuff
+.DS_Store
+
 *.wsgi
 
 ext/schema.jar
