@@ -41,6 +41,13 @@ nosetests.xml
 # SQLite databases
 *.sqlite
 
+#R History
+.Rhistory
+.Rapp.history
+
+# R data sessions
+.Rdata
+
 #information about google client log in
 app/google_auth_class.py
 

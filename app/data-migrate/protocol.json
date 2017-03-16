@@ -90,27 +90,315 @@
             "field_name": "Corresponding Author Contacted",
             "name_in_csv": "date_author_contacted",
             "database_model":"publication",
-            "field_description": "Record the date when the publication author was first contacted asking for information. Authors should always be contacted from the compadre@gmail.com email address rather than a personal email address. For more information on contacting authors, please see the contact author meta-table.",
+            "field_description": "Record the date when the publication author was first contacted asking for information. Authors should always be contacted from the compadrecontact@gmail.com email address rather than a personal email address. For more information on contacting authors, please see the contact author meta-table.",
             "field_short_description": "The date when the publication author was first contacted asking for additional information."
         }, {
             "field_name": "Corresponding Author Contacted Again",
             "name_in_csv": "date_author_contacted_again",
             "database_model":"publication",
-            "field_description": " ",
-            "field_short_description":
+            "field_description": "Record the date when the author was most recently contacted since the first date of contact (see Corresponding Author Contacted)",
+            "field_short_description": "most recent date of the corresponding author was contacted (if different from first date of contact"
         }, {
             "field_name": "Corresponding Extra Content Email",
             "name_in_csv": "extra_content_email ",
             "database_model":"publication",
             "field_description": "If the author has been asked for something other than the standard missing information (see contact author meta-table, a short note should be left in this field. For example, is the species clonal?.",
             "field_short_description": "Author contacted for additional information not in contact author meta-table"
-        }, {
+        },{
             "field_name": "Date Digitized",
             "name_in_csv": "publication_date_digitization",
             "database_model":"publication",
             "field_description": "This column records the date when the COMPADRINO started working on this publication. Specifically when the first matrix population model of that study was digitised. Dates should be recorded in the following date format: yyyy-mm-dd, e.g. 2015-12-25 for 25th Dec 2015.",
             "field_short_description": "This column records the date when the COMPADRINO started working on this publication"
-        }],
+        }{
+            "field_name": "Ecoregion",
+            "name_in_csv": "population_ecoregion",
+            "database_model":"population",
+            "field_description": "Description of the Ecoregion for the study, using the categories described in Figure 1 of Olson et al. (2001). For more information, please visit the github wiki at",
+            "field_short_description" : "Description of the Ecoregion for the study"
+        },{
+            "field_name": "Publication Protocol",
+            "name_in_csv": "publications_protocol",
+            "database_model":"publication",
+            "field_description":"For Compadrino usage during digitization. A publication will be assigned a code depending on what stage of digitization it is currnetly at. For example, if a publication and all of it's meta-data is complete and has been released it will be assigned a 7. For more information, please see the publications protocol meta-table.",
+            "field_short_description": "Compadrino digitization method. Please see publication protocol metatable and assign appropriately"
+        },{
+            "field_name": "Altitude",
+            "name_in_csv": "population_altitude",
+            "database_model":"population",
+            "field_description": "Altitude of studied population in m = Height above sea level of specific population in meters e.g. 208m. Height is either given in the paper, by author communication, or we look it up with Google Maps or Google Earth. If you enter the coordinates into Google Maps you’ll see the altitude at the bottom right corner of the window. If you scroll around in Google maps with your mouse the altitude will change, so pay attention that you read the altitude directly after entering the coordinates without scrolling around!",
+            "field_short_description": "Altitude of studied population in m = Height above sea level of specific population in meters e.g. 208m."
+        },{
+            "field_name": "Continent",
+            "name_in_csv": "population_continent",
+            "database_model":"population",
+            "field_description": "Continent where study took place. Africa, Asia, Europe, N American, S America, Antarctica, Oceania (see https://en.wikipedia.org/wiki/List_of_Oceanian_countries_by_population)",
+            "field_short_description": "Continent where study took place"
+        },{
+            "field_name": "Country",
+            "name_in_csv": "population_country",
+            "database_model":"population",
+            "field_description": "The ISO 3 Country Code(s) of where the study took place. Please see, https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3. Where studies are conducted in seas or oceans this becomes a bit more challenging, in this instance we put the closest country to the point of interest and then complete the field population_nautical_miles, for example, FRA, NODC-22 = 22 nautical miles away from France",
+            "field_short_description": "The ISO 3 Country Code(s) of where the study took place"
+        },{
+            "field_name": "Invasive Status Elsewhere",
+            "name_in_csv": "population_invasive_status_elsewhere",
+            "database_model":"population",
+            "field_description": "Global invasive status collected by Kim Jelbert and Danny Buss at the University of Exeter. Protocol still TBC. For more information, please see population_invasive_status_elsewhere metatable",
+            "field_short_description": "Invasive status of the species globally"
+        },{
+            "field_name": "Invasive Status Study",
+            "name_in_csv": "population_invasive_status_study",
+            "database_model":"population",
+            "field_description": "Local population invasive status collected by Kim Jelbert and Danny Buss at the University of Exeter. Protocol still TBC. For more information, please see population_invasive_status_study metatable",
+            "field_short_description": "Invasive status of the local population studied"
+        },{
+            "field_name": "Latitude",
+            "name_in_csv": "population_latitude",
+            "database_model":"population",
+            "field_description": "Decimal Degree Values of Latititude. Always check geolocation with Google Earth! If the geolocation from Google Earth does not fit the study site description ask author for further information and use one of the comments for the Observation. The following link is useful for converting between different ways of presenting lat/long information: http://www.earthpoint.us/Convert.aspx",
+            "field_short_description": "Geolocation, Decimal Degree Values of Latititude"
+        },{
+            "field_name": "LatNS",
+            "name_in_csv": "lat_ns",
+            "database_model":"population",
+            "field_description": "Cardinal direction, N - North, S - South. Note: Cardinal direction might be given with a “+” or “-“ whereat “+” means North and “-“ means South.",
+            "field_short_description": "Geolocation, Latitudinal Cardinal Direction"
+        },{
+            "field_name": "LatDeg",
+            "name_in_csv": "lat_deg",
+            "database_model":"population",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix. If no LatSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LatMin / LatSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_short_description": "Geolocation, DEGREES, minutes and seconds"
+        },{
+            "field_name": "LatMin",
+            "name_in_csv": "lat_min",
+            "database_model":"population",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LatDeg, LatMin and LatSec. If no LatSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LatMin / LatSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_short_description": "Geolocation, degrees, MINUTES and seconds"
+        },{
+            "field_name": "LatSec",
+            "name_in_csv": "lat_sec",
+            "database_model":"population",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix. If no LatSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LatMin / LatSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_short_description": "Geolocation, degrees, minutes and SECONDS"
+        },{
+            "field_name": "Longitude",
+            "name_in_csv": "population_longitude",
+            "database_model":"population",
+            "field_description": "Decimal Degree Values of Longitude. Always check geolocation with Google Earth! If the geolocation from Google Earth does not fit the study site description ask author for further information and use one of the comments for the Observation. The following link is useful for converting between different ways of presenting lat/long information: http://www.earthpoint.us/Convert.aspx",
+            "field_short_description": "Gelocation, Decimal Degree Values of Longitude"
+        },{
+            "field_name": "LonWE",
+            "name_in_csv": "lon_ew",
+            "database_model":"population",
+            "field_description": "Cardinal direction, W - West, E - East. Note: Cardinal direction might be given with a “+” or “-“ whereat “+” means East and “-“ means West. ",
+            "field_short_description": "Geolocation, Longitudinal Cardinal Direction"
+        },{
+            "field_name": "LonDeg",
+            "name_in_csv": "lon_deg",
+            "database_model":"population",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LonDeg, LonMin, LonSec. If no LonSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LonMin / LonSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_short_description": "Geolocation, DEGREES, minutes and seconds"
+        },{
+            "field_name": "LonMin",
+            "name_in_csv": "lon_min",
+            "database_model":"population",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LonDeg, LonMin, LonSec. If no LonSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LonMin / LonSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_short_description": "Geolocation, degrees, MINUTES and seconds"
+        },{
+            "field_name": "LonSec",
+            "name_in_csv": "lon_sec",
+            "database_model":"population",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LonDeg, LonMin, LonSec. If no LonSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LonMin / LonSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_short_description": "Geolocation, degrees, minutes and SECONDS"
+        },{
+            "field_name": "Population Name",
+            "name_in_csv": "population_name",
+            "database_model":"population",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "population_pop_size",
+            "name_in_csv": "",
+            "database_model":"population",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "study_database_source",
+            "database_model":"population",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "study_duration",
+            "database_model":"population",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "study_end",
+            "database_model":"population",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "study_number_populations",
+            "database_model":"population",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "study_purpose_endangered",
+            "database_model":"population",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "study_purpose_weed",
+            "database_model":"population",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "study_start",
+            "database_model":"population",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "population_nautical_miles",
+            "database_model":"population",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"population",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },],
 
         "Common_values": [{
                 "common_value_name": "Not available",
