@@ -1,0 +1,33 @@
+{
+	"CompadrinoProtocol": {
+		"PublicationsProtocol": [{
+			"protocol_number": "1",
+			"name": "Publication entered",
+			"description": "Only the publication information has been added"
+		}, {
+			"protocol_number": "2",
+			"name": "Publication and species (+ traits and taxonomy) entered",
+			"description": "You have entered all of the publication and species information including taxonomy and trait data where possible"
+		}, {
+			"protocol_number": "3",
+			"name": "Publication, species (+ traits and taxonomy) and populations entered",
+			"description": "You have now entered all the publication, species, taxonomy, traits and population data"
+		}, {
+			"protocol_number": "4",
+			"name": "Publications, species (+taxonomy and traits), populations and matrices entered",
+			"description": "You have now entered all the publication, species, taxonomy, traits, population data and completed all matrices"
+		}, {
+			"protocol_number": "5",
+			"name": "All information and metadata entered, but waiting to be checked",
+			"description": "Publication, species, traits, taxonomy, population, matrices all completed and now needs to be checked"
+		}, {
+			"protocol_number": "6",
+			"name": "Completed, checked and waiting for release",
+			"description": "All information and metadata entered and checked, waiting for release in the next version of the database"
+		}, {
+			"protocol_number": "7",
+			"name": "Released",
+			"description": "This publication and all it's metadata have been released within the database, to check released publications for missing metadata please look for amber flags"
+		}]
+	}
+}

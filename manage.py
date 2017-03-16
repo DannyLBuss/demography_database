@@ -24,7 +24,7 @@ from app.models import User, Role, Permission, \
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Version, Institute, EndSeason, ChangeLogger
+    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Version, Institute, EndSeason, ChangeLogger, PublicationsProtocol
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -50,7 +50,7 @@ def make_shell_context():
                 StageType=StageType, StageTypeClass=StageTypeClass, TransitionType=TransitionType, MatrixValue=MatrixValue, \
                 MatrixComposition=MatrixComposition, StartSeason=StartSeason, StudiedSex=StudiedSex, Captivity=Captivity, MatrixStage=MatrixStage,\
                 Matrix=Matrix, Interval=Interval, Fixed=Fixed, Small=Small, CensusTiming=CensusTiming, Status=Status, InvasiveStatusStudy=InvasiveStatusStudy, InvasiveStatusElsewhere=InvasiveStatusElsewhere, \
-                PurposeEndangered=PurposeEndangered, PurposeWeed=PurposeWeed, Version=Version, Institute=Institute, EndSeason=EndSeason, ChangeLogger = ChangeLogger)
+                PurposeEndangered=PurposeEndangered, PurposeWeed=PurposeWeed, Version=Version, Institute=Institute, EndSeason=EndSeason, ChangeLogger = ChangeLogger, PublicationsProtocol = PublicationsProtocol)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
@@ -220,7 +220,10 @@ def submit_new(data):
     # When checking for null data later, these need to be excluded, as they will always have a value
     ignore_keys = ['version_ok', 'version_latest', 'version_original']
 
-    ''' Publication '''    
+    ''' Publication '''   
+    
+    publications_protocol = PublicationsProtocol.query.filter_by(protocol_number=data["publications_protocol_id"]).first()
+    
     if data["publication_DOI_ISBN"] == None:
         publication = Publication.query.filter_by(authors=data["publication_authors"]).filter_by(year=data["publication_year"]).filter_by(journal_name=data["publication_journal_name"]).filter_by(additional_source_string=data["publication_additional_source_string"]).filter_by(study_notes= data["publication_study_notes"]).first()
     else: 
@@ -248,6 +251,7 @@ def submit_new(data):
 
         pub_dict = {'authors': data["publication_authors"],
         'year' : data["publication_year"],
+        'publications_protocol' : publications_protocol, 
         'DOI_ISBN' : data["publication_DOI_ISBN"],
         'additional_source_string' : data["publication_additional_source_string"],
         'journal_name' : data["publication_journal_name"],
@@ -798,6 +802,7 @@ def convert_all_headers_new(dict):
     new_dict['publication_student'] = dict["publication_student"]
     new_dict['study_database_source_id'] = dict["study_database_source"]
     new_dict['publication_study_notes'] = dict["publication_study_notes"]
+    new_dict['publications_protocol_id'] = dict["publications_protocol"]
     
     for key, value in new_dict.iteritems():
         if value == "NA":
@@ -824,7 +829,7 @@ def migrate_meta():
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute, Version
+    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute, Version, PublicationsProtocol
 
     print "Migrating Meta Tables..."
     Role.insert_roles()
@@ -843,6 +848,7 @@ def migrate_meta():
     User.migrate()
     Database.migrate()
     Status.migrate()
+    PublicationsProtocol.migrate()
    
     return
 

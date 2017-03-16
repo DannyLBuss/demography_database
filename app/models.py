@@ -1083,6 +1083,61 @@ publication_missing_data = db.Table('publication_missing_data', db.Model.metadat
     db.Column('publication_id', db.Integer, db.ForeignKey('publications.id', ondelete='CASCADE'))
 )
 
+class PublicationsProtocol (db.Model):
+    __tablename__ = 'publications_protocol'
+    id = db.Column(db.Integer, primary_key=True)
+    protocol_number = db.Column(db.Integer, index=True)
+    name = db.Column(db.String(200))
+    description = db.Column(db.Text())
+    
+    publications = db.relationship("Publication", backref = "publications_protocol")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/compadrino_protocol.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["CompadrinoProtocol"]
+            nodes = json_data["PublicationsProtocol"]
+
+            for node in nodes:
+                i = PublicationsProtocol.query.filter_by(protocol_number=node['protocol_number']).first()
+                if i is None:
+                    i = PublicationsProtocol()
+
+                i.protocol_number = node['protocol_number']
+                i.name = node['name']
+                i.desceription = node['description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def to_json(self,key):
+        protocol_number = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model = 'protocol_number', key=key,
+                                       _external=False),
+            'data' : {
+                'protocol_number' : self.protocol_number,
+                'name' : self.name,
+                'description' : self.description,
+                'publications' : [publication.to_json_simple(key) for publication in self.publications]
+            }
+        }
+        return publications_protocol
+
+    def to_json_simple(self, key):
+        protocol_number = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='protocol_number', key=key,
+                                      _external=False),
+            'data' : {
+                'protocol_number' : self.protocol_number,
+                'description' : self.description
+            }
+        }
+        return publications_protocol
+
+    def __repr__(self):
+        return self.protocol_number
+
 ''' End Meta Tables for Publication/Additional Source '''
 
 ''' Meta Tables for Author Contact '''
@@ -1179,7 +1234,7 @@ class PurposeEndangered(db.Model):
             'data' : {
                 'purpose_name' : self.purpose_name,
                 'purpose_description' : self.purpose_description,
-                'studies' : [studies.to_json_simple(key) for studies in self.studies]
+                'populations' : [population.to_json_simple(key) for population in self.populations]
             }
         }
         return purpose_endangered
@@ -1234,7 +1289,7 @@ class PurposeWeed(db.Model):
             'data' : {
                 'purpose_name' : self.purpose_name,
                 'purpose_description' : self.purpose_description,
-                'studies' : [studies.to_json_simple(key) for studies in self.studies]
+                'populations' : [population.to_json_simple(key) for population in self.populations]
             }
         }
         return purpose_weed
@@ -1252,8 +1307,6 @@ class PurposeWeed(db.Model):
 
     def __repr__(self):
         return self.purpose_name
-
-''' End Meta Tables for Population '''
 
 ''' Meta Tables for Population '''
 class Ecoregion(db.Model):
@@ -2447,6 +2500,7 @@ class Publication(db.Model):
     colour = db.Column(db.String(7))
     student = db.Column(db.String(200))
     study_notes = db.Column(db.Text())
+    publications_protocol_id = db.Column(db.Integer, db.ForeignKey('publications_protocol.id',ondelete='CASCADE'))
 
     # Establishing one to many relationships between tables
     author_contacts = db.relationship("AuthorContact", backref="publication", passive_deletes=True)
@@ -2463,6 +2517,7 @@ class Publication(db.Model):
         SourceType.migrate()
         Purpose.migrate()
         MissingData.migrate()
+        PublicationsProtocol.migrate()
 
     def to_json(self, key):
         publication = {
@@ -2492,10 +2547,11 @@ class Publication(db.Model):
                 'additional_source_string' : self.additional_source_string,
                 'author_contacts' : self.author_contacts.to_json_simple(key) if self.author_contacts else None,
                 'additional_sources' : self.additional_sources.to_json_simple(key) if self.additional_sources else None,
-                'populations' : [population.to_json_simple(key) for population in self.populations],
+                'populations' : [populations.to_json_simple(key) for populations in self.populations],
                 'stages' : [stages.to_json_simple(key) for stages in self.stages] if self.stages else None,
                 'taxonomies' : [taxonomies.to_json_simple(key) for taxonomies in self.taxonomies],
-                'studies' : [studies.to_json_simple(key) for studies in self.studies] if self.studies else None,
+                'publications_protocol' : self.publications_protocol.to_json_simple(key) if self.publications_protocol else None,
+#                'studies' : [studies.to_json_simple(key) for studies in self.studies] if self.studies else None,
                 'versions' : [versions.to_json_simple(key) for versions in self.versions] if self.versions else None
             }
         }
@@ -2546,10 +2602,10 @@ class Publication(db.Model):
             db.session.commit()
 
 
-class Study(db.Model):
+#class Study(db.Model):
 #    #query_class = VersionQuery
-    __tablename__ = 'studies'
-    id = db.Column(db.Integer, primary_key=True)
+#    __tablename__ = 'studies'
+#    id = db.Column(db.Integer, primary_key=True)
 #    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
 #    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
 #    study_duration = db.Column(db.Integer(), index=True)
