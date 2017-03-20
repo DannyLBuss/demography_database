@@ -216,185 +216,491 @@
             "field_name": "Population Name",
             "name_in_csv": "population_name",
             "database_model":"population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "The name of population where the matrix was recorded, usually as given by the publication author. For example “Brazeau Creek, Florida”. When the author provides no name, the closest geographic location is assigned as name. If there are multiple populations in the study and their names are not pertinent/available, sequential names in alphabetical order are assigned for each population in the study, separated by (e.g. A; B; C; etc).",
+            "field_short_description": "The name of population where the matrix was recorded"
         },{
-            "field_name": "population_pop_size",
-            "name_in_csv": "",
+            "field_name": "Population Size",
+            "name_in_csv": "population_pop_size",
             "database_model":"population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "The total number/abundance of individuals within the population in the stated year. Not always available.",
+            "field_short_description": "Total number of individuals"
         },{
-            "field_name": "",
+            "field_name": "Institute Source",
             "name_in_csv": "study_database_source",
             "database_model":"population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "The institute that collated the data together in a mini database before COMPADRE and COMADRE were developed",
+            "field_short_description": "Previous institute data collation efforts"
         },{
-            "field_name": "",
+            "field_name": "Study Duration",
             "name_in_csv": "study_duration",
             "database_model":"population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Records the number of years of observation, e.g. 5. This is calculated as: “StudyEnd” year - “StudyStart” year + 1. The calculation thus overlooks any missing years in the middle of the study period. Note that Excel should calculate the StudyDuration automatically since the formula is already set as default for that column. If it is not calculated by Excel please enter formula (not a calculated number) in case we get better information later.",
+            "field_short_description": "The number of years of observation per population"
         },{
-            "field_name": "",
+            "field_name": "Study End",
             "name_in_csv": "study_end",
             "database_model":"population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Records the last year that the population was studied, e.g. 2012",
+            "field_short_description": "The last year that the population was studied"
         },{
-            "field_name": "",
+            "field_name": "Number of populations",
             "name_in_csv": "study_number_populations",
             "database_model":"population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "The number of populations of the study species within a single publication. This could be any integer value and refers to the number of populations as defined by the author. Within-site replication of permanent plots are not considered to be different populations.",
+            "field_short_description": "he number of populations of the study species per publication"
         },{
-            "field_name": "",
+            "field_name": "Study purpose endangered",
             "name_in_csv": "study_purpose_endangered",
             "database_model":"population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Whether the aims of the individual study was to done to explore the demogaphy of an endangered species",
+            "field_short_description": "The study focoused on th demography of an endangered species"
         },{
-            "field_name": "",
+            "field_name": "Study purpose weed",
             "name_in_csv": "study_purpose_weed",
             "database_model":"population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Whether the aims of the individual study was to done to explore the demogaphy of a pest species",
+            "field_short_description": "The study focoused on th demography of a pest species"
         },{
-            "field_name": "",
+            "field_name": "Study Start",
             "name_in_csv": "study_start",
             "database_model":"population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Records the first year that the population was studied, e.g. 2012",
+            "field_short_description": "The first year that the population was studied"
         },{
-            "field_name": "",
+            "field_name": "Nautical Miles",
             "name_in_csv": "population_nautical_miles",
             "database_model":"population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "For oceanic studies, this is the distance in nautical miles from the closest land mass. If the population was studied both in French and Spanish waters 22 miles from land the country code field would be FRA; SPA and the nautical miles field would be NODC-22. If it was only studied in international waters (normally defined as 12 nautical miles (for explanation see here) then you would record it as NODC-22",
+            "field_short_description": "The distance in nautical miles from the closest land mass"
         },{
-            "field_name": "",
-            "name_in_csv": "",
+            "field_name": "Version Release",
+            "name_in_csv": "database_master_version",
             "database_model":"population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "The Version number of the database where the data is/will be released. e.g. 3.0.0, 3.1.0. Where the data are not yet to be released (for example, because the data are incomplete) an "X" is used in place of a version number. For all future digitization, an "X" should be placed in the version record. These will be replaced with an appropriate version number by Owen or Rob only at a later date when a final check is done to release more data periodically.",
+            "field_short_description": "Version number of the database when this data was released"
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "fixed_census_timing",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "fixed_independence_flag",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "fixed_seed_stage_error",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "fixed_small",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "Growth Form Raunkiaer",
+            "name_in_csv": "trait_growth_form_raunkiaer",
+            "database_model":"Trait",
+            "field_description": "Plant classification according to Raunkiaer (classified after the position of the overwintering buds). Enter NA for animals etc. For more information please see the relevant metatable and the github https://github.com/Spandex-at-Exeter/demography_database/wiki/Growth-Form-Raunkiaer",
+            "field_short_description": "Plant classification according to Raunkiaer"
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_a_string",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_c_string",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_u_string",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_f_string",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_difficulty",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_captivity",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_checked_count",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_class_author",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_class_number",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_class_organized",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_complete",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_composition",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_criteria_age",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_criteria_ontogeny",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_criteria_size",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_dimension",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
-            "name_in_csv": "",
+            "name_in_csv": "matrix_end_month",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_start_month",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_end_season",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_start_season",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_end_year",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_start_year",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "Matrix Fecundity",
+            "name_in_csv": "matrix_fec",
+            "database_model":"Matrix",
+            "field_description": "This records whether fecundity was measured at all for this matrix model (True/False). True - fecundity was measured for the matrix. False - fecundity was not measured for the matrix. The rationale for this is that a fecundity (in the F matrix) may be recorded as 0 either because it was not measured, or because reproduction was estimated to be zero. As a general rule, if any values for fecundity (e.g. in the F matrix) are non-zero, then MatrixFec should be recorded as 'Yes'. If all values are zero, then you should check the paper carefully to check whther this is because no fecundity was detected, or whether no attempt was made to measure fecundity.",
+            "field_short_description": "Was fecundity measured and used to calculate matrix values (True/False)?"
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_independence_origin",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_independent",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_non_independence",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_non_independence_author",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_observations",
+            "database_model":"",
+            "field_description": "Any useful additional information about the population matrix model that is not provided elsewhere but may nonetheless be important (e.g. plant canopy, burning intervals, etc.) including additional information on the geolocations or matrix treatments. Some standardised sentences: The GPS coordinates were approximated to the closest geographic location described in the reference. (see Geolocation). GPS co-ordinates cited exactly as reported in original paper. These do not match written study site description. (see Geolocation). Geolocation / Altitude from descriptor: (if no matrices are enters yet but a geolocation information are available). Matrix is calculated with stochastic model. X years since last fire. Calculated with demographic data from Author JournalName YearPublished. Data is from a greenhouse experiment. MatrixClassAuthor is not clarified.",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_periodicity",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_seasonal",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_split",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_studied_sex",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_survival_issue",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_vectors_includes_na",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_vectors_proportional",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_vector_class_names",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "species_accepted",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "species_author",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "species_common",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "species_gbif_taxon_key",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "taxonomy_class",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "taxonomy_col_check_date",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "taxonomy_col_check_ok",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "taxonomy_family",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "taxonomy_genus",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "taxonomy_genus_accepted",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "taxonomy_genus_author",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "taxonomy_kingdom",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "taxonomy_order",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "taxonomy_phylum",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "trait_angio_gymno",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "trait_dicot_monoc",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "trait_organism_type",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "trait_spand_ex_growth_type",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "matrix_treatment_type",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "within_site_replication",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "species_iucn_taxonid",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "species_iucn_population_assessed",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "species_iucn_status",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "image_path",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "image_path2",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "species_gisd_status",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "clonality",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "clonality_source",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "seedbank",
+            "database_model":"",
+            "field_description": "",
+            "field_short_description": ""
+        },{
+            "field_name": "",
+            "name_in_csv": "seedbank_source",
             "database_model":"",
             "field_description": "",
             "field_short_description": ""
