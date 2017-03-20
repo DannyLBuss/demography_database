@@ -273,35 +273,35 @@
             "field_description": "For oceanic studies, this is the distance in nautical miles from the closest land mass. If the population was studied both in French and Spanish waters 22 miles from land the country code field would be FRA; SPA and the nautical miles field would be NODC-22. If it was only studied in international waters (normally defined as 12 nautical miles (for explanation see here) then you would record it as NODC-22",
             "field_short_description": "The distance in nautical miles from the closest land mass"
         },{
-            "field_name": "Version Release",
+            "field_name": "DatabaseVersionRelease",
             "name_in_csv": "database_master_version",
             "database_model":"population",
             "field_description": "The Version number of the database where the data is/will be released. e.g. 3.0.0, 3.1.0. Where the data are not yet to be released (for example, because the data are incomplete) an "X" is used in place of a version number. For all future digitization, an "X" should be placed in the version record. These will be replaced with an appropriate version number by Owen or Rob only at a later date when a final check is done to release more data periodically.",
             "field_short_description": "Version number of the database when this data was released"
         },{
-            "field_name": "",
+            "field_name": "CensusTiming",
             "name_in_csv": "fixed_census_timing",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Fixed",
+            "field_description": "When the population was studied in relation to flowering timing of the species. Pre - before flowering census, post - after flowering census, flow - censused continually throughout the year ",
+            "field_short_description": "When the population was studied in relation to flowering timing of the species"
         },{
-            "field_name": "",
+            "field_name": "Matrix Independence Flag",
             "name_in_csv": "fixed_independence_flag",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Fixed",
+            "field_description": "A true or flase field highlighting whether the matrix is independent and if it is not independent that it is ok to use without having pseudoreplication issues within your study set. This is a field that hasn't yet been complete by the University of Exeter",
+            "field_short_description": "True - can use without pseudoreplication in comparative analyses, False - cannot use without pseudoreplication in comparative analyses"
         },{
-            "field_name": "",
+            "field_name": "SeedStage Error",
             "name_in_csv": "fixed_seed_stage_error",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Fixed",
+            "field_description": "During matrix construction, the author has commited the seeds error. For more information, please visit our educational page: or see Caswell etc.",
+            "field_short_description": "During matrix construction, the author has commited the seeds error"
         },{
-            "field_name": "",
+            "field_name": "Small",
             "name_in_csv": "fixed_small",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Fixed",
+            "field_description": "The method the author used to construct fecundities. None - counted seeds in the field, Focused - counted the number of seeds on a few specific adult plants, flowers or fruits and multiplied this by the population size, Lab - Used laboratory or greenhouse experiments to estimate fecundity rates",
+            "field_short_description": "The method the author used to construct fecundities"
         },{
             "field_name": "Growth Form Raunkiaer",
             "name_in_csv": "trait_growth_form_raunkiaer",
@@ -309,137 +309,137 @@
             "field_description": "Plant classification according to Raunkiaer (classified after the position of the overwintering buds). Enter NA for animals etc. For more information please see the relevant metatable and the github https://github.com/Spandex-at-Exeter/demography_database/wiki/Growth-Form-Raunkiaer",
             "field_short_description": "Plant classification according to Raunkiaer"
         },{
-            "field_name": "",
+            "field_name": "matrix_a_string",
             "name_in_csv": "matrix_a_string",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "The population matrix model containing all vital rates. The A matrix - Transition probabilities are constrained between 0 and 1. Reproductive values are always positive but have no upper bound.",
+            "field_short_description": "The population matrix model describing total population dynamics and contains all vital rates"
         },{
-            "field_name": "",
+            "field_name": "matrix_c_string",
             "name_in_csv": "matrix_c_string",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "The C matrix - The population sub-matrix model C (a sub-matrix of A), which describes the clonal-reproduction dynamics of a population under the conditions described above. A range of numeric values are possible, but these are constrained to be positive. These include only estimates of clonal reproduction.",
+            "field_short_description": "The matrix which only describes the clonal-reproduction dynamics of a population"
         },{
-            "field_name": "",
+            "field_name": "matrix_u_string",
             "name_in_csv": "matrix_u_string",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "The U matrix - The population sub-matrix model U (a sub-matrix of A), describes the survival-dependent dynamics of a population under the conditions described above. A range of numeric values possible, but are constrained to be between 0 and 1. These include only survival-dependent vital rates (no sexual or clonal reproduction).",
+            "field_short_description": "The matrix which only describes the survival-dependent dynamics of a population"
         },{
-            "field_name": "",
+            "field_name": "matrix_f_string",
             "name_in_csv": "matrix_f_string",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "The F matrix - The population sub-matrix model F (a sub-matrix of A), which describes the sexual-reproduction dynamics of a population under the conditions described above. A range of numeric values possible, but are constrained to be positive. These include only estimates of sexual reproduction (no clonal reproduction).",
+            "field_short_description": "The matrix which only describes the sexual-reproduction dynamics of a population"
         },{
-            "field_name": "",
+            "field_name": "StudyDifficulty",
             "name_in_csv": "matrix_difficulty",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "This indicates how difficult the MPM information was to extract from the paper. It is recorded on a 3 point scale (values of 1, 2, 3), with 1 being easy to 3 being hard. For more information, please see the github wiki: https://github.com/Spandex-at-Exeter/demography_database/wiki/Matrix-Difficulty",
+            "field_short_description": "This indicates how difficult the MPM information was to extract from the paper (1 - easy, 2-medium, 3- hard)"
         },{
-            "field_name": "",
+            "field_name": "MatrixCaptivity",
             "name_in_csv": "matrix_captivity",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "Indicates whether the study species was studied in the wild (W) or under controlled conditions (C) for most of its lifecycle. For more information, please see matrix_captivity metatable",
+            "field_short_description": "Indicates whether the study species was studied in the wild (W) or under controlled conditions (C)"
         },{
-            "field_name": "",
+            "field_name": "StudyChecked",
             "name_in_csv": "matrix_checked_count",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "This variable records how much the MPM has been checked by us. It is a numeric variable that gets incremented by +1 each time the data in a set of matrices for a particular publication are checked. The first time the data are entered, StudyChecked is 0 (it has been entered not checked). Then, if for whatever reason we revisit the paper/data to check details, we add 1 to the number. e.g. an study that has been entered, then checked twice should have a value of 2.",
+            "field_short_description": "It is a numeric variable that gets incremented by +1 each time the data in a set of matrices for a particular publication are checked"
         },{
-            "field_name": "",
+            "field_name": "MatrixClassAuthor",
             "name_in_csv": "matrix_class_author",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "The stage description as indicated in the source by the publication author of the matrix population model. When possible, we add units (e.g. cm, m, cm^2^). Some information on how to correctly write things in that column: First letter must be a capital letter (e.g. Adult: 100-150 cm DBH). If the Author uses abbreviations first write them down, followed by a “:” and the explanation of that abbreviations. Always add units (when possible) (e.g. 0-9 cm DBH, not 0-9 DBH). Be clear in what is described (e.g. 0-9 cm DBH/ height, not only 0-9 cm). Make sure that you use . Instead of , when typing numbers (e.g. 1.45 cm, not 1,45 cm). Make sure that there is space between the number and the unit (e.g. 1.45 cm, not 1.45cm). We use exact the same description as the author did. If the paper is in another language (e.g. all the Spanish stuff from Iriondo Book 2009) we also write down the stages in that foreign language (e.g. in Spanish). Also write down abbreviations - if the author used them frequently (e.g. if the author explains his stages in the text and after that only uses S1, S2, J1, J2, J3, A, R write them down, too (= s1 = dormant seeds).",
+            "field_short_description": "The stage description of each MPM as indicated in the source by the publication author"
         },{
-            "field_name": "",
+            "field_name": "MatrixClassNumber",
             "name_in_csv": "matrix_class_number",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "A numerical representation of classes in the population matrix model. For more information, please see MatrixClassAuthor descriptions. Numbers starting with 1 (not 0). e.g. 1,2,3, ... $n$, where $n$ is the dimension of the population matrix.",
+            "field_short_description": "A numerical representation of classes in the population matrix model"
         },{
-            "field_name": "",
+            "field_name": "MatrixClassOrganized",
             "name_in_csv": "matrix_class_organized",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "We standardise all stages in a given population matrix model to one of three stages (prop, active, dorm) to facilitate analyses. prop - Propagule (seed). This applies to every stage defined by the author as seed bank or seed. Users are encouraged to carefully examine matrices with these stages and to implement the appropriate calculations to avoid a spurious additional year being added when no seedbank exists in the study species, as explained by Caswell (2001, p. 60). active - This includes stages that can neither be placed in the “prop” nor “dorm” (see below) stages. dorm - A stage that is vegetatively dormant after having germinated and becoming established.",
+            "field_short_description": "standardised descriptions of stages in a given population matrix model (prop, active, dorm)"
         },{
-            "field_name": "",
+            "field_name": "MatrixComplete",
             "name_in_csv": "matrix_complete",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "A true flase field indicating whether the matrix is complete or has NA's within it. This is a house-keeping field for the COMPADRINOs and makes subsetting easy for analysis.",
+            "field_short_description": "A true flase field indicating whether the matrix is complete or has NA's within it"
         },{
-            "field_name": "",
+            "field_name": "MatrixComposite",
             "name_in_csv": "matrix_composition",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "Indicates the type of matrix population model. For example, Individual - A matrix population model constructed for a single study × species × population × treatment × period combination (See the matrix composition metatable for more information).",
+            "field_short_description": "Indicates the type of matrix population model"
         },{
-            "field_name": "",
+            "field_name": "MatrixCriteriaAge",
             "name_in_csv": "matrix_criteria_age",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "Records whether there are any classes that are based on age. Yes - The matrix population model contains at least one class that is based on age (e.g. individuals of 0 year old). No - The matrix population model is not based on age",
+            "field_short_description": "Records whether there are any classes that are based on age."
         },{
-            "field_name": "",
+            "field_name": "MatrixCriteriaOntogeny",
             "name_in_csv": "matrix_criteria_ontogeny",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "Records whether the matrix model is based on ontogenetic stage (e.g. seedbank, reproductive, vegetative, dormant, etc). Yes - The matrix population model contains at least one class that is based on development/ontogeny (e.g. seedbank, reproductive, vegetative, dormant, etc). No - Matrix population model is not based on ontogeny. ",
+            "field_short_description": "Records whether the matrix model is based on ontogenetic stage (e.g. seedbank, reproductive, vegetative, dormant, etc)."
         },{
-            "field_name": "",
+            "field_name": "MatrixCriteriaSize",
             "name_in_csv": "matrix_criteria_size",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "Records whether the matrix model is based on size (e.g. stem length/number, body length/mass, etc). Yes - The matrix population model contains stages based on size and this briefly describes the aspect of size that was measured to classify individuals (e.g. DBH, stem length, stem height, stem number, etc). No - The matrix population model is not based on size.",
+            "field_short_description": "Records whether the matrix model is based on size (e.g. stem length/number, body length/mass, DBH, stem length, stem height, stem number, etc)."
         },{
-            "field_name": "",
+            "field_name": "MatrixDimension",
             "name_in_csv": "matrix_dimension",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "the number of stage/age/ontogeny classes within the MPM. For example, a 3 x 3 matrix would have a matrix dimension of 3.",
+            "field_short_description": "the number of stage/age/ontogeny classes within the MPM"
         },{
-            "field_name": "",
+            "field_name": "MatrixEndMonth",
             "name_in_csv": "matrix_end_month",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "Numeric indication of the last month of study. Month m in periodic matrix population model that describes population dynamics from month m to m+1. e.g. 1 - January, 6 - June, 12 - Decmeber.",
+            "field_short_description": "Numeric indication of the first month of study."
         },{
-            "field_name": "",
+            "field_name": "MatrixStartMonth",
             "name_in_csv": "matrix_start_month",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "Numeric indication of the first month of study. Month m in periodic matrix population model that describes population dynamics from month m to m+1. e.g. 1 - January, 6 - June, 12 - Decmeber.",
+            "field_short_description": "Numeric indication of the first month of study"
         },{
-            "field_name": "",
+            "field_name": "MatrixEndSeason",
             "name_in_csv": "matrix_end_season",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "Numeric indication of the last season of study. 1 - Spring, 2 - Summer, 3 - Autumn, 4 - Winter. Seasons are naturally hemisphere-specific, and this information can be deduced from variables Country and LatDeg.",
+            "field_short_description": "Numeric indication of the last season of study. 1 - Spring, 2 - Summer, 3 - Autumn, 4 - Winter"
         },{
-            "field_name": "",
+            "field_name": "MatrixStartSeason",
             "name_in_csv": "matrix_start_season",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "Numeric indication of the first season of study. 1 - Spring, 2 - Summer, 3 - Autumn, 4 - Winter. Seasons are naturally hemisphere-specific, and this information can be deduced from variables Country and LatDeg.",
+            "field_short_description": "Numeric indication of the first season of study. 1 - Spring, 2 - Summer, 3 - Autumn, 4 - Winter"
         },{
-            "field_name": "",
+            "field_name": "MatrixEndYear",
             "name_in_csv": "matrix_end_year",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "Last year of study for the given population. Year t+1 in matrix population model that describes population dynamics from time t to t+1. e.g. 2001.",
+            "field_short_description": "Last year of study for the given population"
         },{
-            "field_name": "",
+            "field_name": "MatrixStartYear",
             "name_in_csv": "matrix_start_year",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "First year of study. Year t in annual matrix population model that describes population dynamics from time t to t+1. e.g. 1995.",
+            "field_short_description": "First year of study for the given population"
         },{
             "field_name": "Matrix Fecundity",
             "name_in_csv": "matrix_fec",
@@ -447,261 +447,261 @@
             "field_description": "This records whether fecundity was measured at all for this matrix model (True/False). True - fecundity was measured for the matrix. False - fecundity was not measured for the matrix. The rationale for this is that a fecundity (in the F matrix) may be recorded as 0 either because it was not measured, or because reproduction was estimated to be zero. As a general rule, if any values for fecundity (e.g. in the F matrix) are non-zero, then MatrixFec should be recorded as 'Yes'. If all values are zero, then you should check the paper carefully to check whther this is because no fecundity was detected, or whether no attempt was made to measure fecundity.",
             "field_short_description": "Was fecundity measured and used to calculate matrix values (True/False)?"
         },{
-            "field_name": "",
+            "field_name": "matrix_independence_origin",
             "name_in_csv": "matrix_independence_origin",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "This field should state the ID of pre-exisiting matrices. If a matrix is not independent e.g. it has been altered slightly from an original publication due to seeds errors etc. then this will cite the original matrix ID form which it is not indepedent from. If the matrix is an original, this field with be NA.",
+            "field_short_description": "The matrix ID of the original matrix this matrix is related to. If no relation enter NA"
         },{
-            "field_name": "",
+            "field_name": "matrix_independent",
             "name_in_csv": "matrix_independent",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "A true or flase field stating whether this matrix is independent from all other matrices in the database. True - it is independent. False - it is not independent. Note - if it is not independent the matrix_independence_origin field should contain the ID of the matrices this matrix is related to, whilst the matrix_non_independence field should state why it is not indepdent. For example, this is a seeds corrected matrix of the original matrix ID no. 444 from publication ID no. 12",
+            "field_short_description": "A true or flase field stating whether this matrix is independent from all other matrices in the database."
         },{
-            "field_name": "",
+            "field_name": "matrix_non_independence",
             "name_in_csv": "matrix_non_independence",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "This describes why a matrix is not independent from other matrices in the database. For example, this is a seeds corrected matrix of the original matrix ID no. 444 from publication ID no. 12. In this instance, the following fields would contain: matrix_independence_origin - 444, matrix_independent - FALSE",
+            "field_short_description": "This describes why a matrix is not independent from other matrices in the database"
         },{
-            "field_name": "",
+            "field_name": "matrix_non_independence_author",
             "name_in_csv": "matrix_non_independence_author",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "The author or compadrino that recognised that the matrix was not independent and completed the following fields: matrix_independence_origin, matrix_independent, matrix_non_independence. For example, the seeds corrected matrices collated from the Franco & Silvertown database.",
+            "field_short_description": "The author or compadrino that recognised that the matrix was not independent. For example, Franco & Silvertown"
         },{
-            "field_name": "",
+            "field_name": "Observation",
             "name_in_csv": "matrix_observations",
-            "database_model":"",
+            "database_model":"Matrix",
             "field_description": "Any useful additional information about the population matrix model that is not provided elsewhere but may nonetheless be important (e.g. plant canopy, burning intervals, etc.) including additional information on the geolocations or matrix treatments. Some standardised sentences: The GPS coordinates were approximated to the closest geographic location described in the reference. (see Geolocation). GPS co-ordinates cited exactly as reported in original paper. These do not match written study site description. (see Geolocation). Geolocation / Altitude from descriptor: (if no matrices are enters yet but a geolocation information are available). Matrix is calculated with stochastic model. X years since last fire. Calculated with demographic data from Author JournalName YearPublished. Data is from a greenhouse experiment. MatrixClassAuthor is not clarified.",
-            "field_short_description": ""
+            "field_short_description": "Any useful additional information about this MPM"
         },{
             "field_name": "",
             "name_in_csv": "matrix_periodicity",
-            "database_model":"",
+            "database_model":"Matrix",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "matrix_seasonal",
-            "database_model":"",
+            "database_model":"Matrix",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "matrix_split",
-            "database_model":"",
+            "database_model":"Matrix",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "matrix_studied_sex",
-            "database_model":"",
+            "database_model":"Matrix",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "matrix_survival_issue",
-            "database_model":"",
+            "database_model":"Matrix",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "matrix_vectors_includes_na",
-            "database_model":"",
+            "database_model":"Fixed",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "matrix_vectors_proportional",
-            "database_model":"",
+            "database_model":"Fixed",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "matrix_vector_class_names",
-            "database_model":"",
+            "database_model":"Fixed",
             "field_description": "",
             "field_short_description": ""
         },{
-            "field_name": "",
+            "field_name": "SpeciesAccepted",
             "name_in_csv": "species_accepted",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Species",
+            "field_description": "Currently accepted Latin name.",
+            "field_short_description": "Currently accepted Latin name."
         },{
-            "field_name": "",
+            "field_name": "SpeciesAuthor",
             "name_in_csv": "species_author",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Taxonomy",
+            "field_description": "The Latin binomial name of the species as reported in the publication. Note that this may not be the same as the currently accepted name. This should be recorded as Genus_species. It should always include the genus and the species names. Where the paper authors have given infra-specific names information on variety and subspecies should also be added (see below). var. - Where the publication refers to an intraspecific variety, this is indicated with var. followed by the variety name, e.g. Pityopsis_aspera_var._aspera subsp. - Where the study refers to an intraspecific subspecies, this is indicated with subsp. followed by the subspecies name, e.g. Anthyllis_vulneraria_subsp._alpicola. The word following “var.”, “subsp.” or “cf.” must not be capitalised. Excel will try to capitalise it via auto-correct because it follows a period punctuation. Always use an underscore to substitute_spaces. If two or more different demographic studies exist for a particular species, these should be digitised with concatenated numbers after the genus_species starting with 2 onwards (e.g. Rosa_sempervirens, Rosa_sempervirens_2, Rosa_sempervirens_3). Note that the first hit does not get a 1 (e.g. Rosa_sempervirens instead of Rosa_sempervirens_1)",
+            "field_short_description": "The Latin binomial name of the species as reported in the publication"
         },{
-            "field_name": "",
+            "field_name": "CommonName",
             "name_in_csv": "species_common",
-            "database_model":"",
-            "field_description": "",
+            "database_model":"Species",
+            "field_description": "Records the common name as used in the publication. Separate multiple names with a semi-colon (;). If there is no common name used in the publication, record NA",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "species_gbif_taxon_key",
-            "database_model":"",
+            "database_model":"Species",
             "field_description": "",
             "field_short_description": ""
         },{
-            "field_name": "",
+            "field_name": "Class",
             "name_in_csv": "taxonomy_class",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Taxonomy",
+            "field_description": "Class to which species belongs e.g. Magnoliopsida. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_short_description": "Class to which species belongs e.g. Magnoliopsida"
         },{
-            "field_name": "",
+            "field_name": "DateOfCheck",
             "name_in_csv": "taxonomy_col_check_date",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Taxonomy",
+            "field_description": "the date when the taxonomy was last checked and known to be up to date",
+            "field_short_description": "the date when the taxonomy was last checked and known to be up to date"
         },{
             "field_name": "",
             "name_in_csv": "taxonomy_col_check_ok",
-            "database_model":"",
+            "database_model":"Taxonomy",
             "field_description": "",
             "field_short_description": ""
         },{
-            "field_name": "",
+            "field_name": "Family",
             "name_in_csv": "taxonomy_family",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Taxonomy",
+            "field_description": "Family to which species belongs e.g. Polygonaceae. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_short_description": "Family to which species belongs e.g. Polygonaceae."
         },{
-            "field_name": "",
+            "field_name": "Genus",
             "name_in_csv": "taxonomy_genus",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Taxonomy",
+            "field_description": "Genus used in SpeciesAuthor e.g. Chorizanthe. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_short_description": "Genus used in SpeciesAuthor e.g. Chorizanthe."
         },{
-            "field_name": "",
+            "field_name": "GenusAccepted",
             "name_in_csv": "taxonomy_genus_accepted",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Taxonomy",
+            "field_description": "Genus used in SpeciesAccepted e.g. Chorizanthe. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_short_description": "Genus used in SpeciesAuthor e.g. Chorizanthe."
         },{
-            "field_name": "",
+            "field_name": "GenusAuthor",
             "name_in_csv": "taxonomy_genus_author",
-            "database_model":"",
-            "field_description": "",
+            "database_model":"Taxonomy",
+            "field_description": "Genus used in SpeciesAuthor e.g. Chorizanthe. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
             "field_short_description": ""
         },{
-            "field_name": "",
+            "field_name": "Kingdom",
             "name_in_csv": "taxonomy_kingdom",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Taxonomy",
+            "field_description": "Kingdom to which species belongs. e.g. Animalia",
+            "field_short_description": "Kingdom to which species belongs. e.g. Animalia"
         },{
-            "field_name": "",
+            "field_name": "Order",
             "name_in_csv": "taxonomy_order",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Taxonomy",
+            "field_description": "Order to which species belongs e.g. Caryophyllales. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_short_description": "Order to which species belongs e.g. Caryophyllales."
         },{
-            "field_name": "",
+            "field_name": "Phylum",
             "name_in_csv": "taxonomy_phylum",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Taxonomy",
+            "field_description": "Phylum to which species belongs e.g. Magnoliophyta. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_short_description": "Phylum to which species belongs e.g. Magnoliophyta."
         },{
-            "field_name": "",
+            "field_name": "AngioGymno",
             "name_in_csv": "trait_angio_gymno",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Trait",
+            "field_description": "Whether species is an angiosperm or a gymnosperm (record Angiosperm or Gymnosperm). If it is neither angiosperm nor gymnosperm fill in NA. Use NA for all animals.",
+            "field_short_description": "Within the plantae kingdom, is the study species an angiosperm or gymnosperm"
         },{
-            "field_name": "",
+            "field_name": "DicotMonoc",
             "name_in_csv": "trait_dicot_monoc",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Trait",
+            "field_description": "Whether species is a dicot or monocot (record Eudicot or Monocot). If species is neither dicot nor monocot (i.e. if it is not an angiosperm) fill in NA. Use NA for all animals.",
+            "field_short_description": "Within the plantae kingdom, is the study species a Eudicot or Monocot"
         },{
-            "field_name": "",
+            "field_name": "OrganismType",
             "name_in_csv": "trait_organism_type",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Trait",
+            "field_description": "Basic growth type description used to order species within the database. For example, Tree, Amphibia, Aves. For more more information, please see the following github wiki page: ",
+            "field_short_description": "Basic growth type description used to order species within the database"
         },{
             "field_name": "",
             "name_in_csv": "trait_spand_ex_growth_type",
-            "database_model":"",
+            "database_model":"Trait",
             "field_description": "",
             "field_short_description": ""
         },{
-            "field_name": "",
+            "field_name": "MatrixTreatment",
             "name_in_csv": "matrix_treatment_type",
-            "database_model":"",
-            "field_description": "",
-            "field_short_description": ""
+            "database_model":"Matrix",
+            "field_description": "Describes if a treatment was applied or not, and the nature of the treatment. Unmanipulated (no treatment) or a brief description of the treatment applied to the population described by the matrix population model. We define treatment as an action intentionally imposed by humans. Please put all additional treatment information in MatrixObservations. Please see treatment metatable for more information.",
+            "field_short_description": "Describes if a treatment was applied or not (unmanipulated), and the nature of the treatment."
         },{
             "field_name": "",
             "name_in_csv": "within_site_replication",
-            "database_model":"",
+            "database_model":"Population",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "species_iucn_taxonid",
-            "database_model":"",
+            "database_model":"Species",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "species_iucn_population_assessed",
-            "database_model":"",
+            "database_model":"Species",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "species_iucn_status",
-            "database_model":"",
+            "database_model":"Species",
             "field_description": "",
             "field_short_description": ""
         },{
-            "field_name": "",
+            "field_name": "image_path",
             "name_in_csv": "image_path",
-            "database_model":"",
+            "database_model":"Species",
             "field_description": "",
             "field_short_description": ""
         },{
-            "field_name": "",
+            "field_name": "image_path2",
             "name_in_csv": "image_path2",
-            "database_model":"",
+            "database_model":"Species",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "species_gisd_status",
-            "database_model":"",
+            "database_model":"Species",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "clonality",
-            "database_model":"",
+            "database_model":"Trait",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "clonality_source",
-            "database_model":"",
+            "database_model":"Trait",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "seedbank",
-            "database_model":"",
+            "database_model":"Trait",
             "field_description": "",
             "field_short_description": ""
         },{
             "field_name": "",
             "name_in_csv": "seedbank_source",
-            "database_model":"",
+            "database_model":"Trait",
             "field_description": "",
             "field_short_description": ""
         },],
