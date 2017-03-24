@@ -10,6 +10,8 @@ from .forms import LoginForm, RegistrationForm, ChangePasswordForm,\
     PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 from requests_oauthlib import OAuth2Session
 import json
+import os
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
     
 # google auth stuff
 def get_google_auth(state=None, token=None):
@@ -98,7 +100,7 @@ def callback():
             client_secret=Auth.CLIENT_SECRET,
             authorization_response=request.url)
         except:
-            return 'HTTP Error occurred :('
+            return redirect(url_for('auth.login_with_google'))
         google = get_google_auth(token=token)
         resp = google.get(Auth.USER_INFO)
         if resp.status_code == 200:

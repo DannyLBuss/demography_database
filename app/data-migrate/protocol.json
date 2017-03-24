@@ -477,53 +477,53 @@
             "field_description": "Any useful additional information about the population matrix model that is not provided elsewhere but may nonetheless be important (e.g. plant canopy, burning intervals, etc.) including additional information on the geolocations or matrix treatments. Some standardised sentences: The GPS coordinates were approximated to the closest geographic location described in the reference. (see Geolocation). GPS co-ordinates cited exactly as reported in original paper. These do not match written study site description. (see Geolocation). Geolocation / Altitude from descriptor: (if no matrices are enters yet but a geolocation information are available). Matrix is calculated with stochastic model. X years since last fire. Calculated with demographic data from Author JournalName YearPublished. Data is from a greenhouse experiment. MatrixClassAuthor is not clarified.",
             "field_short_description": "Any useful additional information about this MPM"
         },{
-            "field_name": "",
+            "field_name": "MatrixPeriodicity",
             "name_in_csv": "matrix_periodicity",
             "database_model":"Matrix",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Frequency with which seasonal or annual the matrix population model was constructed. For example, 1 - once per year, 2 - twice per year, 0.2 - once every 5 years etc. Annual periodicities can be calculated as follows: If the study site has been visited more than once a year calculate $1 * N$, where N is the number of visits to the site per year, e.g. $1 * 2 = 2$. If the study site has been revisited less than once per year calculate $1 / Y$, where Y is the number of years, e.g. $1/5 = 0.2$.",
+            "field_short_description": "Frequency with which seasonal or annual the matrix population model was constructed"
         },{
-            "field_name": "",
+            "field_name": "MatrixSeasonal",
             "name_in_csv": "matrix_seasonal",
             "database_model":"Matrix",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "A boolean field that indicates whether the matrix presented was seasonal (true) or not (false).  A matrix population model that does not describe a full annual transition, but rather a seasonal (< 1 yr) transition. A matrix can be seasonal even if a it is constructed over several years e.g. spring in years 2000-2012. A seasonal matrix can also be created from pooled, mean or individual data and therefore we have separated seasonal from the matrix composition column that it was hosted in previously.",
+            "field_short_description": "A boolean field that indicates whether the matrix presented was calculated per season (true) or not (false)"
         },{
-            "field_name": "",
+            "field_name": "MatrixSplit",
             "name_in_csv": "matrix_split",
             "database_model":"Matrix",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Indicates whether the A matrix population model can be divided into the U, C and F MPMs (divided/indivisible). Divided - The matrix population model A has successfully been divided into the process-based sub matrices U, F and C. Indivisible - The matrix population model A has not been divided into the process-based sub-matrices U, F and C (see Figure below for further details) because insufficient information is available to classify the various demographic processes for each sub-matrix. If a matrix is divisible, we divide it! Then always insert all sub-matrices – even if e.g. C only has zeros! ",
+            "field_short_description": "Indicates the type of matrix population model (divided/indivisible)"
         },{
-            "field_name": "",
+            "field_name": "MatrixStudiedSex",
             "name_in_csv": "matrix_studied_sex",
             "database_model":"Matrix",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Indication of the sex(es) considered when constructing the matrix population model. M - studied only males. F - studied only females. H - Hermaphrodites. M/F - Males and females separately in the same population matrix model. A - All sexes together. NA - No distinct sexes (e.g. virus).",
+            "field_short_description": "Sex considered when constructing the matrix population model. For example, M - Males."
         },{
-            "field_name": "",
+            "field_name": "MatrixSurvivalIssue",
             "name_in_csv": "matrix_survival_issue",
             "database_model":"Matrix",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "When the components of each column of a PPM matrix add up to more then 1 (exc. fecundity rates). If it is more then 1, then the matrix is stating that over 100% of that stage class is surviving into the next generation, which is not possible.",
+            "field_short_description": "When the components of each column of a PPM matrix add up to more then 1 (exc. fecundity rates)"
         },{
-            "field_name": "",
+            "field_name": "MatrixVectorAbundance",
             "name_in_csv": "matrix_vectors_includes_na",
             "database_model":"Fixed",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "The known initial population structure, represented as the number of individuals. The size of the vector should correspond to the number of dimensions in the PPM of the specific population, but this is not always the case. Please state clearly in the MatrixVectorClassNames field how each class is defined, this is particularly important when the vector class names DO NOT match the Matrix class names. They may not always be presented as an abundance, when presented as a proprtion, please leave this field blank and only complete the MatrixVectorProportional field.",
+            "field_short_description": "The original population structure, represented as the number of individuals"
         },{
-            "field_name": "",
+            "field_name": "MatrixVectorProportional",
             "name_in_csv": "matrix_vectors_proportional",
             "database_model":"Fixed",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "The known initital population structure, represented as the proportion of individuals. The size of the vector should correspond to the number of dimensions in the PPM of the specific population, but this is not always the case. Please state clearly in the MatrixVectorClassNames field how each class is defined, this is particularly important when the vector class names DO NOT match the Matrix class names. They may not always be presented as a proportion, when presented as an abundance, please calculate this field from the known abundances that should be entered into the MatrixVectorAbundance field.",
+            "field_short_description": "The original population structure, represented as the proportion of individuals"
         },{
-            "field_name": "",
+            "field_name": "MatrixVectorClassNames",
             "name_in_csv": "matrix_vector_class_names",
             "database_model":"Fixed",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "The stage description as indicated in the source by the publication author of the known initial population vector. This is only needed when the data for either MatrixVectorAbundance or MatrixVectorProportional are available from the source. When possible, we add units (e.g. cm, m, cm2)",
+            "field_short_description": "Stage description for known intial population vector"
         },{
             "field_name": "SpeciesAccepted",
             "name_in_csv": "species_accepted",
@@ -541,13 +541,13 @@
             "name_in_csv": "species_common",
             "database_model":"Species",
             "field_description": "Records the common name as used in the publication. Separate multiple names with a semi-colon (;). If there is no common name used in the publication, record NA",
-            "field_short_description": ""
+            "field_short_description": "Records the common name as used in the publication"
         },{
-            "field_name": "",
+            "field_name": "GBIF_TaxonKey",
             "name_in_csv": "species_gbif_taxon_key",
             "database_model":"Species",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "A numeric code that is derived from the www.gbif.org website for each SpeciesAccepted. The code is useful to gather species information directly from the gbif database. This code can be scraped using the rGbif package in R or via the GBIF website.",
+            "field_short_description": "A numeric code that is derived from the www.gbif.org website for each SpeciesAccepted"
         },{
             "field_name": "Class",
             "name_in_csv": "taxonomy_class",
@@ -561,11 +561,11 @@
             "field_description": "the date when the taxonomy was last checked and known to be up to date",
             "field_short_description": "the date when the taxonomy was last checked and known to be up to date"
         },{
-            "field_name": "",
+            "field_name": "taxonomy_col_check_ok",
             "name_in_csv": "taxonomy_col_check_ok",
             "database_model":"Taxonomy",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Whether the taxonomy has been checked by a compadrino to be correct.",
+            "field_short_description": "Whether the taxonomy has been checked by a compadrino to be correct."
         },{
             "field_name": "Family",
             "name_in_csv": "taxonomy_family",
@@ -583,13 +583,13 @@
             "name_in_csv": "taxonomy_genus_accepted",
             "database_model":"Taxonomy",
             "field_description": "Genus used in SpeciesAccepted e.g. Chorizanthe. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
-            "field_short_description": "Genus used in SpeciesAuthor e.g. Chorizanthe."
+            "field_short_description": "Genus used in SpeciesAccepted e.g. Chorizanthe."
         },{
             "field_name": "GenusAuthor",
             "name_in_csv": "taxonomy_genus_author",
             "database_model":"Taxonomy",
             "field_description": "Genus used in SpeciesAuthor e.g. Chorizanthe. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
-            "field_short_description": ""
+            "field_short_description": "Genus used in SpeciesAuthor e.g. Chorizanthe."
         },{
             "field_name": "Kingdom",
             "name_in_csv": "taxonomy_kingdom",
@@ -627,11 +627,11 @@
             "field_description": "Basic growth type description used to order species within the database. For example, Tree, Amphibia, Aves. For more more information, please see the following github wiki page: ",
             "field_short_description": "Basic growth type description used to order species within the database"
         },{
-            "field_name": "",
+            "field_name": "trait_spand_ex_growth_type",
             "name_in_csv": "trait_spand_ex_growth_type",
             "database_model":"Trait",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "A simplified version of the current OrganismType collated by the University of Exeter node. Tree, Shrub, Open Herb, Closed Herb and Monocarp. For more information, please see the metatable.",
+            "field_short_description": "A simplified version of the current OrganismType collated by the University of Exeter node"
         },{
             "field_name": "MatrixTreatment",
             "name_in_csv": "matrix_treatment_type",
@@ -639,71 +639,71 @@
             "field_description": "Describes if a treatment was applied or not, and the nature of the treatment. Unmanipulated (no treatment) or a brief description of the treatment applied to the population described by the matrix population model. We define treatment as an action intentionally imposed by humans. Please put all additional treatment information in MatrixObservations. Please see treatment metatable for more information.",
             "field_short_description": "Describes if a treatment was applied or not (unmanipulated), and the nature of the treatment."
         },{
-            "field_name": "",
+            "field_name": "WithinSiteReplication",
             "name_in_csv": "within_site_replication",
             "database_model":"Population",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Reports the number of plots/transects sampled at each population and should give an accurate size description of the plots. For example, “6 (4x4 m2)” means that in each population, the authors established and followed six permanent plots of 4x4 m2. Be as specific but as brief as possible.",
+            "field_short_description": "Reports the number of plots/transects sampled at each population and should give an accurate size description of the plots."
         },{
-            "field_name": "",
+            "field_name": "Species_IUCN_TaxonID",
             "name_in_csv": "species_iucn_taxonid",
             "database_model":"Species",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "A numeric code that is derived from the iucn redlist website for each SpeciesAccepted. The code is useful to gather species information directly from the iucn database. This code can be scraped using the rredlist package in R or via the IUCN redlist website.",
+            "field_short_description": "A numeric code that is derived from the iucn redlist website for each SpeciesAccepted"
         },{
-            "field_name": "",
+            "field_name": "species_iucn_population_assessed",
             "name_in_csv": "species_iucn_population_assessed",
             "database_model":"Species",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "The population used to make the IUCN species assessment. If this field is complete, then only a single population for that species was used to make the IUCN species assessment and therefore should be used with caution.",
+            "field_short_description": "The population used to make the IUCN species assessment"
         },{
-            "field_name": "",
+            "field_name": "Species_IUCNstatus",
             "name_in_csv": "species_iucn_status",
             "database_model":"Species",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "A conservation assessment of each species from an independent source - the IUCN. For more information please see the IUCN status metatable and visit the website for new species assessments - http://www.iucnredlist.org/about/overview",
+            "field_short_description": "A conservation assessment of each species from an independent source - the IUCN"
         },{
             "field_name": "image_path",
             "name_in_csv": "image_path",
             "database_model":"Species",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "The first available html image linked for each species from the EOL website.",
+            "field_short_description": "The first available html image linked for each species from the EOL website."
         },{
             "field_name": "image_path2",
             "name_in_csv": "image_path2",
             "database_model":"Species",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "The second available html image linked for each species from the EOL website.",
+            "field_short_description": "The second available html image linked for each species from the EOL website."
         },{
-            "field_name": "",
+            "field_name": "Species_GISDstatus",
             "name_in_csv": "species_gisd_status",
             "database_model":"Species",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "An assessment of each species from an independent source as to whether that species is globally renound for being invasive (TRUE/FALSE) - from the IUCN. For more information please visit the website for new species assessments - http://www.iucngisd.org/gisd/ or use the gisd function in the originR R package.",
+            "field_short_description": "Is the species globally known as invasive according to iucngisd.org (TRUE/FALSE)"
         },{
-            "field_name": "",
+            "field_name": "Clonality",
             "name_in_csv": "clonality",
             "database_model":"Trait",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Is the species known to reproduce clonally? True - Yes, the species can reproduce clonally. False - No, there is no evidence that this species can reproduce clonally.",
+            "field_short_description": "Is the species known to reproduce clonally (TRUE/FALSE)?"
         },{
-            "field_name": "",
+            "field_name": "ClonalitySource",
             "name_in_csv": "clonality_source",
             "database_model":"Trait",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "If the species is known to reproduce clonally, what evicence provided this information? Please state citations of articles or sources, if more then one source please seperate by a ;",
+            "field_short_description": "Citation evidence for clonality of each species"
         },{
-            "field_name": "",
+            "field_name": "Seedbank",
             "name_in_csv": "seedbank",
             "database_model":"Trait",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "Is there evidence to suggest this species has a seedbank? True - Yes, the species does have a seedbank. False - No, there is no evidence that this species has a seedbank.",
+            "field_short_description": "Is this species known to have a seedbank (TRUE/FALSE)?"
         },{
-            "field_name": "",
+            "field_name": "SeedbankSource",
             "name_in_csv": "seedbank_source",
             "database_model":"Trait",
-            "field_description": "",
-            "field_short_description": ""
+            "field_description": "If the species is known to have a seed bank, what evicence provided this information? Please state citations of articles or sources, if more then one source please seperate by a ",
+            "field_short_description": "Citation evidence for seedbank presence/absence of each species"
         },],
 
         "Common_values": [{
