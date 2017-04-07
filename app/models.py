@@ -1089,7 +1089,7 @@ class PublicationsProtocol (db.Model):
     protocol_number = db.Column(db.Integer, index=True)
     name = db.Column(db.String(200))
     description = db.Column(db.Text())
-
+    
     publications = db.relationship("Publication", backref = "publications_protocol")
 
     @staticmethod
@@ -1139,6 +1139,160 @@ class PublicationsProtocol (db.Model):
         return self.protocol_number
 
 ''' End Meta Tables for Publication/Additional Source '''
+
+''' Meta Tables for Protocol '''
+
+#class DigitizationProtocol (db.Model):
+#    __tablename__ = 'digitization_protocol'
+#    id = db.Column(db.Integer, primary_key=True)
+#    field_name = db.Column(db.String(50))
+#    name_in_csv = db.Column(db.String(100))
+#    database_model = db.Column(db.String(50))
+#    field_description = db.Column(db.Text())
+#    field_short_description = db.Column(db.Text())
+
+
+class Protocol (db.Model):
+    __tablename__ = 'protocol'
+    id = db.Column(db.Integer, primary_key=True)
+    digitization_protocol_id = db.Column(db.Integer, db.ForeignKey('digitization_protocol.id',ondelete='CASCADE'))
+    common_id = db.Column(db.Integer, db.ForeignKey('commonterm.id', ondelete='CASCADE'))
+
+    @staticmethod
+    def migrate():
+        DigitizationProtocol.migrate()
+        CommonUse.migrate()
+
+    def to_json(self,key):
+        field_name = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model = 'field_name', key=key,
+                                       _external=False),
+            'data' : {
+                'digitization_protocol' : self.digitization_protocol.to_json_simple(key) if self.digitization_protocol else None,
+                'commonly_used' : self.commonly_used.to_json_simple(key) if self.commonly_used else None,
+            }
+        }
+        return protocol
+
+    def __repr__(self):
+        return '<Protocol %r>' % self.id
+
+class DigitizationProtocol (db.Model):
+    __tablename__ = 'digitization_protocol'
+    id = db.Column(db.Integer, primary_key=True)
+    field_name = db.Column(db.String(50), index=True)
+    name_in_csv = db.Column(db.String(50))
+    database_model = db.Column(db.String(50))
+    field_description = db.Column(db.Text())
+    field_short_description = db.Column(db.Text())
+
+    protocols = db.relationship("Protocol", backref="digitization_protocol")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/protocol.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Protocolsssss"]
+            nodes = json_data["Protocolss"]
+
+            for node in nodes:
+                i = DigitizationProtocol.query.filter_by(field_name=node['field_name']).first()
+                if i is None:
+                    i = DigitizationProtocol()
+
+                i.field_name = node['field_name']
+                i.name_in_csv = node['name_in_csv']
+                i.database_model = node['database_model']
+                i.field_description = node['field_description']
+                i.field_short_description = node['field_short_description']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def to_json(self,key):
+        field_name = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model = 'field_name', key=key,
+                                       _external=False),
+            'data' : {
+                'field_name' : self.field_name,
+                'name_in_csv' : self.name_in_csv,
+                'database_model' : self.database_model,
+                'field_description' : self.field_description,
+                'field__short_description' : self.field_short_description,
+                'protocols' : [protocol.to_json_simple(key) for protocol in self.protocols]
+            }
+        }
+        return digitization_protocol
+
+    def to_json_simple(self, key):
+        field_name = {
+            'request_url' : url_for('api.get_one_entry', id=self.id, model='field_name', key=key,
+                                      _external=False),
+            'data' : {
+                'field_name' : self.field_name,
+                'field__short_description' : self.field__short_description
+            }
+        }
+        return digitization_protocol
+
+    def __repr__(self):
+        return self.field_name
+
+class CommonTerm(db.Model):
+    __tablename__='commonterm'
+    id = db.Column(db.Integer, primary_key=True)
+    common_value_name = db.Column(db.String(50), index=True)
+    common_value_data = db.Column(db.String(50))
+    common_value_description = db.Column(db.String(250))
+
+    protocols = db.relationship("Protocol", backref="commonterm")
+
+    @staticmethod
+    def migrate():
+        with open('app/data-migrate/protocol.json') as d_file:
+            data = json.load(d_file)
+            json_data = data["Protocolsssss"]
+            nodes = json_data["Common_values"]
+
+            for node in nodes:
+                i = CommonTerm.query.filter_by(common_value_name=node['common_value_name']).first()
+                if i is None:
+                    i = CommonTerm()
+
+                i.common_value_name = node['common_value_name']
+
+                db.session.add(i)
+                db.session.commit()
+
+    def to_json(self, key):
+        commonterm = {
+        'request_url' : url_for('api.get_one_entry', id=self.id, model='commonterms',key=key,
+                                _external=False),
+        'data' : {
+            'common_value_name' : self.common_value_name,
+            'common_value_data' : self.common_value_data,
+            'common_value_description' : self.common_value_description,
+            'protocols' : [protocol.to_json_simple(key) for protocol in self.protocols]
+            }
+        }
+        return commonterm
+
+    def to_json_simple(self,key):
+        commonterm = {
+        'request_url' : url_for('api.get_one_entry', id=self.id, model='commonterms',key=key,
+                                _external=False),
+        'data' : {
+            'common_value_name' : self.common_value_name,
+            'common_value_description' : self.common_value_description,
+            }
+        }
+        return commonterm
+
+    def __repr__(self):
+        return self.common_value_name
+
+''' End Meta Tables for Digitization Protocol '''
+
 
 ''' Meta Tables for Author Contact '''
 class ContentEmail(db.Model):
@@ -3678,7 +3832,8 @@ class Version(db.Model):
             'matrix_stage_id' : self.matrix_stage_id, 
             'matrix_value_id' : self.matrix_value_id,
             'author_contact_id': self.author_contact_id,
-            'additional_source_id' : self.additional_source_id
+            'additional_source_id' : self.additional_source_id,
+            'protocol_id' : self.protocol_id
         }
 
         for f, k in fk.items():

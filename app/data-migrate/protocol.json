@@ -1,18 +1,16 @@
 {
-	"Protocols": {
-	    "Protocol": [{
+	"Protocolsssss": {
+	    "Protocolss": [{
             "field_name": "DOI.ISBN",
             "name_in_csv": "publication_DOI_ISBN",
             "database_model":"publication",
-            "field_description": "This entry records the Digital Object Identifier (DOI) or International Standard Book Number (ISBN) codes that identify the source material. In more recent papers you may find the DOI somewhere at the beginning of the paper. You may also search for it in the Web of Knowledge. 
-            ; Step 1. Use the DOI resolution service at http://dx.doi.org/ to confirm the DOI of the paper you are digitizing. Do this by appending the DOI after this web page. For example, DOI 10.1111/1365-2745.12334 -> http://dx.doi.org/10.1111/1365-2745.12334 ; Step 2. Use the automated publication information tool to auto-complete the other publication fields. ; If no DOI is available use NA and complete the other publication fields by hand. Note. older references may not actually have a DOI.", 
+            "field_description": "This entry records the Digital Object Identifier (DOI) or International Standard Book Number (ISBN) codes that identify the source material. In more recent papers you may find the DOI somewhere at the beginning of the paper. You may also search for it in the Web of Knowledge. Step 1. Use the DOI resolution service at dx.doi.org to confirm the DOI of the paper you are digitizing. Do this by appending the DOI after this web page. For example, DOI 10.1111.1365-2745.12334 -> dx.doi.org 10.1111.1365-2745.12334. Step 2. Use the automated publication information tool to auto complete the other publication fields. If no DOI is available use NA and complete the other publication fields by hand. Note. older references may not actually have a DOI.", 
             "field_short_description": "Digital Object Identifier (DOI) or International Standard Book Number (ISBN) codes that identify the source material"
         }, {
             "field_name": "Journal",
             "name_in_csv": "publication_journal_name",
             "database_model":"publication",
-            "field_description": "Record the name of the journal from which data were sourced. We use the standard abbreviation of the journal using the BIOSIS Format. ; If the data were sourced from a book, thesis, report, or conference talk/poster, record that as appropriate. For journal abbreviations see list here: http://images.webofknowledge.com/WOK46/help/WOS/A_abrvjt.html. ; If no abbreviation is available in both of those list, take a look into the paper. Often there are abbreviations in the left corner of the paper or at the first page. For example, J. Ecol. for Journal of Ecology; ¥ Book - Matrices are from a book, or book chapter. Note: If our source is a book name the author of the related chapter in Authors, not the author of the book.
-                                  ; PhD thesis - Matrices are from a doctoral thesis. ; MSc thesis - Matrices are from a masters thesis. ; Report - Matrices are from a report. ; Conference talk - Matrices reported in a conference talk. ; Conference poster - Matrices reported in a conference poster.",
+            "field_description": "Record the name of the journal from which data were sourced. We use the standard abbreviation of the journal using the BIOSIS Format. ; If the data were sourced from a book, thesis, report, or conference talk or poster, record that as appropriate. For journal abbreviations see list here: images.webofknowledge.comWOK46helpWOSA_abrvjt.html. If no abbreviation is available in both of those list, take a look into the paper. Often there are abbreviations in the left corner of the paper or at the first page. For example, J. Ecol. for Journal of Ecology. Book - Matrices are from a book, or book chapter. Note: If our source is a book name the author of the related chapter in Authors, not the author of the book.PhD thesis - Matrices are from a doctoral thesis. MSc thesis - Matrices are from a masters thesis. Report - Matrices are from a report. Conference talk - Matrices reported in a conference talk. Conference poster - Matrices reported in a conference poster.",
             "field_short_description": "The name of the journal from which data were sourced"
         },{
             "field_name": "Authors",
@@ -78,7 +76,7 @@
             "field_name": "Corresponding Author Reply",
             "name_in_csv": "correspondence_author_reply",
             "database_model":"publication",
-            "field_description": "Did the author reply to a request for further information. This should record a brief answer given by the author, or No (no response yet). Note: Always change Reply from NA/Nothing to No when author has been contacted, and update the entry as soon as a reply is received. Always reply to the author with a short thank-you note when a reply is received.",
+            "field_description": "Did the author reply to a request for further information. This should record a brief answer given by the author, or No (no response yet). Note: Always change Reply from NA or Nothing to No when author has been contacted, and update the entry as soon as a reply is received. Always reply to the author with a short thank-you note when a reply is received.",
             "field_short_description": "Response from corresponding author after missing data request"
         },{
             "field_name": "Corresponding Author Content Email",
@@ -110,7 +108,7 @@
             "database_model":"publication",
             "field_description": "This column records the date when the COMPADRINO started working on this publication. Specifically when the first matrix population model of that study was digitised. Dates should be recorded in the following date format: yyyy-mm-dd, e.g. 2015-12-25 for 25th Dec 2015.",
             "field_short_description": "This column records the date when the COMPADRINO started working on this publication"
-        }{
+        },{
             "field_name": "Ecoregion",
             "name_in_csv": "population_ecoregion",
             "database_model":"population",
@@ -132,13 +130,13 @@
             "field_name": "Continent",
             "name_in_csv": "population_continent",
             "database_model":"population",
-            "field_description": "Continent where study took place. Africa, Asia, Europe, N American, S America, Antarctica, Oceania (see https://en.wikipedia.org/wiki/List_of_Oceanian_countries_by_population)",
+            "field_description": "Continent where study took place. Africa, Asia, Europe, N American, S America, Antarctica, Oceania (see en.wikipedia.org wiki List_of_Oceanian_countries_by_population)",
             "field_short_description": "Continent where study took place"
         },{
             "field_name": "Country",
             "name_in_csv": "population_country",
             "database_model":"population",
-            "field_description": "The ISO 3 Country Code(s) of where the study took place. Please see, https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3. Where studies are conducted in seas or oceans this becomes a bit more challenging, in this instance we put the closest country to the point of interest and then complete the field population_nautical_miles, for example, FRA, NODC-22 = 22 nautical miles away from France",
+            "field_description": "The ISO 3 Country Code(s) of where the study took place. Please see, en.wikipedia.org wiki ISO_3166-1_alpha-3. Where studies are conducted in seas or oceans this becomes a bit more challenging, in this instance we put the closest country to the point of interest and then complete the field population_nautical_miles, for example, FRA, NODC-22 = 22 nautical miles away from France",
             "field_short_description": "The ISO 3 Country Code(s) of where the study took place"
         },{
             "field_name": "Invasive Status Elsewhere",
@@ -156,7 +154,7 @@
             "field_name": "Latitude",
             "name_in_csv": "population_latitude",
             "database_model":"population",
-            "field_description": "Decimal Degree Values of Latititude. Always check geolocation with Google Earth! If the geolocation from Google Earth does not fit the study site description ask author for further information and use one of the comments for the Observation. The following link is useful for converting between different ways of presenting lat/long information: http://www.earthpoint.us/Convert.aspx",
+            "field_description": "Decimal Degree Values of Latititude. Always check geolocation with Google Earth! If the geolocation from Google Earth does not fit the study site description ask author for further information and use one of the comments for the Observation. The following link is useful for converting between different ways of presenting lat or long information: www.earthpoint.us Convert.aspx",
             "field_short_description": "Geolocation, Decimal Degree Values of Latititude"
         },{
             "field_name": "LatNS",
@@ -168,25 +166,25 @@
             "field_name": "LatDeg",
             "name_in_csv": "lat_deg",
             "database_model":"population",
-            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix. If no LatSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LatMin / LatSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix. If no LatSec is available type in a zero. This means: the value 0 may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter 06 into the LatMin or LatSec column but only 6. Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
             "field_short_description": "Geolocation, DEGREES, minutes and seconds"
         },{
             "field_name": "LatMin",
             "name_in_csv": "lat_min",
             "database_model":"population",
-            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LatDeg, LatMin and LatSec. If no LatSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LatMin / LatSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LatDeg, LatMin and LatSec. If no LatSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter 06 into the LatMin or LatSec column but only 6. Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
             "field_short_description": "Geolocation, degrees, MINUTES and seconds"
         },{
             "field_name": "LatSec",
             "name_in_csv": "lat_sec",
             "database_model":"population",
-            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix. If no LatSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LatMin / LatSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix. If no LatSec is available type in a zero. This means: the value 0 may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter 06 into the LatMin and LatSec column but only 6. Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
             "field_short_description": "Geolocation, degrees, minutes and SECONDS"
         },{
             "field_name": "Longitude",
             "name_in_csv": "population_longitude",
             "database_model":"population",
-            "field_description": "Decimal Degree Values of Longitude. Always check geolocation with Google Earth! If the geolocation from Google Earth does not fit the study site description ask author for further information and use one of the comments for the Observation. The following link is useful for converting between different ways of presenting lat/long information: http://www.earthpoint.us/Convert.aspx",
+            "field_description": "Decimal Degree Values of Longitude. Always check geolocation with Google Earth! If the geolocation from Google Earth does not fit the study site description ask author for further information and use one of the comments for the Observation. The following link is useful for converting between different ways of presenting lat or long information: www.earthpoint.us Convert.aspx",
             "field_short_description": "Gelocation, Decimal Degree Values of Longitude"
         },{
             "field_name": "LonWE",
@@ -198,31 +196,31 @@
             "field_name": "LonDeg",
             "name_in_csv": "lon_deg",
             "database_model":"population",
-            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LonDeg, LonMin, LonSec. If no LonSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LonMin / LonSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LonDeg, LonMin, LonSec. If no LonSec is available type in a zero. This means: the value 0 may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter 06 into the LonMin and LonSec column but only 6. Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
             "field_short_description": "Geolocation, DEGREES, minutes and seconds"
         },{
             "field_name": "LonMin",
             "name_in_csv": "lon_min",
             "database_model":"population",
-            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LonDeg, LonMin, LonSec. If no LonSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LonMin / LonSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LonDeg, LonMin, LonSec. If no LonSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter 06 into the LonMin or LonSec column but only 6. Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
             "field_short_description": "Geolocation, degrees, MINUTES and seconds"
         },{
             "field_name": "LonSec",
             "name_in_csv": "lon_sec",
             "database_model":"population",
-            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LonDeg, LonMin, LonSec. If no LonSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter "06" into the LonMin / LonSec column but only "6". Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
+            "field_description": "Record the degree (0-90), minute (0-60) and second (0-60) values of the locations of the matrix in the following fields: LonDeg, LonMin, LonSec. If no LonSec is available type in a zero. This means: the value “0” may mean precise values are not available! If the geolocation is given as e.g. 58° 06' N 17° 26' E we do not enter 06 into the LonMin or LonSec column but only 6. Note: if there are no seconds (or minutes) given, you should record as NA rather than 0.",
             "field_short_description": "Geolocation, degrees, minutes and SECONDS"
         },{
             "field_name": "Population Name",
             "name_in_csv": "population_name",
             "database_model":"population",
-            "field_description": "The name of population where the matrix was recorded, usually as given by the publication author. For example “Brazeau Creek, Florida”. When the author provides no name, the closest geographic location is assigned as name. If there are multiple populations in the study and their names are not pertinent/available, sequential names in alphabetical order are assigned for each population in the study, separated by (e.g. A; B; C; etc).",
+            "field_description": "The name of population where the matrix was recorded, usually as given by the publication author. For example “Brazeau Creek, Florida”. When the author provides no name, the closest geographic location is assigned as name. If there are multiple populations in the study and their names are not pertinent or available, sequential names in alphabetical order are assigned for each population in the study, separated by (e.g. A; B; C; etc).",
             "field_short_description": "The name of population where the matrix was recorded"
         },{
             "field_name": "Population Size",
             "name_in_csv": "population_pop_size",
             "database_model":"population",
-            "field_description": "The total number/abundance of individuals within the population in the stated year. Not always available.",
+            "field_description": "The total number or abundance of individuals within the population in the stated year. Not always available.",
             "field_short_description": "Total number of individuals"
         },{
             "field_name": "Institute Source",
@@ -276,7 +274,7 @@
             "field_name": "DatabaseVersionRelease",
             "name_in_csv": "database_master_version",
             "database_model":"population",
-            "field_description": "The Version number of the database where the data is/will be released. e.g. 3.0.0, 3.1.0. Where the data are not yet to be released (for example, because the data are incomplete) an "X" is used in place of a version number. For all future digitization, an "X" should be placed in the version record. These will be replaced with an appropriate version number by Owen or Rob only at a later date when a final check is done to release more data periodically.",
+            "field_description": "The Version number of the database where the data is or will be released. e.g. 3.0.0, 3.1.0. Where the data are not yet to be released (for example, because the data are incomplete) an X is used in place of a version number. For all future digitization, an X should be placed in the version record. These will be replaced with an appropriate version number by Owen or Rob only at a later date when a final check is done to release more data periodically.",
             "field_short_description": "Version number of the database when this data was released"
         },{
             "field_name": "CensusTiming",
@@ -306,7 +304,7 @@
             "field_name": "Growth Form Raunkiaer",
             "name_in_csv": "trait_growth_form_raunkiaer",
             "database_model":"Trait",
-            "field_description": "Plant classification according to Raunkiaer (classified after the position of the overwintering buds). Enter NA for animals etc. For more information please see the relevant metatable and the github https://github.com/Spandex-at-Exeter/demography_database/wiki/Growth-Form-Raunkiaer",
+            "field_description": "Plant classification according to Raunkiaer (classified after the position of the overwintering buds). Enter NA for animals etc. For more information please see the relevant metatable and the wiki pages on the github - github.com Spandex-at-Exeterdemography_database wiki Growth-Form-Raunkiaer",
             "field_short_description": "Plant classification according to Raunkiaer"
         },{
             "field_name": "matrix_a_string",
@@ -336,7 +334,7 @@
             "field_name": "StudyDifficulty",
             "name_in_csv": "matrix_difficulty",
             "database_model":"Matrix",
-            "field_description": "This indicates how difficult the MPM information was to extract from the paper. It is recorded on a 3 point scale (values of 1, 2, 3), with 1 being easy to 3 being hard. For more information, please see the github wiki: https://github.com/Spandex-at-Exeter/demography_database/wiki/Matrix-Difficulty",
+            "field_description": "This indicates how difficult the MPM information was to extract from the paper. It is recorded on a 3 point scale (values of 1, 2, 3), with 1 being easy to 3 being hard. For more information, please see the github wiki - github.com Spandex-at-Exeter demography_database wiki Matrix-Difficulty",
             "field_short_description": "This indicates how difficult the MPM information was to extract from the paper (1 - easy, 2-medium, 3- hard)"
         },{
             "field_name": "MatrixCaptivity",
@@ -348,13 +346,13 @@
             "field_name": "StudyChecked",
             "name_in_csv": "matrix_checked_count",
             "database_model":"Matrix",
-            "field_description": "This variable records how much the MPM has been checked by us. It is a numeric variable that gets incremented by +1 each time the data in a set of matrices for a particular publication are checked. The first time the data are entered, StudyChecked is 0 (it has been entered not checked). Then, if for whatever reason we revisit the paper/data to check details, we add 1 to the number. e.g. an study that has been entered, then checked twice should have a value of 2.",
+            "field_description": "This variable records how much the MPM has been checked by us. It is a numeric variable that gets incremented by +1 each time the data in a set of matrices for a particular publication are checked. The first time the data are entered, StudyChecked is 0 (it has been entered not checked). Then, if for whatever reason we revisit the paper or data to check details, we add 1 to the number. e.g. an study that has been entered, then checked twice should have a value of 2.",
             "field_short_description": "It is a numeric variable that gets incremented by +1 each time the data in a set of matrices for a particular publication are checked"
         },{
             "field_name": "MatrixClassAuthor",
             "name_in_csv": "matrix_class_author",
             "database_model":"Matrix",
-            "field_description": "The stage description as indicated in the source by the publication author of the matrix population model. When possible, we add units (e.g. cm, m, cm^2^). Some information on how to correctly write things in that column: First letter must be a capital letter (e.g. Adult: 100-150 cm DBH). If the Author uses abbreviations first write them down, followed by a “:” and the explanation of that abbreviations. Always add units (when possible) (e.g. 0-9 cm DBH, not 0-9 DBH). Be clear in what is described (e.g. 0-9 cm DBH/ height, not only 0-9 cm). Make sure that you use . Instead of , when typing numbers (e.g. 1.45 cm, not 1,45 cm). Make sure that there is space between the number and the unit (e.g. 1.45 cm, not 1.45cm). We use exact the same description as the author did. If the paper is in another language (e.g. all the Spanish stuff from Iriondo Book 2009) we also write down the stages in that foreign language (e.g. in Spanish). Also write down abbreviations - if the author used them frequently (e.g. if the author explains his stages in the text and after that only uses S1, S2, J1, J2, J3, A, R write them down, too (= s1 = dormant seeds).",
+            "field_description": "The stage description as indicated in the source by the publication author of the matrix population model. When possible, we add units (e.g. cm, m, cm^2^). Some information on how to correctly write things in that column: First letter must be a capital letter (e.g. Adult: 100-150 cm DBH). If the Author uses abbreviations first write them down, followed by a “:” and the explanation of that abbreviations. Always add units (when possible) (e.g. 0-9 cm DBH, not 0-9 DBH). Be clear in what is described (e.g. 0-9 cm DBH or height, not only 0-9 cm). Make sure that you use . Instead of , when typing numbers (e.g. 1.45 cm, not 1,45 cm). Make sure that there is space between the number and the unit (e.g. 1.45 cm, not 1.45cm). We use exact the same description as the author did. If the paper is in another language (e.g. all the Spanish stuff from Iriondo Book 2009) we also write down the stages in that foreign language (e.g. in Spanish). Also write down abbreviations - if the author used them frequently (e.g. if the author explains his stages in the text and after that only uses S1, S2, J1, J2, J3, A, R write them down, too (= s1 = dormant seeds).",
             "field_short_description": "The stage description of each MPM as indicated in the source by the publication author"
         },{
             "field_name": "MatrixClassNumber",
@@ -390,20 +388,20 @@
             "field_name": "MatrixCriteriaOntogeny",
             "name_in_csv": "matrix_criteria_ontogeny",
             "database_model":"Matrix",
-            "field_description": "Records whether the matrix model is based on ontogenetic stage (e.g. seedbank, reproductive, vegetative, dormant, etc). Yes - The matrix population model contains at least one class that is based on development/ontogeny (e.g. seedbank, reproductive, vegetative, dormant, etc). No - Matrix population model is not based on ontogeny. ",
+            "field_description": "Records whether the matrix model is based on ontogenetic stage (e.g. seedbank, reproductive, vegetative, dormant, etc). Yes - The matrix population model contains at least one class that is based on development or ontogeny (e.g. seedbank, reproductive, vegetative, dormant, etc). No - Matrix population model is not based on ontogeny. ",
             "field_short_description": "Records whether the matrix model is based on ontogenetic stage (e.g. seedbank, reproductive, vegetative, dormant, etc)."
         },{
             "field_name": "MatrixCriteriaSize",
             "name_in_csv": "matrix_criteria_size",
             "database_model":"Matrix",
-            "field_description": "Records whether the matrix model is based on size (e.g. stem length/number, body length/mass, etc). Yes - The matrix population model contains stages based on size and this briefly describes the aspect of size that was measured to classify individuals (e.g. DBH, stem length, stem height, stem number, etc). No - The matrix population model is not based on size.",
-            "field_short_description": "Records whether the matrix model is based on size (e.g. stem length/number, body length/mass, DBH, stem length, stem height, stem number, etc)."
+            "field_description": "Records whether the matrix model is based on size (e.g. stem length or number, body length or mass, etc). Yes - The matrix population model contains stages based on size and this briefly describes the aspect of size that was measured to classify individuals (e.g. DBH, stem length, stem height, stem number, etc). No - The matrix population model is not based on size.",
+            "field_short_description": "Records whether the matrix model is based on size (e.g. stem length or number, body length or mass, DBH, stem length, stem height, stem number, etc)."
         },{
             "field_name": "MatrixDimension",
             "name_in_csv": "matrix_dimension",
             "database_model":"Matrix",
-            "field_description": "the number of stage/age/ontogeny classes within the MPM. For example, a 3 x 3 matrix would have a matrix dimension of 3.",
-            "field_short_description": "the number of stage/age/ontogeny classes within the MPM"
+            "field_description": "the number of stage or age or ontogeny classes within the MPM. For example, a 3 x 3 matrix would have a matrix dimension of 3.",
+            "field_short_description": "the number of stage or age or ontogeny classes within the MPM"
         },{
             "field_name": "MatrixEndMonth",
             "name_in_csv": "matrix_end_month",
@@ -444,8 +442,8 @@
             "field_name": "Matrix Fecundity",
             "name_in_csv": "matrix_fec",
             "database_model":"Matrix",
-            "field_description": "This records whether fecundity was measured at all for this matrix model (True/False). True - fecundity was measured for the matrix. False - fecundity was not measured for the matrix. The rationale for this is that a fecundity (in the F matrix) may be recorded as 0 either because it was not measured, or because reproduction was estimated to be zero. As a general rule, if any values for fecundity (e.g. in the F matrix) are non-zero, then MatrixFec should be recorded as 'Yes'. If all values are zero, then you should check the paper carefully to check whther this is because no fecundity was detected, or whether no attempt was made to measure fecundity.",
-            "field_short_description": "Was fecundity measured and used to calculate matrix values (True/False)?"
+            "field_description": "This records whether fecundity was measured at all for this matrix model (True or False). True - fecundity was measured for the matrix. False - fecundity was not measured for the matrix. The rationale for this is that a fecundity (in the F matrix) may be recorded as 0 either because it was not measured, or because reproduction was estimated to be zero. As a general rule, if any values for fecundity (e.g. in the F matrix) are non-zero, then MatrixFec should be recorded as 'Yes'. If all values are zero, then you should check the paper carefully to check whther this is because no fecundity was detected, or whether no attempt was made to measure fecundity.",
+            "field_short_description": "Was fecundity measured and used to calculate matrix values (True or False)?"
         },{
             "field_name": "matrix_independence_origin",
             "name_in_csv": "matrix_independence_origin",
@@ -474,13 +472,13 @@
             "field_name": "Observation",
             "name_in_csv": "matrix_observations",
             "database_model":"Matrix",
-            "field_description": "Any useful additional information about the population matrix model that is not provided elsewhere but may nonetheless be important (e.g. plant canopy, burning intervals, etc.) including additional information on the geolocations or matrix treatments. Some standardised sentences: The GPS coordinates were approximated to the closest geographic location described in the reference. (see Geolocation). GPS co-ordinates cited exactly as reported in original paper. These do not match written study site description. (see Geolocation). Geolocation / Altitude from descriptor: (if no matrices are enters yet but a geolocation information are available). Matrix is calculated with stochastic model. X years since last fire. Calculated with demographic data from Author JournalName YearPublished. Data is from a greenhouse experiment. MatrixClassAuthor is not clarified.",
+            "field_description": "Any useful additional information about the population matrix model that is not provided elsewhere but may nonetheless be important (e.g. plant canopy, burning intervals, etc.) including additional information on the geolocations or matrix treatments. Some standardised sentences: The GPS coordinates were approximated to the closest geographic location described in the reference. (see Geolocation). GPS co-ordinates cited exactly as reported in original paper. These do not match written study site description. (see Geolocation). Geolocation or Altitude from descriptor: (if no matrices are enters yet but a geolocation information are available). Matrix is calculated with stochastic model. X years since last fire. Calculated with demographic data from Author JournalName YearPublished. Data is from a greenhouse experiment. MatrixClassAuthor is not clarified.",
             "field_short_description": "Any useful additional information about this MPM"
         },{
             "field_name": "MatrixPeriodicity",
             "name_in_csv": "matrix_periodicity",
             "database_model":"Matrix",
-            "field_description": "Frequency with which seasonal or annual the matrix population model was constructed. For example, 1 - once per year, 2 - twice per year, 0.2 - once every 5 years etc. Annual periodicities can be calculated as follows: If the study site has been visited more than once a year calculate $1 * N$, where N is the number of visits to the site per year, e.g. $1 * 2 = 2$. If the study site has been revisited less than once per year calculate $1 / Y$, where Y is the number of years, e.g. $1/5 = 0.2$.",
+            "field_description": "Frequency with which seasonal or annual the matrix population model was constructed. For example, 1 - once per year, 2 - twice per year, 0.2 - once every 5 years etc. Annual periodicities can be calculated as follows: If the study site has been visited more than once a year calculate $1 * N$, where N is the number of visits to the site per year, e.g. $1 * 2 = 2$. If the study site has been revisited less than once per year calculate $1 or Y$, where Y is the number of years, e.g. $1 divided by 5 = 0.2$.",
             "field_short_description": "Frequency with which seasonal or annual the matrix population model was constructed"
         },{
             "field_name": "MatrixSeasonal",
@@ -492,13 +490,13 @@
             "field_name": "MatrixSplit",
             "name_in_csv": "matrix_split",
             "database_model":"Matrix",
-            "field_description": "Indicates whether the A matrix population model can be divided into the U, C and F MPMs (divided/indivisible). Divided - The matrix population model A has successfully been divided into the process-based sub matrices U, F and C. Indivisible - The matrix population model A has not been divided into the process-based sub-matrices U, F and C (see Figure below for further details) because insufficient information is available to classify the various demographic processes for each sub-matrix. If a matrix is divisible, we divide it! Then always insert all sub-matrices – even if e.g. C only has zeros! ",
-            "field_short_description": "Indicates the type of matrix population model (divided/indivisible)"
+            "field_description": "Indicates whether the A matrix population model can be divided into the U, C and F MPMs (divided or indivisible). Divided - The matrix population model A has successfully been divided into the process-based sub matrices U, F and C. Indivisible - The matrix population model A has not been divided into the process-based sub-matrices U, F and C (see Figure below for further details) because insufficient information is available to classify the various demographic processes for each sub-matrix. If a matrix is divisible, we divide it! Then always insert all sub-matrices – even if e.g. C only has zeros! ",
+            "field_short_description": "Indicates the type of matrix population model (divided or indivisible)"
         },{
             "field_name": "MatrixStudiedSex",
             "name_in_csv": "matrix_studied_sex",
             "database_model":"Matrix",
-            "field_description": "Indication of the sex(es) considered when constructing the matrix population model. M - studied only males. F - studied only females. H - Hermaphrodites. M/F - Males and females separately in the same population matrix model. A - All sexes together. NA - No distinct sexes (e.g. virus).",
+            "field_description": "Indication of the sex(es) considered when constructing the matrix population model. M - studied only males. F - studied only females. H - Hermaphrodites. M or F - Males and females separately in the same population matrix model. A - All sexes together. NA - No distinct sexes (e.g. virus).",
             "field_short_description": "Sex considered when constructing the matrix population model. For example, M - Males."
         },{
             "field_name": "MatrixSurvivalIssue",
@@ -552,7 +550,7 @@
             "field_name": "Class",
             "name_in_csv": "taxonomy_class",
             "database_model":"Taxonomy",
-            "field_description": "Class to which species belongs e.g. Magnoliopsida. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_description": "Class to which species belongs e.g. Magnoliopsida. For more information, please visit our taxonomical classification wiki page on github - github.com Spandex-at-Exeter demography_database wiki Taxonomy-columns.",
             "field_short_description": "Class to which species belongs e.g. Magnoliopsida"
         },{
             "field_name": "DateOfCheck",
@@ -570,25 +568,25 @@
             "field_name": "Family",
             "name_in_csv": "taxonomy_family",
             "database_model":"Taxonomy",
-            "field_description": "Family to which species belongs e.g. Polygonaceae. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_description": "Family to which species belongs e.g. Polygonaceae. For more information, please visit our taxonomical classification wiki page on github - github.com Spandex-at-Exeter demography_database wiki Taxonomy-columns.",
             "field_short_description": "Family to which species belongs e.g. Polygonaceae."
         },{
             "field_name": "Genus",
             "name_in_csv": "taxonomy_genus",
             "database_model":"Taxonomy",
-            "field_description": "Genus used in SpeciesAuthor e.g. Chorizanthe. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_description": "Genus used in SpeciesAuthor e.g. Chorizanthe. For more information, please visit our taxonomical classification wiki page on github - github.com Spandex-at-Exeter demography_database wiki Taxonomy-columns.",
             "field_short_description": "Genus used in SpeciesAuthor e.g. Chorizanthe."
         },{
             "field_name": "GenusAccepted",
             "name_in_csv": "taxonomy_genus_accepted",
             "database_model":"Taxonomy",
-            "field_description": "Genus used in SpeciesAccepted e.g. Chorizanthe. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_description": "Genus used in SpeciesAccepted e.g. Chorizanthe. For more information, please visit our taxonomical classification wiki page on github - github.com Spandex-at-Exeter demography_database wiki Taxonomy-columns.",
             "field_short_description": "Genus used in SpeciesAccepted e.g. Chorizanthe."
         },{
             "field_name": "GenusAuthor",
             "name_in_csv": "taxonomy_genus_author",
             "database_model":"Taxonomy",
-            "field_description": "Genus used in SpeciesAuthor e.g. Chorizanthe. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_description": "Genus used in SpeciesAuthor e.g. Chorizanthe. For more information, please visit our taxonomical classification wiki page on github - github.com Spandex-at-Exeter demography_database wiki Taxonomy-columns.",
             "field_short_description": "Genus used in SpeciesAuthor e.g. Chorizanthe."
         },{
             "field_name": "Kingdom",
@@ -600,13 +598,13 @@
             "field_name": "Order",
             "name_in_csv": "taxonomy_order",
             "database_model":"Taxonomy",
-            "field_description": "Order to which species belongs e.g. Caryophyllales. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_description": "Order to which species belongs e.g. Caryophyllales. For more information, please visit our taxonomical classification wiki page on github - github.com Spandex-at-Exeter demography_database wiki Taxonomy-columns.",
             "field_short_description": "Order to which species belongs e.g. Caryophyllales."
         },{
             "field_name": "Phylum",
             "name_in_csv": "taxonomy_phylum",
             "database_model":"Taxonomy",
-            "field_description": "Phylum to which species belongs e.g. Magnoliophyta. For more information, please visit our taxonomical classification wiki page on github: https://github.com/Spandex-at-Exeter/demography_database/wiki/Taxonomy-columns.",
+            "field_description": "Phylum to which species belongs e.g. Magnoliophyta. For more information, please visit our taxonomical classification wiki page on github - github.com Spandex-at-Exeter demography_database wiki Taxonomy-columns.",
             "field_short_description": "Phylum to which species belongs e.g. Magnoliophyta."
         },{
             "field_name": "AngioGymno",
@@ -642,8 +640,8 @@
             "field_name": "WithinSiteReplication",
             "name_in_csv": "within_site_replication",
             "database_model":"Population",
-            "field_description": "Reports the number of plots/transects sampled at each population and should give an accurate size description of the plots. For example, “6 (4x4 m2)” means that in each population, the authors established and followed six permanent plots of 4x4 m2. Be as specific but as brief as possible.",
-            "field_short_description": "Reports the number of plots/transects sampled at each population and should give an accurate size description of the plots."
+            "field_description": "Reports the number of plots or transects sampled at each population and should give an accurate size description of the plots. For example, “6 (4x4 m2)” means that in each population, the authors established and followed six permanent plots of 4x4 m2. Be as specific but as brief as possible.",
+            "field_short_description": "Reports the number of plots or transects sampled at each population and should give an accurate size description of the plots."
         },{
             "field_name": "Species_IUCN_TaxonID",
             "name_in_csv": "species_iucn_taxonid",
@@ -660,7 +658,7 @@
             "field_name": "Species_IUCNstatus",
             "name_in_csv": "species_iucn_status",
             "database_model":"Species",
-            "field_description": "A conservation assessment of each species from an independent source - the IUCN. For more information please see the IUCN status metatable and visit the website for new species assessments - http://www.iucnredlist.org/about/overview",
+            "field_description": "A conservation assessment of each species from an independent source - the IUCN. For more information please see the IUCN status metatable and visit the website for new species assessments - www.iucnredlist.org about overview",
             "field_short_description": "A conservation assessment of each species from an independent source - the IUCN"
         },{
             "field_name": "image_path",
@@ -678,14 +676,14 @@
             "field_name": "Species_GISDstatus",
             "name_in_csv": "species_gisd_status",
             "database_model":"Species",
-            "field_description": "An assessment of each species from an independent source as to whether that species is globally renound for being invasive (TRUE/FALSE) - from the IUCN. For more information please visit the website for new species assessments - http://www.iucngisd.org/gisd/ or use the gisd function in the originR R package.",
-            "field_short_description": "Is the species globally known as invasive according to iucngisd.org (TRUE/FALSE)"
+            "field_description": "An assessment of each species from an independent source as to whether that species is globally renound for being invasive (TRUE or FALSE) - from the IUCN. For more information please visit the website for new species assessments - www.iucngisd.org gisd or use the gisd function in the originR R package.",
+            "field_short_description": "Is the species globally known as invasive according to iucngisd.org (TRUE or FALSE)"
         },{
             "field_name": "Clonality",
             "name_in_csv": "clonality",
             "database_model":"Trait",
             "field_description": "Is the species known to reproduce clonally? True - Yes, the species can reproduce clonally. False - No, there is no evidence that this species can reproduce clonally.",
-            "field_short_description": "Is the species known to reproduce clonally (TRUE/FALSE)?"
+            "field_short_description": "Is the species known to reproduce clonally (TRUE or FALSE)?"
         },{
             "field_name": "ClonalitySource",
             "name_in_csv": "clonality_source",
@@ -697,14 +695,14 @@
             "name_in_csv": "seedbank",
             "database_model":"Trait",
             "field_description": "Is there evidence to suggest this species has a seedbank? True - Yes, the species does have a seedbank. False - No, there is no evidence that this species has a seedbank.",
-            "field_short_description": "Is this species known to have a seedbank (TRUE/FALSE)?"
+            "field_short_description": "Is this species known to have a seedbank (TRUE or FALSE)?"
         },{
             "field_name": "SeedbankSource",
             "name_in_csv": "seedbank_source",
             "database_model":"Trait",
             "field_description": "If the species is known to have a seed bank, what evicence provided this information? Please state citations of articles or sources, if more then one source please seperate by a ",
-            "field_short_description": "Citation evidence for seedbank presence/absence of each species"
-        },],
+            "field_short_description": "Citation evidence for seedbank presence or absence of each species"
+        }],
 
         "Common_values": [{
                 "common_value_name": "Not available",
@@ -729,10 +727,11 @@
         }, {
                 "common_value_name": "Frankenstein matrix",
                 "common_value_data": "FRANK",
-                "common_value_description": "Frankenstein matrices are MPMs where the author parameterised their model using demographic data from 2+ other papers/sources. These MPMs should be clearly indicated with FRANK in the observation column. Furthermore, for these matrices, temporal and geographic information is not useful for comparative analyses and therefore geographic location data, time information (start/end year, season etc.) should be recorded as FRANK (not NA)."
+                "common_value_description": "Frankenstein matrices are MPMs where the author parameterised their model using demographic data from 2+ other papers or sources. These MPMs should be clearly indicated with FRANK in the observation column. Furthermore, for these matrices, temporal and geographic information is not useful for comparative analyses and therefore geographic location data, time information (start or end year, season etc.) should be recorded as FRANK (not NA)."
         }, {
                 "common_value_name": "A simulated matrix",
                 "common_value_data": "Simulation",
                 "common_value_description": "The matrix model is a simulation, and perhaps only loosely based on a specific real species. Typically these simulated matrices are used to explore the behaviour of a population in a theoretical way. In those cases, there is no geographic location, ecoregion etc. For these data we do not calculate averages or ranges for locations and time periods but instead enter Simulation (not NA)."
-    }]
+        }]
+    }   
 }

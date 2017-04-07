@@ -24,7 +24,7 @@ from app.models import User, Role, Permission, \
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Version, Institute, EndSeason, ChangeLogger, PublicationsProtocol
+    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Version, Institute, EndSeason, ChangeLogger, PublicationsProtocol, DigitizationProtocol, Protocol, CommonTerm
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -50,7 +50,8 @@ def make_shell_context():
                 StageType=StageType, StageTypeClass=StageTypeClass, TransitionType=TransitionType, MatrixValue=MatrixValue, \
                 MatrixComposition=MatrixComposition, StartSeason=StartSeason, StudiedSex=StudiedSex, Captivity=Captivity, MatrixStage=MatrixStage,\
                 Matrix=Matrix, Interval=Interval, Fixed=Fixed, Small=Small, CensusTiming=CensusTiming, Status=Status, InvasiveStatusStudy=InvasiveStatusStudy, InvasiveStatusElsewhere=InvasiveStatusElsewhere, \
-                PurposeEndangered=PurposeEndangered, PurposeWeed=PurposeWeed, Version=Version, Institute=Institute, EndSeason=EndSeason, ChangeLogger = ChangeLogger, PublicationsProtocol = PublicationsProtocol)
+                PurposeEndangered=PurposeEndangered, PurposeWeed=PurposeWeed, Version=Version, Institute=Institute, EndSeason=EndSeason, ChangeLogger = ChangeLogger, PublicationsProtocol = PublicationsProtocol, \
+                DigitizationProtocol = DigitizationProtocol, Protocol=Protocol, CommonTerm=CommonTerm)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
@@ -103,6 +104,7 @@ def delete_table_data():
         Trait.query.delete()
         Species.query.delete()
         Version.query.delete()
+        Protocol.query.delete()
         db.session.commit()
         print "All data has been removed"
     elif response == "n":
@@ -220,6 +222,25 @@ def submit_new(data):
     # When checking for null data later, these need to be excluded, as they will always have a value
     ignore_keys = ['version_ok', 'version_latest', 'version_original']
 
+    ''' DigitizationProtocol ''' 
+
+#    digitization_protocol = DigitizationProtocol.query.filter_by(field_name=data["digitization_protocol"]).first()
+
+ #   if digitization_protocol == None:
+ #           ac_dict = {'protocol_id' : protocol.id, 
+ #           'field_name' : data['field_name'],
+ #           'name_in_csv' : data["name_in_csv"],
+ #           'database_model' : data["database_model"],
+ #           'field_description' : data["field_description"],
+ #           'field_short_description' : data["field_short_description"]
+ #           }
+
+ #           ac_cleaned = data_clean(ac_dict)
+ #           digitization_protocol = Protocol(**ac_cleaned["kwargs"])
+            
+ #           db.session.add(digitization_protocol)
+ #           db.session.commit()
+
     ''' Publication '''   
     
     publications_protocol = PublicationsProtocol.query.filter_by(protocol_number=data["publications_protocol_id"]).first()
@@ -312,8 +333,6 @@ def submit_new(data):
             author_contact_version.original_version_id = author_contact_version.id
             db.session.add(author_contact_version)
             db.session.commit()
-    
-
 
     ''' Species '''
     species = Species.query.filter_by(species_accepted=data["species_accepted"]).first()
@@ -457,6 +476,23 @@ def submit_new(data):
 #        db.session.add(study_version)
 #        db.session.commit()
 
+    ''' Protocol '''
+
+#    digitization_protocol = DigitizationProtocol.query.filter_by(field_name=data["digitization_protocol_id"]).first()
+#    commonterm = CommonTerm.query.filter_by(common_value_name=data["commonterm_id"]).first()
+
+#    protocol = Protocol.query.filter_by(protocol_id=protocol.id).first()
+
+#    if protocol == None:
+#        protocol_dict = {'protocol_id' : protocol.id,
+#        'digitization_protocol_id' : digitization_protocol.id if digitization_protocol else None,
+#        'commonterm_id' : commonterm.id if commonterm else None}
+
+#        protocol_cleaned = data_clean(protocol_dict)
+#        protocol = Protocol(**protocol_cleaned["kwargs"])
+
+#        db.session.add(protocol)
+#        db.session.commit()
     
     ''' Population '''
     '''            '''
@@ -803,6 +839,8 @@ def convert_all_headers_new(dict):
     new_dict['study_database_source_id'] = dict["study_database_source"]
     new_dict['publication_study_notes'] = dict["publication_study_notes"]
     new_dict['publications_protocol_id'] = dict["publications_protocol"]
+    new_dict['digitization_protocol_id'] = dict["digitization_protocol"]
+    new_dict['commonterm_id'] = dict["commonterm"]
     
     for key, value in new_dict.iteritems():
         if value == "NA":
@@ -829,7 +867,8 @@ def migrate_meta():
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute, Version, PublicationsProtocol
+    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute, Version, \
+    PublicationsProtocol, DigitizationProtocol, Protocol, CommonTerm
 
     print "Migrating Meta Tables..."
     Role.insert_roles()
@@ -849,6 +888,8 @@ def migrate_meta():
     Database.migrate()
     Status.migrate()
     PublicationsProtocol.migrate()
+    DigitizationProtocol.migrate()
+    CommonTerm.migrate()
    
     return
 
@@ -864,7 +905,7 @@ def model_version(model):
 
 @manager.command
 def version_current():
-    models = [Species(), Taxonomy(), Trait(), Publication(), AuthorContact(), Population(), StageType(), MatrixValue(),Matrix(), Fixed(), Institute()]
+    models = [Species(), Taxonomy(), Trait(), Publication(), AuthorContact(), Population(), StageType(), MatrixValue(),Matrix(), Fixed(), Institute(), Protocol()]
     
     for model in models:
         model_version(model)
