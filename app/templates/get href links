@@ -1,0 +1,32 @@
+from bs4 import BeautifulSoup, SoupStrainer
+from urllib2 import urlopen
+from urllib2 import HTTPError
+from urllib2 import URLError
+import httplib2
+import datetime
+import random
+import re
+
+optionsUrl = 'https://compadredb.wordpress.com/'
+optionsPage = urlopen(optionsUrl)
+soup = BeautifulSoup(optionsPage, "html5lib")
+middle = soup.findAll("h1", attrs={'class': 'entry-title'})
+for line in middle.find_all('a'):
+    print(line.get('href'))
+
+print middle
+print(len(middle))
+
+import urllib2
+from bs4 import BeautifulSoup
+url = urllib2.urlopen("https://compadredb.wordpress.com/").read()
+soup = BeautifulSoup(url, "html5lib")
+for line in soup.find_all('a'):
+    print(line.get('href'))
+#def getLinks(articleUrl):
+#	optionsUrl = 'https://compadredb.wordpress.com/'
+#	optionsPage = urlopen(optionsUrl)
+#	soup = BeautifulSoup(optionsPage, "html5lib")
+#	links = soup.find('h1', attrs={'class': 'entry-title'}).findAll('a', attrs={'href'})
+#	for link in links:
+#		print (link)

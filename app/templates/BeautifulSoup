@@ -1,0 +1,6 @@
+from bs4 import BeautifulSoup
+from urllib import urlopen
+ 
+optionsUrl = 'https://compadredb.wordpress.com/feed/'
+optionsPage = urlopen(optionsUrl)
+soup = BeautifulSoup(optionsPage)
