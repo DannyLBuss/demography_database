@@ -432,3 +432,23 @@ margin:-60px 0 0; /* negative fixed header height */
   stroke: #ccc;
   stroke-width: 2px;
 }
+
+table.dataframe, .dataframe th, .dataframe td {
+  border: none;
+  border-bottom: 1px solid #C8C8C8;
+  border-collapse: collapse;
+  text-align:left;
+  padding: 10px;
+  margin-bottom: 40px;
+  font-size: 0.9em;
+}
+
+.wordpress th {
+    background-color: #77dd77;
+    color: white;
+}
+
+tr:nth-child(odd)       { background-color:#eee; }
+tr:nth-child(even)  { background-color:#fff; }
+
+tr:hover            { background-color: #ffff99;}

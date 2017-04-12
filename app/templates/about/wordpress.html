@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<html>
+<head>
+ <style>
+ /* unvisited link*/
+    a:link {    
+            color: #006400;
+            font-weight:bold;
+            text-transform: capitalize;
+        }
+    /* visited link */
+    a:visited {
+            color: #3CB371;
+            font-weight:bold
+        }
+        /* mouse over link */
+        a:hover {
+            color: #B0E0E6;
+            font-weight:bold
+                }
+            /* selected link */
+            a:active {
+            color: #E9967A;
+            font-weight:bold
+                }
+</style>
+</head>
+<div class="page-header">
+<h1>
+News
+</h1>
+</div>
+<title>Wordpress Blog</title>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css') }}">
+<div class=page>
+    <h1>Compadre</h1>
+    {% for table in wordpress %}
+        <h2>{{titles[loop.index]}}</h2>
+    {{ table|safe }}
+    {% endfor %}
+</div>
+
+<div class="mar_top2">
+    <p><a href="https://compadredb.wordpress.com/2016/11/21/demographic-extrapolations-how-far-canshould-we-go/" target="_blank">Demographic extrapolations: how far can/should we go?</a> (21.11.2016)<br>
+        Just because you can (extrapolate models using the available demographic data in COMPADRE and COMADRE, and other sources) doesn’t mean you should. Shaun Coutts and colleagues have published a work in Ecology Letters asking how far can one extrapolate demographic outputs within and across species based on demographic knowledge, geographic and phylogenetic distance […]<img alt="" border="0" src="https://pixel.wp.com/b.gif?host=compadredb.wordpress.com&amp;blog=70921292&amp;post=381&amp;subd=compadredb&amp;ref=&amp;feed=1" width="1" height="1"></p>
+    </body>
+</div>
+
+<div class="info_box">
+    <h3>{{ }}</h3>
+    <p><a href="http://onlinelibrary.wiley.com/doi/10.1111/1365-2745.12334/abstract;jsessionid=E81509E7DBF840A800EC5701CA22E17B.f04t03" target="_blank">The COMPADRE Plant Matrix Database: an open online repository for plant demography</a></p>
+    <p><a href="http://onlinelibrary.wiley.com/doi/10.1111/1365-2656.12482/full" target="_blank">COMADRE: a global database of animal demography</a></p>
+    <p></p>
+</div>
+
+</html>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
