@@ -471,8 +471,6 @@ class IUCNStatus(db.Model):
     def __repr__(self):
         return self.status_code
 
-''' Seedbank '''
-#Insert Robs new field - This defines whether the species should have a seedbank or not
 
 #class ESAStatus(db.Model):
 #    __tablename__ = 'esa_statuses'
@@ -2223,7 +2221,6 @@ class Species(db.Model):
     species_common = db.Column(db.String(200))
     iucn_status_id = db.Column(db.Integer, db.ForeignKey('iucn_status.id',ondelete='CASCADE'))
     #esa_status_id = db.Column(db.Integer, db.ForeignKey('esa_statuses.id',ondelete='CASCADE'))
-    species_gisd_status = db.Column(db.Boolean())
     #invasive_status = db.Column(db.Boolean())
     gbif_taxon_key = db.Column(db.Integer)
     species_iucn_taxonid = db.Column(db.Integer())
@@ -2412,7 +2409,6 @@ class Species(db.Model):
                                       _external=False),
             'data' : {
                 'species_accepted': self.species_accepted,
-                'species_gisd_status': self.species_gisd_status,
                 'species_common': self.species_common,
                 'taxonomy' : [taxonomy.to_json_simple(key) for taxonomy in self.taxonomy][0],
                 'traits' : [trait.to_json_simple(key) for trait in self.trait],
@@ -2546,7 +2542,10 @@ class Trait(db.Model):
     reproductive_repetition_id = db.Column(db.Integer, db.ForeignKey('reproductive_repetition.id',ondelete='CASCADE'))
     dicot_monoc_id = db.Column(db.Integer, db.ForeignKey('dicot_monoc.id',ondelete='CASCADE'))
     angio_gymno_id = db.Column(db.Integer, db.ForeignKey('angio_gymno.id',ondelete='CASCADE'))
-    spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id',ondelete='CASCADE')) 
+    spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id',ondelete='CASCADE'))
+    species_seedbank = db.Column(db.Boolean())
+    species_clonality = db.Column(db.Boolean())
+    species_gisd_status = db.Column(db.Boolean()) 
 
     version = db.relationship("Version", backref="trait", passive_deletes=True)
     #version_latest = db.Column(db.String(64))
@@ -2572,6 +2571,9 @@ class Trait(db.Model):
                 'reproductive_repetition' : self.reproductive_repetition.to_json_simple(key) if self.reproductive_repetition else None,
                 'dicot_monoc' : self.dicot_monoc.to_json_simple(key) if self.dicot_monoc else None,
                 'angio_gymno' : self.angio_gymno.to_json_simple(key) if self.angio_gymno else None,
+                'species_seedbank': self.species_seedbank,
+                'species_clonality': self.species_clonality,
+                'species_gisd_status': self.species_gisd_status,
                 
                 'versions' : [version.to_json_simple(key) for version in self.versions]
                 }
@@ -2754,81 +2756,6 @@ class Publication(db.Model):
 
             db.session.add(cl)
             db.session.commit()
-
-
-#class Study(db.Model):
-#    #query_class = VersionQuery
-#    __tablename__ = 'studies'
-#    id = db.Column(db.Integer, primary_key=True)
-#    publication_id = db.Column(db.Integer, db.ForeignKey('publications.id',ondelete='CASCADE'))
-#    species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))
-#    study_duration = db.Column(db.Integer(), index=True)
-#    study_start = db.Column(db.Integer())
-#    study_end = db.Column(db.Integer())
-#
-#    purpose_endangered_id = db.Column(db.Integer, db.ForeignKey('purposes_endangered.id',ondelete='CASCADE'))
-#    purpose_weed_id = db.Column(db.Integer, db.ForeignKey('purposes_weed.id',ondelete='CASCADE'))
-#
-#    database_source_id = db.Column(db.Integer, db.ForeignKey('institutes.id',ondelete='CASCADE'))
-#
-#    populations = db.relationship("Population", backref="study", passive_deletes=True)
-#    number_populations = db.Column(db.Integer()) #could verify with populations.count()
-#
-#    version = db.relationship("Version", backref="study", passive_deletes=True)
-#    #version_latest = db.Column(db.String(64))
-#    #version_original = db.Column(db.Boolean())
-#    #version_ok = db.Column(db.Boolean)
-#
-#    @staticmethod
-#    def migrate():
-#        PurposeEndangered.migrate()
-#        PurposeWeed.migrate()
-#
-#    def to_json(self, key):
-#        study = {
-#            'request_url' : url_for('api.get_one_entry', id=self.id, model='studies', key=key,
-#                                      _external=False),
-#            'data' : {
-#                    'publication' : self.publication.to_json_simple(key),
-#                    'study_duration' : self.study_duration,
-#                    'study_start' : self.study_start,
-#                    'study_end' : self.study_end,
-#                    'number_populations' : self.number_populations,           
-#                    'matrices' : [matrix.to_json_simple(key) for matrix in self.matrices],
-#                    'populations' : [population.to_json_simple(key) for population in self.populations],
-#                    'versions' : [version.to_json_simple(key) for version in self.versions]
-#                }
-#            }
-#
-#        user = User.query.filter_by(api_hash=key).first()
-#        if user is not None and user.institute.institution_name == "University of Exeter":
-#            study['data']['purpose_endangered'] = self.purpose_endangered.to_json_simple(key) if self.purpose_endangered else None
-#            study['data']['purpose_weed'] = self.purpose_weed.to_json_simple(key) if self.purpose_weed else None
-#        
-#        return study
-#
-#    def to_json_simple(self, key):
-#        study = {
-#            'request_url' : url_for('api.get_one_entry', id=self.id, model='studies', key=key,
-#                                      _external=False),
-#            'data' : {
-#                    'publication_doi' : self.publication.DOI_ISBN,
-#                    'study_duration' : self.study_duration,
-#                    'study_start' : self.study_start,
-#                    'study_end' : self.study_end,
-#                    'number_populations' : self.number_populations,           
-#                    'matrices_len' : len(self.matrices),
-#                    'populations_len' : len(self.populations),
-#                    'versions_len' : len(self.versions)
-#                }
-#            }
-#        return study
-#
-#    def __getitem__(self, key):
-#        return getattr(self, key)
-#
-#    def __repr__(self):
-#        return '<Study %r>' % self.id
 
 class AuthorContact(db.Model):
     #query_class = VersionQuery

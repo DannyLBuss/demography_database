@@ -343,7 +343,6 @@ def submit_new(data):
         'species_iucn_taxonid': data["species_iucn_taxonid"], 
         'species_accepted' : data["species_accepted"], 
         'species_common' :  data["species_common"], 
-        'species_gisd_status' : coerce_boolean(data["species_gisd_status"]), 
         'iucn_status_id' : iucn.id if iucn else None, 
         'image_path' : data["image_path"], 
         'image_path2' : data["image_path2"]}
@@ -377,7 +376,10 @@ def submit_new(data):
         trait_dict = {'species_id': species.id, 
         'organism_type': organism_type,
         'dicot_monoc': dicot_monoc,
-        'angio_gymno': angio_gymno, 
+        'angio_gymno': angio_gymno,
+        'species_seedbank' : coerce_boolean(data["species_seedbank"]),
+        'species_gisd_status' : coerce_boolean(data["species_gisd_status"]),
+        'species_clonality' : coerce_boolean(data["species_clonality"]),  
         'spand_ex_growth_type_id' : spand_ex_growth_type.id if spand_ex_growth_type else None,
         'growth_form_raunkiaer_id' : growth_form_raunkiaer.id if growth_form_raunkiaer else None}
 
@@ -721,6 +723,8 @@ def convert_all_headers_new(dict):
     new_dict = {}
 
     new_dict["species_gisd_status"] = dict["species_gisd_status"]
+    new_dict["species_seedbank"] = dict["species_seedbank"]
+    new_dict["species_clonality"] = dict["species_clonality"]
     new_dict["publication_purpose_comparative_demography"] = dict["publication_purpose_comparative_demography"]
     new_dict["publication_purpose_species_dynamics_description"] = dict["publication_purpose_species_dynamics_description"]
     new_dict["publication_purpose_spatial_demography"] = dict["publication_purpose_spatial_demography"]

@@ -257,6 +257,7 @@ def explorer(taxon_level,taxon):
     
     return render_template('explorer_template.html',taxon=taxon,taxon_list = taxon_list,taxon_level=taxon_level,next_taxon_level=next_taxon_level, tax_pos = tax_pos)
 
+
 # contribute
 @main.route('/contribute-data')
 def contribute_data():

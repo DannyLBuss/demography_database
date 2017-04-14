@@ -45,6 +45,8 @@ Demography Database
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b> </a>
                     <ul class="dropdown-menu">
                         <li ><a href="{{ url_for('about.news') }}">News</a></li>
+                        <li ><a href="{{ url_for('about.wordpress') }}">Wordpress</a></li>
+                        <li ><a href="{{ url_for('main.comingsoon') }}">Social Media</a></li>
                         <li ><a href="{{ url_for('about.team') }}">Team</a></li>
                         <li ><a href="{{ url_for('about.FAQs') }}">FAQs</a></li>
                         <li ><a href="{{ url_for('about.history') }}">History</a></li>
@@ -73,6 +75,7 @@ Demography Database
                         <li ><a href="{{ url_for('resources.education') }}"><b>Education Home</b></a></li>
                         <li><a href="{{ url_for('main.comingsoon') }}">Lifecycles</a></li>
                         <li ><a href="{{ url_for('resources.education_ppm') }}">What is a Matrix Model?</a></li>
+                        <li ><a href="{{ url_for('main.comingsoon') }}">Integral Projection Models</a></li>
                         <li><a href="{{ url_for('main.comingsoon') }}">Helpful Tools</a></li>
                         <li><a href="{{ url_for('main.comingsoon') }}">Handy R Packages</a></li>
                         <li ><a href="{{ url_for('resources.publications') }}">Demography Publications</a>
@@ -107,7 +110,6 @@ Demography Database
                         <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
                     </ul>
                 </li> {% else %}
-                <li><a href="{{ url_for('auth.login') }}">Log In (Old)</a></li>
                 <li><a href="{{ url_for('auth.login_with_google') }}">Log In (Google OAuth2)</a></li> {% endif %} </ul>
         </div>
     </div>

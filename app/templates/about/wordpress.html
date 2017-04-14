@@ -36,24 +36,35 @@
 News
 </h1>
 </div>
-<title>Wordpress Blog</title>
+<div class="info_box">
 <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css') }}">
 <div class=page>
-    <h1>Compadre</h1>
-    {% for table in wordpress %}
-        <h2>{{titles[loop.index]}}</h2>
-    {{ table|safe }}
+    <h2>Compadre Blog</h2>
+<table>
+    {% for item in data %}
+    <tr><td>{{ item[loop.index] }}</td></tr>
+    {{data | safe}}
     {% endfor %}
+</table>
 </div>
-
-<div class="mar_top2">
-    <p><a href="https://compadredb.wordpress.com/2016/11/21/demographic-extrapolations-how-far-canshould-we-go/" target="_blank">Demographic extrapolations: how far can/should we go?</a> (21.11.2016)<br>
-        Just because you can (extrapolate models using the available demographic data in COMPADRE and COMADRE, and other sources) doesn’t mean you should. Shaun Coutts and colleagues have published a work in Ecology Letters asking how far can one extrapolate demographic outputs within and across species based on demographic knowledge, geographic and phylogenetic distance […]<img alt="" border="0" src="https://pixel.wp.com/b.gif?host=compadredb.wordpress.com&amp;blog=70921292&amp;post=381&amp;subd=compadredb&amp;ref=&amp;feed=1" width="1" height="1"></p>
-    </body>
 </div>
 
 <div class="info_box">
-    <h3>{{ }}</h3>
+    <h4>Testing</h4>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css') }}">
+<div class=page>
+<table>
+{% for cell in data %}
+    <tr>
+        <td>{{ data.Authors }}</td>
+        {{data | safe}}
+    </tr>
+{% endfor %}
+</table>
+</div>
+</div>
+<div class="info_box">
+    <h3>The Databases</h3>
     <p><a href="http://onlinelibrary.wiley.com/doi/10.1111/1365-2745.12334/abstract;jsessionid=E81509E7DBF840A800EC5701CA22E17B.f04t03" target="_blank">The COMPADRE Plant Matrix Database: an open online repository for plant demography</a></p>
     <p><a href="http://onlinelibrary.wiley.com/doi/10.1111/1365-2656.12482/full" target="_blank">COMADRE: a global database of animal demography</a></p>
     <p></p>

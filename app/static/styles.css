@@ -103,10 +103,48 @@ div.flask-pagedown-preview h3 {
 .post-body h3 {
     font-size: 120%;
 }
+
 .table.followers tr {
     border-bottom: 1px solid #e0e0e0;
 }
+.wordpress th {
+    background-color: #77dd77;
+    color: white;
+}
 
+.bTop
+{
+    width: 960px;
+    height: 111px;
+    background-image: url('../Images/BackTop.jpg');
+}
+.bLeft
+{
+    width: 212px;
+    height: 280px;
+    background-image: url('../Images/BackLeft.jpg');    
+
+}
+
+.bMiddle
+{
+    width: 536px;
+    height: 280px;
+}
+
+.bRight
+{
+    width: 212px;
+    height: 280px;
+    background-image: url('../Images/BackRight.jpg');    
+}
+
+.bBottom
+{        
+    width: 960px;
+    height: 111px;
+    background-image: url('../Images/BackBottom.jpg');       
+}
 .verbose-entry {
     padding: 0.3em;
     text-align: justify;
@@ -344,10 +382,6 @@ body {
     height:100px;
 }
 
-td {
-    word-wrap:break-word;
-}
-
 .filter {
     width: 20px; 
     height: 20px;
@@ -433,19 +467,26 @@ margin:-60px 0 0; /* negative fixed header height */
   stroke-width: 2px;
 }
 
-table.dataframe, .dataframe th, .dataframe td {
-  border: none;
-  border-bottom: 1px solid #C8C8C8;
-  border-collapse: collapse;
-  text-align:left;
-  padding: 10px;
-  margin-bottom: 40px;
-  font-size: 0.9em;
+.table
+{
+    border: none;
+    border-bottom: 1px solid #C8C8C8;
+    border-collapse: collapse;
+    height: 35px;
+    margin-bottom: 40px;
+    font-size: 0.9em;
 }
-
-.wordpress th {
-    background-color: #77dd77;
-    color: white;
+.table td
+{
+    border: 1px solid black;
+    background: #00003f;
+    color: #cfffff;
+}
+.table th
+{
+    border: 1px solid black;
+    background: #00003f;
+    color: #cfffff;
 }
 
 tr:nth-child(odd)       { background-color:#eee; }

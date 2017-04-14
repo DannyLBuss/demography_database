@@ -39,11 +39,12 @@ def wordpress_data():
 		authors.append(plums.get_text())
 	# dataframe
 	wordpress_data = pd.DataFrame({
-		'Title': titles,
+		'Titles': titles,
 		'Authors': authors,
-		'Content': contents,
-		'Link': result,
-		'Date': dates })
+		'Contents': contents,
+		'Links': result,
+		'Dates': dates })
+#	wordpress_data.replaceAll("[\\n\\t\\t\\t]", "")
 	return wordpress_data
 
 

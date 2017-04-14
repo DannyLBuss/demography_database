@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<html>
+
+<h3>Social Media Updates</h3>
+<div id="tweets" class="row-fluid">
+{% for tweet in tweets[-6:] %}
+	<div class="tweetweet col-xs-12 col-lg-5 col-md-3" style="padding: 10px 5px 5px 10px; margin: 10px 5px 5px 10px; background: #ecf0f1">
+		<div class="row">
+			<div class="{% if tweet.media %}col-xs-6{% else %}col-xs-12{% endif %}">
+				<p>"{{ tweet.text }}"</p>
+				by <img src="{{ tweet.profile_image_url }}" class="img-circle" width="20">&nbsp;<a href="http://twitter.com/{{tweet.user_screen_name}}" target="none" style="color: #{{ tweet.profile_link_color }}">@{{ tweet.user_screen_name }}</a>
+			</div>
+				{% if tweet.media %}
+				<div class="col-xs-5">
+					
+					{% for media in tweet.media[-1:] %}
+					
+						<img src="{{ media.media_url }}" class="img-responsive"><br/>
+					
+					{% endfor %}
+			    </div>	
+				{% endif %}
+
+		</div>
+		
+	</div>
+{% endfor %}
+</div>
+</html>
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
