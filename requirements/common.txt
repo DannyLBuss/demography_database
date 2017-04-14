@@ -33,4 +33,7 @@ virtualenv-clone==0.2.5
 virtualenvwrapper==4.3.1
 wsgiref==0.1.2
 requests_oauthlib==0.8.0
+bs4==0.0.1
+pandas==0.19.2
+twitter==1.17.1
 

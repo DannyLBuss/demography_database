@@ -127,16 +127,7 @@
     <!-- Right side information with taxonom and traits -->
     <div class="col-sm-4">  {% if species.trait %} {% for trait in species.trait %}
         <h3>Traits {% if can_edit == True %} <small> {{trait.id}}-{{trait.version[0].statuses}}-{{trait.version[0].checked}}</small> {%endif%}</h3>
-        <style> table 
-{
- width:100%; 
- } 
- td 
- { 
-    height:34px; 
-    } 
-</style>
-        <table style="width:100%">
+        <table style="width:100%" class="table table2">
             <tr>
                 <td> <strong>Growth Type: </strong> </td>
                 <td> {{ trait.organism_type.type_name }} </td>
@@ -228,12 +219,12 @@
             
             <!-- population information -->
             <h4><strong>Population Name: </strong>{{ population.population_name }} {% if can_edit == True %} <small> {{population.id}}-{{population.version[0].statuses}}-{{population.version[0].checked}}</small> {%endif%} <span class="label label-default">{{ population.matrices | count }} matrices</span> <span class="label label-default">{{ population.study_start }} - {{ population.study_end }}</span> <span class="label label-default"> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </span> </h4>
-            <table style="width:100%", class="bTop">
+            <table style="width:100%", class="table">
                 <tr>
-                    <td, class="bTop"><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}   </td>
-                    <td, class="bTop">{% if population.longitude %}
+                    <td ><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}   </td>
+                    <td >{% if population.longitude %}
                     <strong>Location: </strong><span class="coordinates {{species.species_accepted}} {{ population.matrices | length }} {{ population.id }}">{{ population.latitude }}, {{ population.longitude }}</span>  </td>
-                    <td, class="bTop"><strong>Altitude: </strong><span>{{ population.altitude }}m</span>
+                    <td ><strong>Altitude: </strong><span>{{ population.altitude }}m</span>
                     {% if population.population_nautical_miles %}<li><strong>Nautical miles:</strong>  {{ population_nautical_miles }} </li>{% endif %}
                 {% else %}
                     No coordinates given
@@ -366,20 +357,20 @@
         </div>
     
     <div class="info_box">
-        <table style="width:100%", class=".bTop">
+        <table style="width:100%" class="table">
             <thead>
                 <tr>
-                    <td, class="bMiddle">
+                    <td>
                         <h4><strong>Publications:</strong></h4></td>
-                    <td, class="bMiddle"></td>
-                    <td, class="bMiddle">
+                    <td></td>
+                    <td>
                         <h4>Filter</h4></td>
                 </tr>
             </thead> {% if publications %}
             <tbody> {% for publication in publications |sort(attribute='id') %}
                 
                 <tr class="publication_row" style="border-left-color:{{ publication.colour }};">
-                    <td, class="bMiddle"> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> {% if can_edit == True %} <small> {{publication.id}}-{{publication.version[0].statuses}}-{{publication.version[0].checked}}</small> {%endif%}
+                    <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> {% if can_edit == True %} <small> {{publication.id}}-{{publication.version[0].statuses}}-{{publication.version[0].checked}}</small> {%endif%}
                         {% if can_edit == True %} 
     <div class="dropdown pull-right">
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
@@ -398,18 +389,18 @@
                         {% endif %}
                         
                     </td>
-                    <td, class="bMiddle"> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source <span class="glyphicon glyphicon-new-window"></span></a>{% endif %}</td>
-                    <td, class="bMiddle">
+                    <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source <span class="glyphicon glyphicon-new-window"></span></a>{% endif %}</td>
+                    <td>
                         <input type="checkbox" class="filter" data-value="id{{publication.id}}"> </td>
                 </tr> {% endfor %} </tbody>
             {% else %}
             <tbody>
                 <tr>
-                    <td, class="bMiddle">
+                    <td>
                         <p>No publications</p>
                     </td>
-                    <td, class="bMiddle"> </td>
-                    <td, class="bMiddle"> </td>
+                    <td> </td>
+                    <td> </td>
                 </tr>
             </tbody> {% endif %} </table>
         {% if can_edit == True %}

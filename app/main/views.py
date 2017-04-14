@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, abort, flash, request,\
 from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import main
-from .forms import EditProfileForm, ContactForm
+from .forms import ContactForm
 from flask_mail import Mail, Message
 from app.matrix_functions import all_species_unreleased, all_populations_unreleased,all_matrices_unreleased, \
 all_species_unreleased_complete, all_populations_unreleased_complete, all_matrices_unreleased_complete, \
@@ -459,33 +459,7 @@ def user(username):
     user = User.query.filter_by(username=username).first_or_404()    
     return render_template('user.html', user=user)
 
-# edit your own profile (non admin)
-@main.route('/edit-profile', methods=['GET', 'POST'])
-@login_required
-def edit_profile():
-    user = current_user
-    print(user)
-    print(current_user)
-    form = EditProfileForm(user=user)
-    if form.validate_on_submit():
-        user.name = form.name.data
-        user.username = form.username.data
-        user.about_me = form.about_me.data
-    
-        # unconfirming institure if they change institute (non admins)
-        if user.institute != form.institute.data and user.role_id != 1:
-            user.institute_confirmed = 0
-            
-        user.institute = form.institute.data
-    
-        flash('Your profile has been updated.')
-        return redirect(url_for('.user', username=user.username))
-    form.name.data = user.name
-    form.username.data = user.username
-    form.about_me.data = user.about_me
-    form.institute.data = user.institute
-        
-    return render_template('admin/user_form.html', form=form)
+
 
 
 

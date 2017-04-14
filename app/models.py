@@ -3798,5 +3798,22 @@ class Version(db.Model):
     def __repr__(self):
         return '<Version {} {} {}>'.format(str(self.id), self.statuses.status_name, self.checked)
 
-
+'''Userlists'''
+class UserList(db.Model):
+    __tablename__ = 'user_lists'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
+    name = db.Column(db.Text())
+    description = db.Column(db.Text())
+    public = db.Column(db.Boolean())
+    DOI_ISBN = db.Column(db.Text()) 
+    
+'''entries in userlists'''    
+class UserListEntry(db.Model):
+    __tablename__ = 'user_list_entries'
+    id = db.Column(db.Integer, primary_key=True)
+    matrix_id = db.Column(db.Integer, db.ForeignKey('matrices.id',ondelete='CASCADE'))
+    exclusion = db.Column(db.Boolean())
+    notes = db.Column(db.Text())
+    
 

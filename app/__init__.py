@@ -73,5 +73,8 @@ def create_app(config_name):
 
     from .data_manage import data_manage as data_manage_blueprint
     app.register_blueprint(data_manage_blueprint, url_prefix='/data-manage')
+    
+    from .user_zone import user_zone as user_zone_blueprint
+    app.register_blueprint(user_zone_blueprint, url_prefix='/user-area')
 
     return app
