@@ -55,3 +55,11 @@ class EditInstituteAdminForm(Form):
     website = StringField('Website')
     submit = SubmitField('Submit')
     
+    
+class EditProtocolAdminForm(Form):
+    field_name = StringField('field_name', validators=[Length(0, 50)])
+    name_in_csv = StringField('name_in_csv', validators=[Length(0, 50)])
+    database_model = StringField('database_model', validators=[Length(0, 50)])
+    field_description = StringField('field_description')
+    field_short_description = StringField('field_short_description')
+    

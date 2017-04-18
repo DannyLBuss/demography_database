@@ -3,7 +3,7 @@ from flask.ext.login import login_user, logout_user, login_required, \
     current_user
 from . import admin
 from .. import db
-from ..models import User, Role, Institute
+from ..models import User, Role, Institute, DigitizationProtocol
 from ..email import send_email
 from .forms import  EditProfileAdminForm, EditInstituteAdminForm
 from ..decorators import admin_required, permission_required, crossdomain
@@ -112,9 +112,59 @@ def new_institute_admin():
         db.session.add(institute)
         db.session.commit()
 
-        flash('The institure has been added')
+        flash('The institute has been added')
         return redirect(url_for('admin.institutes_page'))
 
     return render_template('admin/institute_form.html', form=form)
 
+@admin.route('/new_protocol', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def new_protocol_admin():
+    protocol = DigitisationProtocol()
+    form = EditProtocolAdminForm(protocol=protocol)
+    if form.validate_on_submit():
+        
+        protocol.field_name = form.field_name.data
+        protocol.name_in_csv = form.name_in_csv.data
+        protocol.database_model = form.database_model.data
+        protocol.field_description = form.field_description.data
+        protocol.field_short_description = form.field_short_description.data
+
+        
+        db.session.add(protocol)
+        db.session.commit()
+
+        flash('The protocol entry has been added')
+        return redirect(url_for('main.protocol_page'))
+
+    return render_template('data_manage/generic_form.html', form=form)
+
+@admin.route('/edit_protocol/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_protocol_admin():
+    protocol = DigitizationProtocol.query.get_or_404(id)
+    form = EditProtocolAdminForm(protocol=protocol)
+    if form.validate_on_submit():
+        
+        protocol.field_name = form.field_name.data
+        protocol.name_in_csv = form.name_in_csv.data
+        protocol.database_model = form.database_model.data
+        protocol.field_description = form.field_description.data
+        protocol.field_short_description = form.field_short_description.data
+
+        db.session.add(protocol)
+        db.session.commit()
+
+        flash('The protocol entry has been edited')
+        return redirect(url_for('main.protocol_page'))
+    
+    form.field_name.data = protocol.field_name 
+    form.name_in_csv.data = protocol.name_in_csv
+    form.database_model.data = protocol.database_model
+    form.field_description.data = protocol.field_description
+    form.field_short_description.data = protocol.field_short_description
+
+    return render_template('data_manage/generic_form.html', form=form)
 

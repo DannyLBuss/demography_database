@@ -21,7 +21,7 @@ from ..models import Permission, Role, User, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
                     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, PurposeEndangered, PurposeWeed, Trait, \
                     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Institute, Status, Version, ChangeLogger
+                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Institute, Status, Version, ChangeLogger, DigitizationProtocol
 from ..decorators import admin_required, permission_required, crossdomain
 
 
@@ -203,9 +203,9 @@ def species_page(species_ids,pub_ids):
     all_species = list(set(all_species))
     publications = list(set(all_pubs))
     
-    print(publications)
-    publications.sort();
-    print(publications)
+    #print(publications)
+    #publications.sort();
+    #print(publications)
     
     can_edit = False
     try:
@@ -220,9 +220,25 @@ def species_page(species_ids,pub_ids):
             exeter_data = True
     except:
         pass
+
     
-         
-    return render_template('species_template.html',all_species = all_species, publications = publications, populations = populations,can_edit = can_edit,exeter_data = exeter_data,compadrino_info = compadrino_info)
+    protocol = DigitizationProtocol.query.all() 
+        
+    protocol_dict = {}
+    for ocol in protocol:
+        protocol_dict[ocol.name_in_csv] = ocol.field_short_description   
+    
+    return render_template('species_template.html',all_species = all_species, publications = publications, populations = populations,can_edit = can_edit,exeter_data = exeter_data,compadrino_info = compadrino_info,protocol_dict = protocol_dict)
+
+@main.route('/protocol')
+def protocol_page():
+    protocol = DigitizationProtocol.query.all() 
+        
+    protocol_dict = {}
+    for ocol in protocol:
+        protocol_dict[ocol.name_in_csv] = ocol.field_description 
+        
+    return render_template('protocol_template.html',protocol_dict = protocol_dict,protocol = protocol)
 
 # Taxonomic explorer
 # DOES NOT WORK IN FIREFOX

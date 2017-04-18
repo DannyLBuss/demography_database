@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+
+<a href="../../admin/new_protocol">Add a new entry</a>
+
+<h1>Protocol by specifying field names</h1>
+<table class="table table2">
+    <thead>
+        <th>Name</th>
+        <th>Definition</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Matrix Periodicity</td>
+            <td>{{ protocol_dict["matrix_periodicity"] }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h1>Protocol by looping through</h1>
+<table class="table table2">
+    <thead>
+        <th>Name</th>
+        <th>Definition</th>
+        {% if current_user.role == admin %}
+        <th></th>
+        {% endif %}
+    </thead>
+    <tbody> {% for col in protocol %}
+        <tr>
+            <td>{{ col.field_name }}</td>
+            <td>{{ col.field_description }}</td>
+            {% if current_user.role == admin %}
+                <th><a href = "../../admin/edit_protocol/{{col.id}}">Edit</a> </th>
+            {% endif %}
+        </tr> {% endfor %} 
+    </tbody>
+</table>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

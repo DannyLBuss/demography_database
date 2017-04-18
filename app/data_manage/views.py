@@ -10,7 +10,7 @@ from ..models import Permission, Role, User, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
                     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
                     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Institute, ChangeLogger, Version
+                    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Institute, ChangeLogger, Version, DigitizationProtocol
 from ..decorators import admin_required, permission_required, crossdomain
 
 import random
@@ -341,6 +341,11 @@ def trait_edit_history(id):
 @data_manage.route('/publication/<string:edit_or_new>/<int:id>', methods=['GET', 'POST'])
 @login_required
 def publication_form(id,edit_or_new):
+    
+    protocol_dict = {}
+    for ocol in protocol:
+        protocol_dict[ocol.name_in_csv] = ocol.field_description 
+
     if current_user.role_id not in [1,3,4,6]:
         abort(404)
     

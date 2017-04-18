@@ -37,6 +37,8 @@
         <div class="info_box">
             <h3>Autofilled via DOI or ISBN</h3>
             {{ wtf.form_field(form.authors) }}
+            {{ protocol_dict["publication_authors"] }}
+            
             {{ wtf.form_field(form.editors) }}
             {{ wtf.form_field(form.journal_name)}}
             {{ wtf.form_field(form.year) }}

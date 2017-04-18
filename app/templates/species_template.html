@@ -1,5 +1,4 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
-
 {% if can_edit == true %}
 <button type="button" class="btn btn-primary pull-right" data-toggle="collapse" href="#compadrino_box"><span class="glyphicon glyphicon-wrench"></span> Show/hide publication summary </button>
 <div id="compadrino_box" class='panel-collapse collapse'>
@@ -127,43 +126,43 @@
     <!-- Right side information with taxonom and traits -->
     <div class="col-sm-4">  {% if species.trait %} {% for trait in species.trait %}
         <h3>Traits {% if can_edit == True %} <small> {{trait.id}}-{{trait.version[0].statuses}}-{{trait.version[0].checked}}</small> {%endif%}</h3>
-        <table style="width:100%" class="table table2">
-            <tr>
+        <table style="width:100%" class="table">
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_organism_type"] }}' class="nounderline">
                 <td> <strong>Growth Type: </strong> </td>
                 <td> {{ trait.organism_type.type_name }} </td>
             </tr>
-            <tr>
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_reproductive_repitition"] }}' class="nounderline">
                 <td> <strong>Reproductive Repetition:</strong> </td>
                 <td> {{ trait.reproductive_repetition.repetition_name }} </td>
             </tr>
-            <tr>
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_dicot_monoc"] }}' class="nounderline">
                 <td> <strong>Dicot/Monocot: </strong> </td>
                 <td> {{ trait.dicot_monoc.dicot_monoc_name }} </td>
             </tr>
-            <tr>
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_angio_gymno"] }}' class="nounderline">
                 <td> <strong>Angio/Gymnosperm: </strong> </td>
                 <td> {{ trait.angio_gymno.angio_gymno_name }} </td>
             </tr>
-            <tr>
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_growth_form_raunkiaer"] }}' class="nounderline">
                 <td> <strong>Growth Form Raunkiaer:</strong> </td>
                 <td> {{ trait.growth_form_raunkiaer.form_name }} </td>
             </tr>
-            <tr>
-                <td> <strong>Invasive (Gisd Status):</strong> </td>
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_iucn_gisd_status"] }}' class="nounderline">
+                <td> <strong>Invasive (GISD Status):</strong> </td>
                 <td> {{ trait.iucn_gisd_status }} </td>
             </tr>
             {% if compadrino_info == True %} 
-            <tr>
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_spandex_growth_type_id"] }}' class="nounderline">
                 <td> <strong>SPANDEX growth type:</strong> </td>
                 <td> {{ trait.spandex_growth_type_id.spandex_growth_types }} </td>
             </tr>
             {% endif %}
             {% if species.taxonomy.kingdom == "Plantae" %}
-            <tr>
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_seedbank"] }}' class="nounderline">
                 <td> <strong>Seedbank: </strong> </td>
                 <td> {{ trait.seedbank }} </td>
             </tr>
-            <tr>
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_clonality"] }}' class="nounderline">
                 <td> <strong>Clonality:</strong> </td>
                 <td> {{ trait.clonality }} </td>
             </tr>
@@ -243,24 +242,77 @@
                         <div class="panel-heading" data-toggle="collapse" href="#matrix_{{matrix.id}}2">
                             <h4 id="{{matrix.id}}" class="panel-title">
                             <p>
-                                <span class="label label-default">{{ matrix.matrix_composition.comp_name }} matrix</span> 
-                                <span class="label label-default">{{ matrix.matrix_dimension }}x{{ matrix.matrix_dimension }}</span> 
-                                <span class="label label-default">Periodicity: {{ matrix.periodicity }}</span> 
-                                <span class="label label-default">{% if matrix.matrix_start_season_id %}{{ matrix.matrix_start_season }}{% endif %} {% if matrix.matrix_start_month %} {{ matrix.matrix_start_month }}/{% endif %}{{ matrix.matrix_start_year }} to {% if matrix.matrix_end_season_id %}{{ matrix.matrix_end_season }}{% endif %} {% if matrix.matrix_end_month %} {{ matrix.matrix_end_month }}/{% endif %}{{ matrix.matrix_end_year }}</span> 
-                                <span class="label label-default">{{ matrix.treatment.type_name }}</span>       
-                                <span class="label label-default">Captive: {{ matrix.captivities.cap_code }}</span>
-                                <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title="{{matrix.matrix_composition.comp_description}}" class="nounderline">
+                                    <span class="nounderline label label-default">{{ matrix.matrix_composition.comp_name }} matrix</span>
+                                </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_dimension"] }}' class="nounderline">
+                                    <span class="label label-default">{{ matrix.matrix_dimension }}x{{ matrix.matrix_dimension }}</span> 
+                                </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_periodicity"] }}' class="nounderline">
+                                    <span class="label label-default">Periodicity: {{ matrix.periodicity }}</span>
+                                </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='' class="nounderline">
+                                    <span class="label label-default">{% if matrix.matrix_start_season_id %}{{ matrix.matrix_start_season }}{% endif %} {% if matrix.matrix_start_month %} {{ matrix.matrix_start_month }}/{% endif %}{{ matrix.matrix_start_year }} to {% if matrix.matrix_end_season_id %}{{ matrix.matrix_end_season }}{% endif %} {% if matrix.matrix_end_month %} {{ matrix.matrix_end_month }}/{% endif %}{{ matrix.matrix_end_year }}</span>
+                                    </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_treatment_type"] }}' class="nounderline">
+                                    <span class="label label-default">{{ matrix.treatment }}</span>
+                                </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_captivity"] }}' class="nounderline">
+                                    <span class="label label-default">Captivity: {{ matrix.captivities.cap_code }}</span>
+                                </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_studied_sex"] }}' class="nounderline">
+                                    <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span>
+                                </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_studied_sex"] }}' class="nounderline">
                                 <span class="label label-default">{{ matrix.matrix_split }}</span>
+                                    </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_seasonal"] }}' class="nounderline">
                                 <span class="label label-default">Seasonal: {{ matrix.seasonal }}</span>
+                                    </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["survival_isssue"] }}' class="nounderline">
                                 <span class="label label-default">survival_issue: {{ matrix.survival_issue }}</span>
-                                {# <span class="label label-default">{{ matrix.matrix_fec }}</span>   
-                                <span class="label label-default">{{ matrix.matrix_complete }}</span>   
-                                <span class="label label-default">{{ matrix.n_plots }}</span>   
-                                <span class="label label-default">{{ matrix.plot_size }}</span> #}   
-                                <span class="label label-default">{{ matrix.matrix_irreducible }}</span> 
-                                <span class="label label-default">{{ matrix.matrix_ergodic }}</span> 
-                                <span class="label label-default">{{ matrix.matrix_primitive }}</span> 
-                                <span class="label label-default">λ = {{ matrix.matrix_lambda }}</span> 
+                                    </a>
+                                
+                                <!--
+                                {# <span class="label label-default">{{ matrix.matrix_fec }}</span>  
+                                
+                                
+                                <span class="label label-default">{{ matrix.matrix_complete }}</span>  
+                                
+                                
+                                <span class="label label-default">{{ matrix.n_plots }}</span>
+                                
+                                
+                                <span class="label label-default">{{ matrix.plot_size }}</span> #}
+                                -->
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='Is matrix irreducible' class="nounderline">
+                                <span class="label label-default">{{ matrix.matrix_irreducible }}</span>
+                                    </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='Is matrix ergodic' class="nounderline">
+                                <span class="label label-default">{{ matrix.matrix_ergodic }}</span>
+                                    </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='Is matrix primitive' class="nounderline">
+                                <span class="label label-default">{{ matrix.matrix_primitive }}</span>
+                                    </a>
+                                
+                                <a data-toggle="tooltip" data-placement="top" title='Asymptpic population growth rate' class="nounderline">
+                                <span class="label label-default">λ = {{ matrix.matrix_lambda }}</span>
+                                    </a>
+                                
+                                
                                 {% if can_edit == True %} <small> {{matrix.id}}-{{matrix.version[0].statuses}}-{{matrix.version[0].checked}}</small> {%endif%}
                             </p>
                             </h4> 
@@ -419,6 +471,8 @@
     }
 </script>
 
+
+
 <script>
     // Change matrix strings into tables
     var divs = document.getElementsByClassName("matA");
@@ -491,11 +545,16 @@
         divs[ii].appendChild(table_new);
     }
 </script>
-<script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+
 <script src="{{ url_for('static', filename='leaflet.js') }}"></script>
 <script src="{{ url_for('static', filename='list.js') }}"></script>
 <script src="{{ url_for('static', filename='leaflet-vector-markers.min.js') }}"></script>
 <script src="{{ url_for('static', filename='oms.min.js') }}"></script>
+
+<script>
+
+</script>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='leaflet-vector-markers.css') }}">
 <script>
      //draw empty map
@@ -646,4 +705,6 @@
     document.body.innerHTML = document.body.innerHTML.replace(/-Amber-/g, '-<span class="glyphicon glyphicon-warning-sign"  style="color:Coral"></span>-');
     document.body.innerHTML = document.body.innerHTML.replace(/-Pending-/g, '-<span class="glyphicon glyphicon-flag" style="color:DarkOrchid"></span>-');
     document.body.innerHTML = document.body.innerHTML.replace(/-Red-/g, '-<span class="glyphicon glyphicon glyphicon-remove" style="color:red"></span>-');
-</script> {% endblock %}
+</script> 
+
+{% endblock %}
