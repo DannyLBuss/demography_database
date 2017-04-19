@@ -1,3 +1,12 @@
+from flask import Flask, redirect, render_template, session, url_for, flash 
+from flask.ext.wtf import Form 
+from flask.ext.sqlalchemy import SQLAlchemy 
+from wtforms import StringField, SubmitField 
+from wtforms.validators import Required 
+from flask.ext.bootstrap import Bootstrap
+from flask.ext.mail import Mail, Message 
+import os 
+app = Flask(__name__)
 from flask import render_template, redirect, url_for, abort, flash, request,\
     current_app, make_response, jsonify
 from flask.ext.login import login_required, current_user
@@ -5,6 +14,8 @@ from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from .forms import ContactForm
 from flask_mail import Mail, Message
+from flask.ext.mail import Message, Mail
+from app import mail
 from app.matrix_functions import all_species_unreleased, all_populations_unreleased,all_matrices_unreleased, \
 all_species_unreleased_complete, all_populations_unreleased_complete, all_matrices_unreleased_complete, \
 all_species_released_complete, all_populations_released_complete, all_matrices_released_complete, \
@@ -12,9 +23,7 @@ all_species_released_compadre, all_populations_released_compadre, all_matrices_r
 all_species_released_comadre, all_populations_released_comadre, all_matrices_released_comadre, \
 all_matrices, all_pops, all_species, count_plants, count_comadre, count_compadre, count_plants_pop, count_compadre_pop, count_comadre_pop, species_compadre_count, species_comadre_count
 from ..data_manage.forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, MatrixForm, PublicationForm, DeleteForm
-
 import random
-
 from .. import db
 from ..models import Permission, Role, User, \
                     IUCNStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
@@ -289,23 +298,24 @@ def comingsoon():
 @main.route('/become-a-compadrino', methods=('GET', 'POST'))
 def become_a_compadrino():
     form = ContactForm()
-
     if request.method == 'POST':
         if form.validate() == False:
-            return 'Please fill in all fields <p><a href="/become-a-compadrino">Try Again!!!</a></p>'
+            flash('All fields are required.')
+            return render_template('become_a_compadrino.html', form=form)
         else:
-            msg = Message("Message from your visitor" + form.name.data,
+            msg = Message("Demography Database Message from your visitor " + form.name.data,
                           sender='YourUser@NameHere',
-                          recipients=['compadre@gmail.com', 'spandex.ex@gmail.com'])
+                          recipients=['spandex.ex@gmail.com', 'd.l.buss@exeter.ac.uk', 'demographydatabase@gmail.com'])
             msg.body = """
             From: %s <%s>,
-            %s
-            """ % (form.name.data, form.email.data, form.message.data)
+            Subject: %s
+            Message: %s
+            """ % (form.name.data, form.email.data, form.subject.data, form.message.data)
             mail.send(msg)
-            return "Successfully  sent message!"
+            flash('Successfully  sent message! If you do not receive a response within 10 working days, I apologise for this, please resend your enquiry.')
+            return render_template('become_a_compadrino.html', form=form)
     elif request.method == 'GET':
         return render_template('become_a_compadrino.html', form=form)
-
 
 ### Help Develop Site Form
 @main.route('/help-develop-site', methods=('GET', 'POST'))
@@ -314,17 +324,20 @@ def help_develop_site():
 
     if request.method == 'POST':
         if form.validate() == False:
-            return 'Please fill in all fields <p><a href="/help-develop-site">Try Again!!!</a></p>'
+            flash('All fields are required.')
+            return render_template('help_develop_site.html', form=form)
         else:
-            msg = Message("Message from your visitor" + form.name.data,
+            msg = Message("Demography Database Message from your visitor " + form.name.data,
                           sender='YourUser@NameHere',
-                          recipients=['spandex.ex@gmail.com', 'd.l.buss@exeter.ac.uk'])
+                          recipients=['spandex.ex@gmail.com', 'd.l.buss@exeter.ac.uk', 'demographydatabase@gmail.com'])
             msg.body = """
             From: %s <%s>,
-            %s
-            """ % (form.name.data, form.email.data, form.message.data)
+            Subject: %s
+            Message: %s
+            """ % (form.name.data, form.email.data, form.subject.data, form.message.data)
             mail.send(msg)
-            return "Successfully  sent message!"
+            flash('Successfully  sent message! If you do not receive a response within 10 working days, I apologise for this, please resend your enquiry.')
+            return render_template('help_develop_site.html', form=form)
     elif request.method == 'GET':
         return render_template('help_develop_site.html', form=form)
 

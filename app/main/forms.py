@@ -1,11 +1,12 @@
-from flask.ext.wtf import Form
+from flask.ext.wtf import Form, validators
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
-    SubmitField, validators
+    SubmitField
 from wtforms.validators import Required, Length, Email, Regexp
 from wtforms import ValidationError
 from flask.ext.pagedown.fields import PageDownField
 from ..models import Role, User, Institute
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
+import wtforms
 
 
 
@@ -18,9 +19,9 @@ def CheckNameLength(form, field):
         raise ValidationError('Name must have more then 2 characters')
 
 class ContactForm(Form):
-    name = StringField('Name:', [validators.DataRequired(), CheckNameLength])
-    email = StringField('E-mail address:', [validators.DataRequired(), validators.Email('your@email.com')])
-    message = TextAreaField('Your message:', [validators.DataRequired()])
-    submit = SubmitField('Send Message')
-
+    name = StringField("Name", [wtforms.validators.Required('Please enter your name')])
+    email = StringField("Email", [wtforms.validators.Required('Please enter your email'), wtforms.validators.Email()])
+    subject = StringField("Subject", [wtforms.validators.Required('Please enter a subject')])
+    message = TextAreaField("Message", [wtforms.validators.Required('Please enter a message')])
+    submit = SubmitField("Send")
     
