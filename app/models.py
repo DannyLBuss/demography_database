@@ -1291,6 +1291,18 @@ class CommonTerm(db.Model):
 
 ''' End Meta Tables for Digitization Protocol '''
 
+''' Upload files '''
+
+class UploadingFiles (db.Model):
+    __tablename__ = 'uploading files'
+    id = db.Column(db.Integer, primary_key=True)
+    file_title = db.Column(db.String(100))
+    file_description = db.Column(db.String(300))
+    file_filename = db.Column(db.String, default=None, nullable=True)
+    file_url = db.Column(db.String, default=None, nullable=True)
+    is_public = db.Column(db.Boolean, nullable=False)
+
+''' End files '''
 
 ''' Meta Tables for Author Contact '''
 class ContentEmail(db.Model):

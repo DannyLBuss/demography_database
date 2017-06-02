@@ -63,8 +63,7 @@ $(document).ready(function() {
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Data<b class="caret"></b> </a>
                     <ul class="dropdown-menu">
                         <li> <a href = "{{ url_for('main.protocol_page') }}">Data Digitisation Protocol</a></li>
-                        <li ><a href="{{ url_for('main.comingsoon') }}">Download current version</a></li>
-                        <li><a href="{{ url_for('main.comingsoon') }}">Download previous versions</a></li>
+                        <li ><a href="{{ url_for('outputs.downloads') }}">Download complete database</a></li>
                         <li><a href="{{ url_for('main.comingsoon') }}">Terms of use</a></li>
                     </ul>
                 </li>
@@ -94,6 +93,8 @@ $(document).ready(function() {
                     <ul class="dropdown-menu">
                         <li ><a href="{{ url_for('admin.users_page') }}">Manage users</a>
                         <li ><a href="{{ url_for('admin.institutes_page') }}">Manage institutes</a>
+                        <li ><a href="{{ url_for('main.datadownloads') }}">Upload new version of database</a>
+                        <li ><a href="{{ url_for('main.comingsoon') }}">Download sql dump</a>    
                     </ul>
                 </li>
                 {% endif %}

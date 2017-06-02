@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<html lang="en">
+  <head>
+    <h1>
+    	<title>
+      Here is a list of current and previous versions of the demography database
+  		</title>
+    </h1>
+    <body>
+    	<table>
+    	{% set comma = joiner(",") %}
+    	{% for result in filenames%}
+    		{{comma() }}<a href="/static/uploads/{{ result }}">{{ result }}</a>
+    	</table>
+    {% endfor %}
+  </body>
+</html>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
+<!DOCTYPE html>

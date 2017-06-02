@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, request, redirect, url_for
+from werkzeug.utils import secure_filename
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.mail import Mail
 from flask.ext.moment import Moment
@@ -7,6 +8,7 @@ from flask.ext.pagedown import PageDown
 from config import config
 from flask_sqlalchemy import SQLAlchemy
 from .util import ListConverter
+import os
  
 
 
@@ -24,11 +26,10 @@ bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 
+
 pagedown = PageDown()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
-
-
 
 
 def create_app(config_name):
@@ -36,8 +37,11 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
     app.url_map.converters['list'] = ListConverter
+
+    APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+    UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/uploads')
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
     bootstrap.init_app(app)
     mail.init_app(app)
@@ -61,6 +65,9 @@ def create_app(config_name):
     
     from .admin import admin as admin_blueprint
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
+
+    from .outputs import outputs as outputs_blueprint
+    app.register_blueprint(outputs_blueprint, url_prefix='/outputs')
     
     from .resources import resources as resources_blueprint
     app.register_blueprint(resources_blueprint, url_prefix='/resources')
@@ -76,5 +83,8 @@ def create_app(config_name):
     
     from .user_zone import user_zone as user_zone_blueprint
     app.register_blueprint(user_zone_blueprint, url_prefix='/user-area')
+
+    from .outputs import outputs as outputs_blueprint
+    app.register_blueprint(outputs_blueprint, url_prefix='/outputs')
 
     return app

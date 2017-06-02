@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<h1>
+	File Upload Successful
+</h1>
+<br>
+<br>
+<h3>
+	<a href = "{{ url_for('main.datadownloads') }}">Return to Download Database Files</a>
+	<br><br>
+	<a href = "{{ url_for('main.datadownloads') }}">Upload a new file</a>
+</h3>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
+<!DOCTYPE html>

@@ -5,11 +5,14 @@
 {% block title %}Demography Database{% endblock %}
 
 {% block page_content %}
-<!DOCTYPE html>
 <html>
-<div class="page-header">
-    <h1>Coming Soon.......database downloads</h1>
-</div>
+<title>Upload New File</title>
+<h1>Upload New File</h1>
+<form method="post" enctype="multipart/form-data">
+  <p><input type="file" name="file">
+     <input type="submit", value="Upload">
+  </p>
+</form>
 </html>
 {% endblock %}
 
@@ -17,3 +20,4 @@
 {{ super() }}
 {{ pagedown.include_pagedown() }}
 {% endblock %}
+<!DOCTYPE html>

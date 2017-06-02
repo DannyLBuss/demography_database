@@ -7,7 +7,7 @@
 <div class="page-header">
     <h1>Edit Institute</h1>
     {% if current_user.role_id == 1 %}
-    <h3><a href = "../institutes">Back to institutes overview</a></h3>
+    <h3><a href = "{{url_for('admin.institutes_page')}}">Back to institutes overview</a></h3>
     {% endif %}
     
 </div>

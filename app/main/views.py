@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, session, url_for, flash 
+from flask import Flask, redirect, render_template, session, url_for, flash, request
 from flask.ext.wtf import Form 
 from flask.ext.sqlalchemy import SQLAlchemy 
 from wtforms import StringField, SubmitField 
@@ -15,7 +15,7 @@ from . import main
 from .forms import ContactForm
 from flask_mail import Mail, Message
 from flask.ext.mail import Message, Mail
-from app import mail
+from app import mail, create_app
 from app.matrix_functions import all_species_unreleased, all_populations_unreleased,all_matrices_unreleased, \
 all_species_unreleased_complete, all_populations_unreleased_complete, all_matrices_unreleased_complete, \
 all_species_released_complete, all_populations_released_complete, all_matrices_released_complete, \
@@ -32,7 +32,7 @@ from ..models import Permission, Role, User, \
                     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Institute, Status, Version, ChangeLogger, DigitizationProtocol
 from ..decorators import admin_required, permission_required, crossdomain
-
+from werkzeug import secure_filename
 
 @main.after_app_request
 def after_request(response):
@@ -487,6 +487,64 @@ def help_develop_site():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()    
     return render_template('user.html', user=user)
+
+##Trying get uploads to work - Success 
+##Need to alter file path once on the Exeter server!!!!!
+UPLOAD_FOLDER = '/Users/daniellebuss/Sites/demography_database/app/static/uploads'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'csv'])
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['ALLOWED_EXTENSIONS'] = ALLOWED_EXTENSIONS
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@main.route('/datadownloads', methods=['GET', 'POST'])
+def datadownloads():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return render_template('upload_files.html',
+                filename=filename, type=file.content_type)
+    return render_template('datadownloads.html')
+
+#@main.route('/datadownloads')
+#def datadownloads():
+#    return render_template('datadownloads.html')
+
+#@main.route('/upload', methods=['GET','POST'])
+#def upload():
+    # Get the name of the uploaded file
+#    file = request.files['file']
+    # Check if the file is one of the allowed types/extensions
+#    if file and allowed_file(file.filename):
+        # Make the filename safe, remove unsupported chars
+#        filename = secure_filename(file.filename)
+        # Move the file form the temporal folder to
+        # the upload folder we setup
+#        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        # Redirect the user to the uploaded_file route, which
+        # will basicaly show on the browser the uploaded file
+#        return redirect(url_for('uploaded_file',
+#                                filename=filename))
+
+@main.route('/uploads/<filename>', methods=['GET', 'POST'])
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
 
 
 
