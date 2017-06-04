@@ -156,6 +156,14 @@ def species_page(species_ids,pub_ids):
     if species_ids[0] == "all" and pub_ids[0] == "all":
         flash('Loading all species and publications is not allowed, sorry.')
         abort(404)
+        
+        
+    can_edit = False
+    try:
+        if current_user.role_id in [1,3,4,6]:
+            can_edit = True
+    except:
+        pass
     
     try:
         #get species
@@ -205,23 +213,33 @@ def species_page(species_ids,pub_ids):
         for population in populations:
             all_species.append(Species.query.filter_by(id=population.species_id).first())
         
+
+          
     # remove duplicates 
-    
-    
     populations = list(set(populations))
     all_species = list(set(all_species))
     publications = list(set(all_pubs))
+    
+    # remove unchecked populations
+    if can_edit == False:
+        checked_pops = []
+        waiting_list_note = False
+
+        for population in populations:
+            if population.version[0].status_id ==3:
+                checked_pops.append(population)
+            else:
+                waiting_list_note = True
+                
+        populations = checked_pops
+        if waiting_list_note == True:
+            flash('There are matrices coming soon for this species/publication')
     
     #print(publications)
     #publications.sort();
     #print(publications)
     
-    can_edit = False
-    try:
-        if current_user.role_id in [1,3,4,6]:
-            can_edit = True
-    except:
-        pass
+    #flash('test')
     
     exeter_data = False
     try:
