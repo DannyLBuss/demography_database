@@ -1,0 +1,1 @@
+30 23 * * * bash /Users/daniellebuss/Sites/demography_database/application_tasks/mysql_dump/cron_dump.sh

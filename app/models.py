@@ -1293,14 +1293,14 @@ class CommonTerm(db.Model):
 
 ''' Upload files '''
 
-class UploadingFiles (db.Model):
-    __tablename__ = 'uploading files'
-    id = db.Column(db.Integer, primary_key=True)
-    file_title = db.Column(db.String(100))
-    file_description = db.Column(db.String(300))
-    file_filename = db.Column(db.String, default=None, nullable=True)
-    file_url = db.Column(db.String, default=None, nullable=True)
-    is_public = db.Column(db.Boolean, nullable=False)
+#class UploadingFiles (db.Model):
+#    __tablename__ = 'uploading files'
+#    id = db.Column(db.Integer, primary_key=True)
+#    file_title = db.Column(db.String(100))
+#    file_description = db.Column(db.String(300))
+#    file_filename = db.Column(db.String, default=None, nullable=True)
+#    file_url = db.Column(db.String, default=None, nullable=True)
+#    is_public = db.Column(db.Boolean, nullable=False)
 
 ''' End files '''
 

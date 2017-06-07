@@ -51,6 +51,11 @@ nosetests.xml
 #information about google client log in
 app/google_auth_class.py
 
+#backup dumps
+alchemydumps.py
+alchemydumps/
+mysql_dump.sh
+
 # Virtual environment
 venv
 bin/

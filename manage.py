@@ -30,6 +30,10 @@ from flask.ext.migrate import Migrate, MigrateCommand
 
 from app.matrix_functions import as_array, calc_lambda, calc_surv_issue, is_matrix_irreducible, is_matrix_primitive, is_matrix_ergodic
 
+from flask import Flask
+from flask.ext.alchemydumps import AlchemyDumps, AlchemyDumpsCommand
+from flask.ext.sqlalchemy import SQLAlchemy
+
 import random
 def gen_hex_code():
     r = lambda: random.randint(0,255)
@@ -38,7 +42,6 @@ def gen_hex_code():
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app, db)
-
 
 def make_shell_context():
     return dict(app=app, db=db, User=User, Role=Role,
@@ -55,6 +58,8 @@ def make_shell_context():
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
+
+manager.add_command('alchemydumps', AlchemyDumpsCommand)
 
 @manager.command
 def test(coverage=False):

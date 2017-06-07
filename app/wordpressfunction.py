@@ -21,7 +21,8 @@ def wordpress_data():
 	contentList = soup.findAll('div', attrs={'class': 'entry-content'})
 	contents = []
 	for pears in contentList:
-		contents.append(pears.get_text())
+		contents.append(pears.get_text()[4:])
+
 	# link
 	middle_all = soup.findAll("h1", attrs={'class': 'entry-title'})
 	result = []

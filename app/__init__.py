@@ -10,7 +10,14 @@ from flask_sqlalchemy import SQLAlchemy
 from .util import ListConverter
 import os
  
+from flask import Flask
+from flask.ext.alchemydumps import AlchemyDumps, AlchemyDumpsCommand
+from flask.ext.script import Manager
+from flask.ext.sqlalchemy import SQLAlchemy
 
+# init Flask
+
+# init SQLAlchemy and Flask-Script
 
 # from sqlalchemy.orm.query import Query
 # from sqlalchemy import *
@@ -42,6 +49,10 @@ def create_app(config_name):
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))
     UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/uploads')
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+    db = SQLAlchemy(app)
+    manager = Manager(app)
+    alchemydumps = AlchemyDumps(app, db)
 
     bootstrap.init_app(app)
     mail.init_app(app)

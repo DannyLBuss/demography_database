@@ -48,21 +48,13 @@ News
 </table>
 </div>
 </div>
-
-<div class="info_box">
-    <h4>Testing</h4>
-<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css') }}">
-<div class=page>
-<table>
-{% for cell in data %}
-    <tr>
-        <td>{{ data.Authors }}</td>
-        {{data | safe}}
-    </tr>
-{% endfor %}
+<div>
+    <table>
+    {% for item in 2.data %}
+    <tr><td>{{ item[loop.index] }}</td></tr>
+    {{data | safe}} 
+    {% endfor %}
 </table>
-</div>
-</div>
 <div class="info_box">
     <h3>The Databases</h3>
     <p><a href="http://onlinelibrary.wiley.com/doi/10.1111/1365-2745.12334/abstract;jsessionid=E81509E7DBF840A800EC5701CA22E17B.f04t03" target="_blank">The COMPADRE Plant Matrix Database: an open online repository for plant demography</a></p>

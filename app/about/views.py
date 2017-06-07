@@ -27,6 +27,7 @@ def team():
 @about.route('/wordpress', methods=['GET', 'POST'])
 def wordpress():
     data = wordpress_data()
+    data['Contents'].replace(regex=True,inplace=True, to_replace=r'\\n\\t\\t\\t',value=r'')
     return render_template('about/wordpress.html', wordpress=wordpress, data=[data.to_html(header=True, index=False, border=True)])
 
 #history
