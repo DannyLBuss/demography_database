@@ -3,15 +3,15 @@
 <hr>
 <h3>Hi {{current_user.name}}!</h3>
 <p>Node: {{current_user.institute.institution_name}}</p>
-<p>Your head compadrino is...</p>
+<p>Your head compadrino is...{{current_user.institute.head_compadrino}}</p>
     
 <div class="row">
     <div class="col-sm-3">
         <div class="info_box">
             <h3>Quick links:</h3>
                 <ul>
-                    <li>Protocol</li>
-                    <li>Slack</li>
+                    <li><a href= "{{ url_for('main.protocol_page') }}" target="_blank">Protocol</li></a>
+                    <li><a href= "https://slack.com/signin" target="_blank">Slack</li></a>
                     <li>PDF host</li>
                 </ul>
         </div>
@@ -22,20 +22,21 @@
             <p>Search by species</p>
             <p><a href="../../../data-manage/species/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new species</a></p>
             <p>Track my edits</p>
-            <p>View my public profile</p>
+            <p><a href="{{ url_for('main.user', username=current_user.username) }}" target="_blank"><span class="glyphicon glyphicon-new-window"></span>View public profile</a></p>
         </div>
         {% if current_user.role_id == 1 %}
         <div class="info_box">
             <h3>Admin actions</h3>
             <p>Recent compadrino actions</p>
-            <p>Edit institutions</p>
+            <p><a href="{{url_for('admin.new_institute_admin')}}"><span class="glyphicon glyphicon-plus-sign"></span>Add new institute</a></p>
+            <p><a href="{{ url_for('admin.institutes_page') }}"><span class="glyphicon glyphicon-new-window"></span>Edit institutions</a></p>
         </div>
         {% endif %}
     </div>
     
     <div class="col-sm-9">
         <div class="info_box"> 
-            <h3>Your currently assigned publications:</h3>
+            <h3>Your currently assigned publications: (coming soon)</h3>
             <p><b>Publications entered</b></p>
             <p>list of publications</p>
             <p><b>Publications and species (+taxonomy and traits) entered</b></p>

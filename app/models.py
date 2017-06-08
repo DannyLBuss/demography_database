@@ -341,6 +341,7 @@ class Institute(db.Model):
     department = db.Column(db.String(64))
     country = db.Column(db.String(64))
     website = db.Column(db.String(200))
+    head_compadrino = db.Column(db.String(64))
 
     users = db.relationship("User", backref="institute")
     populations = db.relationship("Population", backref="database_source")
@@ -366,6 +367,7 @@ class Institute(db.Model):
                 i.department = ins['department']
                 i.country = ins['country']
                 i.website = ins['website']
+                i.head_compadrino = ins['head_compadrino']
 
                 db.session.add(i)
                 db.session.commit()
@@ -386,6 +388,7 @@ class Institute(db.Model):
                     'department' : self.department,
                     'country' : self.country,
                     'website' : self.website,
+                    'head_compadrino' : self.head_compadrino,
                     'users' : [user.to_json_simple(key) for user in self.users]}
         }
         return institute
@@ -405,6 +408,7 @@ class Institute(db.Model):
             'department' : self.department,
             'country' : self.country,
             'website' : self.website,
+            'head_compadrino' : self.head_compadrino,
             'users' : len(self.users)}
             
         }

@@ -53,6 +53,7 @@ class EditInstituteAdminForm(Form):
     department = StringField('Department')
     country = StringField('Country')
     website = StringField('Website')
+    head_compadrino = StringField('Head compadrino')
     submit = SubmitField('Submit')
     
     

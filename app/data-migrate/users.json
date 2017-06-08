@@ -290,7 +290,8 @@
             "date_joined" : "",
             "department" : "",
             "country" : "",
-            "website" : ""
+            "website" : "",
+            "head_compadrino" : "sandra_schneider"
         },{
             "institution_name": "University of Exeter",
             "institution_short" : "UoE",
@@ -301,7 +302,8 @@
             "date_joined" : "",
             "department" : "College of Life and Environmental Sciences",
             "country" : "England",
-            "website" : "http://lifecycle.exeter.ac.uk"
+            "website" : "http://lifecycle.exeter.ac.uk",
+            "head_compadrino" : "danny_buss"
         },{
             "institution_name": "Trinity College Dublin",
             "institution_short" : "TCD",
@@ -312,7 +314,8 @@
             "date_joined" : "",
             "department" : "",
             "country" : "",
-            "website" : ""
+            "website" : "",
+            "head_compadrino" : "kevin_healy"
         },{
             "institution_name": "University of Sheffield",
             "institution_short" : "UOS",
@@ -323,7 +326,8 @@
             "date_joined" : "",
             "department" : "",
             "country" : "",
-            "website" : ""
+            "website" : "",
+            "head_compadrino" : "simon_rolph"
         },{
             "institution_name": "University of Southampton",
             "institution_short" : "UOSP",
@@ -334,7 +338,8 @@
             "date_joined" : "",
             "department" : "",
             "country" : "",
-            "website" : ""
+            "website" : "",
+            "head_compadrino" : ""
         },{
             "institution_name": "University of Southern Denmark",
             "institution_short" : "SDU",
@@ -345,7 +350,8 @@
             "date_joined" : "",
             "department" : "",
             "country" : "",
-            "website" : ""
+            "website" : "",
+            "head_compadrino" : ""
         },{
             "institution_name": "Lincoln Park Zoo",
             "institution_short" : "LPZ",
@@ -356,7 +362,8 @@
             "date_joined" : "",
             "department" : "",
             "country" : "",
-            "website" : ""
+            "website" : "",
+            "head_compadrino" : ""
         },{
             "institution_name": "University of Amsterdam",
             "institution_short" : "UVA",
@@ -367,7 +374,8 @@
             "date_joined" : "",
             "department" : "",
             "country" : "",
-            "website" : ""
+            "website" : "",
+            "head_compadrino" : ""
         },{
             "institution_name": "National Center for Ecological Analysis and Synthesis",
             "institution_short" : "NCEAS",
@@ -378,7 +386,8 @@
             "date_joined" : "",
             "department" : "",
             "country" : "",
-            "website" : ""
+            "website" : "",
+            "head_compadrino" : ""
         },{
             "institution_name": "University of Turku",
             "institution_short" : "Ramula",
@@ -389,7 +398,8 @@
             "date_joined" : "",
             "department" : "",
             "country" : "",
-            "website" : ""
+            "website" : "",
+            "head_compadrino" : ""
         },{
             "institution_name": "No Institution",
             "institution_short" : "NA",
@@ -400,7 +410,8 @@
             "date_joined" : "",
             "department" : "",
             "country" : "",
-            "website" : ""
+            "website" : "",
+            "head_compadrino" : ""
         }]
     }
 }
