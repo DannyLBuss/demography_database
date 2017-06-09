@@ -111,11 +111,12 @@ def callback():
             
             if user is not None:
                 next_form = False
+                flash("You have succesfully logged in")
             else:
-                flash("You have created a new account in the database")
                 next_form = True
                 
             if user is None:
+                flash("You have not created a new account in the database")
                 user = User()
                 user.role = Role.query.filter_by(name="User").first()
                 user.email = email
@@ -137,7 +138,8 @@ def callback():
             login_user(user)
 
             if next_form == True:
-                return redirect(url_for('main.edit_profile'))
+                return redirect(url_for('main.index'))
+                flash("You have not created a new account in the database, please try again")
             else:
                 return redirect(url_for('main.index'))
 
