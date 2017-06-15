@@ -5,9 +5,9 @@
             "database_description": "Compadre Version 3.2 Released as 3.2.1",
             "database_master_version" : "3.2.1",
             "database_date_created" : "2015-08-09",
-            "database_number_species_accepted" : "1",
-            "database_number_studies" : "1",
-            "database_number_matrices" : "1",
+            "database_number_species_accepted" : "637",
+            "database_number_studies" : "735",
+            "database_number_matrices" : "6242",
             "database_agreement" : "NA"
         }, {
             "database_name": "4.0.0",
@@ -50,9 +50,9 @@
             "database_description": "Comadre Version 1 Released as 1.0.0",
             "database_master_version" : "1.0.0",
             "database_date_created" : "2015-08-09",
-            "database_number_species_accepted" : "1",
-            "database_number_studies" : "1",
-            "database_number_matrices" : "1",
+            "database_number_species_accepted" : "345",
+            "database_number_studies" : "402",
+            "database_number_matrices" : "1625",
             "database_agreement" : "NA"
         }]
     }

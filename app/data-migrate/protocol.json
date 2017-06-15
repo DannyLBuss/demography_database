@@ -95,7 +95,7 @@
             "name_in_csv": "date_author_contacted_again",
             "database_model":"publication",
             "field_description": "Record the date when the author was most recently contacted since the first date of contact (see Corresponding Author Contacted)",
-            "field_short_description": "most recent date of the corresponding author was contacted (if different from first date of contact"
+            "field_short_description": "most recent date of the corresponding author was contacted (if different from first date of contact)"
         }, {
             "field_name": "Corresponding Extra Content Email",
             "name_in_csv": "extra_content_email ",
