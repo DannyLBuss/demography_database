@@ -5,7 +5,7 @@ from . import admin
 from .. import db
 from ..models import User, Role, Institute, DigitizationProtocol
 from ..email import send_email
-from .forms import  EditProfileAdminForm, EditInstituteAdminForm
+from .forms import  EditProfileAdminForm, EditInstituteAdminForm, EditProtocolAdminForm
 from ..decorators import admin_required, permission_required, crossdomain
 
 
@@ -122,7 +122,7 @@ def new_institute_admin():
 @login_required
 @admin_required
 def new_protocol_admin():
-    protocol = DigitisationProtocol()
+    protocol = DigitizationProtocol()
     form = EditProtocolAdminForm(protocol=protocol)
     if form.validate_on_submit():
         
@@ -139,7 +139,7 @@ def new_protocol_admin():
         flash('The protocol entry has been added')
         return redirect(url_for('main.protocol_page'))
 
-    return render_template('data_manage/generic_form.html', form=form)
+    return render_template('admin/protocol_form.html', form=form)
 
 @admin.route('/edit_protocol/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -167,5 +167,5 @@ def edit_protocol_admin():
     form.field_description.data = protocol.field_description
     form.field_short_description.data = protocol.field_short_description
 
-    return render_template('data_manage/generic_form.html', form=form)
+    return render_template('admin/protocol_form.html', form=form)
 

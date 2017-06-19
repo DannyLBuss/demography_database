@@ -2,7 +2,7 @@ from flask.ext.wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,SubmitField, validators, PasswordField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
-from ..models import User, Role, Institute
+from ..models import User, Role, Institute, DigitizationProtocol
 from wtforms.fields.html5 import DateField
 
     
@@ -63,4 +63,5 @@ class EditProtocolAdminForm(Form):
     database_model = StringField('database_model', validators=[Length(0, 50)])
     field_description = StringField('field_description')
     field_short_description = StringField('field_short_description')
+    submit = SubmitField('Submit')
     

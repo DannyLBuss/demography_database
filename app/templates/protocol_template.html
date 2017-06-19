@@ -36,8 +36,8 @@
         <tr>
             <td>{{ col.field_name }}</td>
             <td>{{ col.field_description }}</td>
-            {% if current_user.role == admin %}
-                <th><a href = "../../admin/edit_protocol/{{col.id}}">Edit</a> </th>
+            {% if current_user.role_id == 1 %}
+            <td><a href = "../../admin/edit_protocol/{{col.id}}">Edit</a></td>
             {% endif %}
         </tr> {% endfor %} 
     </tbody>

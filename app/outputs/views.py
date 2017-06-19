@@ -25,16 +25,26 @@ import random
 def downloads():
 	downloadfiles = []
 	filenames = []
-	for img in os.listdir('/Users/daniellebuss/Sites/demography_database/app/static/uploads'):
-		downloadfiles.append(img)
-		image = random.randint(0, len(downloadfiles)-1)
+	items = os.listdir('/Users/daniellebuss/Sites/demography_database/app/static/uploads')
+	for img in items:
+		if img.endswith(".RData"):
+			downloadfiles.append(img)
 		return downloadfiles[image].split(".")[0]
+		image = random.randint(0, len(downloadfiles)-1)
 	for names in downloadfiles:
 		filenames.append(downloadfiles.img)
 	return filenames
 	return render_template("outputs/downloads.html")
 
 
+import os
+items = os.listdir(".")
+
+newlist = []
+for names in items:
+    if names.endswith(".txt"):
+        newlist.append(names)
+print newlist
 
 #@outputs.route('/downloads')
 #def downloads():
