@@ -83,7 +83,7 @@ def edit_institute_admin(id):
     form.main_contact_name.data = institute.main_contact_name
     form.institution_address.data = institute.institution_address
     form.research_group.data = institute.research_group
-    form.email.data = institute.date_joined 
+    #form.email.data = institute.date_joined 
     form.department.data = institute.department
     form.country.data = institute.country 
     form.website.data = institute.website 
@@ -96,6 +96,7 @@ def edit_institute_admin(id):
 def new_institute_admin():
     institute = Institute()
     form = EditInstituteAdminForm(institute=institute)
+    flash('Date format must be "YYYY-mm-dd".')
     if form.validate_on_submit():
         
         institute.institution_name = form.institution_name.data

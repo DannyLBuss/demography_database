@@ -113,9 +113,7 @@ $(document).ready(function() {
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="{{ current_user.gravatar(size=18) }}"> Account <b class="caret"></b> </a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ url_for('user_zone.area') }}">User Area</a></li>
-                        <li><a href="{{ url_for('user_zone.edit_profile') }}">Edit profile</a></li>
-                        <li><a href="{{ url_for('auth.change_password') }}">Change Password (old login)</a></li>
-                        <li><a href="{{ url_for('auth.change_email_request') }}">Change Email (old login)</a></li>
+                        <li><a href="{{ url_for('user_zone.edit_profile') }}">Edit Profile</a></li>
                         <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
                     </ul>
                 </li> {% else %}
