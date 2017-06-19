@@ -144,7 +144,7 @@ def new_protocol_admin():
 @admin.route('/edit_protocol/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def edit_protocol_admin():
+def edit_protocol_admin(id):
     protocol = DigitizationProtocol.query.get_or_404(id)
     form = EditProtocolAdminForm(protocol=protocol)
     if form.validate_on_submit():
