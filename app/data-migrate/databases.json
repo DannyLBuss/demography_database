@@ -19,8 +19,8 @@
             "database_number_matrices" : "7024",
             "database_agreement" : "http://www.compadre-db.org/Compadre/UserAgreement"
         }, {
-            "database_name": "XXX",
-            "database_description": "Unreleased data currently under edit by COMPADRINOs",
+            "database_name": "XXX.Comadre",
+            "database_description": "Unreleased data COMADRE currently under edit by COMPADRINOs",
             "database_master_version" : "XXX",
             "database_date_created" : "2017-06-15",
             "database_number_species_accepted" : "456",
@@ -55,14 +55,23 @@
             "database_number_matrices" : "1625",
             "database_agreement" : "NA"
         }, {
+            "database_name": "XXX.Compadre",
+            "database_description": "Unreleased data COMPADRE currently under edit by COMPADRINOs",
+            "database_master_version" : "X.X.X",
+            "database_date_created" : "2017-06-15",
+            "database_number_species_accepted" : "725",
+            "database_number_studies" : "859",
+            "database_number_matrices" : "7396",
+            "database_agreement" : "NA"
+        },{
             "database_name": "Unreleased",
-            "database_description": "Unreleased data currently under edit by COMPADRINOs, new since database switched from Excel to SQL",
+            "database_description": "Unreleased data COMPADRE currently under edit by COMPADRINOs",
             "database_master_version" : "X",
             "database_date_created" : "1964-01-01",
             "database_number_species_accepted" : "1",
             "database_number_studies" : "1",
             "database_number_matrices" : "1",
             "database_agreement" : "NA"
-        },]
+        }]
     }
 }

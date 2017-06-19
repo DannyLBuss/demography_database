@@ -116,7 +116,6 @@ def callback():
                 next_form = True
                 
             if user is None:
-                flash("You have not created a new account in the database")
                 user = User()
                 user.role = Role.query.filter_by(name="User").first()
                 user.email = email

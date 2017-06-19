@@ -30,7 +30,7 @@ def downloads():
 		image = random.randint(0, len(downloadfiles)-1)
 		return downloadfiles[image].split(".")[0]
 	for names in downloadfiles:
-		filenames.append(downloadfiles.filename)
+		filenames.append(downloadfiles.img)
 	return filenames
 	return render_template("outputs/downloads.html")
 

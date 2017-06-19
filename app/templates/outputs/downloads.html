@@ -16,7 +16,7 @@
     	<table>
     	{% set comma = joiner(",") %}
     	{% for result in filenames%}
-    		{{comma() }}<a href="/static/uploads/{{ result }}">{{ result }}</a>
+    		{{comma() }}<a href="/static/uploads/{{ result.result }}">{{ result }}</a>
     	</table>
     {% endfor %}
   </body>
