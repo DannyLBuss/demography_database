@@ -53,7 +53,7 @@
 </div>
 {% endif %}
 
-<div id="publication_filter">
+
     <button type="button" class="btn btn-xs btn-default" data-toggle="collapse" href="#mappo"> <span class="glyphicon glyphicon-globe"></span> Show/hide map </button>
     <div id="mappo" class='panel-collapse in collapse'>
         <div class = "row">
@@ -65,8 +65,9 @@
             </div>
         </div>
     </div>
+
+<div id="notmap">
     
-    <div class="list">
     {% for species in all_species |sort(attribute='id')  %}
     <div>
         
@@ -406,7 +407,6 @@
     {% endif %}
 
     {% endfor %}
-        </div>
     
     <div class="info_box">
         <table style="width:100%" class="table">
@@ -415,8 +415,6 @@
                     <td>
                         <h4><strong>Publications:</strong></h4></td>
                     <td></td>
-                    <td>
-                        <h4>Filter</h4></td>
                 </tr>
             </thead> {% if publications %}
             <tbody> {% for publication in publications |sort(attribute='id') %}
@@ -442,8 +440,6 @@
                         
                     </td>
                     <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source <span class="glyphicon glyphicon-new-window"></span></a>{% endif %}</td>
-                    <td>
-                        <input type="checkbox" class="filter" data-value="id{{publication.id}}"> </td>
                 </tr> {% endfor %} </tbody>
             {% else %}
             <tbody>
@@ -461,8 +457,8 @@
         {% endif %}
     </div> 
     
-    
-</div> {% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }}
+    </div>
+ {% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown() }}
 <!-- JAVASCRIPT -->
 <script>
     function openInNewTab(url) {
@@ -562,11 +558,12 @@
     var Esri_WorldPhysical = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service'
         , maxZoom: 8
-        , minZoom: 2
+        , minZoom: 1
     }).addTo(mymap);
+    
     {%for species in all_species %}
     {% if species.gbif_taxon_key %}
-    L.tileLayer('http://api.gbif.org/v1/map/density/tile?&x={x}&y={y}&z={z}&type=TAXON&key={{species.gbif_taxon_key}}&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds', {
+    species{{species.gbif_taxon_key}} = L.tileLayer('http://api.gbif.org/v1/map/density/tile?&x={x}&y={y}&z={z}&type=TAXON&key={{species.gbif_taxon_key}}&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds', {
         attribution: ''
         , maxZoom: 8
         , minZoom: 2
@@ -574,9 +571,17 @@
      {% endif %} 
      {% endfor %}
      
-     var baseMaps = { "Esri_WorldPhysical": Esri_WorldPhysical};
+     var baseMaps = { "Physical": Esri_WorldPhysical};
+      
+    var speciesMaps = { 
+    {%for species in all_species %}
+        {% if species.gbif_taxon_key %}
+        "{{species.species_accepted}}": species{{species.gbif_taxon_key}},
+        {% endif %} 
+    {% endfor %}
+    };
      
-    L.control.layers(baseMaps).addTo(mymap);
+    L.control.layers(speciesMaps).addTo(mymap);
 </script>
 <script>
     // remove duplicate publications
@@ -633,40 +638,7 @@
         oms.addMarker(marker);
     });
 </script>
-<script>
-    // list.js stuff
-    $(function () {
-        var options = {
-            valueNames: [
-                {
-                    attr: 'data-value'
-                    , name: 'population'
-                }
-            ]
-        };
-        var userList = new List('publication_filter', options);
-        var activeFilters = [];
-        //filter
-        $('.filter').change(function () {
-            var isChecked = this.checked;
-            var value = $(this).data("value");
-            if (isChecked) {
-                //  add to list of active filters
-                activeFilters.push(value);
-            }
-            else {
-                // remove from active filters
-                activeFilters.splice(activeFilters.indexOf(value), 1);
-            }
-            userList.filter(function (item) {
-                if (activeFilters.length > 0) {
-                    return (activeFilters.indexOf(item.values().population)) > -1;
-                }
-                return true;
-            });
-        });
-    });
-</script>
+
 <script>
     window.twttr = (function (d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0]
@@ -683,6 +655,7 @@
         return t;
     }(document, "script", "twitter-wjs"));
 </script>
+
 <script>
     function htmlreplace(a, b, element) {
         if (!element) element = document.body;
@@ -700,11 +673,16 @@
     // htmlreplace('None', 'Unknown');
     htmlreplace('&lt;', '<');
     htmlreplace('&gt;', '>');
+    htmlreplace('-True', '-Checked');
+    htmlreplace('-False', '-Unchecked');
     
-    document.body.innerHTML = document.body.innerHTML.replace(/-Green-/g, '-<span class="glyphicon glyphicon-ok" style="color:green"></span>-');
-    document.body.innerHTML = document.body.innerHTML.replace(/-Amber-/g, '-<span class="glyphicon glyphicon-warning-sign"  style="color:Coral"></span>-');
-    document.body.innerHTML = document.body.innerHTML.replace(/-Pending-/g, '-<span class="glyphicon glyphicon-flag" style="color:DarkOrchid"></span>-');
-    document.body.innerHTML = document.body.innerHTML.replace(/-Red-/g, '-<span class="glyphicon glyphicon glyphicon-remove" style="color:red"></span>-');
-</script> 
+    var notmap = document.getElementById("notmap")
+    
+    notmap.innerHTML = notmap.innerHTML.replace(/-Green-/g, '-<span class="glyphicon glyphicon-ok" style="color:green"></span>-');
+    notmap.innerHTML = notmap.innerHTML.replace(/-Amber-/g, '-<span class="glyphicon glyphicon-warning-sign"  style="color:Coral"></span>-');
+    notmap.innerHTML = notmap.innerHTML.replace(/-Pending-/g, '-<span class="glyphicon glyphicon-flag" style="color:DarkOrchid"></span>-');
+    notmap.innerHTML = notmap.innerHTML.replace(/-Red-/g, '-<span class="glyphicon glyphicon glyphicon-remove" style="color:red"></span>-');
+</script>
+ 
 
 {% endblock %}

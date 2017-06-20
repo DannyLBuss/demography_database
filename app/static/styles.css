@@ -336,9 +336,7 @@ matrix_cont{
     font-weight: bold;
 }
 
-#dist_map {
-    height: 400px;
-}
+
 
 .btn-info {
     padding:2px;
@@ -435,6 +433,10 @@ body {
 .empty_box {
     color:#909090;
 
+}
+
+#dist_map{
+    height:400px;
 }
 
 :target:before {
