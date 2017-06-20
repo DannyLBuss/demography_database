@@ -70,22 +70,20 @@ def species_form(id,edit_or_new):
     if form.validate_on_submit():
         
         if edit_or_new == "edit":
-            # PASTE CODE BLOCK
+            # COPY CODE BLOCK
             species.add_to_logger(current_user,'species_accepted',species_old.species_accepted,form.species_accepted.data,'edit')
             species.add_to_logger(current_user,'species_common',species_old.species_common,form.species_common.data,'edit')
             species.add_to_logger(current_user,'iucn_status',species_old.iucn_status,form.iucn_status.data,'edit')
-            species.add_to_logger(current_user,'species_gisd_status',species_old.species_gisd_status,form.species_gisd_status.data,'edit')
             species.add_to_logger(current_user,'species_iucn_taxonid',species_old.species_iucn_taxonid,form.species_iucn_taxonid.data,'edit')
             #species.add_to_logger(current_user,'invasive_status',species_old.invasive_status,form.invasive_status.data,'edit')
             species.add_to_logger(current_user,'gbif_taxon_key',species_old.gbif_taxon_key,form.gbif_taxon_key.data,'edit')
             species.add_to_logger(current_user,'image_path',species_old.image_path,form.image_path.data,'edit')
             species.add_to_logger(current_user,'image_path2',species_old.image_path2,form.image_path2.data,'edit')
-            # END PAST CODE BLOCK
+            #END COPY CODE BLOCK
         
         species.species_accepted = form.species_accepted.data 
         species.species_common = form.species_common.data
         species.iucn_status = form.iucn_status.data
-        species.species_gisd_status = form.species_gisd_status.data #
         species.species_iucn_taxonid = form.species_iucn_taxonid.data #
         #species.invasive_status = form.invasive_status.data
         species.gbif_taxon_key = form.gbif_taxon_key.data
@@ -101,7 +99,6 @@ def species_form(id,edit_or_new):
             species.add_to_logger(current_user,'species_accepted',species_old.species_accepted,form.species_accepted.data,'edit')
             species.add_to_logger(current_user,'species_common',species_old.species_common,form.species_common.data,'edit')
             species.add_to_logger(current_user,'iucn_status',species_old.iucn_status,form.iucn_status.data,'edit')
-            species.add_to_logger(current_user,'species_gisd_status',species_old.species_gisd_status,form.species_gisd_status.data,'edit')
             species.add_to_logger(current_user,'species_iucn_taxonid',species_old.species_iucn_taxonid,form.species_iucn_taxonid.data,'edit')
             #species.add_to_logger(current_user,'invasive_status',species_old.invasive_status,form.invasive_status.data,'edit')
             species.add_to_logger(current_user,'gbif_taxon_key',species_old.gbif_taxon_key,form.gbif_taxon_key.data,'edit')
@@ -125,7 +122,6 @@ def species_form(id,edit_or_new):
     form.species_accepted.data = species.species_accepted
     form.species_common.data = species.species_common
     form.iucn_status.data = species.iucn_status
-    form.species_gisd_status.data = species.species_gisd_status #
     form.species_iucn_taxonid.data = species.species_iucn_taxonid #
     #form.invasive_status.data = species.invasive_status
     form.gbif_taxon_key.data = species.gbif_taxon_key
@@ -342,13 +338,18 @@ def trait_edit_history(id):
 @login_required
 def publication_form(id,edit_or_new):
     
+    # GET PROTOCOL FOR THE FORM
+    # THEN MUST BE MANUALLY FIELD BY FIELD TEMPLATED OUT IN THE FORM TEMPLATE
+    protocol = DigitizationProtocol.query.all()
     protocol_dict = {}
     for ocol in protocol:
         protocol_dict[ocol.name_in_csv] = ocol.field_description 
 
+    # DENY ACCESS IF NOT A ROLE WITH EDITING RIGHTS
     if current_user.role_id not in [1,3,4,6]:
         abort(404)
     
+    # WHETHER EDIITNG AN EXISTING OBJECT OR CREATING A NEW ONE
     if edit_or_new == "edit":
         publication = Publication.query.filter_by(id=id).first_or_404()
         publication_old = Publication.query.filter_by(id=id).first_or_404()
@@ -358,9 +359,11 @@ def publication_form(id,edit_or_new):
         publication_old = Publication()
         form = PublicationForm()
     
+    # WHEN YOU PRESS SUBMIT...
     if form.validate_on_submit():
         
         if edit_or_new == "edit":
+            # CHANGE LOGGER, I AM SORRY THAT THIS IS NOT A GOOD IMPLEMENTATION
             # COPY CODE BLOCK
             publication.add_to_logger(current_user,'source_type',publication_old.source_type,form.source_type.data,'edit')
             publication.add_to_logger(current_user,'authors',publication_old.authors,form.authors.data,'edit')
@@ -474,7 +477,7 @@ def publication_form(id,edit_or_new):
     #form.student.data = publication.student
     
     
-    return render_template('data_manage/publication_form.html', form=form, publication=publication)
+    return render_template('data_manage/publication_form.html', form=form, publication=publication,protocol_dict = protocol_dict)
 
 # publication edit history
 @data_manage.route('/publication/<int:id>/edit-history')
@@ -531,12 +534,18 @@ def population_form(id,edit_or_new,species_id,publication_id):
         population.lat_deg = form.lat_deg.data
         population.lat_min = form.lat_min.data
         population.lat_sec = form.lat_sec.data
-        #population.latitude = float(population.lat_deg) + float(population.lat_min)/60 + float(population.lat_sec)/3600
+        if population.lat_ns == "N":
+            population.latitude = float(population.lat_deg) + float(population.lat_min)/60 + float(population.lat_sec)/3600
+        if population.lat_ns == "S":
+            population.latitude = -(float(population.lat_deg) + float(population.lat_min)/60 + float(population.lat_sec)/3600)
         population.lon_ew = form.lon_ew.data
         population.lon_deg = form.lon_deg.data
         population.lon_min = form.lon_min.data
         population.lon_sec = form.lon_sec.data
-        #population.longitude = float(population.lon_deg) + float(population.lon_min)/60 + float(population.lon_sec)/3600
+        if population.lon_ew == "E":
+            population.longitude = float(population.lon_deg) + float(population.lon_min)/60 + float(population.lon_sec)/3600
+        if population.lon_ew == "W":
+            population.longitude = -(float(population.lon_deg) + float(population.lon_min)/60 + float(population.lon_sec)/3600)
         population.altitude = form.altitude.data
         #population.pop_size = form.pop_size.data
         population.within_site_replication = form.within_site_replication.data

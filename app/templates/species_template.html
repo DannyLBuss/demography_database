@@ -85,8 +85,8 @@
             <li><a target="_blank" href="../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}">Update status</a></li>{% else %}
             <li><a href="../../data-manage/taxonomy/new/0/species={{species.id}}">Add taxonomy</a></li> {% endif %}
             <li class="dropdown-header">Species Traits</li> {% if species.trait %}
-            <li><a href="../../data-manage/traits/edit/{{species.trait.id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
-            <li><a href="../../data-manage/traits/{{species.trait.id}}/edit-history">View edits</a></li>
+            <li><a href="../../data-manage/traits/edit/{{species.trait[0].id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
+            <li><a href="../../data-manage/traits/{{species.trait[0].id}}/edit-history">View edits</a></li>
             <li><a target="_blank" href="../../data-manage/version/edit/{{species.trait[0].version[0].id}}">Update status</a></li>{% else %}
             <li><a href="../../data-manage/traits/new/0/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
             
@@ -154,7 +154,7 @@
             {% if compadrino_info == True %} 
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_spandex_growth_type_id"] }}' class="nounderline">
                 <td> <strong>SPANDEX growth type:</strong> </td>
-                <td> {{ trait.spandex_growth_type_id.spandex_growth_types }} </td>
+                <td> {{ trait.spand_ex_growth_type_id.spandex_growth_types }} </td>
             </tr>
             {% endif %}
             {% if species.taxonomy.kingdom == "Plantae" %}

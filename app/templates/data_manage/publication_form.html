@@ -23,6 +23,8 @@
         <div class="info_box">
             <h3>What type of source?</h3>
         {{ wtf.form_field(form.source_type) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
         </div>
         <div class="info_box">
             <h3>Get information from DOI via <a target="_blank" href="https://github.com/CrossRef/rest-api-doc/blob/master/rest_api.md">Crossref API</a> / ISBN via ...</h3>
@@ -33,29 +35,61 @@
                         <a class="btn btn-default disabled">Get info from ISBN</a>
                 </div>
             </div>
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
         </div>
         <div class="info_box">
             <h3>Autofilled via DOI or ISBN</h3>
             {{ wtf.form_field(form.authors) }}
-            {{ protocol_dict["publication_authors"] }}
-            
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.editors) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.journal_name)}}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.year) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.volume) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.pages) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.publisher) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.city) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.country) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.institution) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.pub_title) }}
+            <p>If this is in all caps then use <a href ="https://convertcase.net/">convertcase.net</a> to change it to Capitalized case.</p>
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
+            
         </div>
         <div class="info_box">
             <h3>Must be input manually</h3>
             {{ wtf.form_field(form.purposes) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.embargo) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.additional_source_string) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
             {{ wtf.form_field(form.study_notes) }}
+            <b>Protocol Description: </b>{{ protocol_dict["publication_authors"] }}
+            <hr>
         </div>
     </div>
 
