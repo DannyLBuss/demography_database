@@ -55,6 +55,11 @@ def version_form(id):
 @data_manage.route('/species/<string:edit_or_new>/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def species_form(id,edit_or_new):
+    
+    protocol = DigitizationProtocol.query.all()
+    protocol_dict = {}
+    for ocol in protocol:
+        protocol_dict[ocol.name_in_csv] = ocol.field_description
     if current_user.role_id not in [1,3,4,6]:
         abort(404)
     
@@ -142,6 +147,11 @@ def species_edit_history(id):
 @data_manage.route('/taxonomy/<string:edit_or_new>/<int:id>/species=<int:species_id>', methods=['GET', 'POST'])
 @login_required
 def taxonomy_form(id,species_id,edit_or_new):
+    protocol = DigitizationProtocol.query.all()
+    protocol_dict = {}
+    for ocol in protocol:
+        protocol_dict[ocol.name_in_csv] = ocol.field_description
+        
     if current_user.role_id not in [1,3,4,6]:
         abort(404)
     
@@ -253,6 +263,11 @@ def taxonomy_edit_history(id):
 @data_manage.route('/traits/<string:edit_or_new>/<int:id>/species=<int:species_id>', methods=['GET', 'POST'])
 @login_required
 def trait_form(id,edit_or_new,species_id):
+    protocol = DigitizationProtocol.query.all()
+    protocol_dict = {}
+    for ocol in protocol:
+        protocol_dict[ocol.name_in_csv] = ocol.field_description
+    
     if current_user.role_id not in [1,3,4,6]:
         abort(404)
     
@@ -505,6 +520,11 @@ def choose_species(id_pub):
 def population_form(id,edit_or_new,species_id,publication_id):
     if current_user.role_id not in [1,3,4,6]:
         abort(404)
+        
+    protocol = DigitizationProtocol.query.all()
+    protocol_dict = {}
+    for ocol in protocol:
+        protocol_dict[ocol.name_in_csv] = ocol.field_description
 
     if edit_or_new == "edit":
         population = Population.query.get_or_404(id)
@@ -602,7 +622,7 @@ def population_form(id,edit_or_new,species_id,publication_id):
     
     species_author_populations = Population.query.filter_by(species_id=species.id).filter_by(publication_id=publication.id).all()
 
-    return render_template('data_manage/population_form.html', form=form, population=population,species = species,publication = publication,species_author_populations = species_author_populations)
+    return render_template('data_manage/population_form.html', form=form, population=population,species = species,publication = publication,species_author_populations = species_author_populations,protocol_dict = protocol_dict)
 
 # population edit history
 @data_manage.route('/population/<int:id>/edit-history')

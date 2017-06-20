@@ -22,8 +22,14 @@
     {% endif %}
     
 </div>
+<form method="post" role="form">
+    <div class="form">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_errors(form, hiddens="only") }}
+    </div>
 <div class="form">
     <div class="info_box">
+        <h3>Population Information</h3>
         <table class="table">
             <thead>
                 <tr>
@@ -46,29 +52,69 @@
             
             
         {{ wtf.form_field(form.species_author) }}
-<!--
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
-        {{ wtf.form_field(form. FIELD ) }}
--->
+        <p>{{ protocol_dict["species_author"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.population_name) }}
+        <p>{{ protocol_dict["population_name"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.ecoregion) }}
+        <p>{{ protocol_dict["population_ecoregion"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.invasive_status_study) }}
+        <p>{{ protocol_dict["population_invasive_status_study"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.invasive_status_elsewhere) }}
+        <p>{{ protocol_dict["population_invasive_status_elsewhere"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.country) }}
+        <p>{{ protocol_dict["population_country"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.population_nautical_miles) }}
+        <p>{{ protocol_dict["population_nautical_miles"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.continent) }}
+        <p>{{ protocol_dict["population_continent"] }}</p>
+    </div>
+    <div class="info_box">
+        <h3>Coordinates and altitude</h3>
+        <div class="row">
+            <div class="col-sm-3">{{ wtf.form_field(form.lat_ns) }}<p>{{ protocol_dict["lat_ns"] }}</p></div>
+            <div class="col-sm-3">{{ wtf.form_field(form.lat_deg) }}<p>{{ protocol_dict["lat_deg"] }}</p></div>
+            <div class="col-sm-3">{{ wtf.form_field(form.lat_min) }}<p>{{ protocol_dict["lat_min"] }}</p></div>
+            <div class="col-sm-3">{{ wtf.form_field(form.lat_sec) }}<p>{{ protocol_dict["lat_sec"] }}</p></div>
+        </div>
+            
+        <div class="row">
+            <div class="col-sm-3">{{ wtf.form_field(form.lon_ew) }}<p>{{ protocol_dict["lon_ew"] }}</p></div>
+            <div class="col-sm-3">{{ wtf.form_field(form.lon_deg) }}<p>{{ protocol_dict["lon_deg"] }}</p></div>
+            <div class="col-sm-3">{{ wtf.form_field(form.lon_min) }}<p>{{ protocol_dict["lon_min"] }}</p></div>
+            <div class="col-sm-3">{{ wtf.form_field(form.lon_sec) }}<p>{{ protocol_dict["lon_sec"] }}</p></div>
+        </div>
+                
+        {{ wtf.form_field(form.altitude) }}
+    </div>
+    <div class="info_box">
+        <h3>Study Information</h3>
+        {{ wtf.form_field(form.study_start) }}
+        <p>{{ protocol_dict["study_start"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.study_end) }}
+        <p>{{ protocol_dict["study_end"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.purpose_endangered) }}
+        <p>{{ protocol_dict["study_purpose_endangered"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.purpose_weed) }}
+        <p>{{ protocol_dict["study_purpose_weed"] }}</p>
+        
         
     </div>
+    <div class="info_box">
+        <h3>Submit</h3>
+        {{ wtf.form_field(form.submit) }}
+    </div>
 </div>
+</form>
 
 <script>
  
