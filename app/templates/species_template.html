@@ -180,11 +180,12 @@
 <br>
 <!-- External sources line with buttons  (species model)--> 
 <div id="external-sources"> Search external sources:
-    <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://media.eol.org//assets/favicon-9de6ee8ce10b9ad7b2662236411f4539.ico" class="little_logo"> Enyclopedia of Life</a>
-    <a href="http://www.catalogueoflife.org/col/search/all/key/{{species.species_accepted}}/" target="_blank" class="btn btn-default" role="button"><img src="http://www.catalogueoflife.org/sites/default/files/favicon.gif" class="little_logo"> Catalogue of Life</a>
+    <a href="https://scholar.google.co.uk/scholar?q={{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://scholar.google.co.uk/favicon-png.ico" class="little_logo"> Scholar</a>
+    <a href="http://www.onezoom.org/life.html/@{{species.species_accepted|replace(' ','_')}}"target="_blank" class="btn btn-default" role="button"><img src="http://www.onezoom.org/favicon.ico" class="little_logo"> OneZoom</a>
+    <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://eol.org/favicon.ico" class="little_logo"> Enyclopedia of Life</a>
+    <a href="http://www.catalogueoflife.org/col/search/all/key/{{species.species_accepted}}/" target="_blank" class="btn btn-default" role="button"><img src="http://www.catalogueoflife.org/favicon.ico" class="little_logo"> Catalogue of Life</a>
     <a href="https://en.wikipedia.org/wiki/{{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://en.wikipedia.org/static/favicon/wikipedia.ico" class="little_logo"> Wikipedia</a>
     <a href="http://www.ncbi.nlm.nih.gov/nuccore/?term=%22{{species.species_accepted}}%22" target="_blank" class="btn btn-default" role="button"><img class="little_logo" src="https://www.ncbi.nlm.nih.gov/favicon.ico"> Genbank</a>
-    <a href="https://scholar.google.co.uk/scholar?q={{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://scholar.google.co.uk/favicon-png.ico" class="little_logo"> Scholar</a>
 </div>
 <!-- end of external sources  (species model)-->
 <br>
@@ -563,7 +564,7 @@
     
     {%for species in all_species %}
     {% if species.gbif_taxon_key %}
-    species{{species.gbif_taxon_key}} = L.tileLayer('http://api.gbif.org/v1/map/density/tile?&x={x}&y={y}&z={z}&type=TAXON&key={{species.gbif_taxon_key}}&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds', {
+    species{{species.gbif_taxon_key}} = L.tileLayer('http://api.gbif.org/v1/map/density/tile?&x={x}&y={y}&z={z}&type=TAXON&key={{species.gbif_taxon_key}}&resolution=4&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows-reds', {
         attribution: ''
         , maxZoom: 8
         , minZoom: 2
@@ -576,27 +577,14 @@
     var speciesMaps = { 
     {%for species in all_species %}
         {% if species.gbif_taxon_key %}
-        "{{species.species_accepted}}": species{{species.gbif_taxon_key}},
+        "GBIF data - {{species.species_accepted}}": species{{species.gbif_taxon_key}},
         {% endif %} 
     {% endfor %}
     };
      
-    L.control.layers(speciesMaps).addTo(mymap);
+    L.control.layers(speciesMaps,null,{collapsed:false}).addTo(mymap);
 </script>
-<script>
-    // remove duplicate publications
-    var seen = {};
-    $('.remove_duplicates').each(function () {
-        var txt = $(this).text();
-        if (seen[txt]) $(this).remove();
-        else seen[txt] = true;
-    });
-    var x = document.getElementsByClassName("remove_duplicates");
-    var i;
-    for (i = 0; i < x.length; i++) {
-        x[i].style.visibility = "visible";
-    }
-</script>
+
 
 <script>
     // create new spidery thing

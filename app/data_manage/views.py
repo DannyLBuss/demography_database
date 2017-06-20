@@ -600,7 +600,7 @@ def population_form(id,edit_or_new,species_id,publication_id):
     form.purpose_weed.data = population.purpose_weed  
     #form.database_source.data = population.database_source  
 
-    return render_template('data_manage/generic_form.html', form=form, population=population,species = species,publication = publication)
+    return render_template('data_manage/population_form.html', form=form, population=population,species = species,publication = publication)
 
 # population edit history
 @data_manage.route('/population/<int:id>/edit-history')

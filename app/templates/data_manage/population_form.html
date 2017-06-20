@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Demography Database - Data Input{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Data Input Form</h1>
+    
+    <h3><a href="" onclick="goBack()"> <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back to previous page - changes will NOT be saved</a></h3>
+    
+    {% if publication %}
+    <h3><strong>Publication:</strong> {{publication.authors}} </h3>
+    {% endif %}
+    
+    {% if species %}
+    <h3><strong>Species:</strong> <i>{{species.species_accepted}}</i></h3>
+    {% endif %}
+    
+    {% if population %}
+    <h3><strong>Population:</strong> {{population.population_name}}</h3>    
+    {% endif %}
+    
+</div>
+<div class="form">
+    <div class="info_box">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Species Author</th>
+                    <th>Publication</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+            
+            
+        {{ wtf.form_field(form.species_author) }}
+    </div>
+</div>
+
+<script>
+ 
+    function goBack() {
+        window.history.go(-1);
+    }
+</script>
+{% endblock %}
