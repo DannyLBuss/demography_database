@@ -32,15 +32,41 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
+                <h3></h3>
+                {% for pops in species_author_populations %}
+                <tr class="remove_duplicates">
+                    
+                    <td>{{pops.species_author}}</td>
+                    <td>{{pops.publication.authors}}, {{pops.publication.year}}, {{pops.publication.DOI_ISBN}}</td>
+                    
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
             
             
         {{ wtf.form_field(form.species_author) }}
+<!--
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+        {{ wtf.form_field(form. FIELD ) }}
+-->
+        
     </div>
 </div>
 
@@ -50,4 +76,21 @@
         window.history.go(-1);
     }
 </script>
+
+
+<script>
+    // remove duplicate publications
+    var seen = {};
+    $('.remove_duplicates').each(function () {
+        var txt = $(this).text();
+        if (seen[txt]) $(this).remove();
+        else seen[txt] = true;
+    });
+    var x = document.getElementsByClassName("remove_duplicates");
+    var i;
+    for (i = 0; i < x.length; i++) {
+        x[i].style.visibility = "visible";
+    }
+</script>
+
 {% endblock %}

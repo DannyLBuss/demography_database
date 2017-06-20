@@ -598,9 +598,11 @@ def population_form(id,edit_or_new,species_id,publication_id):
     form.study_end.data = population.study_end 
     form.purpose_endangered.data = population.purpose_endangered 
     form.purpose_weed.data = population.purpose_weed  
-    #form.database_source.data = population.database_source  
+    #form.database_source.data = population.database_source 
+    
+    species_author_populations = Population.query.filter_by(species_id=species.id).filter_by(publication_id=publication.id).all()
 
-    return render_template('data_manage/population_form.html', form=form, population=population,species = species,publication = publication)
+    return render_template('data_manage/population_form.html', form=form, population=population,species = species,publication = publication,species_author_populations = species_author_populations)
 
 # population edit history
 @data_manage.route('/population/<int:id>/edit-history')
