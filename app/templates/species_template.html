@@ -58,7 +58,7 @@
     <div id="mappo" class='panel-collapse in collapse'>
         <div class = "row">
             <div class="col-md-9">
-                <div id="dist_map"></div>
+                <div id="dist_map"  class= "shadowed"></div>
                 </div>
             <div class="col-md-3">
                 <h3>Map legend</h3>
@@ -80,31 +80,46 @@
             <li><a href="../../data-manage/species/edit/{{species.id}}" ><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
             <li><a href="../../data-manage/species/{{species.id}}/edit-history">View edits</a></li>
             <li><a target="_blank" href="../../data-manage/version/edit/{{species.version.id}}">Update status</a></li>
+            <li><a href="../../data-manage/delete/species/{{species.id}}"><span class="glyphicon glyphicon-trash"></span> Delete species + taxonomy + traits</a></li>
             <li class="dropdown-header">Taxonomy</li> {% if species.taxonomy %}
             <li><a href="../../data-manage/taxonomy/edit/{{species.taxonomy[0].id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
             <li><a href="../../data-manage/taxonomy/{{species.taxonomy[0].id}}/edit-history">View edits</a></li>
-            <li><a target="_blank" href="../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}">Update status</a></li>{% else %}
+            <li><a target="_blank" href="../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}">Update status</a>
+            </li>
+            {% else %}
             <li><a href="../../data-manage/taxonomy/new/0/species={{species.id}}">Add taxonomy</a></li> {% endif %}
             <li class="dropdown-header">Species Traits</li> {% if species.trait %}
             <li><a href="../../data-manage/traits/edit/{{species.trait[0].id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
             <li><a href="../../data-manage/traits/{{species.trait[0].id}}/edit-history">View edits</a></li>
-            <li><a target="_blank" href="../../data-manage/version/edit/{{species.trait[0].version[0].id}}">Update status</a></li>{% else %}
+            <li><a target="_blank" href="../../data-manage/version/edit/{{species.trait[0].version[0].id}}">Update status</a></li>
+            {% else %}
             <li><a href="../../data-manage/traits/new/0/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
             
     </div> {% endif %}
-    <h1><i>{{species.species_accepted}}</i> {% if can_edit == True %} <small> {{species.id}}-{{species.version.statuses}}-{{species.version.checked}}</small> {%endif%} </h1> 
-    {% if species.species_common %}
-    <p><b>Common name(s):</b> 
-        {{species.species_common}}</p>
-    {% endif %}
+    <h1><i>{{species.species_accepted}}</i> {% if can_edit == True %} <small> {{species.id}}-{{species.version.statuses}}-{{species.version.checked}}</small> {%endif%} </h1>
+    <div class="row">
+    
+        {% if species.species_common %}
+        <div class="col-sm-4">
+            <p><b>Common name(s):</b>  {{species.species_common}}</p>
+        </div>
+        {% endif %}
+        {%if species.iucn_status  %}
+        <div class="col-sm-8">
+            <p><b>IUCN status: </b>{{ species.iucn_status.status_name }}</p>
+        </div>
+        {% endif %}
+    </div>
         
     
     <!-- BREADCRUMB -->
     {% for taxonomy in species.taxonomy %}
 
             <p><b>Taxonomy: </b><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> &nbsp;&nbsp;&nbsp;&nbsp;  Authority: {{ taxonomy.authority }} &nbsp;&nbsp;&nbsp;&nbsp;{% if taxonomy.kingdom == "Plantae" %} TPL version: {{ taxonomy.tpl_version }}{% endif %} {% if can_edit == True %} <small> {{taxonomy.id}}-{{taxonomy.version[0].statuses}}-{{taxonomy.version[0].checked}}</small> {%endif%}</p>  
+            
         {% else %}
         <div class="info_box_empty"><p>No taxonomy</p>  <p> <a href="../../data-manage/taxonomy/new/0/species={{species.id}}"><span class="glyphicon glyphicon-plus-sign"></span> Add taxonomy information</a></p> </div>
+            
         {% endfor %} 
    
     
@@ -116,10 +131,10 @@
     <div class="col-sm-8"> <!-- Left side infobox with pictures and map -->
             <div class="row">
                 <div class="col-xs-6"> {% if species.image_path %}
-                    <div class="species-image-container" style="background-image:url('{{ species.image_path }}');"></div> {% else %}
-                    <div class="species-image-container">Image 1</div> {% endif %} </div>
+                    <div class="species-image-container shadowed" style="background-image:url('{{ species.image_path }}');"></div> {% else %}
+                    <div class="species-image-container ">Image 1</div> {% endif %} </div>
                 <div class="col-xs-6"> {% if species.image_path2 %}
-                    <div class="species-image-container" style="background-image:url('{{ species.image_path2 }}');"></div> {% else %}
+                    <div class="species-image-container shadowed" style="background-image:url('{{ species.image_path2 }}');"></div> {% else %}
                     <div class="species-image-container">Image 2</div> {% endif %} </div>
             </div>
     </div>
@@ -132,6 +147,7 @@
                 <td> <strong>Growth Type: </strong> </td>
                 <td> {{ trait.organism_type.type_name }} </td>
             </tr>
+            {% if species.taxonomy[0].kingdom == "Plantae" %}
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_reproductive_repitition"] }}' class="nounderline">
                 <td> <strong>Reproductive Repetition:</strong> </td>
                 <td> {{ trait.reproductive_repetition.repetition_name }} </td>
@@ -140,6 +156,8 @@
                 <td> <strong>Dicot/Monocot: </strong> </td>
                 <td> {{ trait.dicot_monoc.dicot_monoc_name }} </td>
             </tr>
+            
+            
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_angio_gymno"] }}' class="nounderline">
                 <td> <strong>Angio/Gymnosperm: </strong> </td>
                 <td> {{ trait.angio_gymno.angio_gymno_name }} </td>
@@ -148,17 +166,19 @@
                 <td> <strong>Growth Form Raunkiaer:</strong> </td>
                 <td> {{ trait.growth_form_raunkiaer.form_name }} </td>
             </tr>
+            {% endif %}
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_iucn_gisd_status"] }}' class="nounderline">
                 <td> <strong>Invasive (GISD Status):</strong> </td>
                 <td> {{ trait.iucn_gisd_status }} </td>
             </tr>
+            
             {% if compadrino_info == True %} 
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_spandex_growth_type_id"] }}' class="nounderline">
                 <td> <strong>SPANDEX growth type:</strong> </td>
                 <td> {{ trait.spand_ex_growth_type_id.spandex_growth_types }} </td>
             </tr>
             {% endif %}
-            {% if species.taxonomy.kingdom == "Plantae" %}
+            {% if species.taxonomy[0].kingdom == "Plantae" %}
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_seedbank"] }}' class="nounderline">
                 <td> <strong>Seedbank: </strong> </td>
                 <td> {{ trait.seedbank }} </td>
@@ -177,10 +197,13 @@
     </div>
 <!-- End of top section (species, taxonomy, traits models)) -->
 </div>
-<br>
+        <br>
 <!-- External sources line with buttons  (species model)--> 
 <div id="external-sources"> Search external sources:
     <a href="https://scholar.google.co.uk/scholar?q={{species.species_accepted}}" target="_blank" class="btn btn-default" role="button"><img src="https://scholar.google.co.uk/favicon-png.ico" class="little_logo"> Scholar</a>
+    {% if species.species_iucn_taxonid %}
+    <a href="http://www.iucnredlist.org/details/{{species.species_iucn_taxonid}}/0"target="_blank" class="btn btn-default" role="button"><img src="http://www.iucnredlist.org/favicon.ico" class="little_logo"> IUCN Red List</a>
+    {% endif %}
     <a href="http://www.onezoom.org/life.html/@{{species.species_accepted|replace(' ','_')}}"target="_blank" class="btn btn-default" role="button"><img src="http://www.onezoom.org/favicon.ico" class="little_logo"> OneZoom</a>
     <a href="http://eol.org/search?q={{species.species_accepted}}&amp;search=Go" target="_blank" class="btn btn-default" role="button"><img src="http://eol.org/favicon.ico" class="little_logo"> Enyclopedia of Life</a>
     <a href="http://www.catalogueoflife.org/col/search/all/key/{{species.species_accepted}}/" target="_blank" class="btn btn-default" role="button"><img src="http://www.catalogueoflife.org/favicon.ico" class="little_logo"> Catalogue of Life</a>
@@ -212,8 +235,9 @@
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li><a href="../../data-manage/population/edit/{{population.id}}/species={{population.species.id}}/publication={{population.publication.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit population</a></li>
                     <li><a href="../../data-manage/population/{{population.id}}/edit-history">View edits</a></li>
-                    <li><a target="_blank" href="../../data-manage/version/edit/{{population.version[0].id}}">Update status</a></li>
+                    <li><a target="_blank" href="../../data-manage/version/edit/{{population.version[0].id}}">Update status</a>
                     <li class="disabled"><a href="#">Add new matrix</a></li>
+                    <li><a href="../../data-manage/delete/population/{{population.id}}"><span class="glyphicon glyphicon-trash"></span> Delete population</a></li>
                 </ul>
             </div> 
             {% endif %}
@@ -334,6 +358,7 @@
                                             <li><a href="../../data-manage/matrix/edit/{{matrix.id}}/population={{population.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit matrix</a></li>
                                             <li><a href="../../data-manage/matrix/{{matrix.id}}/edit-history">View edits</a></li>
                                             <li><a target="_blank" href="../../data-manage/version/edit/{{matrix.version[0].id}}">Update status</a></li>
+                                            <li><a href="../../data-manage/delete/matrix/{{matrix.id}}"><span class="glyphicon glyphicon-trash"></span> Delete matrix</a></li>
                                         </ul>
                                     </div> {% endif %} </ul>
                                 <div class="tab-content">
@@ -371,11 +396,17 @@
                                         <p><strong>matrix_fec: </strong> {{ matrix.matrix_fec }}</p>
                                     </div>
                                     <p><strong>Observations: </strong> {{ matrix.observations }}</p>
-
+                                    
                                     <!-- Fixed model suff goes here -->
-                                     {% if exeter_data %}
-                                    <p>Fixed <a>Edit fixed data</a></p>
+                                     {% if exeter_data == True %}
+                                    <hr>
+                                    <p><b>SPAND_EX data</b> <a>Edit</a></p>
                                     <p>Vector: {{ matrix.fixed[0].vector_str }}</p>
+                                    <p>Vector present: {{ matrix.fixed[0].vector_present }}</p>
+                                    <p>Total pop number: {{ matrix.fixed[0].total_pop_number }}</p>
+                                    <p>Smalls: {{ matrix.fixed[0].small_id.small_description }}</p>
+                                    <p>Census timing: {{ matrix.fixed[0].census_timing_id.census_description }}</p>
+                                    <p>Seed stage error: {{ matrix.fixed[0].seed_stage_error}}</p>
                                      {% endif %}
                                 </div>
                             </li>
@@ -430,6 +461,7 @@
             <li><a href="../../data-manage/publication/edit/{{publication.id}}" > <span class="	glyphicon glyphicon-pencil"></span> Edit publication</a></li>
             <li><a href="../../data-manage/publication/{{publication.id}}/edit-history">View edits</a></li>
             <li><a target="_blank" href="../../data-manage/version/edit/{{publication.version[0].id}}">Update status</a></li>
+            <li><a href="../../data-manage/delete/publication/{{publication.id}}"><span class="glyphicon glyphicon-trash"></span> Delete publication</a></li>
         </ul>
     </div> {% endif %}
                         <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}
@@ -455,6 +487,7 @@
         {% if can_edit == True %}
         <p><a href="../data-manage/publication/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new publication</a></p>
         <p><a href="../data-manage/species/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new species</a></p>
+        
         {% endif %}
     </div> 
     

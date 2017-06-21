@@ -66,17 +66,13 @@ class VersionForm(Form):
     checked_count = IntegerField('How many times has this been checked?')
     submit = SubmitField('Submit')
 
-# Species form, up to date: 30/1/17
 class SpeciesForm(Form):
     species_accepted = StringField('Species Accepted', validators=[Required()])
     species_common = StringField('Species Common Name')
     iucn_status = QuerySelectField('IUCN Status',
             query_factory=lambda: IUCNStatus.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {} ({})'.format(a.status_code, a.status_name, a.status_description))
-    species_gisd_status = BooleanField('GISD Status')
-    #invasive_status = BooleanField('Invasive Status')
     species_iucn_taxonid = IntegerField('IUCN Taxon key', validators=[Optional()])
-    #species_iucn_population_assessed = StringField('IUCN Population assessed')   
     gbif_taxon_key = IntegerField('GBIF Taxon Key', validators=[Optional()])
     image_path = StringField('Path to image')
     image_path2 = StringField('Path to image')

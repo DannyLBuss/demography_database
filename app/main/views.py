@@ -245,6 +245,8 @@ def species_page(species_ids,pub_ids):
     try:
         if current_user.institute.institution_short == "UoE" and current_user.institute_confirmed == 1:
             exeter_data = True
+        if current_user.institute.institution_short == "UOS" and current_user.institute_confirmed == 1:
+            exeter_data = True
     except:
         pass
 

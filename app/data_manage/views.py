@@ -4,7 +4,7 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import data_manage
 from .. import db
-from forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, MatrixForm, VersionForm
+from forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, MatrixForm, VersionForm, DeleteForm
 from ..models import Permission, Role, User, \
                     IUCNStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
@@ -80,7 +80,6 @@ def species_form(id,edit_or_new):
             species.add_to_logger(current_user,'species_common',species_old.species_common,form.species_common.data,'edit')
             species.add_to_logger(current_user,'iucn_status',species_old.iucn_status,form.iucn_status.data,'edit')
             species.add_to_logger(current_user,'species_iucn_taxonid',species_old.species_iucn_taxonid,form.species_iucn_taxonid.data,'edit')
-            #species.add_to_logger(current_user,'invasive_status',species_old.invasive_status,form.invasive_status.data,'edit')
             species.add_to_logger(current_user,'gbif_taxon_key',species_old.gbif_taxon_key,form.gbif_taxon_key.data,'edit')
             species.add_to_logger(current_user,'image_path',species_old.image_path,form.image_path.data,'edit')
             species.add_to_logger(current_user,'image_path2',species_old.image_path2,form.image_path2.data,'edit')
@@ -105,7 +104,6 @@ def species_form(id,edit_or_new):
             species.add_to_logger(current_user,'species_common',species_old.species_common,form.species_common.data,'edit')
             species.add_to_logger(current_user,'iucn_status',species_old.iucn_status,form.iucn_status.data,'edit')
             species.add_to_logger(current_user,'species_iucn_taxonid',species_old.species_iucn_taxonid,form.species_iucn_taxonid.data,'edit')
-            #species.add_to_logger(current_user,'invasive_status',species_old.invasive_status,form.invasive_status.data,'edit')
             species.add_to_logger(current_user,'gbif_taxon_key',species_old.gbif_taxon_key,form.gbif_taxon_key.data,'edit')
             species.add_to_logger(current_user,'image_path',species_old.image_path,form.image_path.data,'edit')
             species.add_to_logger(current_user,'image_path2',species_old.image_path2,form.image_path2.data,'edit')
@@ -133,7 +131,7 @@ def species_form(id,edit_or_new):
     form.image_path.data = species.image_path
     form.image_path2.data = species.image_path2
     
-    return render_template('data_manage/generic_form.html', form=form, species=species)
+    return render_template('data_manage/species_form.html', form=form, species=species,protocol_dict = protocol_dict)
 
 # species information edit history
 @data_manage.route('/species/<int:id>/edit-history')
@@ -703,7 +701,7 @@ def matrix_form(id,edit_or_new,pop_id):
         
         
         flash('The matrix infomation has been updated.')
-        return redirect(url_for('main.species_page',species_id=species.id,pubs_ids="all"))
+        return redirect(url_for('.compadrino_zone'))
         
     form.treatment.data = matrix.treatment.treatment_name
     form.matrix_split.data = matrix.matrix_split
@@ -747,57 +745,88 @@ def matrix_edit_history(id):
     return render_template('edit_history.html', matrix= matrix)
 
 ## delete things
-#@data_manage.route('/delete/<thing_to_delete>/<int:id_obj>', methods=['GET', 'POST'])
-#@login_required
-#def delete_object(thing_to_delete,id_obj):
-#    form = DeleteForm()
-#    
-#    if thing_to_delete == "population":
-#        population = Population.query.get_or_404(id_obj)
-#        
-#    if thing_to_delete == "species":
-#        species = Species.query.get_or_404(id_obj)
-#        populations = Population.query.filter_by(species_id=id_obj)
-#        taxonomy = Taxonomy(species_id=id_obj)
-#        traits = Traits(species_id=id_obj)
-#    
-#    if thing_to_delete == "publication":
-#        publication = Publication.query.get_or_404(id_obj)
-#        populations = Population.query.filter_by(publication_id=id_obj)
-#        
-#    if thing_to_delete == "matrix":
-#        matrix = Matrix.query.get_or_404(id_obj)
-#        
-#        
-#    if form.validate_on_submit() and thing_to_delete == "population":
-#        db.session.delete(population)
-#        db.session.commit()
-#        flash('The population has been deleted')
-#        return redirect(url_for('.publication_page',id=population.publication_id))
-#    
-#    if form.validate_on_submit() and thing_to_delete == "species":
-#        db.session.delete(species)
-#        for p in populations:
-#            db.session.delete(p)
-#        db.session.commit()
-#        flash('The species has been deleted')
-#        return redirect(url_for('.species_table'))
-#    
-#    if form.validate_on_submit() and thing_to_delete == "publication":
-#        db.session.delete(publication)
-#        for p in populations:
-#            db.session.delete(p)
-#        db.session.commit()
-#        flash('The publication has been deleted')
-#        return redirect(url_for('.publications_table'))
-#    
-#    if form.validate_on_submit() and thing_to_delete == "matrix":
-#        db.session.delete(matrix)
-#        db.session.commit()
-#        flash('The matrix has been deleted')
-#        return redirect(url_for('.publication_page',id=matrix.publication_id))
-#    
-#    return render_template('data_manage/delete_confirm.html', form=form)
+@data_manage.route('/delete/<thing_to_delete>/<int:id_obj>', methods=['GET', 'POST'])
+@login_required
+def delete_object(thing_to_delete,id_obj):
+    form = DeleteForm()
+    
+    # only specific roles can delete
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
+    
+    can_delete = False
+    
+    ## check if it can be deleted
+    if thing_to_delete == "species":
+        species = Species.query.get_or_404(id_obj)
+        if len(species.populations) == 0:
+            can_delete = True
+    
+    if thing_to_delete == "publication":
+        publication = Publication.query.get_or_404(id_obj)
+        if len(publication.populations) == 0:
+            can_delete = True
+            
+    if thing_to_delete == "population":
+        population = Population.query.get_or_404(id_obj)
+        if len(population.matrices) == 0:
+            can_delete = True
+        
+    if thing_to_delete == "matrix":
+        matrix = Matrix.query.get_or_404(id_obj)
+        can_delete = True
+        
+    
+    # delete stuff
+    if form.validate_on_submit() and thing_to_delete == "species" and can_delete == True:
+        taxonomy = Taxonomy.query.filter_by(id = species.id)
+        trait = Trait.query.filter_by(id = species.id)
+        version = Version.query.filter_by(species_id = species.id)
+        db.session.delete(species)
+        for tax in taxonomy:
+            db.session.delete(tax)
+        for tra in trait:
+            db.session.delete(tra)
+        for ver in version:
+            db.session.delete(ver)
+        db.session.commit()
+        flash('The species (+taxonomy and traits) has been deleted')
+        return redirect(url_for('.compadrino_zone'))
+
+    if form.validate_on_submit() and thing_to_delete == "publication" and can_delete == True:
+        version = Version.query.filter_by(publication_id = publication.id)
+        for ver in version:
+            db.session.delete(ver)
+        db.session.delete(publication)
+        db.session.commit()
+        flash('The publication has been deleted')
+        return redirect(url_for('.compadrino_zone'))
+    
+    if form.validate_on_submit() and thing_to_delete == "population" and can_delete == True:
+        version = Version.query.filter_by(population_id = population.id)
+        species_id = str(population.species.id)
+        for ver in version:
+            db.session.delete(ver)
+        db.session.delete(population)
+        db.session.commit()
+        flash('The population has been deleted')
+        return redirect("../species="+species_id+"/publications=all")
+    
+    if form.validate_on_submit() and thing_to_delete == "matrix" and can_delete == True:
+        version = Version.query.filter_by(matrix_id = matrix.id)
+        species_id = str(matrix.population.species.id)
+        for ver in version:
+            db.session.delete(ver)
+        fixed = Fixed.query.filter_by(id = matrix.id)
+        for fix in fixed:
+            db.session.delete(fix)
+        db.session.delete(matrix)
+        db.session.commit()
+        flash('The matrix has been deleted')
+        return redirect("../species="+species_id+"/publications=all")
+    
+    return render_template('data_manage/delete_confirm.html', form=form,can_delete = can_delete,obj_type = thing_to_delete)
+        
 
 @data_manage.route('/meta-tables/')
 @login_required
@@ -900,6 +929,10 @@ def csv_export():
                      
     return render_template('output.csv')
 
+@data_manage.route('/591514wdjfgw43qrt34r4w5r274rrollback')
+def rollback():  
+    db.session.rollback()
+    return redirect(url_for('.compadrino_zone'))
 
 
 
