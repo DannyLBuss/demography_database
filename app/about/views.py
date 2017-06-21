@@ -45,6 +45,10 @@ def funding():
 def FAQs():
     return render_template('about/FAQs.html')
 
+@about.route('/socialmedia')
+def socialmedia():
+    return render_template('about/social_media.html')
+
 # @about.route('/social_media')
 # def social_media():
 #     api = twitter.Api(

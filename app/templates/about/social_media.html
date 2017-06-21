@@ -6,33 +6,47 @@
 
 {% block page_content %}
 <html>
-
-<h3>Social Media Updates</h3>
-<div id="tweets" class="row-fluid">
-{% for tweet in tweets[-6:] %}
-	<div class="tweetweet col-xs-12 col-lg-5 col-md-3" style="padding: 10px 5px 5px 10px; margin: 10px 5px 5px 10px; background: #ecf0f1">
-		<div class="row">
-			<div class="{% if tweet.media %}col-xs-6{% else %}col-xs-12{% endif %}">
-				<p>"{{ tweet.text }}"</p>
-				by <img src="{{ tweet.profile_image_url }}" class="img-circle" width="20">&nbsp;<a href="http://twitter.com/{{tweet.user_screen_name}}" target="none" style="color: #{{ tweet.profile_link_color }}">@{{ tweet.user_screen_name }}</a>
-			</div>
-				{% if tweet.media %}
-				<div class="col-xs-5">
-					
-					{% for media in tweet.media[-1:] %}
-					
-						<img src="{{ media.media_url }}" class="img-responsive"><br/>
-					
-					{% endfor %}
-			    </div>	
-				{% endif %}
-
-		</div>
-		
-	</div>
-{% endfor %}
+<h2>Social Media</h2>
+<br>
+<bold>
+	<h4>
+		<a target="_blank" title="find us on Facebook" href="https://www.facebook.com/groups/compadrecomadre/"><img alt="find us on facebook" src="//login.create.net/images/icons/user/facebook-c_130x50.png" border=0></a>
+	</h4>
+</bold>
+<br><br>
+<button type="button" class="btn btn-xs btn-default" data-toggle="collapse" href="#social"> <span class="glyphicon glyphicon-thumbs-up"></span> Show/hide database twitter </button>
+<div id="social" class="info_box_green">
+    <h3>Database feeds</h3>
+    <div class="row">
+        <div class="col-sm-6">
+        	<a href="https://twitter.com/compadreDB" class="twitter-follow-button" data-show-count="false">Follow @compadreDB</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            <a class="twitter-timeline" data-height="500" href="https://twitter.com/compadreDB">Tweets by compadreDB</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        <div class="col-sm-6">
+        	<a href="https://twitter.com/comadreDB" class="twitter-follow-button" data-show-count="false">Follow @comadreDB</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            <a class="twitter-timeline" data-height="500" href="https://twitter.com/comadreDB">Tweets by comadreDB</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+    </div>
+</div>
+<br>
+<button type="button" class="btn btn-xs btn-default" data-toggle="collapse" href="#social2"> <span class="glyphicon glyphicon-thumbs-up"></span> Show/hide research group twitter </button>
+<div id="social2" class="info_box_red">
+    <h3>Research group feeds</h3>
+    <div class="row">
+        <div class="col-sm-6">
+        	<a href="https://twitter.com/spand_ex" class="twitter-follow-button" data-show-count="false">Follow @spand_ex</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            <a class="twitter-timeline" href="https://twitter.com/spand_ex">Tweets by Spand_Ex Team</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            <a href="https://twitter.com/messages/compose?recipient_id=2831373479" class="twitter-dm-button" data-screen-name="@spand_ex" data-show-count="false">Message @@spand_ex</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        <div class="col-sm-6">
+        	<a href="https://twitter.com/SalGoTeam" class="twitter-follow-button" data-show-count="false">Follow @SalGoTeam</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            <a class="twitter-timeline" href="https://twitter.com/SalGoTeam">Tweets by SalGoTeam</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+    </div>
 </div>
 </html>
+
+{% endblock %}
 
 {% block scripts %}
 {{ super() }}
