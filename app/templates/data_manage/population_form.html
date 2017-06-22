@@ -113,9 +113,11 @@
     </div>
     
     <div class="info_box">
-        {{ wtf.form_field(form.database_source) }}
+        {{ wtf.form_field(form.database) }}
         <p>{{ protocol_dict["database_master_version"] }}</p>
         <hr>
+        {{ wtf.form_field(form.database_source) }}
+        <p>{{ protocol_dict["study_database_source"] }}</p>
     </div>
     <div class="info_box">
         <h3>Submit</h3>

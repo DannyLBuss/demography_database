@@ -612,7 +612,8 @@ def population_form(id,edit_or_new,species_id,publication_id):
         #population.study_duration = population.study_end - population.study_start
         population.purpose_endangered = form.purpose_endangered.data
         population.purpose_weed = form.purpose_weed.data
-        #population.database_source = form.database_source.data #Not sure what this is
+        population.database_source = form.database_source.data 
+        population.database = form.database.data 
         flash('The population infomation has been updated.')
         
         if edit_or_new == "new":
@@ -656,7 +657,8 @@ def population_form(id,edit_or_new,species_id,publication_id):
     form.study_end.data = population.study_end 
     form.purpose_endangered.data = population.purpose_endangered 
     form.purpose_weed.data = population.purpose_weed  
-    #form.database_source.data = population.database_source 
+    form.database_source.data = population.database_source 
+    form.database.data = population.database 
     
     species_author_populations = Population.query.filter_by(species_id=species.id).filter_by(publication_id=publication.id).all()
 
