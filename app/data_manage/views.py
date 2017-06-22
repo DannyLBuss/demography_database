@@ -29,6 +29,14 @@ def compadrino_zone():
 @data_manage.route('/version/edit/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def version_form(id):
+    
+    protocol = DigitizationProtocol.query.all()
+    protocol_dict = {}
+    for ocol in protocol:
+        protocol_dict[ocol.name_in_csv] = ocol.field_description
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
+        
     if current_user.role_id not in [1,3,4,6]:
         abort(404)
     
@@ -46,7 +54,7 @@ def version_form(id):
     form.status.data = version.statuses
     form.checked_count.data = version.checked_count
     
-    return render_template('data_manage/version_form.html', form=form, version=version)
+    return render_template('data_manage/version_form.html', form=form, version=version,protocol_dict = protocol_dict)
 
 
 # editing species information #updated 25/1/17

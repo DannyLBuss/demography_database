@@ -9,8 +9,29 @@
     <h3><a href="" onclick="goBack()"> <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back to previous page - changes will NOT be saved</a></h3>
 
 </div>
-<div class="info_box">
-    {{ wtf.quick_form(form) }}
+<form method="post" role="form">
+    <div class="form">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_errors(form, hiddens="only") }}
+    </div>
+<div class="form">
+    <div class="info_box">
+        <h3>Updating the status of object</h3>
+        <hr>
+        {{ wtf.form_field(form.checked) }}
+        <p>{{ protocol_dict["version_checked"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.status) }}
+        <p>{{ protocol_dict["version_status"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.checked_count) }}
+        <p>{{ protocol_dict["matrix_checked_count"] }}</p>
+        <hr>
+        <h3>Submit</h3>
+        {{ wtf.form_field(form.submit) }}
+        <p>Once you have pressed submit on this form and you can see "Version has been updated" at the top of this page, you can close this window. Then, go back to the page you were updating the status of and REFRESH the page to see the updated status.</p>
+        
+    </div>
 </div>
 
 

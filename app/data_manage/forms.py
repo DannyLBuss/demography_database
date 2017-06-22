@@ -195,7 +195,7 @@ class PopulationForm(Form):
     purpose_weed = QuerySelectField('Purpose weed',
             query_factory=lambda: PurposeWeed.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.purpose_description)
-    #database_source = QuerySelectField('Database source',query_factory=lambda: Database.query.all(), get_pk=lambda a: a.id,get_label=lambda a:a.database_description)
+    database_source = QuerySelectField('Database source',query_factory=lambda: Database.query.all(), get_pk=lambda a: a.id,get_label=lambda a:a.database_description)
     submit = SubmitField('Submit')
 
 

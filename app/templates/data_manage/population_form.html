@@ -60,12 +60,7 @@
         {{ wtf.form_field(form.ecoregion) }}
         <p>{{ protocol_dict["population_ecoregion"] }}</p>
         <hr>
-        {{ wtf.form_field(form.invasive_status_study) }}
-        <p>{{ protocol_dict["population_invasive_status_study"] }}</p>
-        <hr>
-        {{ wtf.form_field(form.invasive_status_elsewhere) }}
-        <p>{{ protocol_dict["population_invasive_status_elsewhere"] }}</p>
-        <hr>
+        
         {{ wtf.form_field(form.country) }}
         <p>{{ protocol_dict["population_country"] }}</p>
         <hr>
@@ -107,8 +102,20 @@
         <hr>
         {{ wtf.form_field(form.purpose_weed) }}
         <p>{{ protocol_dict["study_purpose_weed"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.invasive_status_study) }}
+        <p>{{ protocol_dict["population_invasive_status_study"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.invasive_status_elsewhere) }}
+        <p>{{ protocol_dict["population_invasive_status_elsewhere"] }}</p>
         
         
+    </div>
+    
+    <div class="info_box">
+        {{ wtf.form_field(form.database_source) }}
+        <p>{{ protocol_dict["database_master_version"] }}</p>
+        <hr>
     </div>
     <div class="info_box">
         <h3>Submit</h3>
