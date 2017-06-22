@@ -147,6 +147,7 @@
                 <td> <strong>Growth Type: </strong> </td>
                 <td> {{ trait.organism_type.type_name }} </td>
             </tr>
+            {% if species.taxonomy %}
             {% if species.taxonomy[0].kingdom == "Plantae" %}
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_reproductive_repitition"] }}' class="nounderline">
                 <td> <strong>Reproductive Repetition:</strong> </td>
@@ -167,32 +168,33 @@
                 <td> {{ trait.growth_form_raunkiaer.form_name }} </td>
             </tr>
             {% endif %}
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_iucn_gisd_status"] }}' class="nounderline">
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["species_gisd_status"] }}' class="nounderline">
                 <td> <strong>Invasive (GISD Status):</strong> </td>
-                <td> {{ trait.iucn_gisd_status }} </td>
+                <td> {{ trait.species_gisd_status }} </td>
             </tr>
             
-            {% if compadrino_info == True %} 
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_spandex_growth_type_id"] }}' class="nounderline">
-                <td> <strong>SPANDEX growth type:</strong> </td>
-                <td> {{ trait.spand_ex_growth_type_id.spandex_growth_types }} </td>
+            {% if exeter_data == True %} 
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_spand_ex_growth_type"] }}' class="nounderline">
+                <td> <strong>SPAND_EX growth type:</strong> </td>
+                <td> {{ trait.spand_ex_growth_types.type_name }} </td>
             </tr>
             {% endif %}
             {% if species.taxonomy[0].kingdom == "Plantae" %}
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_seedbank"] }}' class="nounderline">
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["seedbank"] }}' class="nounderline">
                 <td> <strong>Seedbank: </strong> </td>
-                <td> {{ trait.seedbank }} </td>
+                <td> {{ trait.species_seedbank }} </td>
             </tr>
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_clonality"] }}' class="nounderline">
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["clonality"] }}' class="nounderline">
                 <td> <strong>Clonality:</strong> </td>
-                <td> {{ trait.clonality }} </td>
+                <td> {{ trait.species_clonality }} </td>
             </tr>
+            {% endif %}
             {% endif %}
         </table> {% endfor %} {% else %} 
         <h3>Traits</h3>
         <div class="info_box_empty">
             <p>Not entered</p>
-            <p><a href=""><span class="glyphicon glyphicon-plus-sign"></span> Add traits</a></p>
+            <p><a href="../../data-manage/traits/new/0/species={{species.id}}"><span class="glyphicon glyphicon-plus-sign"></span> Add traits</a></p>
         </div> {% endif %}
     </div>
 <!-- End of top section (species, taxonomy, traits models)) -->

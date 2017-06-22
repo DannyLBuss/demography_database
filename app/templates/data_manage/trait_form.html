@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Demography Database - Data Input{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Data Input Form</h1>
+    
+    <h3><a href="" onclick="goBack()"> <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back to previous page - changes will NOT be saved</a></h3>
+    
+    {% if publication %}
+    <h3><strong>Publication:</strong> {{publication.authors}} </h3>
+    {% endif %}
+    
+    {% if species %}
+    <h3><strong>Species:</strong> <i>{{species.species_accepted}}</i></h3>
+    {% endif %}
+    
+    {% if population %}
+    <h3><strong>Population:</strong> {{population.population_name}}</h3>    
+    {% endif %}
+    
+</div>
+<form method="post" role="form">
+    <div class="form">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_errors(form, hiddens="only") }}
+    </div>
+<div class="form">
+    <div class="info_box">            
+        {{ wtf.form_field(form.organism_type) }}
+        <p>{{ protocol_dict["trait_organism_type"] }}</p>
+        <hr>
+        
+        {{ wtf.form_field(form.growth_form_raunkiaer) }}
+        <p>{{ protocol_dict["trait_growth_form_raunkiaer"] }}</p>
+        <hr>
+        
+        {{ wtf.form_field(form.reproductive_repetition) }}
+        <p>{{ protocol_dict["trait_reproductive_repetition"] }}</p>
+        <hr>
+        
+        {{ wtf.form_field(form.dicot_monoc) }}
+        <p>{{ protocol_dict["trait_dicot_monoc"] }}</p>
+        <hr>
+        
+        {{ wtf.form_field(form.angio_gymno) }}
+        <p>{{ protocol_dict["taxonomy_genus_accepted"] }}</p>
+        <hr>
+        
+        {{ wtf.form_field(form.spand_ex_growth_types) }}
+        <p>{{ protocol_dict["trait_spand_ex_growth_type"] }}</p>
+        <hr>
+        
+        {{ wtf.form_field(form.species_seedbank) }}
+        <p>{{ protocol_dict["seedbank"] }}</p>
+        <hr>
+        
+        {{ wtf.form_field(form.species_seedbank_source) }}
+        <p>{{ protocol_dict["seedbank_source"] }}</p>
+        <hr>
+        
+        {{ wtf.form_field(form.species_clonality) }}
+        <p>{{ protocol_dict["clonality"] }}</p>
+        <hr>
+        
+        {{ wtf.form_field(form.species_clonality_source) }}
+        <p>{{ protocol_dict["clonality_source"] }}</p>
+        <hr>
+        
+        {{ wtf.form_field(form.species_gisd_status) }}
+        <p>{{ protocol_dict["species_gisd_status"] }}</p>
+    </div>
+
+
+    <div class="info_box">
+        <h3>Submit</h3>
+        {{ wtf.form_field(form.submit) }}
+    </div>
+</div>
+</form>
+
+<script>
+ 
+    function goBack() {
+        window.history.go(-1);
+    }
+</script>
+
+
+<script>
+    // remove duplicate publications
+    var seen = {};
+    $('.remove_duplicates').each(function () {
+        var txt = $(this).text();
+        if (seen[txt]) $(this).remove();
+        else seen[txt] = true;
+    });
+    var x = document.getElementsByClassName("remove_duplicates");
+    var i;
+    for (i = 0; i < x.length; i++) {
+        x[i].style.visibility = "visible";
+    }
+</script>
+
+{% endblock %}

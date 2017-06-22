@@ -2561,7 +2561,9 @@ class Trait(db.Model):
     spand_ex_growth_type_id = db.Column(db.Integer, db.ForeignKey('spand_ex_growth_types.id',ondelete='CASCADE'))
     species_seedbank = db.Column(db.Boolean())
     species_clonality = db.Column(db.Boolean())
-    species_gisd_status = db.Column(db.Boolean()) 
+    species_gisd_status = db.Column(db.Boolean())
+    species_seedbank_source = db.Column(db.Text())
+    species_clonality_source = db.Column(db.Text())
 
     version = db.relationship("Version", backref="trait", passive_deletes=True)
     #version_latest = db.Column(db.String(64))

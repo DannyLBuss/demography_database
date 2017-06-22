@@ -119,6 +119,11 @@ class TraitForm(Form):
     spand_ex_growth_types = QuerySelectField('Spand.ex growth type',
             query_factory=lambda: SpandExGrowthType.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.type_name)
+    species_seedbank = BooleanField('Species seedbank')
+    species_seedbank_source = StringField('Species seedbank source')
+    species_clonality = BooleanField('Species clonality')
+    species_clonality_source = StringField('Species clonality source')
+    species_gisd_status = BooleanField('Species GISD status')
     submit = SubmitField('Submit')
    
 # up to date 12/1/16

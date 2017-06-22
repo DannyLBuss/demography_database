@@ -179,7 +179,7 @@ def taxonomy_form(id,species_id,edit_or_new):
             taxonomy.add_to_logger(current_user,'phylum',taxonomy_old.phylum,form.phylum.data,'edit')
             taxonomy.add_to_logger(current_user,'kingdom',taxonomy_old.kingdom,form.kingdom.data,'edit')
             taxonomy.add_to_logger(current_user,'col_check_ok',taxonomy_old.col_check_ok,form.col_check_ok.data,'edit')
-            #taxonomy.add_to_logger(current_user,'col_check_date',taxonomy_old.col_check_date,form.col_check_date.data,'edit')
+            taxonomy.add_to_logger(current_user,'col_check_date',taxonomy_old.col_check_date,form.col_check_date.data,'edit')
             #END COPY CODE BLOCK
             
         taxonomy.authority = form.authority.data
@@ -194,7 +194,7 @@ def taxonomy_form(id,species_id,edit_or_new):
         taxonomy.phylum = form.phylum.data
         taxonomy.kingdom = form.kingdom.data
         taxonomy.col_check_ok = form.col_check_ok.data #
-        #taxonomy.col_check_date = form.col_check_date.data #
+        taxonomy.col_check_date = form.col_check_date.data 
         
         if edit_or_new == "new":
             taxonomy.species_id = species.id
@@ -215,7 +215,7 @@ def taxonomy_form(id,species_id,edit_or_new):
             taxonomy.add_to_logger(current_user,'phylum',taxonomy_old.phylum,form.phylum.data,'edit')
             taxonomy.add_to_logger(current_user,'kingdom',taxonomy_old.kingdom,form.kingdom.data,'edit')
             taxonomy.add_to_logger(current_user,'col_check_ok',taxonomy_old.col_check_ok,form.col_check_ok.data,'edit')
-            #taxonomy.add_to_logger(current_user,'col_check_date',taxonomy_old.col_check_date,form.col_check_date.data,'edit')
+            taxonomy.add_to_logger(current_user,'col_check_date',taxonomy_old.col_check_date,form.col_check_date.data,'edit')
             #END COPY CODE BLOCK
             
             #make associated version object
@@ -244,7 +244,7 @@ def taxonomy_form(id,species_id,edit_or_new):
         form.phylum.data = taxonomy.phylum
         form.kingdom.data = taxonomy.kingdom
         form.col_check_ok.data = taxonomy.col_check_ok
-        #form.col_check_date.data = 
+        form.col_check_date.data =  taxonomy.col_check_date
 
     #Actually rendering the page
     return render_template('data_manage/taxonomy_form.html', form=form, taxonomy = taxonomy, species=species,protocol_dict=protocol_dict)
@@ -289,6 +289,13 @@ def trait_form(id,edit_or_new,species_id):
             trait.add_to_logger(current_user,'dicot_monoc',trait_old.dicot_monoc,form.dicot_monoc.data,'edit')
             trait.add_to_logger(current_user,'angio_gymno',trait_old.angio_gymno,form.angio_gymno.data,'edit')
             trait.add_to_logger(current_user,'spand_ex_growth_types',trait_old.spand_ex_growth_types,form.spand_ex_growth_types.data,'edit')
+            
+            trait.add_to_logger(current_user,'species_seedbank',trait_old.species_seedbank,form.species_seedbank.data,'edit')
+            trait.add_to_logger(current_user,'species_clonality',trait_old.species_clonality,form.species_clonality.data,'edit')
+            
+            trait.add_to_logger(current_user,'species_seedbank_source',trait_old.species_seedbank_source,form.species_seedbank_source.data,'edit')
+            trait.add_to_logger(current_user,'species_clonality_source',trait_old.species_clonality_source,form.species_clonality_source.data,'edit')
+            trait.add_to_logger(current_user,'species_gisd_status',trait_old.species_gisd_status,form.species_gisd_status.data,'edit')
             # END CODE BLOCK
             
         trait.organism_type = form.organism_type.data
@@ -297,6 +304,11 @@ def trait_form(id,edit_or_new,species_id):
         trait.dicot_monoc = form.dicot_monoc.data
         trait.angio_gymno = form.angio_gymno.data
         trait.spand_ex_growth_types = form.spand_ex_growth_types.data
+        trait.species_seedbank = form.species_seedbank.data
+        trait.species_seedbank_source = form.species_seedbank_source.data
+        trait.species_clonality = form.species_clonality.data
+        trait.species_clonality_source = form.species_clonality_source.data
+        trait.species_gisd_status = form.species_gisd_status.data
         
         if edit_or_new == "new":
             trait.species_id = species.id
@@ -311,6 +323,13 @@ def trait_form(id,edit_or_new,species_id):
             trait.add_to_logger(current_user,'dicot_monoc',trait_old.dicot_monoc,form.dicot_monoc.data,'edit')
             trait.add_to_logger(current_user,'angio_gymno',trait_old.angio_gymno,form.angio_gymno.data,'edit')
             trait.add_to_logger(current_user,'spand_ex_growth_types',trait_old.spand_ex_growth_types,form.spand_ex_growth_types.data,'edit')
+            
+            trait.add_to_logger(current_user,'species_seedbank',trait_old.species_seedbank,form.species_seedbank.data,'edit')
+            trait.add_to_logger(current_user,'species_clonality',trait_old.species_clonality,form.species_clonality.data,'edit')
+            
+            trait.add_to_logger(current_user,'species_seedbank_source',trait_old.species_seedbank_source,form.species_seedbank_source.data,'edit')
+            trait.add_to_logger(current_user,'species_clonality_source',trait_old.species_clonality_source,form.species_clonality_source.data,'edit')
+            trait.add_to_logger(current_user,'species_gisd_status',trait_old.species_gisd_status,form.species_gisd_status.data,'edit')
             # END CODE BLOCK
             
             #make associated version object
@@ -334,8 +353,13 @@ def trait_form(id,edit_or_new,species_id):
     form.dicot_monoc.data = trait.dicot_monoc
     form.angio_gymno.data = trait.angio_gymno
     form.spand_ex_growth_types.data = trait.spand_ex_growth_types
+    form.species_seedbank.data = trait.species_seedbank
+    form.species_clonality.data = trait.species_clonality
+    form.species_gisd_status.data = trait.species_gisd_status
+    form.species_seedbank_source.data = trait.species_seedbank_source
+    form.species_clonality_source.data = trait.species_clonality_source
     
-    return render_template('data_manage/generic_form.html', form=form, trait=trait,species = species)
+    return render_template('data_manage/trait_form.html', form=form, trait=trait,species = species,protocol_dict = protocol_dict)
 
 # traits edit history
 @data_manage.route('/traits/<int:id>/edit-history')
