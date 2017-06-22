@@ -181,14 +181,18 @@
             
             
             {% if species.taxonomy[0].kingdom == "Plantae" %}
+            {% if trait.species_seedbank %}
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["seedbank"] }}' class="nounderline">
                 <td> <strong>Seedbank: </strong> </td>
                 <td> {{ trait.species_seedbank }} </td>
             </tr>
+            {% endif %}
+            {% if trait.species_clonality %}
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["clonality"] }}' class="nounderline">
                 <td> <strong>Clonality:</strong> </td>
                 <td> {{ trait.species_clonality }} </td>
             </tr>
+            {% endif %}
             {% endif %}
             {% endif %}
         </table> {% endfor %} {% else %} 

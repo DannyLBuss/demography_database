@@ -247,6 +247,10 @@ footer {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
+.centred{
+    text-align: center;
+}
+
 .info_box_empty{
     padding: 1em;
     margin-bottom: 20px;

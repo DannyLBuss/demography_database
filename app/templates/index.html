@@ -85,24 +85,37 @@
     </div>
 </div>
 
-<div class="info_box">
-<h3>Explore the Demography Database</h3>
+<hr>
+<h2 class="centred">Explore the Demography Database</h2>
     
         
             <div class="row">
                 {% for species in species2 %}
-                <div class="col-xs-3"><a href="/species={{species.id}}/publications=all"><div class="species-image-container" style="background-image:url('{{ species.image_path }}');"></div>
-                    <h4>{{species.species_accepted}}</h4></a>
+                <div class="col-xs-3"><a href="/species={{species.id}}/publications=all"><div class="species-image-container shadowed" style="background-image:url('{{ species.image_path }}');"></div>
+                    <h4 class="centred">{{species.species_accepted | replace("_"," ")}}</h4></a>
                     {% if species.populations | count == 1 %}
-                    <p>{{ species.populations | count }} population</p>
+                    <p class="centred">{{ species.populations | count }} population</p>
                     {% else %}
-                    <p>{{ species.populations | count }} populations</p>
+                    <p class="centred">{{ species.populations | count }} populations</p>
                     {% endif %}
                 </div>
                 {% endfor %}
             </div>
-            
+<br>
+<div class="row">
+    <div class="col-xs-4">
+            <a href="../../explorer/life/asweknowit"><h3 class="centred"><span class="glyphicon glyphicon-search"></span> Taxonomic Explorer</h3></a>
+    </div>
+    <div class="col-xs-4">
+            <a href="{{ url_for('main.species_table') }}"><h3 class="centred"><span class="glyphicon glyphicon-search"></span> Search by Species</h3></a>
+    </div>
+    <div class="col-xs-4">
+            <a href="{{ url_for('main.publications_table') }}"><h3 class="centred"><span class="glyphicon glyphicon-search"></span> Search by Publication</h3></a>
+    </div>
 </div>
+    
+<hr>        
+
 
 <div class="info_box">
     <h3>Quicklinks</h3>
