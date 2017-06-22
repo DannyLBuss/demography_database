@@ -247,7 +247,7 @@ def taxonomy_form(id,species_id,edit_or_new):
         #form.col_check_date.data = 
 
     #Actually rendering the page
-    return render_template('data_manage/generic_form.html', form=form, taxonomy = taxonomy, species=species)
+    return render_template('data_manage/taxonomy_form.html', form=form, taxonomy = taxonomy, species=species,protocol_dict=protocol_dict)
 
 @data_manage.route('/taxonomy/<int:id>/edit-history')
 @login_required
