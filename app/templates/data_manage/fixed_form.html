@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Demography Database - Data Input{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Update status</h1>
+    <h3><a href="" onclick="goBack()"> <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back to previous page - changes will NOT be saved</a></h3>
+
+</div>
+<form method="post" role="form">
+    <div class="form">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_errors(form, hiddens="only") }}
+    </div>
+<div class="form">
+    <div class="info_box">
+        <h3>SPAND_EX Data</h3>
+        <hr>
+        {{ wtf.form_field(form.vector_str) }}
+        <p>{{ protocol_dict["version_checked"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.vector_present) }}
+        <p>{{ protocol_dict["version_status"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.total_pop_no) }}
+        <p>{{ protocol_dict["population_pop_size"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.smalls) }}
+        <p>{{ protocol_dict["fixed_small"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.census_timing) }}
+        <p>{{ protocol_dict["fixed_census_timing"] }}</p>
+        <hr>
+        <!--
+        SEED STAGE ERROR?
+        -->
+        {{ wtf.form_field(form.private) }}
+        <p>{{ protocol_dict["fixed_private"] }}</p>
+        <hr>
+        <h3>Submit</h3>
+        {{ wtf.form_field(form.submit) }}
+        
+    </div>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+
+    
+<script>
+
+    function goBack() {
+        window.history.go(-1);
+    }
+</script>
+{% endblock %}

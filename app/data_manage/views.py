@@ -4,7 +4,7 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import data_manage
 from .. import db
-from forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, MatrixForm, VersionForm, DeleteForm
+from forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, MatrixForm, VersionForm, DeleteForm, FixedForm
 from ..models import Permission, Role, User, \
                     IUCNStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
@@ -776,6 +776,60 @@ def matrix_edit_history(id):
     matrix = Matrix.query.get_or_404(id)
     return render_template('edit_history.html', matrix= matrix)
 
+@data_manage.route('/fixed/<string:edit_or_new>/<int:id>/matrix=<int:matrix_id>', methods=['GET', 'POST'])
+@login_required
+def fixed_form(id,edit_or_new,matrix_id):
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
+        
+    protocol = DigitizationProtocol.query.all()
+    protocol_dict = {}
+    for ocol in protocol:
+        protocol_dict[ocol.name_in_csv] = ocol.field_description
+
+    if edit_or_new == "edit":
+        fixed = Fixed.query.get_or_404(id)
+        fixed_old = Fixed.query.get_or_404(id)
+        matrix = Matrix.query.get_or_404(matrix_id)
+        form = FixedForm(fixed=fixed)
+    else:
+        fixed = Fixed()
+        fixed_old = Fixed()
+        matrix = Matrix.query.get_or_404(matrix_id)
+        form = FixedForm(fixed=fixed)
+       
+    publication = Publication.query.get_or_404(matrix.population.publication.id)
+    publication_id = str(publication.id)
+    
+    if form.validate_on_submit():
+        fixed.vector_str = form.vector_str.data
+        fixed.vector_present = form.vector_present.data
+        fixed.total_pop_no = form.total_pop_no.data
+        fixed.smalls = form.smalls.data
+        fixed.census_timing_id = form.census_timing.data
+        fixed.private = form.private.data
+        
+        if edit_or_new == "new":
+            #make associated version object
+            version = Version()
+            version.checked = 0
+            version.checked_count = 0
+            version.statuses = Status.query.filter_by(id=4).first()
+            version.matrix_id = matrix.id
+            db.session.add(version)
+            db.session.commit()
+        flash('The SPAND_EX data has been updated.')
+        return redirect("../species=all/publications="+publication_id)
+
+    form.vector_str.data = fixed.vector_str
+    form.vector_present.data =  fixed.vector_present
+    form.total_pop_no.data =  fixed.total_pop_no
+    form.smalls.data =  fixed.smalls
+    form.census_timing.data =  fixed.census_timing_id
+    form.private.data =  fixed.private
+        
+    return render_template('data_manage/fixed_form.html', form=form, matrix=matrix,fixed = fixed,publicaton = publication,protocol_dict=protocol_dict)
+
 ## delete things
 @data_manage.route('/delete/<thing_to_delete>/<int:id_obj>', methods=['GET', 'POST'])
 @login_required
@@ -964,7 +1018,7 @@ def csv_export():
 @data_manage.route('/591514wdjfgw43qrt34r4w5r274rrollback')
 def rollback():  
     db.session.rollback()
-    return redirect(url_for('.compadrino_zone'))
+    return ("Rollback successful")
 
 
 

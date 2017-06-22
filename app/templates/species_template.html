@@ -167,18 +167,19 @@
                 <td> <strong>Growth Form Raunkiaer:</strong> </td>
                 <td> {{ trait.growth_form_raunkiaer.form_name }} </td>
             </tr>
-            {% endif %}
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["species_gisd_status"] }}' class="nounderline">
-                <td> <strong>Invasive (GISD Status):</strong> </td>
-                <td> {{ trait.species_gisd_status }} </td>
-            </tr>
-            
             {% if exeter_data == True %} 
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_spand_ex_growth_type"] }}' class="nounderline">
                 <td> <strong>SPAND_EX growth type:</strong> </td>
                 <td> {{ trait.spand_ex_growth_types.type_name }} </td>
             </tr>
             {% endif %}
+            {% endif %}
+            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["species_gisd_status"] }}' class="nounderline">
+                <td> <strong>Invasive (GISD Status):</strong> </td>
+                <td> {{ trait.species_gisd_status }} </td>
+            </tr>
+            
+            
             {% if species.taxonomy[0].kingdom == "Plantae" %}
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["seedbank"] }}' class="nounderline">
                 <td> <strong>Seedbank: </strong> </td>
@@ -401,14 +402,34 @@
                                     
                                     <!-- Fixed model suff goes here -->
                                      {% if exeter_data == True %}
+                                    {% if matrix.fixed[0] %}
                                     <hr>
-                                    <p><b>SPAND_EX data</b> <a>Edit</a></p>
-                                    <p>Vector: {{ matrix.fixed[0].vector_str }}</p>
-                                    <p>Vector present: {{ matrix.fixed[0].vector_present }}</p>
-                                    <p>Total pop number: {{ matrix.fixed[0].total_pop_number }}</p>
-                                    <p>Smalls: {{ matrix.fixed[0].small_id.small_description }}</p>
-                                    <p>Census timing: {{ matrix.fixed[0].census_timing_id.census_description }}</p>
-                                    <p>Seed stage error: {{ matrix.fixed[0].seed_stage_error}}</p>
+                                     {% if can_edit == True %}
+                                    <div class="dropdown pull-right">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><a href="../../data-manage/fixed/edit/{{matrix.fixed[0].id}}/matrix={{matrix.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit SPAND_EX data</a></li>
+                                            <!--<li><a href="../../data-manage/population/{{population.id}}/edit-history">View edits</a></li>-->
+                                            <li><a target="_blank" href="../../data-manage/version/edit/{{matrix.fixed[0].version[0].id}}">Update status</a>
+                                        </ul>
+                                    </div> 
+                                    {% endif %}
+                                    <h4><b>SPAND_EX data</b>
+                                        {% if can_edit == True %}
+                                        <small> {{matrix.fixed[0].id}}-{{matrix.fixed[0].version[0].statuses}}-{{matrix.fixed[0].version[0].checked}}</small>
+                                        {% endif %}
+                                    </h4>
+                                    <p><b>Vector:</b> {{ matrix.fixed[0].vector_str }}</p>
+                                    <p><b>Vector present:</b> {{ matrix.fixed[0].vector_present }}</p>
+                                    <p><b>Total pop number:</b> {{ matrix.fixed[0].total_pop_no }}</p>
+                                    <p><b>Smalls:</b> {{ matrix.fixed[0].smalls.small_name }} - {{ matrix.fixed[0].smalls.small_description }}</p>
+                                    <p><b>Census timing:</b> {{ matrix.fixed[0].census_timing_id.census_description }}</p>
+                                    <p><b>Seed stage error:</b> {{ matrix.fixed[0].seed_stage_error}}</p>
+                                    {% else %}
+                                    <div class="info_box_empty">
+        <a href="../data-manage/fixed/new/0/matrix={{matrix.id}}">Add SPAND_EX data</a> <p>SOMETHING HAS GONE WRONG IF YOU CAN SEE THIS</p>
+    </div>
+                                    {% endif %}
                                      {% endif %}
                                 </div>
                             </li>

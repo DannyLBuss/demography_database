@@ -6,6 +6,15 @@
 
 {% block page_content %}
 
+<h3><a href="" onclick="goBack()"> <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back to previous page - changes will NOT be saved</a></h3>
+
+<script>
+ 
+    function goBack() {
+        window.history.go(-1);
+    }
+</script>
+
 <h1>Choose Species</h1>
 <h3>Click on the species for which you want to create a population:</h3>
 <hr>
