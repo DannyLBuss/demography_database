@@ -667,6 +667,12 @@ def population_edit_history(id):
 @data_manage.route('/matrix/<string:edit_or_new>/<int:id>/population=<int:pop_id>', methods=['GET', 'POST'])
 @login_required
 def matrix_form(id,edit_or_new,pop_id):
+    
+    protocol = DigitizationProtocol.query.all()
+    protocol_dict = {}
+    for ocol in protocol:
+        protocol_dict[ocol.name_in_csv] = ocol.field_description
+        
     if current_user.role_id not in [1,3,4,6]:
         abort(404)
         
@@ -684,44 +690,57 @@ def matrix_form(id,edit_or_new,pop_id):
         species = Species.query.get_or_404(population.species_id)
         publication = Publication.query.get_or_404(population.publication_id)
         form = MatrixForm()
+        
+    publication_id = str(publication.id)
     
     if form.validate_on_submit():
-        matrix.treatment = form.treatment.data
-        matrix.matrix_split = form.matrix_split.data
-        matrix.matrix_composition = form.matrix_composition.data
-        matrix.n_intervals = form.n_intervals.data
+#        matrix.treatment = form.treatment.data
+#        matrix.matrix_split = form.matrix_split.data
+#        matrix.matrix_composition = form.matrix_composition.data
+#        matrix.n_intervals = form.n_intervals.data
         matrix.periodicity = form.periodicity.data
-        matrix.matrix_criteria_size = form.matrix_criteria_size.data
-        matrix.matrix_criteria_ontogeny = form.matrix_criteria_ontogeny.data
-        matrix.matrix_criteria_age = form.matrix_criteria_age.data
-        matrix.matrix_start_year = form.matrix_start_year.data
-        matrix.matrix_start_month = form.matrix_start_month.data
-        matrix.matrix_end_year = form.matrix_end_year.data
-        matrix.matrix_end_month = form.matrix_end_month.data
-        matrix.matrix_start_season_id = form.matrix_start_season.data
-        matrix.matrix_end_season_id = form.matrix_end_season.data
-        matrix.matrix_fec = form.matrix_fec.data
+#        matrix.matrix_criteria_size = form.matrix_criteria_size.data
+#        matrix.matrix_criteria_ontogeny = form.matrix_criteria_ontogeny.data
+#        matrix.matrix_criteria_age = form.matrix_criteria_age.data
+#        matrix.matrix_start_year = form.matrix_start_year.data
+#        matrix.matrix_start_month = form.matrix_start_month.data
+#        matrix.matrix_end_year = form.matrix_end_year.data
+#        matrix.matrix_end_month = form.matrix_end_month.data
+#        matrix.matrix_start_season_id = form.matrix_start_season.data
+#        matrix.matrix_end_season_id = form.matrix_end_season.data
+#        matrix.matrix_fec = form.matrix_fec.data
         matrix.matrix_a_string = form.matrix_a_string.data
         matrix.matrix_u_string = form.matrix_u_string.data
         matrix.matrix_f_string = form.matrix_f_string.data
         matrix.matrix_c_string = form.matrix_c_string.data
-        matrix.class_author = form.class_author.data
-        matrix.class_organized = form.class_organized.data
-        matrix.class_number = form.class_number.data
-        matrix.studied_sex = form.studied_sex.data
-        matrix.captivity_id = form.captivity_id.data
+#        matrix.class_author = form.class_author.data
+#        matrix.class_organized = form.class_organized.data
+#        matrix.class_number = form.class_number.data
+#        matrix.studied_sex = form.studied_sex.data
+#        matrix.captivity_id = form.captivity_id.data
         matrix.matrix_dimension = form.matrix_dimension.data
-        matrix.observations = form.observations.data
+#        matrix.observations = form.observations.data
+#        
+#        matrix.matrix_difficulty = form.matrix_difficulty.data
+#        matrix.matrix_complete = form.matrix_complete.data
+#        matrix.independence_origin = form.independence_origin.data
+#        matrix.independent = form.independent.data
+#        matrix.non_independence = form.non_independence.data
+#        matrix.non_independence_author = form.non_independence_author.data
         
-        matrix.matrix_difficulty = form.matrix_difficulty.data
-        matrix.matrix_complete = form.matrix_complete.data
-        matrix.independence_origin = form.independence_origin.data
-        matrix.independent = form.independent.data
-        matrix.non_independence = form.non_independence.data
-        matrix.non_independence_author = form.non_independence_author.data
+        #matrix.survival_issue
+        #matrix.irreducible
+        #matrix.primitive
+        #matrix.ergodic
         
         
         if edit_or_new == "new":
+            db.session.flush()
+            matrix.population_id = population.id
+            db.session.add(matrix)
+            db.session.commit()
+            
+            
             #make associated version object
             version = Version()
             version.checked = 0
@@ -730,12 +749,27 @@ def matrix_form(id,edit_or_new,pop_id):
             version.matrix_id = matrix.id
             db.session.add(version)
             db.session.commit()
-        
+            
+            # make fixed object
+            fixed = Fixed()
+            fixed.matrix_id = matrix.id
+            print fixed
+            db.session.add(fixed)
+            db.session.commit()
+            
+            # make a version for the fixed object...
+            version = Version()
+            version.checked = 0
+            version.checked_count = 0
+            version.statuses = Status.query.filter_by(id=4).first()
+            version.fixed_id = fixed.id
+            db.session.add(version)
+            db.session.commit()
         
         flash('The matrix infomation has been updated.')
-        return redirect(url_for('.compadrino_zone'))
+        return redirect("../species=all/publications="+publication_id)
         
-    form.treatment.data = matrix.treatment.treatment_name
+    form.treatment.data = matrix.treatment
     form.matrix_split.data = matrix.matrix_split
     form.matrix_composition.data = matrix.matrix_composition
     form.n_intervals.data = matrix.n_intervals
@@ -767,7 +801,7 @@ def matrix_form(id,edit_or_new,pop_id):
     form.non_independence.data = matrix.non_independence
     form.non_independence_author.data = matrix.non_independence_author
     
-    return render_template('data_manage/matrix_form.html', form=form, matrix=matrix,population=population,species = species)
+    return render_template('data_manage/matrix_form.html', form=form, matrix=matrix,population=population,species = species,protocol_dict = protocol_dict)
 
 # matrix edit history
 @data_manage.route('/matrix/<int:id>/edit-history')
@@ -815,7 +849,7 @@ def fixed_form(id,edit_or_new,matrix_id):
             version.checked = 0
             version.checked_count = 0
             version.statuses = Status.query.filter_by(id=4).first()
-            version.matrix_id = matrix.id
+            version.fixed_id = fixed.id
             db.session.add(version)
             db.session.commit()
         flash('The SPAND_EX data has been updated.')
@@ -905,6 +939,8 @@ def delete_object(thing_to_delete,id_obj):
             db.session.delete(ver)
         fixed = Fixed.query.filter_by(id = matrix.id)
         for fix in fixed:
+            for vers in fix.version:
+                db.session.delete(vers)
             db.session.delete(fix)
         db.session.delete(matrix)
         db.session.commit()

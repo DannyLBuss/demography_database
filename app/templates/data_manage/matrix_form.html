@@ -21,32 +21,55 @@
             <h3>Matrix infomation</h3>
             <div class="form">
                 {{ wtf.form_field(form.treatment) }}
+                <p>{{ protocol_dict["matrix_treatment_type"] }}</p>
+                <hr>
                 {{ wtf.form_field(form.observations) }}
+                <p>{{ protocol_dict["matrix_observations"] }}</p>
+                <hr>
                 {{ wtf.form_field(form.matrix_composition) }}
+                <p>{{ protocol_dict["matrix_composition"] }}</p>
+                <hr>
                 {{ wtf.form_field(form.n_intervals)}}
+                <p>{{ protocol_dict["matrix_n_intervals"] }}</p>
+                <hr>
                 {{ wtf.form_field(form.captivity_id) }}
+                <p>{{ protocol_dict["matrix_captivity"] }}</p>
+                <hr>
                 {{ wtf.form_field(form.matrix_split) }}
+                <p>{{ protocol_dict["matrix_split"] }}</p>
+                <hr>
                 {{ wtf.form_field(form.matrix_criteria_size) }}
+                <p>{{ protocol_dict["matrix_criteria_size"] }}</p>
+                <hr>
                 {{ wtf.form_field(form.matrix_complete) }}
-                {{ wtf.form_field(form.matrix_difficulty) }}
+                <p>{{ protocol_dict["matrix_complete"] }}</p>
+                <hr>
+                
                 {{ wtf.form_field(form.independence_origin) }}
+                <p>{{ protocol_dict["matrix_independence_origin"] }}</p>
+                <hr>
                 {{ wtf.form_field(form.independent) }}
+                <p>{{ protocol_dict["matrix_independent"] }}</p>
+                <hr>
                 {{ wtf.form_field(form.non_independence) }}
+                <p>{{ protocol_dict["matrix_non_independence"] }}</p>
+                <hr>
                 {{ wtf.form_field(form.non_independence_author) }}
+                <p>{{ protocol_dict["matrix_non_independence_author"] }}</p>
             </div>
             <br>
 
             <div class="form form-inline">
                 <div class="row">
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_criteria_age) }}</div>
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_criteria_ontogeny) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_criteria_age) }}
+                    <p>{{ protocol_dict["matrix_criteria_age"] }}</p>
+                    </div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_criteria_ontogeny) }}
+                    <p>{{ protocol_dict["matrix_criteria_ontogeny"] }}</p></div>
                 </div>
                 <br>
-                <div class="row">
-                    <div class="col-sm-4"></div>
-                    <div class="col-sm-4">{{ wtf.form_field(form.studied_sex) }}</div>
-                    
-                </div>
+                {{ wtf.form_field(form.studied_sex) }}
+                <p>{{ protocol_dict["matrix_studied_sex"] }}</p>
             </div>
             <br>
         </div>
@@ -54,22 +77,32 @@
             <h3>Timing</h3>
             <div class="form form-inline">
                 <div class="row">
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start_month) }}</div>
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end_month) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start_month) }}
+                    <p>{{ protocol_dict["matrix_start_month"] }}</p></div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end_month) }}
+                    <p>{{ protocol_dict["matrix_end_month"] }}</p></div>
                 </div>
             </div>
             <br>
             <div class="form form-inline">
+                
                 <div class="row">
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start_year) }}</div>
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end_year) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start_year) }}
+                    <p>{{ protocol_dict["matrix_start_year"] }}</p></div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end_year) }}
+                    <p>{{ protocol_dict["matrix_end_year"] }}</p></div>
                 </div>
             </div>
             <br>
             <div class="form form-inline">
+                {{ wtf.form_field(form.seasonal) }}
+                    <p>{{ protocol_dict["matrix_seasonal"] }}</p>
+                <hr>
                 <div class="row">
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start_season) }}</div>
-                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end_season) }}</div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_start_season) }}
+                    <p>{{ protocol_dict["matrix_start_season"] }}</p></div>
+                    <div class="col-sm-6">{{ wtf.form_field(form.matrix_end_season) }}
+                    <p>{{ protocol_dict["matrix_end_season"] }}</p></div>
                 </div>
             </div>
             <br>
@@ -79,11 +112,15 @@
             <h3>Matrix format information</h3>
             <div class="form form-inline">
                 <div class="row">
-                <div class="col-sm-3">{{ wtf.form_field(form.matrix_split) }}</div>
-                <div class="col-sm-3">{{ wtf.form_field(form.matrix_fec) }}</div>
-                <div class="col-sm-3">{{ wtf.form_field(form.periodicity) }}</div>
-                <div class="col-sm-3">{{ wtf.form_field(form.matrix_dimension) }}</div>
+                <div class="col-sm-6">{{ wtf.form_field(form.matrix_split) }}<p>{{ protocol_dict["matrix_split"] }}</p></div>
+                <div class="col-sm-6">{{ wtf.form_field(form.matrix_fec) }}<p>{{ protocol_dict["matrix_fec"] }}</p></div>
                 </div>
+                <hr>
+                <div class="row">
+                <div class="col-sm-6">{{ wtf.form_field(form.periodicity) }}<p>{{ protocol_dict["matrix_periodicity"] }}</p></div>
+                <div class="col-sm-6">{{ wtf.form_field(form.matrix_dimension) }}<p>{{ protocol_dict["matrix_dimension"] }}</p></div>
+                </div>
+                <hr>
             </div>
             <br>
             <div class="form">
@@ -91,30 +128,39 @@
                 
                 <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('class_author')">Edit matrix classes</button>
                 {{ wtf.form_field(form.class_author)}}
+                <p>{{ protocol_dict["matrix_class_author"] }}</p>
+                <hr>
                 <div id="class_author_smart-input"></div>
                 
                 <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_class_organized_')">Edit matrix classes</button>
                 {{ wtf.form_field(form.class_organized)}}
+                <p>{{ protocol_dict["matrix_class_organized"] }}</p>
+                <hr>
                 <div id="matrix_class_organized_smart-input"></div>
                 
                 <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_class_number_')">Edit matrix classes</button>
                 {{ wtf.form_field(form.class_number)}}
+                <p>{{ protocol_dict["matrix_class_number"] }}</p><hr>
                 <div id="matrix_class_number_smart-input"></div>
                 
                 <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_a_')">Edit matrix A</button>
                 {{ wtf.form_field(form.matrix_a_string) }}
+                <p>{{ protocol_dict["matrix_a_string"] }}</p><hr>
                 <div id="matrix_a_smart-input"></div>
                 
                 <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_u_')">Edit matrix U</button>
                 {{ wtf.form_field(form.matrix_u_string) }}
+                <p>{{ protocol_dict["matrix_u_string"] }}</p><hr>
                 <div id="matrix_u_smart-input"></div>
                 
                 <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_f_')">Edit matrix F</button>
                 {{ wtf.form_field(form.matrix_f_string) }}
+                <p>{{ protocol_dict["matrix_f_string"] }}</p><hr>
                 <div id="matrix_f_smart-input"></div>
                 
                 <button type="button" class="btn btn-info pull-right" onclick="Javascript:addmat('matrix_c_')">Edit matrix C</button>
                 {{ wtf.form_field(form.matrix_c_string) }}
+                <p>{{ protocol_dict["matrix_c_string"] }}</p><hr>
                 <div id="matrix_c_smart-input"></div>
                 
             </div>
@@ -127,6 +173,10 @@
                 <li>Matrix dimensions are consistent</li>
                 <li>Organised class stages are correctly labelled</li>
             </ul>
+            <hr>
+            {{ wtf.form_field(form.matrix_difficulty) }}
+            <p>{{ protocol_dict["matrix_difficulty"] }}</p>
+            <hr>
             <h3>Submit changes: {{ wtf.form_field(form.submit) }}</h3>
         </div>
     </form>

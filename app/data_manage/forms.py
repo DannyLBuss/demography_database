@@ -209,6 +209,7 @@ class MatrixForm(Form):
     matrix_composition = QuerySelectField('Matrix Composition *',
             query_factory=lambda: MatrixComposition.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.comp_name, validators=[Required()])
+    seasonal = BooleanField('Seasonal')
     n_intervals = IntegerField('Number of Intervals', validators=[Optional()])
     periodicity = FloatField('Periodicity')
     matrix_criteria_size = StringField('Matrix Criteria Size')
@@ -230,7 +231,7 @@ class MatrixForm(Form):
     matrix_u_string = TextAreaField('Matrix U String *', validators=[Required()]) #Must be in specific format
     matrix_f_string = TextAreaField('Matrix F String *', validators=[Required()]) #Must be in specific format
     matrix_c_string = TextAreaField('Matrix C String *', validators=[Required()]) #Must be in specific format
-    matrix_difficulty = StringField('Matrix Difficult')
+    matrix_difficulty = StringField('Matrix Difficulty')
     matrix_complete = BooleanField('Matrix complete')
     independence_origin = StringField('Independence origin')
     studied_sex = QuerySelectField('Studied Sex',
@@ -244,12 +245,11 @@ class MatrixForm(Form):
     class_organized = StringField('Class organized')
     class_author = StringField('Class as described by the author')
     class_number = StringField('Class number')
-    independent = BooleanField('Independant')
+    independent = BooleanField('Independent')
     non_independence = StringField('Non independence')
     non_independence_author = StringField('Author of non-independence')
     submit = SubmitField('Submit')
     
-#Fixed form needs to be created
 class FixedForm(Form):
     vector_str = StringField('Vetctor String')
     vector_present = BooleanField('Vector present')
