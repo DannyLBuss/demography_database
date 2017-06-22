@@ -8,7 +8,8 @@
 
 <a href="../../admin/new_protocol">Add new protocol (Admins only)</a>
 
-<h1>Protocol</h1>
+<h1>Data Digitization Protocol</h1>
+<!--
 <h3>By specifying field names (not yet implemented)</h3>
 <table class="table table2">
     <thead>
@@ -22,26 +23,34 @@
         </tr>
     </tbody>
 </table>
+-->
 
-<h1>Protocol - field classifications</h1>
+{% for protocol_group in protocol|groupby('database_model') | reverse() %}
+<h2>{{protocol_group.grouper | capitalize() }}</h2>
 <table class="table table2">
     <thead>
         <th>Name</th>
         <th>Definition</th>
-        {% if current_user.role == admin %}
+        {% if current_user.role_id == 1 %}
         <th></th>
         {% endif %}
     </thead>
-    <tbody> {% for col in protocol %}
+    <tbody> 
+        
+        {% for col in protocol_group.list %}
         <tr>
             <td>{{ col.field_name }}</td>
             <td>{{ col.field_description }}</td>
             {% if current_user.role_id == 1 %}
             <td><a href = "../../admin/edit_protocol/{{col.id}}">Edit</a></td>
             {% endif %}
-        </tr> {% endfor %} 
+        </tr> 
+        {% endfor %} 
+        
     </tbody>
 </table>
+{% endfor %}
+
 
 {% endblock %}
 

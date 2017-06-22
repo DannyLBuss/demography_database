@@ -252,7 +252,7 @@
                     <td ><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}   </td>
                     <td >{% if population.longitude %}
                     <strong>Location: </strong><span class="coordinates {{species.species_accepted}} {{ population.matrices | length }} {{ population.id }}">{{ population.latitude }}, {{ population.longitude }}</span>  </td>
-                    <td ><strong>Altitude: </strong><span>{{ population.altitude }}m</span>
+                    <td >{% if population.altitude %}<strong>Altitude: </strong><span>{{ population.altitude }}m</span>{% endif %}
                     {% if population.population_nautical_miles %}<li><strong>Nautical miles:</strong>  {{ population_nautical_miles }} </li>{% endif %}
                 {% else %}
                     No coordinates given

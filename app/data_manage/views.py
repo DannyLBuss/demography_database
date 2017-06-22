@@ -24,6 +24,14 @@ def gen_hex_code():
 def compadrino_zone():
     return render_template('data_manage/compadrino_zone.html')
 
+# publication edit history
+@data_manage.route('/useredits')
+@login_required
+def useredits():
+    
+    logged_changes = ChangeLogger.query.filter_by(user_id = current_user.id)
+    return render_template('edit_history.html',logged_changes = logged_changes)
+
 # Data management forms
 
 @data_manage.route('/version/edit/<int:id>/', methods=['GET', 'POST'])

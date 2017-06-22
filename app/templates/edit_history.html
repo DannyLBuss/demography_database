@@ -11,7 +11,7 @@
     {% endif %}
      
 </div>
-
+ 
 
 <table class="table">
     <thead>
@@ -31,7 +31,7 @@
             <td>{{ change.new_edit_delete }}</td>
             <td>{{ change.time_of_edit }}</td>
             <td>{{ change.user.username }}</td>
-            <td>{{ change.field_name }}</td>
+            <td>{{ change.object_type }}-{{ change.object_id }}-{{ change.field_name }}</td>
             <td>{{ change.content_before }}</td>
             <td>→</td>
             <td>{{ change.content_after }}</td>

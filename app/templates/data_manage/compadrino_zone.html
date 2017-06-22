@@ -10,9 +10,9 @@
         <div class="info_box">
             <h3>Quick links:</h3>
                 <ul>
-                    <li><a href= "{{ url_for('main.protocol_page') }}" target="_blank">Protocol</li></a>
-                    <li><a href= "https://slack.com/signin" target="_blank">Slack</li></a>
-                    <li>PDF host</li>
+                    <li><a href= "{{ url_for('main.protocol_page') }}">Protocol</a></li>
+                    <li><a href= "https://slack.com/signin" target="_blank"></a>Slack</li>
+                    <!--<li>PDF host</li>-->
                 </ul>
         </div>
         <div class="info_box">
@@ -21,7 +21,7 @@
             <p><a href="../data-manage/publication/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new publication</a></p>
             <p>Search by species</p>
             <p><a href="../../../data-manage/species/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new species</a></p>
-            <p>Track my edits</p>
+            <p><a href= "{{ url_for('.useredits') }}">My edits</a></p>
             <p><a href="{{ url_for('main.user', username=current_user.username) }}" target="_blank"><span class="glyphicon glyphicon-new-window"></span>View public profile</a></p>
         </div>
         {% if current_user.role_id == 1 %}
@@ -36,19 +36,7 @@
     
     <div class="col-sm-9">
         <div class="info_box"> 
-            <h3>Your currently assigned publications: (coming soon)</h3>
-            <p><b>Publications entered</b></p>
-            <p>list of publications</p>
-            <p><b>Publications and species (+taxonomy and traits) entered</b></p>
-            <p>list of publications</p>
-            <p><b>Publications, species (+taxonomy and traits) and populations entered</b></p>
-            <p>list of publications</p>
-            <p><b>Publications, species (+taxonomy and traits), populations and matrices entered</b></p>
-            <p>list of publications</p>
-            <p><b>All information and metadata entered, but unchecked</b></p>
-            <p>list of publications</p>
-            <p><b>All information and metadata entered and checked, waiting for release</b></p>
-            <p>list of publications</p>
+            <h3>Your currently assigned publications:</h3>
         </div>
         
         
