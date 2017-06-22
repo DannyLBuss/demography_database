@@ -134,7 +134,7 @@ class PublicationForm(Form):
                             get_label=lambda a:'{} - {}'.format(a.source_name, a.source_description))	
     authors = StringField('Publication Authors *', validators=[Required()])
     editors = StringField('Publication Editors')
-    journal_name = StringField('Jorunal/Publication Title (ie J Ecol) *', validators=[Required()])
+    journal_name = StringField('Journal/Publication Title (ie J Ecol) *', validators=[Required()])
     journal_book_conf = StringField('Journal/Book Conf')
     year = IntegerField('Year Publication Published *', validators=[Required()])
     volume = StringField('Journal/Publication Volume')

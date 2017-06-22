@@ -23,7 +23,7 @@
         <div class="info_box">
             <h3>What type of source?</h3>
             {{ wtf.form_field(form.source_type) }}
-            <p>PROTOCOL MISSING</p>
+            <p>{{ protocol_dict["publication_source_type"] }}</p>
             <hr>
         </div>
         <div class="info_box">
@@ -72,14 +72,14 @@
             <hr>
             {{ wtf.form_field(form.pub_title) }}
             <p>If this is in all caps then use <a href ="https://convertcase.net/">convertcase.net</a> to change it to Capitalized case.</p>
-            <p>PROTOCOL MISSING</p>
+            <p>{{ protocol_dict["publication_pub_title"] }}</p>
             
         </div>
         <div class="info_box">
             <h3>Must be input manually</h3>
             {{ wtf.form_field(form.purposes) }}
             <p><i>Hold ctrl (or command on Mac) to select more than one purpose.</i></p>
-            <p>{{ protocol_dict["publication_purposes_etc"] }}</p>
+            <p>{{ protocol_dict["publication_purpose_etc"] }}</p>
             <hr>
             {{ wtf.form_field(form.embargo) }}
             <p>{{ protocol_dict["publication_embargo"] }}</p>
