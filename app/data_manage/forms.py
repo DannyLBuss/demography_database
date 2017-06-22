@@ -205,7 +205,7 @@ class MatrixForm(Form):
     treatment = QuerySelectField('Matrix Treatment *',
             query_factory=lambda: Treatment.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.treatment_name, validators=[Required()])
-    matrix_split = StringField('Matrix Split')
+    matrix_split = BooleanField('Matrix Split')
     matrix_composition = QuerySelectField('Matrix Composition *',
             query_factory=lambda: MatrixComposition.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:a.comp_name, validators=[Required()])
@@ -251,18 +251,22 @@ class MatrixForm(Form):
     submit = SubmitField('Submit')
     
 class FixedForm(Form):
-    vector_str = StringField('Vetctor String')
+    vector_str = StringField('Vector String')
     vector_present = BooleanField('Vector present')
-    total_pop_no = IntegerField('Total population number')
+    total_pop_no = IntegerField('Total population number', validators=[Optional()])
     smalls = QuerySelectField('Smalls',
             query_factory=lambda: Small.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.small_name, a.small_description))
     census_timing = QuerySelectField('Census timing',
             query_factory=lambda: CensusTiming.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.census_name, a.census_description))
-    #seed_stage_error
+    seed_stage_error = BooleanField('Seed stage error')
     private = BooleanField('Private')
+    vectors_includes_na = BooleanField('Vectors includes NA')
+    vectors_proportional = StringField('Vectors proportional')
+    vector_class_names = StringField('Vector class names')
     submit = SubmitField('Submit')
+    
     
 # delete form   
 class DeleteForm(Form):

@@ -123,7 +123,7 @@ def delete_table_data():
 # This can be padded out for future stuff...
 def coerce_boolean(string):
     true = ['Yes', 'Divided','TRUE','T']
-    false = ['No', 'Undivided','FALSE','F']
+    false = ['No', 'Undivided','FALSE','F','Indivisible']
 
     if string in true:
         return True
@@ -591,7 +591,7 @@ def submit_new(data):
         db.session.commit()
 
     matrix_dict = {'treatment' : treatment,
-    'matrix_split' : data["matrix_split"],
+    'matrix_split' : coerce_boolean(data["matrix_split"]),
     'matrix_composition' : MatrixComposition.query.filter_by(comp_name=data["matrix_composition_id"]).first(),
     'matrix_criteria_size' : data["matrix_criteria_size"],
     'matrix_criteria_ontogeny' : coerce_boolean(data["matrix_criteria_ontogeny"]),

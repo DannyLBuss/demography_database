@@ -702,39 +702,39 @@ def matrix_form(id,edit_or_new,pop_id):
     publication_id = str(publication.id)
     
     if form.validate_on_submit():
-#        matrix.treatment = form.treatment.data
-#        matrix.matrix_split = form.matrix_split.data
-#        matrix.matrix_composition = form.matrix_composition.data
-#        matrix.n_intervals = form.n_intervals.data
+        matrix.treatment = form.treatment.data
+        matrix.matrix_split = form.matrix_split.data
+        matrix.matrix_composition = form.matrix_composition.data
+        matrix.n_intervals = form.n_intervals.data
         matrix.periodicity = form.periodicity.data
-#        matrix.matrix_criteria_size = form.matrix_criteria_size.data
-#        matrix.matrix_criteria_ontogeny = form.matrix_criteria_ontogeny.data
-#        matrix.matrix_criteria_age = form.matrix_criteria_age.data
-#        matrix.matrix_start_year = form.matrix_start_year.data
-#        matrix.matrix_start_month = form.matrix_start_month.data
-#        matrix.matrix_end_year = form.matrix_end_year.data
-#        matrix.matrix_end_month = form.matrix_end_month.data
-#        matrix.matrix_start_season_id = form.matrix_start_season.data
-#        matrix.matrix_end_season_id = form.matrix_end_season.data
-#        matrix.matrix_fec = form.matrix_fec.data
+        matrix.matrix_criteria_size = form.matrix_criteria_size.data
+        matrix.matrix_criteria_ontogeny = form.matrix_criteria_ontogeny.data
+        matrix.matrix_criteria_age = form.matrix_criteria_age.data
+        matrix.matrix_start_year = form.matrix_start_year.data
+        matrix.matrix_start_month = form.matrix_start_month.data
+        matrix.matrix_end_year = form.matrix_end_year.data
+        matrix.matrix_end_month = form.matrix_end_month.data
+        matrix.matrix_start_season_id = form.matrix_start_season.data
+        matrix.matrix_end_season_id = form.matrix_end_season.data
+        matrix.matrix_fec = form.matrix_fec.data
         matrix.matrix_a_string = form.matrix_a_string.data
         matrix.matrix_u_string = form.matrix_u_string.data
         matrix.matrix_f_string = form.matrix_f_string.data
         matrix.matrix_c_string = form.matrix_c_string.data
-#        matrix.class_author = form.class_author.data
-#        matrix.class_organized = form.class_organized.data
-#        matrix.class_number = form.class_number.data
-#        matrix.studied_sex = form.studied_sex.data
-#        matrix.captivity_id = form.captivity_id.data
+        matrix.class_author = form.class_author.data
+        matrix.class_organized = form.class_organized.data
+        matrix.class_number = form.class_number.data
+        matrix.studied_sex = form.studied_sex.data
+        matrix.captivity_id = form.captivity_id.data
         matrix.matrix_dimension = form.matrix_dimension.data
-#        matrix.observations = form.observations.data
-#        
-#        matrix.matrix_difficulty = form.matrix_difficulty.data
-#        matrix.matrix_complete = form.matrix_complete.data
-#        matrix.independence_origin = form.independence_origin.data
-#        matrix.independent = form.independent.data
-#        matrix.non_independence = form.non_independence.data
-#        matrix.non_independence_author = form.non_independence_author.data
+        matrix.observations = form.observations.data
+        
+        matrix.matrix_difficulty = form.matrix_difficulty.data
+        matrix.matrix_complete = form.matrix_complete.data
+        matrix.independence_origin = form.independence_origin.data
+        matrix.independent = form.independent.data
+        matrix.non_independence = form.non_independence.data
+        matrix.non_independence_author = form.non_independence_author.data
         
         #matrix.survival_issue
         #matrix.irreducible
@@ -850,6 +850,11 @@ def fixed_form(id,edit_or_new,matrix_id):
         fixed.smalls = form.smalls.data
         fixed.census_timing_id = form.census_timing.data
         fixed.private = form.private.data
+        fixed.vectors_includes_na = form.vectors_includes_na.data
+        fixed.vectors_proportional = form.vectors_proportional.data
+        fixed.vector_class_names = form.vector_class_names.data
+        fixed.seed_stage_error = form.seed_stage_error.data
+        
         
         if edit_or_new == "new":
             #make associated version object
@@ -869,6 +874,10 @@ def fixed_form(id,edit_or_new,matrix_id):
     form.smalls.data =  fixed.smalls
     form.census_timing.data =  fixed.census_timing_id
     form.private.data =  fixed.private
+    form.vectors_includes_na.data =  fixed.vectors_includes_na
+    form.vectors_proportional.data =  fixed.vectors_proportional
+    form.vector_class_names.data =  fixed.vector_class_names
+    form.seed_stage_error.data =  fixed.seed_stage_error
         
     return render_template('data_manage/fixed_form.html', form=form, matrix=matrix,fixed = fixed,publicaton = publication,protocol_dict=protocol_dict)
 

@@ -21,8 +21,17 @@
         {{ wtf.form_field(form.vector_str) }}
         <p>{{ protocol_dict["version_checked"] }}</p>
         <hr>
+        {{ wtf.form_field(form.vectors_includes_na) }}
+        <p>{{ protocol_dict["matrix_vectors_includes_na"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.vectors_proportional) }}
+        <p>{{ protocol_dict["matrix_vectors_proportional"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.vector_class_names) }}
+        <p>{{ protocol_dict["matrix_vector_class_names"] }}</p>
+        <hr>
         {{ wtf.form_field(form.vector_present) }}
-        <p>{{ protocol_dict["version_status"] }}</p>
+        <p>{{ protocol_dict["vector_present"] }}</p>
         <hr>
         {{ wtf.form_field(form.total_pop_no) }}
         <p>{{ protocol_dict["population_pop_size"] }}</p>
@@ -33,9 +42,9 @@
         {{ wtf.form_field(form.census_timing) }}
         <p>{{ protocol_dict["fixed_census_timing"] }}</p>
         <hr>
-        <!--
-        SEED STAGE ERROR?
-        -->
+        {{ wtf.form_field(form.seed_stage_error) }}
+        <p>{{ protocol_dict["fixed_seed_stage_error"] }}</p>
+        <hr>
         {{ wtf.form_field(form.private) }}
         <p>{{ protocol_dict["fixed_private"] }}</p>
         <hr>

@@ -3309,7 +3309,7 @@ class Matrix(db.Model):
     uid = db.Column(db.String(200), index=True, unique=True)
     population_id = db.Column(db.Integer, db.ForeignKey('populations.id',ondelete='CASCADE'))
     treatment_id = db.Column(db.Integer, db.ForeignKey('treatments.id',ondelete='CASCADE'))
-    matrix_split = db.Column(db.String(64))
+    matrix_split = db.Column(db.Boolean())
     matrix_composition_id = db.Column(db.Integer, db.ForeignKey('matrix_compositions.id',ondelete='CASCADE'))
     seasonal = db.Column(db.Boolean())
     survival_issue = db.Column(db.Float())
@@ -3580,16 +3580,15 @@ class Fixed(db.Model):
     total_pop_no = db.Column(db.Integer())
     small_id = db.Column(db.Integer, db.ForeignKey('smalls.id',ondelete='CASCADE'))
     census_timing_id = db.Column(db.Integer, db.ForeignKey('census_timings.id',ondelete='CASCADE'))
-    seed_stage_error = db.Column(db.Boolean())
+    seed_stage_error = db.Column(db.Boolean(), default=False)
     private = db.Column(db.Boolean(), default=True)
+    vectors_includes_na = db.Column(db.Boolean(), default=False)
+    vectors_proportional = db.Column(db.Text())
+    vector_class_names = db.Column(db.Text())
+    
 
-    #
-    #fixed_independence_flag
 
     version = db.relationship("Version", backref="fixed", passive_deletes=True)
-    #version_latest = db.Column(db.String(64))
-    #version_original = db.Column(db.Boolean())
-    #version_ok = db.Column(db.Boolean)
 
     @staticmethod
     def migrate():
