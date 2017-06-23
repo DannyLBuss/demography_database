@@ -9,7 +9,7 @@ from ..models import IUCNStatus,  OrganismType, GrowthFormRaunkiaer, Reproductiv
     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
     TransitionType, MatrixComposition, StartSeason, EndSeason, StudiedSex, Captivity, Species, Taxonomy, Trait, \
     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
-    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute, Status
+    MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, PurposeEndangered, PurposeWeed, Institute, Status, User
 from wtforms.fields.html5 import DateField
     
 
@@ -156,7 +156,9 @@ class PublicationForm(Form):
     
     additional_source_string = StringField('Additional Source')
     study_notes = StringField('Additional notes')
-    student = StringField('Student')
+    student = QuerySelectField('Assigned compadrino',
+            query_factory=lambda: User.query.all(), get_pk=lambda a: a.id,
+                            get_label=lambda a:'{} - {}'.format(a.name, a.email))
     # author_contacts # Fkey#additional_sources # Fkey
     submit = SubmitField('Submit')
 
@@ -281,6 +283,9 @@ class ContactsForm(Form):
     correspondence_email_content = StringField('correspondence_email_content')
     extra_content_email = StringField('extra_content_email')
     author_reply = StringField('Author reply')
+    contacting_user = QuerySelectField('Contacting user',
+            query_factory=lambda: User.query.all(), get_pk=lambda a: a.id,
+                            get_label=lambda a:'{} - {}'.format(a.name, a.email))
     submit = SubmitField('Submit')
     
     

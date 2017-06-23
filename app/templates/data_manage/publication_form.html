@@ -99,6 +99,9 @@
             {{ wtf.form_field(form.missing_data) }}
             <p><i>Hold ctrl (or command on Mac) to select more than one purpose.</i></p>
             <p>{{ protocol_dict["publication_missing_data"] }}</p>
+        <hr>
+        {{ wtf.form_field(form.student) }}
+            <p>{{ protocol_dict["publication_student"] }}</p>
             {{ wtf.form_field(form.submit) }}
     </div>
 </form>

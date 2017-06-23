@@ -460,7 +460,7 @@ def publication_form(id,edit_or_new):
         publication.missing_data = form.missing_data.data
         publication.additional_source_string = form.additional_source_string.data
         publication.study_notes = form.study_notes.data
-        #publication.student = form.student.data
+        publication.users = form.student.data
         
         
         print(publication.purposes)
@@ -527,7 +527,7 @@ def publication_form(id,edit_or_new):
     form.missing_data.data = publication.missing_data
     form.additional_source_string.data = publication.additional_source_string
     form.study_notes.data = publication.study_notes
-    #form.student.data = publication.student
+    form.student.data = publication.user
     
     
     return render_template('data_manage/publication_form.html', form=form, publication=publication,protocol_dict = protocol_dict)
@@ -918,6 +918,7 @@ def contacts_form(id,edit_or_new,publication_id):
         contact.extra_content_email = form.extra_content_email.data
         contact.correspondence_email_content = form.correspondence_email_content.data
         contact.author_reply = form.author_reply.data
+        contact.user = form.contacting_user.data
         contact.publication_id = publication_id
         
         db.session.add(contact)
@@ -932,6 +933,8 @@ def contacts_form(id,edit_or_new,publication_id):
     form.extra_content_email.data= contact.extra_content_email
     form.correspondence_email_content.data= contact.correspondence_email_content
     form.author_reply.data= contact.author_reply
+    form.contacting_user.data = contact.user
+    
     
     return render_template('data_manage/generic_form.html', form=form, contact=contact,publicaton = publication,protocol_dict=protocol_dict)
 

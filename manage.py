@@ -274,6 +274,7 @@ def submit_new(data):
         else:
             missing_data = 'NDY'
 
+        possible_user = User.query.filter_by(name = data["publication_student"]).first()
 
         pub_dict = {'authors': data["publication_authors"],
         'year' : data["publication_year"],
@@ -283,7 +284,7 @@ def submit_new(data):
         'journal_name' : data["publication_journal_name"],
         'date_digitised' : datetime.datetime.strptime(data['publication_date_digitization'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['publication_date_digitization'] else None,
         'purposes' : queryset,
-        'student' : data["publication_student"],
+        'student_id' :  possible_user.id if possible_user else None,
         'study_notes' : data["publication_study_notes"]
         }
 
@@ -314,6 +315,8 @@ def submit_new(data):
         
         author_contacts = AuthorContact.query.filter_by(corresponding_author = data["publication_corresponding_author"]).filter_by(corresponding_author_email = data["publication_corresponding_email"]).first()
         
+        
+        
         if author_contacts == None:
             ac_dict = {'publication_id' : publication.id, 
             'date_contacted' : datetime.datetime.strptime(data['date_author_contacted'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['date_author_contacted'] else None,
@@ -323,7 +326,8 @@ def submit_new(data):
             'corresponding_author' : data["publication_corresponding_author"],
             'corresponding_author_email' : data["publication_corresponding_email"],
             'correspondence_email_content' : data["correspondence_email_content"],
-            'extra_content_email' : data["extra_content_email"]
+            'extra_content_email' : data["extra_content_email"],
+            'contacting_user_id' : possible_user.id if possible_user else None
             }
 
             ac_cleaned = data_clean(ac_dict)

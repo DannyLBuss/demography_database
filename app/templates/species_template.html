@@ -7,7 +7,7 @@
     {% for publication in publications %}
     <p><b>Publication: </b>{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}</p>
     <p><b>Missing data:</b> {% for da in publication.missing_data %} {{ da.missing_description }}, {% endfor %} </p>
-    <p><b>Assigned to:</b> {{publication.student}} </p>
+    <p><b>Assigned to:</b> {{publication.user.name}} </p>
     <p><b>Checked by:</b> </p>
     <ul>
         <li>Publication-{{publication.id}}-{{publication.version[0].statuses}}-{{publication.version[0].checked}}</li>
@@ -506,7 +506,7 @@
                             <h4>Contacting the authors</h4>
                             <ol>
                         {% for contac in publication.author_contacts %}
-                        <li><p><b>Date:</b> {{contac.date_contacted}} <b>Follow-up:</b> {{contac.date_contacted_again}} <b> To:</b> {{contac.corresponding_author}} ({{contac.corresponding_author_email}}) <b>Contacted by:</b> {{contac.contacting_user_id}} <a href="../../data-manage/contact/edit/{{contac.id}}/publication={{publication.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit contact</a> <a href="../../data-manage/delete/contact/{{contac.id}}"><span class="glyphicon glyphicon-trash"></span> Delete contact</a> </p>
+                        <li><p><b>Date:</b> {{contac.date_contacted}} <b>Follow-up:</b> {{contac.date_contacted_again}} <b> To:</b> {{contac.corresponding_author}} ({{contac.corresponding_author_email}}) <b>Contacted by:</b> {{contac.user.name}} <a href="../../data-manage/contact/edit/{{contac.id}}/publication={{publication.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit contact</a> <a href="../../data-manage/delete/contact/{{contac.id}}"><span class="glyphicon glyphicon-trash"></span> Delete contact</a> </p>
                         <p><b>Missing data asked for:</b> {{contac.correspondence_email_content}}</p>
                         <p><b>Extra missing content asked for (optional):</b> {{contac.extra_email_content}}</p>
                         <p> <b>Author reply?: </b>{{contac.author_reply}}</p></li>

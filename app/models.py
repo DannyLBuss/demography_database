@@ -118,6 +118,8 @@ class User(UserMixin, db.Model):
 
     #versions = db.relationship("Version", backref="user")
     changelogger = db.relationship("ChangeLogger", backref="user")
+    contacts = db.relationship("AuthorContact", backref="user")
+    publications = db.relationship("Publication", backref="user")
 
     @staticmethod
     def migrate():
@@ -134,6 +136,7 @@ class User(UserMixin, db.Model):
                     
 
                 u.email = us['email']
+                u.name = us['name']
                 u.username = us['username']
                 u.role = Role.query.filter_by(id=us['role_id']).first()
                 u.password = generate_password_hash(us['password'])
@@ -2672,7 +2675,7 @@ class Publication(db.Model):
                     secondary=publication_missing_data, backref="publications", passive_deletes=True)
     additional_source_string = db.Column(db.Text())
     colour = db.Column(db.String(7))
-    student = db.Column(db.String(200))
+    student_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
     study_notes = db.Column(db.Text())
     publications_protocol_id = db.Column(db.Integer, db.ForeignKey('publications_protocol.id',ondelete='CASCADE'))
 
