@@ -151,7 +151,9 @@ class PublicationForm(Form):
     purposes = QuerySelectMultipleField(query_factory=lambda: Purpose.query.all(), get_pk=lambda a: a.id,get_label=lambda a:'{} - {}'.format(a.purpose_name, a.purpose_description))
     date_digitised = DateField('Date digitized',validators=[Optional()])
     embargo = DateField('Embargo',validators=[Optional()])
-    #missing_data = QuerySelectField('Missing Data',query_factory=lambda: MissingData.query.all(), get_pk=lambda a: a.id,get_label=lambda a:'{} - {}'.format(a.missing_code, a.missing_description))
+    
+    missing_data = QuerySelectMultipleField(query_factory=lambda: MissingData.query.all(), get_pk=lambda a: a.id,get_label=lambda a:'{} - {}'.format(a.missing_code, a.missing_description))
+    
     additional_source_string = StringField('Additional Source')
     study_notes = StringField('Additional notes')
     student = StringField('Student')
@@ -268,6 +270,17 @@ class FixedForm(Form):
     vectors_includes_na = BooleanField('Vectors includes NA')
     vectors_proportional = StringField('Vectors proportional')
     vector_class_names = StringField('Vector class names')
+    submit = SubmitField('Submit')
+    
+class ContactsForm(Form):
+
+    corresponding_author = StringField('Corresponding author')
+    corresponding_author_email = StringField('Corresponding author email')
+    date_contacted = DateField("Date contacted")
+    date_contacted_again = DateField("Date contacted again", validators=[Optional()])
+    correspondence_email_content = StringField('correspondence_email_content')
+    extra_content_email = StringField('extra_content_email')
+    author_reply = StringField('Author reply')
     submit = SubmitField('Submit')
     
     

@@ -2783,10 +2783,12 @@ class AuthorContact(db.Model):
     corresponding_author = db.Column(db.Text())
     corresponding_author_email = db.Column(db.Text())
     date_contacted = db.Column(db.Date(), index=True)
+    date_contacted_again = db.Column(db.Date(), index=True)
     contacting_user_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
     content_emails = db.relationship("ContentEmail",
                     secondary=contact_contents, backref="author_contacts", passive_deletes=True)
     extra_content_email = db.Column(db.Text())
+    correspondence_email_content = db.Column(db.Text())
     author_reply = db.Column(db.Text())
 
     version = db.relationship("Version", backref="author_contact", passive_deletes=True)

@@ -4,7 +4,7 @@ from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import data_manage
 from .. import db
-from forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, MatrixForm, VersionForm, DeleteForm, FixedForm
+from forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, PublicationForm, MatrixForm, VersionForm, DeleteForm, FixedForm, ContactsForm
 from ..models import Permission, Role, User, \
                     IUCNStatus, OrganismType, GrowthFormRaunkiaer, ReproductiveRepetition, \
                     DicotMonoc, AngioGymno, SpandExGrowthType, SourceType, Database, Purpose, MissingData, ContentEmail, Ecoregion, Continent, InvasiveStatusStudy, InvasiveStatusElsewhere, StageTypeClass, \
@@ -457,7 +457,7 @@ def publication_form(id,edit_or_new):
         publication.purposes = form.purposes.data
         #publication.date_digitised = form.date_digitised.data
         publication.embargo = form.embargo.data
-        #publication.missing_data = form.missing_data.data
+        publication.missing_data = form.missing_data.data
         publication.additional_source_string = form.additional_source_string.data
         publication.study_notes = form.study_notes.data
         #publication.student = form.student.data
@@ -524,7 +524,7 @@ def publication_form(id,edit_or_new):
     form.purposes.data = publication.purposes
     #form.date_digitised.data = publication.date_digitised
     form.embargo.data = publication.embargo
-    #form.missing_data.data = publication.missing_data
+    form.missing_data.data = publication.missing_data
     form.additional_source_string.data = publication.additional_source_string
     form.study_notes.data = publication.study_notes
     #form.student.data = publication.student
@@ -800,6 +800,8 @@ def matrix_form(id,edit_or_new,pop_id):
     form.matrix_f_string.data = matrix.matrix_f_string
     form.matrix_c_string.data = matrix.matrix_c_string
     form.class_author.data = matrix.class_author
+    form.class_organized.data = matrix.class_organized
+    form.class_number.data = matrix.class_number
     form.studied_sex.data = matrix.studied_sex
     form.captivity_id.data = matrix.captivity_id
     form.observations.data = matrix.observations
@@ -882,6 +884,56 @@ def fixed_form(id,edit_or_new,matrix_id):
     form.seed_stage_error.data =  fixed.seed_stage_error
         
     return render_template('data_manage/fixed_form.html', form=form, matrix=matrix,fixed = fixed,publicaton = publication,protocol_dict=protocol_dict)
+
+@data_manage.route('/contact/<string:edit_or_new>/<int:id>/publication=<int:publication_id>', methods=['GET', 'POST'])
+@login_required
+def contacts_form(id,edit_or_new,publication_id):
+    if current_user.role_id not in [1,3,4,6]:
+        abort(404)
+        
+    protocol = DigitizationProtocol.query.all()
+    protocol_dict = {}
+    for ocol in protocol:
+        protocol_dict[ocol.name_in_csv] = ocol.field_description
+        
+    if edit_or_new == "edit":
+        contact = AuthorContact.query.get_or_404(id)
+        contact_old = AuthorContact.query.get_or_404(id)
+        publication = Publication.query.get_or_404(publication_id)
+        form = ContactsForm(contact=contact)
+    else:
+        contact = AuthorContact()
+        contact_old = AuthorContact()
+        publication = Publication.query.get_or_404(publication_id)
+        form = ContactsForm(contact=contact)
+        
+    publication_id = str(publication.id)
+        
+        
+    if form.validate_on_submit():
+        contact.corresponding_author = form.corresponding_author.data
+        contact.corresponding_author_email = form.corresponding_author_email.data
+        contact.date_contacted = form.date_contacted.data
+        contact.date_contacted_again = form.date_contacted_again.data
+        contact.extra_content_email = form.extra_content_email.data
+        contact.correspondence_email_content = form.correspondence_email_content.data
+        contact.author_reply = form.author_reply.data
+        contact.publication_id = publication_id
+        
+        db.session.add(contact)
+        db.session.commit()
+        flash('The contact has been updated.')
+        return redirect("../species=all/publications="+publication_id)
+        
+    form.corresponding_author.data = contact.corresponding_author 
+    form.corresponding_author_email.data= contact.corresponding_author_email
+    form.date_contacted.data= contact.date_contacted
+    form.date_contacted_again.data= contact.date_contacted_again
+    form.extra_content_email.data= contact.extra_content_email
+    form.correspondence_email_content.data= contact.correspondence_email_content
+    form.author_reply.data= contact.author_reply
+    
+    return render_template('data_manage/generic_form.html', form=form, contact=contact,publicaton = publication,protocol_dict=protocol_dict)
 
 ## delete things
 @data_manage.route('/delete/<thing_to_delete>/<int:id_obj>', methods=['GET', 'POST'])

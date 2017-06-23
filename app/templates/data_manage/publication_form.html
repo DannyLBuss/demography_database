@@ -96,6 +96,9 @@
 
     <div class="info_box">
         <h3>Submit data</h3>
+            {{ wtf.form_field(form.missing_data) }}
+            <p><i>Hold ctrl (or command on Mac) to select more than one purpose.</i></p>
+            <p>{{ protocol_dict["publication_missing_data"] }}</p>
             {{ wtf.form_field(form.submit) }}
     </div>
 </form>

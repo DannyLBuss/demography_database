@@ -317,10 +317,13 @@ def submit_new(data):
         if author_contacts == None:
             ac_dict = {'publication_id' : publication.id, 
             'date_contacted' : datetime.datetime.strptime(data['date_author_contacted'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['date_author_contacted'] else None,
+            'date_contacted_again' : datetime.datetime.strptime(data['date_author_contacted_again'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['date_author_contacted_again'] else None,
             'extra_content_email' : data["correspondence_email_content"],
             'author_reply' : data["correspondence_author_reply"],
             'corresponding_author' : data["publication_corresponding_author"],
-            'corresponding_author_email' : data["publication_corresponding_email"]
+            'corresponding_author_email' : data["publication_corresponding_email"],
+            'correspondence_email_content' : data["correspondence_email_content"],
+            'extra_content_email' : data["extra_content_email"]
             }
 
             ac_cleaned = data_clean(ac_dict)
@@ -837,14 +840,19 @@ def convert_all_headers_new(dict):
     new_dict['image_path'] = dict["image_path"]
     new_dict['image_path2'] = dict["image_path2"]
     new_dict['species_iucn_taxonid'] = dict["species_iucn_taxonid"]
+    
+    # correspondence
     new_dict['publication_corresponding_author'] = dict["publication_corresponding_author"]
     new_dict['publication_corresponding_email'] = dict["publication_corresponding_email"]
     new_dict['date_author_contacted'] = dict["date_author_contacted"]
-    new_dict['correspondence_email_content'] = dict["correspondence_email_content"]
-    new_dict['correspondence_author_reply'] = dict["correspondence_author_reply"]
+    new_dict['date_author_contacted_again'] = dict["date_author_contacted_again"]
+    new_dict['correspondence_email_content'] = dict["correspondence_email_content"] # what was missing from publication (asked for)
+    new_dict['correspondence_author_reply'] = dict["correspondence_author_reply"] # did they reply?
+    new_dict['publication_student'] = dict["publication_student"] #who asked for it
+    new_dict['extra_content_email'] = dict["extra_content_email"] # extra information asked for
+    
+    new_dict['publication_missing_data'] = dict["publication_missing_data"] # attatched to publication as a note about what is missing
     new_dict['population_within_site_replication'] = dict["within_site_replication"]
-    new_dict['publication_missing_data'] = dict["publication_missing_data"]
-    new_dict['publication_student'] = dict["publication_student"]
     new_dict['study_database_source_id'] = dict["study_database_source"]
     new_dict['publication_study_notes'] = dict["publication_study_notes"]
     new_dict['publications_protocol_id'] = dict["publications_protocol"]

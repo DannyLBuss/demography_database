@@ -91,6 +91,9 @@
     </div>
     <div class="info_box">
         <h3>Study Information</h3>
+        {{ wtf.form_field(form.within_site_replication) }}
+        <p>{{ protocol_dict["within_site_replication"] }}</p>
+        <hr>
         {{ wtf.form_field(form.study_start) }}
         <p>{{ protocol_dict["study_start"] }}</p>
         <hr>
