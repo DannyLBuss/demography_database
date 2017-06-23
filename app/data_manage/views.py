@@ -967,6 +967,10 @@ def delete_object(thing_to_delete,id_obj):
         matrix = Matrix.query.get_or_404(id_obj)
         can_delete = True
         
+    if thing_to_delete == "contact":
+        contact = AuthorContact.query.get_or_404(id_obj)
+        can_delete = True
+        
     
     # delete stuff
     if form.validate_on_submit() and thing_to_delete == "species" and can_delete == True:
@@ -995,17 +999,24 @@ def delete_object(thing_to_delete,id_obj):
     
     if form.validate_on_submit() and thing_to_delete == "population" and can_delete == True:
         version = Version.query.filter_by(population_id = population.id)
-        species_id = str(population.species.id)
+        publication_id = str(population.publication.id)
         for ver in version:
             db.session.delete(ver)
         db.session.delete(population)
         db.session.commit()
         flash('The population has been deleted')
-        return redirect("../species="+species_id+"/publications=all")
+        return redirect("../species=all/publications="+publication_id)
+    
+    if form.validate_on_submit() and thing_to_delete == "contact" and can_delete == True:
+        publication_id = str(contact.publication.id)
+        db.session.delete(contact)
+        db.session.commit()
+        flash('The contact has been deleted')
+        return redirect("../species=all/publications="+publication_id)
     
     if form.validate_on_submit() and thing_to_delete == "matrix" and can_delete == True:
         version = Version.query.filter_by(matrix_id = matrix.id)
-        species_id = str(matrix.population.species.id)
+        publication_id = str(matrix.population.publication.id)
         for ver in version:
             db.session.delete(ver)
         fixed = Fixed.query.filter_by(id = matrix.id)
@@ -1016,7 +1027,7 @@ def delete_object(thing_to_delete,id_obj):
         db.session.delete(matrix)
         db.session.commit()
         flash('The matrix has been deleted')
-        return redirect("../species="+species_id+"/publications=all")
+        return redirect("../species=all/publications="+publication_id)
     
     return render_template('data_manage/delete_confirm.html', form=form,can_delete = can_delete,obj_type = thing_to_delete)
         

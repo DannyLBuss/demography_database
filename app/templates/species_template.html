@@ -506,7 +506,7 @@
                             <h4>Contacting the authors</h4>
                             <ol>
                         {% for contac in publication.author_contacts %}
-                        <li><p><b>Date:</b> {{contac.date_contacted}} <b>Follow-up:</b> {{contac.date_contacted_again}} <b> To:</b> {{contac.corresponding_author}} ({{contac.corresponding_author_email}}) <b>Contacted by:</b> {{contac.contacting_user_id}} <a href="../../data-manage/contact/edit/{{contac.id}}/publication={{publication.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit contact</a> </p>
+                        <li><p><b>Date:</b> {{contac.date_contacted}} <b>Follow-up:</b> {{contac.date_contacted_again}} <b> To:</b> {{contac.corresponding_author}} ({{contac.corresponding_author_email}}) <b>Contacted by:</b> {{contac.contacting_user_id}} <a href="../../data-manage/contact/edit/{{contac.id}}/publication={{publication.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit contact</a> <a href="../../data-manage/delete/contact/{{contac.id}}"><span class="glyphicon glyphicon-trash"></span> Delete contact</a> </p>
                         <p><b>Missing data asked for:</b> {{contac.correspondence_email_content}}</p>
                         <p><b>Extra missing content asked for (optional):</b> {{contac.extra_email_content}}</p>
                         <p> <b>Author reply?: </b>{{contac.author_reply}}</p></li>
