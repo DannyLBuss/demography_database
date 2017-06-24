@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+
+<div class="page-header">
+	<h1>
+		What is a lifecycle?
+		<br><br>
+		<div class="footer"><img src="/../../static/images/lifecycle_example.png" width= "350" height="70" alt="hi"/>
+		</div>
+	</h1>
+</div>
+<div class="info_box">
+	<h2>Introduction</h2>
+</div>
+<div class="info_box_green">
+	<h2>Lifecycle of the European Badger, <i> Meles meles </i></h2>
+		<h4><i> by Anna Sambrook </i></h4>
+</div>
+<div class="info_box_green">
+	<h2>Lifecycle of the ? ?, <i> ? ? </i></h2>
+		<h4><i> by Danny Buss </i></h4>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

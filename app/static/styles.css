@@ -18,6 +18,10 @@ div.post-tabs ul.posts {
     margin: 0px;
     border-top: none;
 }
+div.pdf-link {
+    font-style: bold;
+    color: rgb(170, 170, 164);
+}
 ul.posts li.post {
     padding: 8px;
     border-bottom: 1px solid #e0e0e0;

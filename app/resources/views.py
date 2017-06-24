@@ -9,6 +9,16 @@ from .. import db
 def education():
     return render_template('resources/education_pages/education.html')
 
+# r resources
+@resources.route('/r_resources')
+def r_resources():
+    return render_template('resources/education_pages/r_resources.html')
+
+# lifecycles
+@resources.route('/lifecycles')
+def lifecycles():
+    return render_template('resources/education_pages/lifecycles.html')
+
 # education ppm
 @resources.route('/education_ppm')
 def education_ppm():

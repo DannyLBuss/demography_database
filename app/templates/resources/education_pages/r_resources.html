@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+
+<div class="page-header">
+	<h1>
+		Useful <a href="https://www.rstudio.com/products/rstudio/download2/" target="_blank"><img src="/../../static/images/RStudio.png" width= "70" height="70" alt="hi" /></a> packages for demographic analyses
+	</h1>
+		<div class="post-footer"><h5><i>Don't have<img src="/../../static/images/R.jpeg" width= "70" height="80" alt="hi" />- download it <a href="https://cran.r-project.org/bin/" target="_blank">here</a></h5>
+		</div></i>
+</div>
+<div class="info_box_green">
+	<h2>Pop Demo</h2>
+			<div class="pdf-link">
+				<h7>(Download PDF <a href="https://cran.r-project.org/web/packages/popdemo/popdemo.pdf" target="_blank">here)</a><h7>
+			</div>
+		<h5><i> by Iain Stott, Dave Hodgson, Stuart Townley </i></h5>
+				<div class="comment-content">
+					<p>
+						This package provides a set of tools designed for modelling population demography using population projection matrix (PPM) models. The focus is mainly on indices of transient dynamics, and the use of control theory (specifically transfer functions). However, popdemo includes a number of tools focussing on other areas of demographic modelling. Some tools may prove useful to anyone working with projection matrix models of any type, or indeed matrices in general. The package is designed to build on those tools already available in popbio.
+					</p>
+				</div>	
+</div>
+<div class="info_box_red">
+	<h2>Pop Bio</h2>
+			<div class="pdf-link">
+				<h7>(Download PDF <a href="https://cran.r-project.org/web/packages/popbio/popbio.pdf" target="_blank">here)</a><h7>
+			</div>
+		<h5><i> by Chris Stubben, Brook Milligan, Patrick Nantel </i></h5>
+				<div class="comment-content">
+					<p>
+						Popbio is a package for the construction and analysis of matrix population models. First, the package consists of the R translation of Matlab code found in Caswell (2001) or Morris and Doak(2002). A list of converted functions within each book can be accessed using help(Caswell) and help(Morris) within R, or by following the links to 02.Caswell and 03.Morris from the help content pages.
+						<br><br>
+						Second, the popbio package includes functions to estimate vital rates and construct projection matrices from raw census data typically collected in plant demography studies. In these studies, vital rates can often be estimated directly from annual censuses of tagged individuals using transition frequency tables. To estimate vital rates in animal demography using capture-recapture methods, try the Rcapture or mra package instead.
+						<br><br>
+						Finally, the package includes plotting methods and sample datasets consisting of either published projection matrices or annual census data from demography studies. Three sample demonstrations illustrate some of the package capabilities (Caswell, fillmore and stage.classify).
+						<br><br>
+						A description of the package in the Journal of Statistical Software is available <a href="http://www.jstatsoft.org/v22/i11">here</a>.
+					</p>
+				</div>	
+</div>
+<div class="info_box">
+	<h2>Mage</h2>
+			<div class="pdf-link">
+				<h7>(Visit Github Site <a href="https://github.com/jonesor/compadreDB/tree/master/Mage" target="_blank">here)</a><h7>
+			</div>
+		<h5><i> by Owen Jones and Rob Salguero-Gomez</i></h5>
+				<div class="comment-content">
+					<p>This package contains utility functions for interacting with the COMPADRE and COMPADRE matrix databases and performing ageing focussed analyses.
+					<br><br>
+					Note that this package is at an early stage of development. Expect bugs!
+					<br><br>
+					To download the Compadre and Comadre R Objects, please visit the database downloads page <a href="{{ url_for('main.comingsoon')}}">here.</a>
+					</p>
+				</div>	
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

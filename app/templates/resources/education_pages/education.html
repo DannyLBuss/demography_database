@@ -8,44 +8,31 @@
 
 <div class="page-header">
 <h1>
-Are you interested in learning about demography and it's applications? Then check out our education pages below!
-</h1>
+Are you interested in learning about demography and it's applications?</h1><h2><i> Then check out our education pages below!
+<i></h2>
 </div>
-<div class = "info_box">
+<div class = "info_box_green">
 <h3> What is a life cycle? </h3>
 	<h4><i> by Danny Buss </i></h4>
-		<p>Need to add links to education_pages/life_cycle.html
-			<br><br><i> image coming soon </i><br></p>
-				<!--img src="/../../static/images/#" width= "500" height="50" alt="hi" /> -->
+		<a href="{{ url_for('resources.lifecycles') }}">Lifecycles</a>
+			<div class="centred">
+				<img src="/../../static/images/lifecycle_example.png" width= "500" height="100" alt="hi" />
+			</div>
 </div>
-<div class = "info_box_red"> 
+<div class = "info_box"> 
 <h3> What is a population projection matrix (PPM)? </h3>
 	<h4><i> by Iain Stott </i></h4>
-		<p>Need to add links to education_pages/education_matrix_modelling.html</p>
+		<a href="{{ url_for('resources.education_ppm') }}">What is a Matrix Model?</a>
 </div>
-<div class = "info_box_green">
-<h3>What is an integral projection model?</h3>
-	<h4><i> by Iain Stott and Danny Buss </i></h4>
-		<p>Need to add links to education_pages/IPMs.html
-			<br><br><i> image coming soon </i><br></p>
-</div>
-<div class = "info_box">
-<h3> Helpful Tools </h3>
-	<h4><i> by Danny Buss </i></h4>
-		<p>Need to add links to education_pages/helpful_tools.html
-			<br><br><i> image coming soon </i><br></p>
-				<!--img src="/../../static/images/#" width= "500" height="50" alt="hi" /> -->
-</div>
-<div class = "info_box_red"> 
+<div class = "info_box_green"> 
 <h3> Handy R Packages </h3>
 	<h4><i> by Danny Buss </i></h4>
-		<p>Need to add links to education_pages/r_packages.html</p>
+		<a href="{{ url_for('resources.r_resources') }}">R Packages and Information</a>
 </div>
-<div class = "info_box_green">
+<div class = "info_box">
 <h3> Demography Publications </h3>
 	<h4><i> handpicked by Rob Salguero-Gomez and Owen Jones </i></h4>
-		<p>Need to add links to resources/publications.html
-			<br><br><i> image coming soon </i><br></p>
+		<a href="{{ url_for('resources.publications') }}">Publications</a>
 </div>
 
 {% endblock %}
