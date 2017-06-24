@@ -67,23 +67,25 @@ def edit_institute_admin(id):
         institute.main_contact_email = form.main_contact_email.data
         institute.main_contact_name = form.main_contact_name.data
         institute.institution_address = form.institution_address.data
+        institute.head_compadrino = form.head_compadrino.data
         institute.research_group = form.research_group.data
-        institute.date_joined = form.email.data
+        institute.date_joined = form.date_joined.data
         institute.department = form.department.data
         institute.country = form.country.data
         institute.website = form.website.data
         db.session.commit()
 
-        flash('The profile has been updated.')
-        return redirect(url_for('admin.institute_page'))
+        flash('The institute profile has been updated.')
+        return redirect(url_for('admin.institutes_page'))
     
     form.institution_name.data = institute.institution_name
     form.institution_short.data = institute.institution_short
     form.main_contact_email.data = institute.main_contact_email 
     form.main_contact_name.data = institute.main_contact_name
     form.institution_address.data = institute.institution_address
+    form.head_compadrino.data = institute.head_compadrino
     form.research_group.data = institute.research_group
-    #form.email.data = institute.date_joined 
+    form.date_joined.data = institute.date_joined 
     form.department.data = institute.department
     form.country.data = institute.country 
     form.website.data = institute.website 
@@ -105,7 +107,8 @@ def new_institute_admin():
         institute.main_contact_name = form.main_contact_name.data
         institute.institution_address = form.institution_address.data
         institute.research_group = form.research_group.data
-        #institute.date_joined = form.email.data
+        institute.head_compadrino = form.head_compadrino.data
+        institute.date_joined = form.date_joined.data
         institute.department = form.department.data
         institute.country = form.country.data
         institute.website = form.website.data
