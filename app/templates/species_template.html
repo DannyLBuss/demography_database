@@ -79,22 +79,20 @@
             <li class="dropdown-header">Species information</li>
             <li><a href="../../data-manage/species/edit/{{species.id}}" ><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
             <li><a href="../../data-manage/species/{{species.id}}/edit-history">View edits</a></li>
-            <li><a target="_blank" href="../../data-manage/version/edit/{{species.version.id}}">Update status</a></li>
+            <li><a href="../../data-manage/version/edit/{{species.version.id}}" onclick="window.open('../../data-manage/version/edit/{{species.version.id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
             <li><a href="../../data-manage/delete/species/{{species.id}}"><span class="glyphicon glyphicon-trash"></span> Delete species + taxonomy + traits</a></li>
             <li class="dropdown-header">Taxonomy</li> {% if species.taxonomy %}
             <li><a href="../../data-manage/taxonomy/edit/{{species.taxonomy[0].id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
             <li><a href="../../data-manage/taxonomy/{{species.taxonomy[0].id}}/edit-history">View edits</a></li>
-            <li><a target="_blank" href="../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}">Update status</a>
-            </li>
+            <li><a href="../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}', 'newwindow','width=800,height=600');return false;">Update status</a></li>
             {% else %}
             <li><a href="../../data-manage/taxonomy/new/0/species={{species.id}}">Add taxonomy</a></li> {% endif %}
             <li class="dropdown-header">Species Traits</li> {% if species.trait %}
             <li><a href="../../data-manage/traits/edit/{{species.trait[0].id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
             <li><a href="../../data-manage/traits/{{species.trait[0].id}}/edit-history">View edits</a></li>
-            <li><a target="_blank" href="../../data-manage/version/edit/{{species.trait[0].version[0].id}}">Update status</a></li>
+            <li><a href="../../data-manage/version/edit/{{species.trait[0].version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{species.trait[0].version[0].id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
             {% else %}
             <li><a href="../../data-manage/traits/new/0/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
-            
     </div> {% endif %}
     <h1><i>{{species.species_accepted}}</i> {% if can_edit == True %} <small> {{species.id}}-{{species.version.statuses}}-{{species.version.checked}}</small> {%endif%} </h1>
     <div class="row">
@@ -242,7 +240,7 @@
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li><a href="../../data-manage/population/edit/{{population.id}}/species={{population.species.id}}/publication={{population.publication.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit population</a></li>
                     <li><a href="../../data-manage/population/{{population.id}}/edit-history">View edits</a></li>
-                    <li><a target="_blank" href="../../data-manage/version/edit/{{population.version[0].id}}">Update status</a>
+                    <li><a href="../../data-manage/version/edit/{{population.version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{population.version[0].id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
                     <li><a href="../../data-manage/matrix/new/0/population={{population.id}}">Add new matrix</a></li>
                     <li><a href="../../data-manage/delete/population/{{population.id}}"><span class="glyphicon glyphicon-trash"></span> Delete population</a></li>
                 </ul>
@@ -366,7 +364,7 @@
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li><a href="../../data-manage/matrix/edit/{{matrix.id}}/population={{population.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit matrix</a></li>
                                             <li><a href="../../data-manage/matrix/{{matrix.id}}/edit-history">View edits</a></li>
-                                            <li><a target="_blank" href="../../data-manage/version/edit/{{matrix.version[0].id}}">Update status</a></li>
+                                            <li><a href="../../data-manage/version/edit/{{matrix.version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{matrix.version[0].id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
                                             <li><a href="../../data-manage/delete/matrix/{{matrix.id}}"><span class="glyphicon glyphicon-trash"></span> Delete matrix</a></li>
                                         </ul>
                                     </div> {% endif %} </ul>
@@ -416,7 +414,7 @@
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li><a href="../../data-manage/fixed/edit/{{matrix.fixed[0].id}}/matrix={{matrix.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit SPAND_EX data</a></li>
                                             <!--<li><a href="../../data-manage/population/{{population.id}}/edit-history">View edits</a></li>-->
-                                            <li><a target="_blank" href="../../data-manage/version/edit/{{matrix.fixed[0].version[0].id}}">Update status</a>
+                                            <li><a href="../../data-manage/version/edit/{{matrix.fixed[0].version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{matrix.fixed[0].version[0].id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
                                         </ul>
                                     </div> 
                                     {% endif %}
@@ -492,7 +490,7 @@
 
             <li><a href="../../data-manage/publication/edit/{{publication.id}}" > <span class="	glyphicon glyphicon-pencil"></span> Edit publication</a></li>
             <li><a href="../../data-manage/publication/{{publication.id}}/edit-history">View edits</a></li>
-            <li><a target="_blank" href="../../data-manage/version/edit/{{publication.version[0].id}}">Update status</a></li>
+            <li><a href="../../data-manage/version/edit/{{publication.version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{publication.version[0].id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
             <li><a href="../../data-manage/delete/publication/{{publication.id}}"><span class="glyphicon glyphicon-trash"></span> Delete publication</a></li>
         </ul>
     </div> {% endif %}
@@ -750,6 +748,5 @@
     notmap.innerHTML = notmap.innerHTML.replace(/-Pending-/g, '-<span class="glyphicon glyphicon-flag" style="color:DarkOrchid"></span>-');
     notmap.innerHTML = notmap.innerHTML.replace(/-Red-/g, '-<span class="glyphicon glyphicon glyphicon-remove" style="color:red"></span>-');
 </script>
- 
 
 {% endblock %}

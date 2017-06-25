@@ -6,8 +6,8 @@
 {% block page_content %}
 <div class="page-header">
     <h1>Update status</h1>
-    <h3><a href="" onclick="goBack()"> <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back to previous page - changes will NOT be saved</a></h3>
 
+    <h3><i>Please update the status of the object and then close this window and refresh previous page</h3>
 </div>
 <form method="post" role="form">
     <div class="form">
@@ -33,16 +33,12 @@
         
     </div>
 </div>
-
-
-{% endblock %}
-{% block scripts %}
-
-    
+</form>
 <script>
-
+ 
     function goBack() {
         window.history.go(-1);
     }
 </script>
+
 {% endblock %}
