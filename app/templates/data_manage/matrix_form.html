@@ -303,7 +303,7 @@
         $(('#').concat(whichmatrix.concat('smart-input'))).append('<br>');
         $(('#').concat(whichmatrix.concat('smart-input'))).append("<p><strong>Before changes:</strong></p>")
         document.getElementById(whichmatrix.concat("smart-input")).appendChild(table_before_edit); //append table to div
-        $(('#').concat(whichmatrix.concat('smart-input'))).append("<p><strong>After changes:</strong></p>")
+        $(('#').concat(whichmatrix.concat('smart-input'))).append("<p><strong>After changes:</strong><br><br><i>Please note: only enter a string of numbers with spaces between matrix entries, do not include any non-numeric characters. E.g. 0 0 0.13 0.272 0.825 0.056 0 0.013 0.908</i></p>")
         $(('#').concat(whichmatrix.concat('smart-input'))).append("<div class=\"form-group\"><input type=\"text\" class=\"form-control\" id=\""+whichmatrix+"pastebox\" placeholder=\"Paste from excel\"><button type=\"button\" onclick=\"Javascript:pastemat('"+whichmatrix+"')\" class=\"btn btn-default\">Input</button></div>");
         
         document.getElementById(whichmatrix.concat("smart-input")).appendChild(table); //append table to div
