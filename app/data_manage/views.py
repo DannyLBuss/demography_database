@@ -727,7 +727,7 @@ def matrix_form(id,edit_or_new,pop_id):
         matrix.class_organized = form.class_organized.data
         matrix.class_number = form.class_number.data
         matrix.studied_sex = form.studied_sex.data
-        matrix.captivity_id = form.captivity_id.data
+        matrix.captivities = form.captivity_id.data
         matrix.matrix_dimension = form.matrix_dimension.data
         matrix.observations = form.observations.data
         
@@ -745,7 +745,6 @@ def matrix_form(id,edit_or_new,pop_id):
         
         
         if edit_or_new == "new":
-            db.session.flush()
             matrix.population_id = population.id
             db.session.add(matrix)
             db.session.commit()
@@ -803,7 +802,7 @@ def matrix_form(id,edit_or_new,pop_id):
     form.class_organized.data = matrix.class_organized
     form.class_number.data = matrix.class_number
     form.studied_sex.data = matrix.studied_sex
-    form.captivity_id.data = matrix.captivity_id
+    form.captivity_id.data = matrix.captivities
     form.observations.data = matrix.observations
     
     form.matrix_difficulty.data = matrix.matrix_difficulty
@@ -1139,6 +1138,11 @@ def csv_export():
 @data_manage.route('/591514wdjfgw43qrt34r4w5r274rrollback')
 def rollback():  
     db.session.rollback()
+    return ("Rollback successful")
+
+@data_manage.route('/591514wdjfgw43qrt34r4w5r274rrollbackerror')
+def rollbackerror():  
+    Session.rollback()
     return ("Rollback successful")
 
 
