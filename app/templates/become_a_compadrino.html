@@ -45,10 +45,17 @@
         </p>
         </td></tr>
         <tr>
-          <td align="left"><p>
-          {{ form.submit }}
-        </p>
-        </td></tr>
+          {% if current_user.is_anonymous%}
+          <h5><bold>Please log in to submit form</bold></h5>
+          {% endif %}
+          {% if current_user.is_authenticated %}
+          <td align="left">
+            <p>
+            {{ form.submit }}
+            </p>
+          </td>
+          {% endif %}
+        </tr>
       </form>
     </table>
 </body>
