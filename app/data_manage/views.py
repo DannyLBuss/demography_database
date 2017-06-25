@@ -56,7 +56,7 @@ def version_form(id):
         version.checked_count = form.checked_count.data
         db.session.commit()
         
-        flash('Version has been updated')
+        flash('Status has been updated, please close this window and refresh the previous page')
         
     form.checked.data = version.checked
     form.status.data = version.statuses
