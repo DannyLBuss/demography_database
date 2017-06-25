@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Contact</title>
+</head>
+<body>
+    <h1>Report an Error</h1>
+    <br>
+    <div class = "info_box">
+    <h4>Having problems with the website? Please fill in the contact form below:</h4>
+    
+    <h3>Report an Error Form:</h3><br>
+    <table>
+    <form action="/error-form" method="post">
+          {{ form.hidden_tag() }}
+        <tr>
+          <td align="right"><p>
+          {{ form.name.label }}
+          {{ form.name }}
+        </p>
+      </td></tr>
+        <tr>
+          <td align="right"><p>
+          {{ form.email.label }}
+          {{ form.email }}
+        </p>
+        </td></tr>
+        <tr>
+          <td align="right"><p>
+          {{ form.subject.label }}
+          {{ form.subject }}
+        </p>
+        </td></tr>
+        <tr>
+          <td align="right"><p>
+          {{ form.message.label }}
+          {{ form.message }}
+        </p>
+        </td></tr>
+        <tr>
+          <td align="left">
+            <p>
+            {{ form.submit }}
+            </p>
+          </td>
+        </tr>
+      </form>
+    </table>
+</body>
+</div>
+</html>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

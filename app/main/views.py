@@ -341,6 +341,29 @@ def become_a_compadrino():
     elif request.method == 'GET':
         return render_template('become_a_compadrino.html', form=form)
 
+### Report a Website Error Form
+@main.route('/error-form', methods=('GET', 'POST'))
+def error_form():
+    form = ContactForm()
+    if request.method == 'POST':
+        if form.validate() == False:
+            flash('All fields are required.')
+            return render_template('Error_form.html', form=form)
+        else:
+            msg = Message("Demography Database Message from your visitor " + form.name.data,
+                          sender='YourUser@NameHere',
+                          recipients=['spandex.ex@gmail.com', 'd.l.buss@exeter.ac.uk', 'demographydatabase@gmail.com'])
+            msg.body = """
+            From: %s <%s>,
+            Subject: %s
+            Message: %s
+            """ % (form.name.data, form.email.data, form.subject.data, form.message.data)
+            mail.send(msg)
+            flash('Successfully  sent message! Thank you for reporting the error, we will try and fix this as soon as possible. If the problem persists please resend your enquiry after 10 working days.')
+            return render_template('Error_form.html', form=form)
+    elif request.method == 'GET':
+        return render_template('Error_form.html', form=form)
+
 ### Help Develop Site Form
 @main.route('/help-develop-site', methods=('GET', 'POST'))
 def help_develop_site():
