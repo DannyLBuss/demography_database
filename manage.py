@@ -523,7 +523,7 @@ def submit_new(data):
     database_source = Institute.query.filter_by(institution_name=data["study_database_source_id"]).first()
 
     
-    pop = Population.query.filter_by(population_name=data["population_name"], publication_id=publication.id).first()
+    pop = Population.query.filter_by(population_name=data["population_name"], publication_id=publication.id, species_id=species.id).first()
 
     if pop == None:
         pop_dict = {'population_name' : data["population_name"],       
