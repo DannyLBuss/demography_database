@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<html lang="en">
+  <head>
+  	<div class="page-header">
+   		<h1>
+    		Download demography databases 
+    	</h1>
+    </div>
+    	    {% if current_user.is_anonymous %}
+    	    <h2><col="red"> please login to access files </col></h2>
+    	    {% endif %}
+    	    {% if current_user.is_authenticated %}
+    	    <div class="info_box">
+    	    	    <div class="row">
+        				<div class="col-sm-4">
+      						<h3>Compadre</h3>
+        						<ul>
+        							<li><h5>Download Compadre 4.0.0</h5>
+        								<a href="{{url_for('main.download_zip4')}}" target="blank"><button class='btn btn-default'>Download Compadre 4.0.0</button></a>
+        							</li>
+        							<li><h5>Download Compadre 3.2.1</h5>
+        								<a href="{{url_for('main.download_zip5')}}" target="blank"><button class='btn btn-default'>Download Compadre 3.2.1</button></a>
+        							</li>
+        							<li><h5>Download Compadre 3.2.0</h5>
+        								<a href="{{url_for('main.download_zip6')}}" target="blank"><button class='btn btn-default'>Download Compadre 3.2.0</button></a>
+        							</li>
+        							<li><h5>Download Compadre 3.0.0</h5>
+        								<a href="{{url_for('main.download_zip7')}}" target="blank"><button class='btn btn-default'>Download Compadre 3.0.0</button></a>
+        							</li>
+        						</ul>
+        				</div>
+        				<div class="col-sm-4">
+            				<h3>Comadre</h3>
+            					<ul>
+        							<li><h5>Download Comadre 2.0.0</h5>
+        								<a href="{{url_for('main.download_zip')}}" target="blank"><button class='btn btn-default'>Download Comadre 2.0.0</button></a>
+        							</li>
+        							<li><h5>Download Comadre 1.0.0</h5>
+        								<a href="{{url_for('main.download_zip8')}}" target="blank"><button class='btn btn-default'>Download Comadre 1.0.0</button></a>
+        							</li>
+        						</ul>
+        				</div>
+        			{% if current_user.role_id in [1,4] %}
+        				<div class="col-sm-4">
+        					<h3>Admin use only</h3>
+        						<ul>
+        							<li><h5>Download Comadre X.X.X</h5>
+        								<a href="{{url_for('main.download_zip2')}}" target="blank"><button class='btn btn-default'>Download Comadre X.X.X</button></a>
+        							</li>
+        							<li><h5>Download Compadre X.X.X</h5>
+        								<a href="{{url_for('main.download_zip3')}}" target="blank"><button class='btn btn-default'>Download Comadre X.X.X</button></a>
+        							</li>
+        							<br><br><br>
+        							<li><h5>Download All Files (zipped)</h5>
+        								<a href="{{url_for('main.download_all')}}"><button class='btn btn-default'>DOWNLOAD ALL FILES AS ZIP</button></a>
+        							</li>
+        						</ul>
+        				</div>
+        			</div>
+        	</div>
+        			{% endif %}
+        	{% endif %}
+</html>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
+<!DOCTYPE html>

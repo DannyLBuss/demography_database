@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<html lang="en">
+  <head>
+    <h1>
+    	<title>
+    		Download demography database sql dump
+    	</title>
+    	    </h1>
+    	    {% if current_user.is_anonymous %}
+    	    <h2><col="red"> Administrators only - please login to access files </col></h2>
+    	    {% endif %}
+    	    {% if current_user.is_authenticated %}
+                {% if current_user.role_id in [1,4] %}
+      			<body class="body">
+        			<div class="container" align="left">
+        				<h2>Download SQL Database Dump (Updated daily)</h2>
+        					<a href="{{url_for('main.download_sql')}}" target="blank"><button class='btn btn-default'>SQL Dump</button></a>
+        			</div>
+                {% endif %}
+            {% endif %}
+</html>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
+<!DOCTYPE html>
