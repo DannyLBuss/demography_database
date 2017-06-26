@@ -471,10 +471,28 @@ def download_zip3():
     file_name = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMPADRE_v_xxx.RData'
     return send_file(file_name, as_attachment=True, mimetype='text/plain')
 
-#Download COMPADRE 4.0.1
+#Download COMPADRE 4.0.0
 @main.route('/download-zip4/', methods=['GET', 'POST'])
 def download_zip4():
     file_name = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMPADRE_v_4_0_1.RData'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
+
+#Download COMPADRE 3.2.1
+@main.route('/download-zip5/', methods=['GET', 'POST'])
+def download_zip5():
+    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMPADRE_v_3_2_1.RData'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
+
+#Download COMPADRE 3.2.0
+@main.route('/download-zip6/', methods=['GET', 'POST'])
+def download_zip6():
+    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMPADRE_v_3_2_0.RData'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
+
+#Download COMPADRE 3.0.0
+@main.route('/download-zip7/', methods=['GET', 'POST'])
+def download_zip7():
+    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMPADRE_v_3_0_0.RData'
     return send_file(file_name, as_attachment=True, mimetype='text/plain')
 
 #Download current SQL Dump (This gets updated Daily)
