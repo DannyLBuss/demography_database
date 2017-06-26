@@ -12,6 +12,7 @@ from ..models import Permission, Role, User, \
                     Publication, AuthorContact, AdditionalSource, Population, Stage, StageType, Treatment, \
                     MatrixStage, MatrixValue, Matrix, Interval, Fixed, Small, CensusTiming, Status, PurposeEndangered, PurposeWeed, Institute, ChangeLogger, Version, DigitizationProtocol
 from ..decorators import admin_required, permission_required, crossdomain
+import re
 
 import random
 def gen_hex_code():
@@ -1108,7 +1109,8 @@ def csv_export():
         
         # Grab all of the parent objects
         matrix = matrix
-        fixed = matrix.fixed[0]
+        if matrix.fixed:
+            fixed = matrix.fixed[0]
         population = matrix.population
         publication = population.publication
         species = population.species
@@ -1124,16 +1126,19 @@ def csv_export():
             headings = [key for key in entry.keys()]
             headings = str(headings)
             w_file.write(headings[1:-1] + '\n')
+            
+        entry = str(entry.values())
         
         # cleaning
         # remove quotes from strings
         # remove u from unicode strings
-        #  [<taxonomy 1l="">] to 1
+        #[<taxonomy 1l="">] to 1
         # remove L from numbers
         # study purposes
         # remove fields we don't want
         # date time
-        entry = str(entry.values())
+        
+        #re.sub("u'","",entry)
         
         w_file.write(entry[1:-1] + '\n')
                      
