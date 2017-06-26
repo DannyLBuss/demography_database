@@ -63,6 +63,34 @@
                 </div>
             <div class="col-md-3">
                 <h3>Map legend</h3>
+                <p><b>Populations</b></p>
+                <div class="row">
+                    <div class="col-xs-2">
+                        <img src="../../../../static/images/marker.png" class = "img-responsive">
+                    </div>
+                    <div class="col-xs-10">
+                        <p>Each marker represents a population that was studied. Different colours ({% for pub in publications%}
+<span class="glyphicon glyphicon-map-marker" style="color:{{pub.colour}};"></span> 
+                    {% endfor%}) represents data from different sources.</p>
+                    </div>
+                
+                </div>
+
+                    
+                
+                <p><b>Occurence data</b></p>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <img src="../../../../static/images/map.png" class = "img-responsive">
+                    </div>
+                    <div class="col-xs-8">
+                        <p>GBIF species occurence data</p>
+                    </div>
+                    
+                </div>
+                <br>
+                <p>Use the selector on the right-hand side of the map to choose between species</p>
+                <p>This data is from the Global Biodiversity Information Facility (GBIF), learn more about this <a href ="http://www.gbif.org">here.</a></p>
             </div>
         </div>
     </div>
