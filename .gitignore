@@ -3,6 +3,9 @@
 # C extensions
 *.so
 
+*twitter_auth*
+twitter.py
+
 config.py
 *config*
 

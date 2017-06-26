@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Demography Database - Login{% endblock %}
+
+{% block page_content %}
+<html>
+    <div class="page-header">
+        <h1>Login</h1>
+    </div>
+    <body>
+        <h1>Twitter Signin Test</h1>
+        {% for message in get_flashed_messages() %}
+            <p><b>Error</b>: {{ message }}</p>
+        {% endfor %}
+        {% if current_user.is_authenticated %}
+            <h2>Hi, {{ current_user.nickname }}!</h2>
+            <p><a href="{{ url_for('logout') }}">Logout</a></p>
+        {% else %}
+            <h2>I don't know you!</h2>
+            <p><a href="{{ url_for('oauth_authorize', provider='twitter') }}">Login with Twitter</a></p>
+        {% endif %}
+    </body>
+</html>
+{% endblock %}
