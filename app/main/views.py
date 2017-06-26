@@ -495,6 +495,12 @@ def download_zip7():
     file_name = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMPADRE_v_3_0_0.RData'
     return send_file(file_name, as_attachment=True, mimetype='text/plain')
 
+#Download COMPADRE 3.0.0
+@main.route('/download-zip8/', methods=['GET', 'POST'])
+def download_zip8():
+    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMADRE_v_1_0_0.RData'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
+
 #Download current SQL Dump (This gets updated Daily)
 #!!!On server file is /var/www/demography-database/alchemydumps/demography-database.sql
 @main.route('/download-sql/', methods=['GET', 'POST'])
