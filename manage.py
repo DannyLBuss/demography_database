@@ -204,11 +204,11 @@ def data_clean(data):
     incomplete = True if 'NDY' in data.values() else False
     kwargs = {key: val for key, val in data.items() if val != 'NDY'}
     amber = Status.query.filter_by(status_name="Amber").first()
-    pending = Status.query.filter_by(status_name="Pending").first()
+    green = Status.query.filter_by(status_name="Green").first()
     #kwargs['version_ok'] = 0 if incomplete else 1
     #kwargs['version_original'] = 1
     #kwargs['version_latest'] = 1
-    return {'kwargs' : kwargs, 'status' : amber if incomplete else pending}
+    return {'kwargs' : kwargs, 'status' : amber if incomplete else green}
 
 def version_data(cleaned):
     version =  {'checked' : False, 

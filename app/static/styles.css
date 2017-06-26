@@ -415,6 +415,9 @@ body {
     background-color:rgba(173, 173, 173, 0.31);
 }
 
+.glyphicon-question-sign{
+    color:rgba(128, 128, 128, 0.46);
+}
 
 #matrix_a_matrixtable {background-color:#FFFFFF;text-align: center;}
 #matrix_u_matrixtable {background-color:#FFFFFF;text-align: center;}

@@ -1,4 +1,5 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
+<p>Rollover the smaall question marks (like this one: <span data-toggle="tooltip" data-placement="top" title='Hello world!' class="nounderline glyphicon glyphicon-question-sign"></span>) for information about the data presented here.</p>
 {% if can_edit == true %}
 <button type="button" class="btn btn-primary pull-right" data-toggle="collapse" href="#compadrino_box"><span class="glyphicon glyphicon-wrench"></span> Show/hide publication summary </button>
 <div id="compadrino_box" class='panel-collapse collapse'>
@@ -138,7 +139,7 @@
         {% endif %}
         {%if species.iucn_status  %}
         <div class="col-sm-8">
-            <p><b>IUCN status: </b>{{ species.iucn_status.status_name }}</p>
+            <p><b>IUCN status <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span>: </b>{{ species.iucn_status.status_name }}</p>
         </div>
         {% endif %}
     </div>
@@ -147,7 +148,7 @@
     <!-- BREADCRUMB -->
     {% for taxonomy in species.taxonomy %}
 
-            <p><b>Taxonomy: </b><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> &nbsp;&nbsp;&nbsp;&nbsp;  Authority: {{ taxonomy.authority }} &nbsp;&nbsp;&nbsp;&nbsp;{% if taxonomy.kingdom == "Plantae" %} TPL version: {{ taxonomy.tpl_version }}{% endif %} {% if can_edit == True %} <small> {{taxonomy.id}}-{{taxonomy.version[0].statuses}}-{{taxonomy.version[0].checked}}</small> {%endif%}</p>  
+            <p><b>Taxonomy: </b><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> &nbsp;&nbsp;&nbsp;&nbsp;  Authority <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span>  : {{ taxonomy.authority }} &nbsp;&nbsp;&nbsp;&nbsp;{% if taxonomy.kingdom == "Plantae" %} TPL version <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span>: {{ taxonomy.tpl_version }}{% endif %} {% if can_edit == True %} <small> {{taxonomy.id}}-{{taxonomy.version[0].statuses}}-{{taxonomy.version[0].checked}}</small> {%endif%}</p>  
             
         {% else %}
         <div class="info_box_empty"><p>No taxonomy</p>  <p> <a href="../../data-manage/taxonomy/new/0/species={{species.id}}"><span class="glyphicon glyphicon-plus-sign"></span> Add taxonomy information</a></p> </div>
@@ -175,39 +176,39 @@
     <div class="col-sm-4">  {% if species.trait %} {% for trait in species.trait %}
         <h3>Traits {% if can_edit == True %} <small> {{trait.id}}-{{trait.version[0].statuses}}-{{trait.version[0].checked}}</small> {%endif%}</h3>
         <table style="width:100%" class="table">
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_organism_type"] }}' class="nounderline">
-                <td> <strong>Growth Type: </strong> </td>
+            <tr >
+                <td> <strong>Growth Type <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["trait_organism_type"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> </td>
                 <td> {{ trait.organism_type.type_name }} </td>
             </tr>
             {% if species.taxonomy %}
             {% if species.taxonomy[0].kingdom == "Plantae" %}
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_reproductive_repitition"] }}' class="nounderline">
-                <td> <strong>Reproductive Repetition:</strong> </td>
+                <td> <strong>Reproductive Repetition <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
                 <td> {{ trait.reproductive_repetition.repetition_name }} </td>
             </tr>
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_dicot_monoc"] }}' class="nounderline">
-                <td> <strong>Dicot/Monocot: </strong> </td>
+                <td> <strong>Dicot/Monocot <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> </td>
                 <td> {{ trait.dicot_monoc.dicot_monoc_name }} </td>
             </tr>
             
             
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_angio_gymno"] }}' class="nounderline">
-                <td> <strong>Angio/Gymnosperm: </strong> </td>
+                <td> <strong>Angio/Gymnosperm <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> </td>
                 <td> {{ trait.angio_gymno.angio_gymno_name }} </td>
             </tr>
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_growth_form_raunkiaer"] }}' class="nounderline">
-                <td> <strong>Growth Form Raunkiaer:</strong> </td>
+                <td> <strong>Growth Form Raunkiaer <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
                 <td> {{ trait.growth_form_raunkiaer.form_name }} </td>
             </tr>
             {% if exeter_data == True %} 
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_spand_ex_growth_type"] }}' class="nounderline">
-                <td> <strong>SPAND_EX growth type:</strong> </td>
+                <td> <strong>SPAND_EX growth type <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
                 <td> {{ trait.spand_ex_growth_types.type_name }} </td>
             </tr>
             {% endif %}
             {% endif %}
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["species_gisd_status"] }}' class="nounderline">
-                <td> <strong>Invasive (GISD Status):</strong> </td>
+                <td> <strong>Invasive (GISD Status) <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
                 <td> {{ trait.species_gisd_status }} </td>
             </tr>
             
@@ -215,13 +216,13 @@
             {% if species.taxonomy[0].kingdom == "Plantae" %}
             {% if trait.species_seedbank %}
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["seedbank"] }}' class="nounderline">
-                <td> <strong>Seedbank: </strong> </td>
+                <td> <strong>Seedbank <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> </td>
                 <td> {{ trait.species_seedbank }} </td>
             </tr>
             {% endif %}
             {% if trait.species_clonality %}
             <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["clonality"] }}' class="nounderline">
-                <td> <strong>Clonality:</strong> </td>
+                <td> <strong>Clonality <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
                 <td> {{ trait.species_clonality }} </td>
             </tr>
             {% endif %}
@@ -286,7 +287,7 @@
             <h4><strong>Population Name: </strong>{{ population.population_name }} {% if can_edit == True %} <small> {{population.id}}-{{population.version[0].statuses}}-{{population.version[0].checked}}</small> {%endif%} <span class="label label-default">{{ population.matrices | count }} matrices</span> <span class="label label-default">{{ population.study_start }} - {{ population.study_end }}</span> <span class="label label-default"> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </span> </h4>
             <table style="width:100%", class="table">
                 <tr>
-                    <td ><strong>Ecoregion: </strong> {{ population.ecoregion.ecoregion_description }}   </td>
+                    <td ><strong>Ecoregion <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> {{ population.ecoregion.ecoregion_description }}   </td>
                     <td >{% if population.longitude %}
                     <strong>Location: </strong><span class="coordinates {{species.species_accepted}} {{ population.matrices | length }} {{ population.id }}">{{ population.latitude }}, {{ population.longitude }}</span>  </td>
                     <td >{% if population.altitude %}<strong>Altitude: </strong><span>{{ population.altitude }}m</span>{% endif %}
@@ -294,7 +295,7 @@
                 {% else %}
                     No coordinates given
                 {% endif %}  </td>
-                    <td >{%if population.within_site_replication %}<b>Within site replication: </b> {{ population.within_site_replication }} {% endif %}
+                    <td >{%if population.within_site_replication %}<b>Within site replication <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </b> {{ population.within_site_replication }} {% endif %}
                         
                 </tr>
             </table>
@@ -345,10 +346,6 @@
                                 
                                 <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_seasonal"] }}' class="nounderline">
                                 <span class="label label-default">Seasonal: {{ matrix.seasonal }}</span>
-                                    </a>
-                                
-                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["survival_isssue"] }}' class="nounderline">
-                                <span class="label label-default">survival_issue: {{ matrix.survival_issue }}</span>
                                     </a>
                                 
                                 <!--
