@@ -12,6 +12,7 @@
 
         <input type="text" class="search form-control" placeholder="Search everything" id="big_search">
     </div>
+    <!--
     <div class="btn-group togglers" data-toggle="buttons">
             <label class="btn btn-default">
             <input type="checkbox" class="filter" data-value="Actinopterygii"/> Actinopterygii </label>
@@ -52,6 +53,7 @@
             <label class="btn btn-default">
             <input type="checkbox" class="filter" data-value="Tree"/> Tree </label>
         </div>
+-->
     <hr>
     <table class="table table2">
         <thead>
@@ -67,6 +69,7 @@
         </thead>
         <tbody class="list">
             {% for s in species %}
+            {% if can_edit == True or s.version.status_id == 3 %}
                 <tr>
                     {% for trait in s.trait %}
                     <td class="growthtype">{{ trait.organism_type }}</td>
@@ -80,6 +83,7 @@
                     {% endfor %}
                     <td class="species"><a href="../species={{ s.id }}/publications=all"><em>{{ s.species_accepted }}</em></a></td>
                 </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>

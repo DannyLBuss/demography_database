@@ -20,17 +20,17 @@
             <h3>Compadrino actions:</h3>
             <p>List of unclaimed publications</p>
             <p><a href="../publication/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new publication</a></p>
-            <p>Search by species</p>
+            <p><a href="{{ url_for('main.species_table') }}">Search by species</p>
             <p><a href="../../../data-manage/species/new/0"><span class="glyphicon glyphicon-plus-sign"></span> Add a new species</a></p>
             <p><a href= "{{ url_for('.useredits') }}">My edits</a></p>
-            <p><a href="{{ url_for('main.user', username=current_user.username) }}" target="_blank"><span class="glyphicon glyphicon-new-window"></span>View public profile</a></p>
+            <p><a href="{{ url_for('main.user', username=current_user.username) }}">View public profile</a></p>
         </div>
         {% if current_user.role_id == 1 %}
         <div class="info_box">
             <h3>Admin actions</h3>
             <p>Recent compadrino actions</p>
-            <p><a href="{{url_for('admin.new_institute_admin')}}"><span class="glyphicon glyphicon-plus-sign"></span>Add new institute</a></p>
-            <p><a href="{{ url_for('admin.institutes_page') }}"><span class="glyphicon glyphicon-new-window"></span>Edit institutions</a></p>
+            <p><a href="{{url_for('admin.new_institute_admin')}}"><span class="glyphicon glyphicon-plus-sign"></span> Add new institute</a></p>
+            <p><a href="{{ url_for('admin.institutes_page') }}"><span class="glyphicon glyphicon-pencil"></span> Edit institutions</a></p>
         </div>
         {% endif %}
     </div>

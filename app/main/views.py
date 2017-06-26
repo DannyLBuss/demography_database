@@ -142,15 +142,30 @@ def data():
 # the big table of species
 @main.route('/species-table/')
 def species_table():
-    # species = Species.query.all()
+    can_edit = False
+    try:
+        if current_user.role_id in [1,3,4,6]:
+            can_edit = True
+    except:
+        pass
+    
+    print can_edit
     species = Species.query.all()
-    return render_template('species_table_template.html', species=species)
+    return render_template('species_table_template.html', species=species,can_edit = can_edit)
 
 # the big table of publications
 @main.route('/publications-table/')
 def publications_table():
+    can_edit = False
+    try:
+        if current_user.role_id in [1,3,4,6]:
+            can_edit = True
+    except:
+        pass
+    
+    
     publications = Publication.query.all()
-    return render_template('publications_table_template.html', publications=publications)
+    return render_template('publications_table_template.html', publications=publications,can_edit = can_edit)
 
 ###############################################################################################################################
 ### OVERVIEW PAGES
@@ -224,14 +239,23 @@ def species_page(species_ids,pub_ids):
     all_species = list(set(all_species))
     publications = list(set(all_pubs))
     
-    # remove unchecked populations
+    # remove unchecked populations and matrices
     if can_edit == False:
         checked_pops = []
+        checked_mats = []
         waiting_list_note = False
 
         for population in populations:
             if population.version[0].status_id ==3:
-                checked_pops.append(population)
+                dont_append = False
+                
+                for mat in population.matrices:
+                    if mat.version[0].status_id !=3:
+                        dont_append = True
+                        waiting_list_note = True
+                
+                if dont_append == False:
+                    checked_pops.append(population)
             else:
                 waiting_list_note = True
                 

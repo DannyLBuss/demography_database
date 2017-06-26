@@ -67,9 +67,11 @@
         </div>
     </div>
 
+
 <div id="notmap">
     
     {% for species in all_species |sort(attribute='id')  %}
+    {% if can_edit == T or species.version.status_id == 3 %}
     <div>
         
         <!-- compadrino actions for top part of page -->
@@ -96,7 +98,10 @@
             <li><a href="../../data-manage/traits/new/0/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
     </div> {% endif %}
     <h1><i>{{species.species_accepted}}</i> {% if can_edit == True %} <small> {{species.id}}-{{species.version.statuses}}-{{species.version.checked}}</small> {%endif%} </h1>
-    <div class="row">
+        
+
+    
+        <div class="row">
     
         {% if species.species_common %}
         <div class="col-sm-4">
@@ -219,6 +224,7 @@
 <!-- end of external sources  (species model)-->
 <br>
 </div>
+    
 
 
 
@@ -468,8 +474,14 @@
         {% endif %}
         {% endif %}
     {% endif %}
-
+    {% else %}
+    <br>
+    <div class="alert alert-warning">
+        The information for this species has not been entered and/or checked.
+    </div>
+    {% endif %}
     {% endfor %}
+    
     
     <div class="info_box">
         <table style="width:100%" class="table">
@@ -481,6 +493,7 @@
                 </tr>
             </thead> {% if publications %}
             <tbody> {% for publication in publications |sort(attribute='id') %}
+                {% if can_edit == T or publication.version[0].status_id == 3 %}
                 
                 <tr class="publication_row" style="border-left-color:{{ publication.colour }};">
                     <td> <a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a> {% if can_edit == True %} <small> {{publication.id}}-{{publication.version[0].statuses}}-{{publication.version[0].checked}}</small> {%endif%}
@@ -518,7 +531,21 @@
                         
                     </td>
                     <td> {% if publication.DOI_ISBN %}<a class="btn btn-default" target="_blank" href="https://doi.org/{{ publication.DOI_ISBN }}">Go to source <span class="glyphicon glyphicon-new-window"></span></a>{% endif %}</td>
-                </tr> {% endfor %} </tbody>
+                </tr> 
+                
+                {% else %}
+                    <br>
+                <tr>
+                    <td>
+                    <div class="alert alert-warning">
+                        The information for this publication has not been entered and/or checked.
+                    </div>
+                        </td>
+                    </tr>
+                
+                    {% endif %}
+                
+                {% endfor %} </tbody>
             {% else %}
             <tbody>
                 <tr>

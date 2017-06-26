@@ -204,15 +204,15 @@ def data_clean(data):
     incomplete = True if 'NDY' in data.values() else False
     kwargs = {key: val for key, val in data.items() if val != 'NDY'}
     amber = Status.query.filter_by(status_name="Amber").first()
-    green = Status.query.filter_by(status_name="Green").first()
+    pending = Status.query.filter_by(status_name="Pending").first()
     #kwargs['version_ok'] = 0 if incomplete else 1
     #kwargs['version_original'] = 1
     #kwargs['version_latest'] = 1
-    return {'kwargs' : kwargs, 'status' : amber if incomplete else green}
+    return {'kwargs' : kwargs, 'status' : amber if incomplete else pending}
 
 def version_data(cleaned):
-    version =  {'checked' : True, 
-    'checked_count' : 1, 
+    version =  {'checked' : False, 
+    'checked_count' : 0, 
     'statuses' : cleaned['status']#,
     #'version_number' : 1,
     #'user' : User.query.filter_by(username='admin').first(), 
@@ -288,7 +288,7 @@ def submit_new(data):
         'date_digitised' : datetime.datetime.strptime(data['publication_date_digitization'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['publication_date_digitization'] else None,
         'purposes' : queryset,
         'entered_by_id' :  possible_user.id if possible_user else None,
-        'checked_by_id' :  possible_user.id if possible_user else None,
+        'checked_by_id' :  na_user.id if na_user else None,
         'study_notes' : data["publication_study_notes"]
         }
 
