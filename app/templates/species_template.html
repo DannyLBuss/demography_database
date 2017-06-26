@@ -655,7 +655,7 @@
     var divs = document.getElementsByClassName("matClasses");
     for (var ii = 0; ii < divs.length; ii++) {
         var matrix_string = divs[ii].innerHTML;
-        var matrix_string = matrix_string.substring(4, matrix_string.length - 3);
+        var matrix_string = matrix_string.substring(2, matrix_string.length - 2);
         var matrix_string_array = matrix_string.split("|");
         numberOfClasses = matrix_string_array.length;
         var table_new = document.createElement('TABLE');
