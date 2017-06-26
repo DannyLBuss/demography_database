@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<html lang="en">
+  <head>
+    <h1>
+    	<title>
+    		Download previous versions of the demography databases 
+    	</title>
+    	    </h1>
+    	    {% if current_user.is_anonymous %}
+    	    <h2><col="red"> please login to access files </col></h2>
+    	    {% endif %}
+    	    {% if current_user.is_authenticated %}
+      			<body class="body">
+        			<div class="container" align="left">
+        				<li><h4>Download Compadre 4.0.0</h4>
+        					<a href="{{url_for('main.download_zip4')}}" target="blank"><button class='btn btn-default'>Download Compadre 4.0</button></a>
+        				</li>
+        			</div>
+        			<div class="container" align="left">
+        				<li><h4>Download Compadre 3.2.1</h4>
+        					<a href="{{url_for('main.download_all')}}" target="blank"><button class='btn btn-default'>Download Compadre 3.2.1</button></a>
+        				</li>
+        			</div>
+        			<div class="container" align="left">
+        				<li><h4>Download Comadre 2.0.1</h4>
+        					<a href="{{url_for('main.download_zip')}}" target="blank"><button class='btn btn-default'>Download Comadre 2.0.1</button></a>
+        				</li>
+        			</div>
+        			<div class="container" align="left">
+        				<li><h4>Download Comadre 1.0.0</h4>
+        					<a href="{{url_for('main.download_all')}}" target="blank"><button class='btn btn-default'>Download Comadre 1.0.0</button></a>
+        				</li>
+        			</div>
+        			{% if current_user.role_id in [1,4] %}
+        			<br>
+        			<h3>Admin use only</h3>
+        			<div class="container" align="left">
+        				<li><h4>Download Comadre X.X.X</h4>
+        					<a href="{{url_for('main.download_zip2')}}" target="blank"><button class='btn btn-default'>Download Comadre X.X.X</button></a>
+        				</li>
+        			</div>
+        			<div class="container" align="left">
+        				<li><h4>Download Compadre X.X.X</h4>
+        					<a href="{{url_for('main.download_zip3')}}" target="blank"><button class='btn btn-default'>Download Comadre X.X.X</button></a>
+        				</li>
+        			</div>
+        			<div class="container" align="right">
+        				<li><h4>Download All</h4>
+        				<a href="{{url_for('main.download_all')}}"><button class='btn btn-default'>DOWNLOAD ALL FILES AS ZIP</button></a>
+        			</div>
+        			{% endif %}
+        	{% endif %}
+        		</body>
+</html>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
+<!DOCTYPE html>

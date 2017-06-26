@@ -1,11 +1,12 @@
-from flask import Flask, redirect, render_template, session, url_for, flash, request
+from flask import Flask, redirect, render_template, session, url_for, flash, request, send_file
 from flask.ext.wtf import Form 
 from flask.ext.sqlalchemy import SQLAlchemy 
 from wtforms import StringField, SubmitField 
 from wtforms.validators import Required 
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.mail import Mail, Message 
-import os 
+import os
+import zipfile 
 app = Flask(__name__)
 from flask import render_template, redirect, url_for, abort, flash, request,\
     current_app, make_response, jsonify
@@ -400,7 +401,7 @@ def user(username):
 ##Trying get uploads to work - Success 
 ##Need to alter file path once on the Exeter server!!!!!
 UPLOAD_FOLDER = '/Users/daniellebuss/Sites/demography_database/app/static/uploads'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'csv'])
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'csv', 'RData', 'DS_Store'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -429,6 +430,63 @@ def datadownloads():
             return render_template('upload_files.html',
                 filename=filename, type=file.content_type)
     return render_template('datadownloads.html')
+
+@main.route('/download_all')
+def download_all():
+    UPLOAD_FOLDER = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/'
+    zipf = zipfile.ZipFile('Database.zip', 'w', zipfile.ZIP_DEFLATED)
+    for root, dirs, files in os.walk(UPLOAD_FOLDER):
+        for file in files:
+            zipf.write(UPLOAD_FOLDER+file)
+        zipf.close()
+        return send_file('Database.zip',
+            mimetype = 'zip',
+            attachment_filename = 'Database.zip',
+            as_attachment = True)
+
+#@main.route('/return-file/', methods=['GET', 'POST'])
+#def return_file():
+#    return send_file('/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMADRE_v_2_0_1.RData', attachment_filename='comadre_2.RData')
+
+#Download file html template
+@main.route('/download')
+def download():
+    return render_template('outputs/download.html')
+
+#Download COMADRE 2.0.1
+@main.route('/download-zip/', methods=['GET', 'POST'])
+def download_zip():
+    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMADRE_v_2_0_1.RData'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
+
+#Download COMADRE xxx
+@main.route('/download-zip2/', methods=['GET', 'POST'])
+def download_zip2():
+    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMADRE_v_xxx.RData'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
+
+#Download COMPADRE xxx
+@main.route('/download-zip3/', methods=['GET', 'POST'])
+def download_zip3():
+    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMPADRE_v_xxx.RData'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
+
+#Download COMPADRE 4.0.1
+@main.route('/download-zip4/', methods=['GET', 'POST'])
+def download_zip4():
+    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/uploads/COMPADRE_v_4_0_1.RData'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
+
+#Download current SQL Dump (This gets updated Daily)
+#!!!On server file is /var/www/demography-database/alchemydumps/demography-database.sql
+@main.route('/download-sql/', methods=['GET', 'POST'])
+def download_sql():
+    file_name = '/Users/daniellebuss/Sites/demography_database/application_tasks/mysql_dump/demography_database.sql'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
+
+@main.route('/downloadsql')
+def downloadsql():
+    return render_template('outputs/download_sql.html')
 
 #@main.route('/datadownloads')
 #def datadownloads():

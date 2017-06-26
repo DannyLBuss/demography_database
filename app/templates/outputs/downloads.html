@@ -12,13 +12,18 @@
       Here is a list of current and previous versions of the demography database
   		</title>
     </h1>
-    <body>
+      <body class="body">
+        <div class="container" align="left">
+          <p>
+          <a href="/outputs/getFile" target="blank"><button class='btn btn-default'>Download!</button>
+          </a>
+          <a class="label label-primary" href=/static/uploads/{{  post.hashVal }}.Rdata target="_blank"  style="margin-right: 5px;">Download Rdata </a>
+          <a class="label label-primary" href=/static/uploads/{{  post.hashVal }}.txt target="_blank"  style="margin-right: 5px;">Download txt </a>
+          <a class="label label-primary" href=/static/uploads/{{  post.hashVal }}.csv target="_blank"  style="margin-right: 5px;">Download csv </a>
+          <a class="label label-primary" href=/static/uploads/{{  post.hashVal }}.pdf target="_blank"  style="margin-right: 5px;">Download pdf </a>
+        </p>
+        </div>
     	<table>
-    	{% set comma = joiner(",") %}
-    	{% for result in filenames%}
-    		{{comma() }}<a href="/static/uploads/{{ result.result }}">{{ result }}</a>
-    	</table>
-    {% endfor %}
   </body>
 </html>
 {% endblock %}
@@ -28,3 +33,20 @@
 {{ pagedown.include_pagedown() }}
 {% endblock %}
 <!DOCTYPE html>
+<form id="download" action="/download_zip" method="POST"><input type="hidden" name="param1" value="value1">...</form>
+
+Here's my jQuery function that triggers the POST request:
+
+$form = $('#download');
+    $form.submit();
+
+function batchDownload() {
+    $.post('/download_zip', {
+        file_name: 'temp.zip'
+    }).done(function(data) {
+        alert(data);
+    }).fail(function() {
+        alert('Error.  Could not download files :(');
+    });
+}
+
