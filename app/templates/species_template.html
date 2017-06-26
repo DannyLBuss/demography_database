@@ -7,8 +7,9 @@
     {% for publication in publications %}
     <p><b>Publication: </b>{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}</p>
     <p><b>Missing data:</b> {% for da in publication.missing_data %} {{ da.missing_description }}, {% endfor %} </p>
-    <p><b>Assigned to:</b> {{publication.user.name}} </p>
-    <p><b>Checked by:</b> </p>
+    <p><b>Correspondence:</b> {% for contacts in publication.author_contacts %} {{contacts.user.name}}, {% endfor %} </p>
+    <p><b>Entered by:</b> {{publication.entered_by.name}} </p>
+    <p><b>Checked by:</b>  {{publication.checked_by.name}}</p>
     <ul>
         <li>Publication-{{publication.id}}-{{publication.version[0].statuses}}-{{publication.version[0].checked}}</li>
         
@@ -77,20 +78,20 @@
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
         <ul class="dropdown-menu dropdown-menu-right">
             <li class="dropdown-header">Species information</li>
-            <li><a href="../../data-manage/species/edit/{{species.id}}" ><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
-            <li><a href="../../data-manage/species/{{species.id}}/edit-history">View edits</a></li>
-            <li><a href="../../data-manage/version/edit/{{species.version.id}}" onclick="window.open('../../data-manage/version/edit/{{species.version.id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
+            <li><a href="../../data-manage/species/edit/{{species.id}}" ><span class="glyphicon glyphicon-pencil"></span> Edit species</a></li>
+            <li><a href="../../data-manage/species/{{species.id}}/edit-history"><span class="glyphicon glyphicon-time"></span> View edits</a></li>
+            <li><a href="../../data-manage/version/edit/{{species.version.id}}" onclick="window.open('../../data-manage/version/edit/{{species.version.id}}', 'newwindow', 'width=800,height=600');return false;"><span class="glyphicon glyphicon-flag"></span> Update status</a></li>
             <li><a href="../../data-manage/delete/species/{{species.id}}"><span class="glyphicon glyphicon-trash"></span> Delete species + taxonomy + traits</a></li>
             <li class="dropdown-header">Taxonomy</li> {% if species.taxonomy %}
-            <li><a href="../../data-manage/taxonomy/edit/{{species.taxonomy[0].id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
-            <li><a href="../../data-manage/taxonomy/{{species.taxonomy[0].id}}/edit-history">View edits</a></li>
-            <li><a href="../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}', 'newwindow','width=800,height=600');return false;">Update status</a></li>
+            <li><a href="../../data-manage/taxonomy/edit/{{species.taxonomy[0].id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit taxonomy</a></li>
+            <li><a href="../../data-manage/taxonomy/{{species.taxonomy[0].id}}/edit-history"><span class="glyphicon glyphicon-time"></span> View edits</a></li>
+            <li><a href="../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{species.taxonomy[0].version[0].id}}', 'newwindow','width=800,height=600');return false;"><span class="glyphicon glyphicon-flag"></span> Update status</a></li>
             {% else %}
             <li><a href="../../data-manage/taxonomy/new/0/species={{species.id}}">Add taxonomy</a></li> {% endif %}
             <li class="dropdown-header">Species Traits</li> {% if species.trait %}
-            <li><a href="../../data-manage/traits/edit/{{species.trait[0].id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
-            <li><a href="../../data-manage/traits/{{species.trait[0].id}}/edit-history">View edits</a></li>
-            <li><a href="../../data-manage/version/edit/{{species.trait[0].version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{species.trait[0].version[0].id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
+            <li><a href="../../data-manage/traits/edit/{{species.trait[0].id}}/species={{species.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit traits</a></li>
+            <li><a href="../../data-manage/traits/{{species.trait[0].id}}/edit-history"><span class="glyphicon glyphicon-time"></span> View edits</a></li>
+            <li><a href="../../data-manage/version/edit/{{species.trait[0].version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{species.trait[0].version[0].id}}', 'newwindow', 'width=800,height=600');return false;"><span class="glyphicon glyphicon-flag"></span> Update status</a></li>
             {% else %}
             <li><a href="../../data-manage/traits/new/0/species={{species.id}}">Add traits</a></li> {% endif %} </ul>
     </div> {% endif %}
@@ -239,9 +240,9 @@
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li><a href="../../data-manage/population/edit/{{population.id}}/species={{population.species.id}}/publication={{population.publication.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit population</a></li>
-                    <li><a href="../../data-manage/population/{{population.id}}/edit-history">View edits</a></li>
-                    <li><a href="../../data-manage/version/edit/{{population.version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{population.version[0].id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
-                    <li><a href="../../data-manage/matrix/new/0/population={{population.id}}">Add new matrix</a></li>
+                    <li><a href="../../data-manage/population/{{population.id}}/edit-history"><span class="glyphicon glyphicon-time"></span> View edits</a></li>
+                    <li><a href="../../data-manage/version/edit/{{population.version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{population.version[0].id}}', 'newwindow', 'width=800,height=600');return false;"><span class="glyphicon glyphicon-flag"></span> Update status</a></li>
+                    <li><a href="../../data-manage/matrix/new/0/population={{population.id}}"><span class="glyphicon glyphicon-plus-sign"></span> Add new matrix</a></li>
                     <li><a href="../../data-manage/delete/population/{{population.id}}"><span class="glyphicon glyphicon-trash"></span> Delete population</a></li>
                 </ul>
             </div> 
@@ -363,8 +364,8 @@
                                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li><a href="../../data-manage/matrix/edit/{{matrix.id}}/population={{population.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit matrix</a></li>
-                                            <li><a href="../../data-manage/matrix/{{matrix.id}}/edit-history">View edits</a></li>
-                                            <li><a href="../../data-manage/version/edit/{{matrix.version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{matrix.version[0].id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
+                                            <li><a href="../../data-manage/matrix/{{matrix.id}}/edit-history"><span class="glyphicon glyphicon-time"></span> View edits</a></li>
+                                            <li><a href="../../data-manage/version/edit/{{matrix.version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{matrix.version[0].id}}', 'newwindow', 'width=800,height=600');return false;"><span class="glyphicon glyphicon-flag"></span> Update status</a></li>
                                             <li><a href="../../data-manage/delete/matrix/{{matrix.id}}"><span class="glyphicon glyphicon-trash"></span> Delete matrix</a></li>
                                         </ul>
                                     </div> {% endif %} </ul>
@@ -413,8 +414,8 @@
                                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Compadrino actions<span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <li><a href="../../data-manage/fixed/edit/{{matrix.fixed[0].id}}/matrix={{matrix.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit SPAND_EX data</a></li>
-                                            <!--<li><a href="../../data-manage/population/{{population.id}}/edit-history">View edits</a></li>-->
-                                            <li><a href="../../data-manage/version/edit/{{matrix.fixed[0].version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{matrix.fixed[0].version[0].id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
+                                            <!--<li><a href="../../data-manage/population/{{population.id}}/edit-history"><span class="glyphicon glyphicon-time"></span> View edits</a></li>-->
+                                            <li><a href="../../data-manage/version/edit/{{matrix.fixed[0].version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{matrix.fixed[0].version[0].id}}', 'newwindow', 'width=800,height=600');return false;"><span class="glyphicon glyphicon-flag"></span> Update status</a></li>
                                         </ul>
                                     </div> 
                                     {% endif %}
@@ -489,8 +490,8 @@
         <ul class="dropdown-menu dropdown-menu-right">
 
             <li><a href="../../data-manage/publication/edit/{{publication.id}}" > <span class="	glyphicon glyphicon-pencil"></span> Edit publication</a></li>
-            <li><a href="../../data-manage/publication/{{publication.id}}/edit-history">View edits</a></li>
-            <li><a href="../../data-manage/version/edit/{{publication.version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{publication.version[0].id}}', 'newwindow', 'width=800,height=600');return false;">Update status</a></li>
+            <li><a href="../../data-manage/publication/{{publication.id}}/edit-history"><span class="glyphicon glyphicon-time"></span> View edits</a></li>
+            <li><a href="../../data-manage/version/edit/{{publication.version[0].id}}" onclick="window.open('../../data-manage/version/edit/{{publication.version[0].id}}', 'newwindow', 'width=800,height=600');return false;"><span class="glyphicon glyphicon-flag"></span> Update status</a></li>
             <li><a href="../../data-manage/delete/publication/{{publication.id}}"><span class="glyphicon glyphicon-trash"></span> Delete publication</a></li>
         </ul>
     </div> {% endif %}
@@ -504,7 +505,7 @@
                             <h4>Contacting the authors</h4>
                             <ol>
                         {% for contac in publication.author_contacts %}
-                        <li><p><b>Date:</b> {{contac.date_contacted}} <b>Follow-up:</b> {{contac.date_contacted_again}} <b> To:</b> {{contac.corresponding_author}} ({{contac.corresponding_author_email}}) <b>Contacted by:</b> {{contac.user.name}} <a href="../../data-manage/contact/edit/{{contac.id}}/publication={{publication.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit contact</a> <a href="../../data-manage/delete/contact/{{contac.id}}"><span class="glyphicon glyphicon-trash"></span> Delete contact</a> </p>
+                        <li><p><b>Date:</b> {{contac.date_contacted}} <b>Follow-up:</b> {{contac.date_contacted_again}} <b> To:</b> {{contac.corresponding_author}} ({{contac.corresponding_author_email}}) <b>Contacted by:</b> {{contac.user.name}} <a href="../../data-manage/contact/edit/{{contac.id}}/publication={{publication.id}}"><span class="glyphicon glyphicon-pencil"></span> Edit correspondence</a> <a href="../../data-manage/delete/contact/{{contac.id}}"><span class="glyphicon glyphicon-trash"></span> Delete correspondence</a> </p>
                         <p><b>Missing data asked for:</b> {{contac.correspondence_email_content}}</p>
                         <p><b>Extra missing content asked for (optional):</b> {{contac.extra_email_content}}</p>
                         <p> <b>Author reply?: </b>{{contac.author_reply}}</p></li>

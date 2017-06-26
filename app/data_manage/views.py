@@ -19,10 +19,11 @@ def gen_hex_code():
     return('#%02X%02X%02X' % (r(),r(),r()))
 
 # compadrino zone
-@data_manage.route('/compadrino-zone/', methods=['GET', 'POST'])
+@data_manage.route('/compadrino-zone')
 @login_required
 def compadrino_zone():
-    return render_template('data_manage/compadrino_zone.html')
+    assigned_pubs = Publication.query.filter_by(entered_by_id = current_user.id)
+    return render_template('data_manage/compadrino_zone.html',assigned_pubs = assigned_pubs)
 
 # publication edit history
 @data_manage.route('/useredits')
@@ -460,7 +461,9 @@ def publication_form(id,edit_or_new):
         publication.missing_data = form.missing_data.data
         publication.additional_source_string = form.additional_source_string.data
         publication.study_notes = form.study_notes.data
-        publication.users = form.student.data
+        publication.checked_by_id = form.checked_by.data.id
+        publication.entered_by_id = form.entered_by.data.id
+        db.session.commit()
         
         
         print(publication.purposes)
@@ -527,7 +530,8 @@ def publication_form(id,edit_or_new):
     form.missing_data.data = publication.missing_data
     form.additional_source_string.data = publication.additional_source_string
     form.study_notes.data = publication.study_notes
-    form.student.data = publication.user
+    form.checked_by.data = publication.checked_by
+    form.entered_by.data = publication.entered_by
     
     
     return render_template('data_manage/publication_form.html', form=form, publication=publication,protocol_dict = protocol_dict)

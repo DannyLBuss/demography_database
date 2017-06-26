@@ -1,4 +1,5 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Compadrino Zone - Demography Database{% endblock %} {% block page_content %}
+<div id="notmap">
 <h1>Compadrino zone</h1>
 <hr>
 <h3>Hi {{current_user.name}}!</h3>
@@ -37,9 +38,57 @@
     <div class="col-sm-9">
         <div class="info_box"> 
             <h3>Your currently assigned publications:</h3>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date digitised</th>
+                    <th>Publication information and missing data</th>
+                    <th>Statuses</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for publication in assigned_pubs |sort(attribute='date_digitised')%}
+                  <tr>
+                    <td>{{ publication.date_digitised.strftime('%Y-%m-%d')}}</td>
+                      <td><p><a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a></p>
+                        <p>Missing data: {% for da in publication.missing_data %} {{ da.missing_description }},{% endfor %}</p>
+                          <p>Checked by: {{publication.checked_by.name}}</p>
+                      
+                      
+                      </td>
+                        <td>
+                        <p>Publication: -{{ publication.version[0].statuses }}-</p>
+                         <p>Populations ({{ publication.populations|length()}}):  
+                         {% for pops in publication.populations %}
+                            -{{ pops.version[0].statuses}}-
+                        {% endfor %}</p>  
+                        <p>Matrices:
+                        {% for pops in publication.populations  %}
+                            {% for mat in pops.matrices %}
+                            -{{ mat.version[0].statuses}}-
+                            {%endfor%}
+                        {% endfor %}
+                            </p>
+                      
+                      
+                      </td>
+                  </tr>
+                    {% endfor %}
+                </tbody>
+              </table>            
         </div>
         
         
     </div>
 </div>
+    </div>
+
+<script>
+var notmap = document.getElementById("notmap")
+    
+    notmap.innerHTML = notmap.innerHTML.replace(/-Green-/g, '<span class="glyphicon glyphicon-ok" style="color:green"></span>');
+    notmap.innerHTML = notmap.innerHTML.replace(/-Amber-/g, '<span class="glyphicon glyphicon-warning-sign"  style="color:Coral"></span>');
+    notmap.innerHTML = notmap.innerHTML.replace(/-Pending-/g, '<span class="glyphicon glyphicon-flag" style="color:DarkOrchid"></span>');
+    notmap.innerHTML = notmap.innerHTML.replace(/-Red-/g, '<span class="glyphicon glyphicon glyphicon-remove" style="color:red"></span>');
+</script>
  {% endblock %} {% block scripts %}  {{ super() }} {{ pagedown.include_pagedown() }} {% endblock %}

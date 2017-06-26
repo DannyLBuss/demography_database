@@ -119,7 +119,6 @@ class User(UserMixin, db.Model):
     #versions = db.relationship("Version", backref="user")
     changelogger = db.relationship("ChangeLogger", backref="user")
     contacts = db.relationship("AuthorContact", backref="user")
-    publications = db.relationship("Publication", backref="user")
 
     @staticmethod
     def migrate():
@@ -2675,7 +2674,7 @@ class Publication(db.Model):
                     secondary=publication_missing_data, backref="publications", passive_deletes=True)
     additional_source_string = db.Column(db.Text())
     colour = db.Column(db.String(7))
-    student_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
+    
     study_notes = db.Column(db.Text())
     publications_protocol_id = db.Column(db.Integer, db.ForeignKey('publications_protocol.id',ondelete='CASCADE'))
 
@@ -2683,6 +2682,11 @@ class Publication(db.Model):
     author_contacts = db.relationship("AuthorContact", backref="publication", passive_deletes=True)
     additional_sources = db.relationship("AdditionalSource", backref="publication", passive_deletes=True)
     populations = db.relationship("Population", backref="publication", passive_deletes=True)
+    
+    entered_by_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
+    checked_by_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
+    entered_by = db.relationship("User", foreign_keys=[entered_by_id])
+    checked_by = db.relationship("User", foreign_keys=[checked_by_id])
 
     version = db.relationship("Version", backref="publication", passive_deletes=True)
     #version_latest = db.Column(db.String(64))
@@ -2777,7 +2781,7 @@ class Publication(db.Model):
 
             db.session.add(cl)
             db.session.commit()
-
+            
 class AuthorContact(db.Model):
     #query_class = VersionQuery
     __tablename__ = 'author_contacts'

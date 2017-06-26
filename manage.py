@@ -275,6 +275,9 @@ def submit_new(data):
             missing_data = 'NDY'
 
         possible_user = User.query.filter_by(name = data["publication_student"]).first()
+        na_user = User.query.filter_by(name = "N/A").first()
+        if possible_user == None:
+            possible_user = na_user
 
         pub_dict = {'authors': data["publication_authors"],
         'year' : data["publication_year"],
@@ -284,7 +287,8 @@ def submit_new(data):
         'journal_name' : data["publication_journal_name"],
         'date_digitised' : datetime.datetime.strptime(data['publication_date_digitization'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['publication_date_digitization'] else None,
         'purposes' : queryset,
-        'student_id' :  possible_user.id if possible_user else None,
+        'entered_by_id' :  possible_user.id if possible_user else None,
+        'checked_by_id' :  possible_user.id if possible_user else None,
         'study_notes' : data["publication_study_notes"]
         }
 

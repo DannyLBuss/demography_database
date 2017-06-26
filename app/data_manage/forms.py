@@ -156,7 +156,10 @@ class PublicationForm(Form):
     
     additional_source_string = StringField('Additional Source')
     study_notes = StringField('Additional notes')
-    student = QuerySelectField('Assigned compadrino',
+    entered_by = QuerySelectField('Entered by',
+            query_factory=lambda: User.query.all(), get_pk=lambda a: a.id,
+                            get_label=lambda a:'{} - {}'.format(a.name, a.email))
+    checked_by = QuerySelectField('Checked by',
             query_factory=lambda: User.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} - {}'.format(a.name, a.email))
     # author_contacts # Fkey#additional_sources # Fkey

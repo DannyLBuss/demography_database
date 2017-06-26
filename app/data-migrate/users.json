@@ -1,6 +1,15 @@
 {
 	"User": {
           "User": [{
+            "email" : "N/A",
+            "username" : "N/A",
+            "name" : "N/A",
+            "role_id" : 6,
+            "password" : "notapplicable",
+            "confirmed" : 0, 
+            "institute_id" : 2, 
+            "institute_confirmed" : 0
+            },{
             "email" : "lifecycle@exeter.ac.uk",
             "username" : "admin",
             "name" : "admin",
