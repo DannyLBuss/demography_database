@@ -1,5 +1,5 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import "_macros.html" as macros %} {% block title %}Demography Database{% endblock %} {% block page_content %}
-<p>Rollover the smaall question marks (like this one: <span data-toggle="tooltip" data-placement="top" title='Hello world!' class="nounderline glyphicon glyphicon-question-sign"></span>) for information about the data presented here.</p>
+<p>Rollover the question marks (like this one: <span data-toggle="tooltip" data-placement="top" title='Hello world!' class="nounderline glyphicon glyphicon-question-sign"></span>) for information about the data presented here.</p>
 {% if can_edit == true %}
 <button type="button" class="btn btn-primary pull-right" data-toggle="collapse" href="#compadrino_box"><span class="glyphicon glyphicon-wrench"></span> Show/hide publication summary </button>
 <div id="compadrino_box" class='panel-collapse collapse'>
@@ -148,7 +148,7 @@
     <!-- BREADCRUMB -->
     {% for taxonomy in species.taxonomy %}
 
-            <p><b>Taxonomy: </b><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> &nbsp;&nbsp;&nbsp;&nbsp;  Authority <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span>  : {{ taxonomy.authority }} &nbsp;&nbsp;&nbsp;&nbsp;{% if taxonomy.kingdom == "Plantae" %} TPL version <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span>: {{ taxonomy.tpl_version }}{% endif %} {% if can_edit == True %} <small> {{taxonomy.id}}-{{taxonomy.version[0].statuses}}-{{taxonomy.version[0].checked}}</small> {%endif%}</p>  
+            <p><b>Taxonomy: </b><a href="../../explorer/life/asweknowit">Life</a> > <a href="../../explorer/kingdom/{{ taxonomy.kingdom }}">{{ taxonomy.kingdom }}</a> > <a href="../../explorer/phylum/{{ taxonomy.phylum }}">{{ taxonomy.phylum }}</a> > <a href="../../explorer/class/{{ taxonomy.tax_class }}">{{ taxonomy.tax_class }}</a> > <a href="../../explorer/order/{{ taxonomy.tax_order }}">{{ taxonomy.tax_order }}</a> > <a href="../../explorer/family/{{ taxonomy.family }}">{{ taxonomy.family }}</a> &nbsp;&nbsp;&nbsp;&nbsp;  Authority <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["taxonomy_authority"] }}' class="nounderline glyphicon glyphicon-question-sign"></span>  : {{ taxonomy.authority }} &nbsp;&nbsp;&nbsp;&nbsp;{% if taxonomy.kingdom == "Plantae" %} TPL version <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["taxonomy_tpl_version"] }}' class="nounderline glyphicon glyphicon-question-sign"></span>: {{ taxonomy.tpl_version }}{% endif %} {% if can_edit == True %} <small> {{taxonomy.id}}-{{taxonomy.version[0].statuses}}-{{taxonomy.version[0].checked}}</small> {%endif%}</p>  
             
         {% else %}
         <div class="info_box_empty"><p>No taxonomy</p>  <p> <a href="../../data-manage/taxonomy/new/0/species={{species.id}}"><span class="glyphicon glyphicon-plus-sign"></span> Add taxonomy information</a></p> </div>
@@ -182,47 +182,47 @@
             </tr>
             {% if species.taxonomy %}
             {% if species.taxonomy[0].kingdom == "Plantae" %}
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_reproductive_repitition"] }}' class="nounderline">
-                <td> <strong>Reproductive Repetition <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
+            <tr>
+                <td> <strong>Reproductive Repetition <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["trait_reproductive_repetition"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
                 <td> {{ trait.reproductive_repetition.repetition_name }} </td>
             </tr>
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_dicot_monoc"] }}' class="nounderline">
-                <td> <strong>Dicot/Monocot <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> </td>
+            <tr>
+                <td> <strong>Dicot/Monocot <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["trait_dicot_monoc"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> </td>
                 <td> {{ trait.dicot_monoc.dicot_monoc_name }} </td>
             </tr>
             
             
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_angio_gymno"] }}' class="nounderline">
-                <td> <strong>Angio/Gymnosperm <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> </td>
+            <tr>
+                <td> <strong>Angio/Gymnosperm <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["trait_angio_gymno"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> </td>
                 <td> {{ trait.angio_gymno.angio_gymno_name }} </td>
             </tr>
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_growth_form_raunkiaer"] }}' class="nounderline">
-                <td> <strong>Growth Form Raunkiaer <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
+            <tr>
+                <td> <strong>Growth Form Raunkiaer <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["trait_growth_form_raunkiaer"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
                 <td> {{ trait.growth_form_raunkiaer.form_name }} </td>
             </tr>
             {% if exeter_data == True %} 
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["trait_spand_ex_growth_type"] }}' class="nounderline">
-                <td> <strong>SPAND_EX growth type <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
+            <tr>
+                <td> <strong>SPAND_EX growth type <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["trait_spand_ex_growth_type"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
                 <td> {{ trait.spand_ex_growth_types.type_name }} </td>
             </tr>
             {% endif %}
             {% endif %}
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["species_gisd_status"] }}' class="nounderline">
-                <td> <strong>Invasive (GISD Status) <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
+            <tr>
+                <td> <strong>Invasive (GISD Status) <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["species_gisd_status"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
                 <td> {{ trait.species_gisd_status }} </td>
             </tr>
             
             
             {% if species.taxonomy[0].kingdom == "Plantae" %}
             {% if trait.species_seedbank %}
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["seedbank"] }}' class="nounderline">
-                <td> <strong>Seedbank <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> </td>
+            <tr >
+                <td> <strong>Seedbank <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["seedbank"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> </td>
                 <td> {{ trait.species_seedbank }} </td>
             </tr>
             {% endif %}
             {% if trait.species_clonality %}
-            <tr data-toggle="tooltip" data-placement="left" title='{{ protocol_dict["clonality"] }}' class="nounderline">
-                <td> <strong>Clonality <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
+            <tr>
+                <td> <strong>Clonality <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["clonality"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :</strong> </td>
                 <td> {{ trait.species_clonality }} </td>
             </tr>
             {% endif %}
@@ -287,15 +287,15 @@
             <h4><strong>Population Name: </strong>{{ population.population_name }} {% if can_edit == True %} <small> {{population.id}}-{{population.version[0].statuses}}-{{population.version[0].checked}}</small> {%endif%} <span class="label label-default">{{ population.matrices | count }} matrices</span> <span class="label label-default">{{ population.study_start }} - {{ population.study_end }}</span> <span class="label label-default"> <img src="../../static/flags/{{ population.country }}.GIF"> {{ population.country }}, {{ population.continent.continent_name }} </span> </h4>
             <table style="width:100%", class="table">
                 <tr>
-                    <td ><strong>Ecoregion <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </strong> {{ population.ecoregion.ecoregion_description }}   </td>
+                    <td ><strong>Ecoregion</strong> <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["population_ecoregion"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> :  {{ population.ecoregion.ecoregion_description }}   </td>
                     <td >{% if population.longitude %}
                     <strong>Location: </strong><span class="coordinates {{species.species_accepted}} {{ population.matrices | length }} {{ population.id }}">{{ population.latitude }}, {{ population.longitude }}</span>  </td>
                     <td >{% if population.altitude %}<strong>Altitude: </strong><span>{{ population.altitude }}m</span>{% endif %}
-                    {% if population.population_nautical_miles %}<li><strong>Nautical miles:</strong>  {{ population_nautical_miles }} </li>{% endif %}
+                    {% if population.population_nautical_miles %}<li><strong>Nautical miles:</strong> <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["population_nautical_miles"] }}' class="nounderline glyphicon glyphicon-question-sign"></span>  {{ population_nautical_miles }} </li>{% endif %}
                 {% else %}
                     No coordinates given
                 {% endif %}  </td>
-                    <td >{%if population.within_site_replication %}<b>Within site replication <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["TODO"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : </b> {{ population.within_site_replication }} {% endif %}
+                    <td >{%if population.within_site_replication %}<b>Within site replication </b> <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["within_site_replication"] }}' class="nounderline glyphicon glyphicon-question-sign"></span> : {{ population.within_site_replication }} {% endif %}
                         
                 </tr>
             </table>
@@ -312,7 +312,7 @@
                             <h4 id="{{matrix.id}}" class="panel-title">
                             <p>
                                 
-                                <a data-toggle="tooltip" data-placement="top" title="{{matrix.matrix_composition.comp_description}}" class="nounderline">
+                                <a data-toggle="tooltip" data-placement="top" title="{{ protocol_dict['matrix_composition'] }} ({{ matrix.matrix_composition.comp_name }} - {{matrix.matrix_composition.comp_description}})" class="nounderline">
                                     <span class="nounderline label label-default">{{ matrix.matrix_composition.comp_name }} matrix</span>
                                 </a>
                                 
@@ -324,25 +324,22 @@
                                     <span class="label label-default">Periodicity: {{ matrix.periodicity }}</span>
                                 </a>
                                 
-                                <a data-toggle="tooltip" data-placement="top" title='' class="nounderline">
+                                <a data-toggle="tooltip" data-placement="top" title='The start and end of study to produce this matrix.' class="nounderline">
                                     <span class="label label-default">{% if matrix.matrix_start_season_id %}{{ matrix.matrix_start_season }}{% endif %} {% if matrix.matrix_start_month %} {{ matrix.matrix_start_month }}/{% endif %}{{ matrix.matrix_start_year }} to {% if matrix.matrix_end_season_id %}{{ matrix.matrix_end_season }}{% endif %} {% if matrix.matrix_end_month %} {{ matrix.matrix_end_month }}/{% endif %}{{ matrix.matrix_end_year }}</span>
                                     </a>
                                 
                                 <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_treatment_type"] }}' class="nounderline">
-                                    <span class="label label-default">{{ matrix.treatment }}</span>
+                                    <span class="label label-default">Treatment: {{ matrix.treatment }}</span>
                                 </a>
                                 
-                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_captivity"] }}' class="nounderline">
+                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_captivity"] }} ({{ matrix.captivities.cap_code }} - {{ matrix.captivities.cap_description }})' class="nounderline">
                                     <span class="label label-default">Captivity: {{ matrix.captivities.cap_code }}</span>
                                 </a>
                                 
-                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_studied_sex"] }}' class="nounderline">
+                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_studied_sex"] }} ({{ matrix.studied_sex.sex_code }} - {{ matrix.studied_sex.sex_description }})' class="nounderline">
                                     <span class="label label-default">Studied sex: {{ matrix.studied_sex.sex_code }}</span>
                                 </a>
                                 
-                                <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_studied_sex"] }}' class="nounderline">
-                                <span class="label label-default">{{ matrix.matrix_split }}</span>
-                                    </a>
                                 
                                 <a data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["matrix_seasonal"] }}' class="nounderline">
                                 <span class="label label-default">Seasonal: {{ matrix.seasonal }}</span>
@@ -359,7 +356,7 @@
                                 
                                 
                                 <span class="label label-default">{{ matrix.plot_size }}</span> #}
-                                -->
+                                
                                 
                                 <a data-toggle="tooltip" data-placement="top" title='Is matrix irreducible' class="nounderline">
                                 <span class="label label-default">{{ matrix.matrix_irreducible }}</span>
@@ -372,6 +369,7 @@
                                 <a data-toggle="tooltip" data-placement="top" title='Is matrix primitive' class="nounderline">
                                 <span class="label label-default">{{ matrix.matrix_primitive }}</span>
                                     </a>
+-->
                                 
                                 <a data-toggle="tooltip" data-placement="top" title='Asymptpic population growth rate' class="nounderline">
                                 <span class="label label-default">λ = {{ matrix.matrix_lambda }}</span>
@@ -533,7 +531,8 @@
             <li><a href="../../data-manage/delete/publication/{{publication.id}}"><span class="glyphicon glyphicon-trash"></span> Delete publication</a></li>
         </ul>
     </div> {% endif %}
-                        <p><b>Purposes:</b> {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}
+                        <p><b>Purposes</b> <span data-toggle="tooltip" data-placement="top" title='{{ protocol_dict["publication_purpose_etc"] }}' class="nounderline glyphicon glyphicon-question-sign"></span>:
+ {% for purp in publication.purposes %} {{ purp.purpose_name }}; {% else %} No purposes given {% endfor %}
                         {% if publication.additional_source_string %}<p><b>Additional sources:</b> {{ publication.additional_source_string }}{% endif %}</p>
                         
                         {% if can_edit == True %}
