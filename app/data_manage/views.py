@@ -583,6 +583,35 @@ def population_form(id,edit_or_new,species_id,publication_id):
         form = PopulationForm()
     
     if form.validate_on_submit():
+        
+        # COPY CODE BLOCK
+        population.add_to_logger(current_user,'species_author',population_old.species_author,form.species_author.data,'edit')
+        population.add_to_logger(current_user,'population_name',population_old.population_name,form.population_name.data,'edit')
+        population.add_to_logger(current_user,'ecoregion',population_old.ecoregion,form.ecoregion.data,'edit')
+        population.add_to_logger(current_user,'invasive_status_study',population_old.invasive_status_study_id,form.invasive_status_study.data,'edit')
+        population.add_to_logger(current_user,'invasive_status_elsewhere',population_old.invasive_status_elsewhere,form.invasive_status_elsewhere.data,'edit')
+        population.add_to_logger(current_user,'country',population_old.country,form.country.data,'edit')
+        population.add_to_logger(current_user,'population_nautical_miles',population_old.population_nautical_miles,form.population_nautical_miles.data,'edit')
+        population.add_to_logger(current_user,'continent',population_old.continent,form.continent.data,'edit')
+        population.add_to_logger(current_user,'lat_ns',population_old.lat_ns,form.lat_ns.data,'edit')
+        population.add_to_logger(current_user,'lat_deg',population_old.lat_deg,form.lat_deg.data,'edit')
+        population.add_to_logger(current_user,'lat_min',population_old.lat_min,form.lat_min.data,'edit')
+        population.add_to_logger(current_user,'lat_sec',population_old.lat_sec,form.lat_sec.data,'edit')
+        population.add_to_logger(current_user,'lon_ew',population_old.lon_ew,form.lon_ew.data,'edit')
+        population.add_to_logger(current_user,'lon_deg',population_old.lon_deg,form.lon_deg.data,'edit')
+        population.add_to_logger(current_user,'lon_min',population_old.lon_min,form.lon_min.data,'edit')
+        population.add_to_logger(current_user,'lon_sec',population_old.lon_sec,form.lon_sec.data,'edit')
+        population.add_to_logger(current_user,'altitude',population_old.altitude,form.altitude.data,'edit')
+        population.add_to_logger(current_user,'within_site_replication',population_old.within_site_replication,form.within_site_replication.data,'edit')
+        population.add_to_logger(current_user,'study_start',population_old.study_start,form.study_start.data,'edit')
+        population.add_to_logger(current_user,'study_end',population_old.study_end,form.study_end.data,'edit')
+        population.add_to_logger(current_user,'purpose_endangered',population_old.purpose_endangered,form.purpose_endangered.data,'edit')
+        population.add_to_logger(current_user,'purpose_weed',population_old.purpose_weed,form.purpose_weed.data,'edit')
+        population.add_to_logger(current_user,'database_source',population_old.database_source,form.database_source.data,'edit')
+        population.add_to_logger(current_user,'database',population_old.database,form.database.data,'edit')
+        # end block
+        
+        
         population.species_id = species_id
         population.publication_id = publication_id
         population.species_author = form.species_author.data
@@ -626,6 +655,33 @@ def population_form(id,edit_or_new,species_id,publication_id):
             db.session.flush()
             db.session.add(population)
             db.session.commit()
+            
+            # COPY CODE BLOCK
+            population.add_to_logger(current_user,'species_author',population_old.species_author,form.species_author.data,'edit')
+            population.add_to_logger(current_user,'population_name',population_old.population_name,form.population_name.data,'edit')
+            population.add_to_logger(current_user,'ecoregion',population_old.ecoregion,form.ecoregion.data,'edit')
+            population.add_to_logger(current_user,'invasive_status_study',population_old.invasive_status_study_id,form.invasive_status_study.data,'edit')
+            population.add_to_logger(current_user,'invasive_status_elsewhere',population_old.invasive_status_elsewhere,form.invasive_status_elsewhere.data,'edit')
+            population.add_to_logger(current_user,'country',population_old.country,form.country.data,'edit')
+            population.add_to_logger(current_user,'population_nautical_miles',population_old.population_nautical_miles,form.population_nautical_miles.data,'edit')
+            population.add_to_logger(current_user,'continent',population_old.continent,form.continent.data,'edit')
+            population.add_to_logger(current_user,'lat_ns',population_old.lat_ns,form.lat_ns.data,'edit')
+            population.add_to_logger(current_user,'lat_deg',population_old.lat_deg,form.lat_deg.data,'edit')
+            population.add_to_logger(current_user,'lat_min',population_old.lat_min,form.lat_min.data,'edit')
+            population.add_to_logger(current_user,'lat_sec',population_old.lat_sec,form.lat_sec.data,'edit')
+            population.add_to_logger(current_user,'lon_ew',population_old.lon_ew,form.lon_ew.data,'edit')
+            population.add_to_logger(current_user,'lon_deg',population_old.lon_deg,form.lon_deg.data,'edit')
+            population.add_to_logger(current_user,'lon_min',population_old.lon_min,form.lon_min.data,'edit')
+            population.add_to_logger(current_user,'lon_sec',population_old.lon_sec,form.lon_sec.data,'edit')
+            population.add_to_logger(current_user,'altitude',population_old.altitude,form.altitude.data,'edit')
+            population.add_to_logger(current_user,'within_site_replication',population_old.within_site_replication,form.within_site_replication.data,'edit')
+            population.add_to_logger(current_user,'study_start',population_old.study_start,form.study_start.data,'edit')
+            population.add_to_logger(current_user,'study_end',population_old.study_end,form.study_end.data,'edit')
+            population.add_to_logger(current_user,'purpose_endangered',population_old.purpose_endangered,form.purpose_endangered.data,'edit')
+            population.add_to_logger(current_user,'purpose_weed',population_old.purpose_weed,form.purpose_weed.data,'edit')
+            population.add_to_logger(current_user,'database_source',population_old.database_source,form.database_source.data,'edit')
+            population.add_to_logger(current_user,'database',population_old.database,form.database.data,'edit')
+            # end block
             
             #make associated version object
             version = Version()
@@ -675,7 +731,7 @@ def population_form(id,edit_or_new,species_id,publication_id):
 def population_edit_history(id):
     population = Population.query.get_or_404(id)
     logged_changes = ChangeLogger.query.filter_by(object_type = "population",object_id = id)
-    return render_template('edit_history.html', population=population)
+    return render_template('edit_history.html', population=population, logged_changes = logged_changes)
 
 # editing matrix
 # NEEDS UPDATE
