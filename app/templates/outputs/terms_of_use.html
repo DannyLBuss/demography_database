@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Demography Database{% endblock %}
+
+{% block page_content %}
+<html lang="en">
+  	<div class="page-header">
+   		<h1>
+    		User Agreement 
+    	</h1>
+    </div>
+    <div class="info_box">
+      			<h3>
+                    Please Read
+                </h3>
+                <p> The COMPADRE Plant Matrix Database and COMADRE Animal Matrix Database provided via this portal are open-access data and are free of charge. We request that in all published work and presentations, the user acknowledges the COMPADRE Plant Matrix Database and/or the COMADRE Animal Matrix Database as either the source or the intermediary of the data. In the interest of reproducibility by the scientific community, we suggest the following citation format in outputs:
+                <br><br>
+                <ul>
+                    <li><p>COMPADRE Plant Matrix Database. University of Exeter Cornwall Campus (United Kingdom). Available at demography.ex.ac.uk. (data downloaded on [date], version X.X.X).</p>
+                    </li>
+                    <li><p>COMADRE Animal Matrix Database. Max Planck Institute for Demographic Research (Germany). Available at www.comadre-db.org. (data downloaded on [date] , version X.X.X).</p>
+                    </li>
+                    <div class="centred">
+                        <a href="{{url_for('main.download')}}" target="blank"><button class='btn btn-default'>Download Databases Here</button></a>
+                    </div>
+                    <br>
+                    <li><p>The version number of the database for COMPADRE and/or COMADRE is indicated within their respective Rdata objects (e.g compadre$version).</p></li>
+                    <br>
+                    <li><p>If the user chooses another citation format, the full name of the database(s) (COMPADRE Plant Matrix Database and/or COMADRE Animal Matrix Database), the full name of the institutional sponsors (University of Exeter, Max Planck Institute for Demographic Research), the version used, and our internet addresses (demography.ex.ac.uk) must be explicitly mentioned.</p></li>
+                </ul>
+                <br>
+                <ul>
+                    <p>
+                        Additional citations that may be useful for a description of the databases are:
+                    </p>
+                    <li><p>Salguero-Gómez R, Jones OR, Archer CA, Buckley YM, Che-Castaldo J, Caswell C, Scheuerlein A, Conde DA, Baudisch A, Brinks E, de Buhr H, Farack C, Gottschalk F, Hartmann A, Henning A, Hoppe G, Römer G, Runge J, Ruoff T, Wille J, Zeh S, Vieregg D, Altwegg R, Colchero F, Dong M, Hodgson D, de Kroon H, Lebreton J-D, Metcalf CJE, Neel M, Parker I, Takada T, Valverde T, Vélez-Espino LA, Wardle GM, Franco M & Vaupel JW. The COMPADRE Plant Matrix Database: an online repository for plant population dynamics. Journal of Ecology 103: 202-218. DOI:<a href="http://onlinelibrary.wiley.com/doi/10.1111/1365-2745.12334/abstract" target="_blank"> 10.1101/027821</a>
+                    </p></li>
+                    <br>
+                    <li><p>Salguero-Gómez R, Jones OR, Archer CA, Bein C, de Buhr H, Farack C, Gottschalk F, Hartmann A, Henning A, Hoppe G, Römer G, Ruoff T, Sommer V, Wille J, Zeh S, Vieregg D, Buckley YM, Che-Castaldo J, Hodgson D, Scheuerlein A, Caswell H & Vaupel JW. COMADRE: a global database of animal demography. bioRxiv DOI: <a href="http://www.biorxiv.org/content/early/2015/09/29/027821" target="_blank"> 10.1101/027821</a></p></li>
+                </ul>
+                <br>
+                <ul>
+                    <li>
+                        <p>
+                            However, please note that although our team has digitized numerous additional ancillary data, the matrix data in these databases are ultimately derived from (mostly) peer-reviewed scientific publications. We therefore urge users, wherever possible, to cite these original sources in addition to acknowledging the COMPADRE/COMADRE repository through which you were able to access them. The ultimate source for each matrix in the database is indicated in the metadata. Additional information about how to cite these data is available on the <a href="{{url_for('about.FAQs')}}" target="blank"> “FAQ”</a> section of the website. If you have further questions about citation procedures, please contact compadrecontact@gmail.com.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            We request that the user refers his/her colleagues to our website rather than simply passing on copies of the data. This is because our databases are updated frequently, including potential typo and error correction, and we wish to minimize the propagation of errors wherever possible.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            The data contained in both the COMPADRE Plant Matrix Database and COMADRE Animal Matrix Database have been carefully checked to fix and avoid errors. However, the COMPADRE/COMADRE team (see <a href="{{url_for('about.team')}}" target="blank"> “About Us”</a> ; including all project personnel and institutional sponsors) accepts no liability with regard to the material available in the collection. In particular, we accept no responsibility for any harm suffered by the user as a result of using these data, even if such harm results from errors on our part. We ask you to inform us of any errors that you find so that we can correct them.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <bold>
+                                We intend to update COMPADRE and COMADRE regularly and to provide convenient access to the collection online. However, we do not accept responsibility for any harm or inconvenience resulting from a suspension of service, whether temporary or permanent.
+                            </bold>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+    </div>
+</html>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

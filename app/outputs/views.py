@@ -19,6 +19,11 @@ import re
 import os
 import random
 
+#news
+@outputs.route('/termsofuse')
+def termsofuse():
+    return render_template('outputs/terms_of_use.html')
+
 ###Download files from UPLOAD FOLDER
 
 #@outputs.route('/downloading', methods=['GET','POST'])
