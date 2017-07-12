@@ -13,6 +13,12 @@
             "field_description": "Record the name of the journal from which data were sourced. We use the standard abbreviation of the journal using the BIOSIS Format. ; If the data were sourced from a book, thesis, report, or conference talk or poster, record that as appropriate. For journal abbreviations see list here: images.webofknowledge.comWOK46helpWOSA_abrvjt.html. If no abbreviation is available in both of those list, take a look into the paper. Often there are abbreviations in the left corner of the paper or at the first page. For example, J. Ecol. for Journal of Ecology. Book - Matrices are from a book, or book chapter. Note: If our source is a book name the author of the related chapter in Authors, not the author of the book.PhD thesis - Matrices are from a doctoral thesis. MSc thesis - Matrices are from a masters thesis. Report - Matrices are from a report. Conference talk - Matrices reported in a conference talk. Conference poster - Matrices reported in a conference poster.",
             "field_short_description": "The name of the journal from which data were sourced"
         },{
+            "field_name": "Title",
+            "name_in_csv": "publication_title",
+            "database_model":"publication",
+            "field_description": "Record the title of the paper or source from which data were sourced.",
+            "field_short_description": "The title of the paper from which data were sourced"
+        },{
             "field_name": "Authors",
             "name_in_csv": "publication_authors",
             "database_model":"publication",
