@@ -250,9 +250,9 @@ class MatrixForm(Form):
                             get_label=lambda a:'{} - {}'.format(a.cap_code, a.cap_description))
 
     observations = TextAreaField('Observations')
-    class_organized = StringField('Class organized')
-    class_author = StringField('Class as described by the author')
-    class_number = StringField('Class number')
+    class_organized = TextAreaField('Class organized')
+    class_author = TextAreaField('Class as described by the author')
+    class_number = TextAreaField('Class number')
     independent = BooleanField('Independent')
     non_independence = StringField('Non independence')
     non_independence_author = StringField('Author of non-independence')
