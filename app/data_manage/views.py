@@ -23,7 +23,7 @@ def gen_hex_code():
 @data_manage.route('/compadrino-zone')
 @login_required
 def compadrino_zone():
-    assigned_pubs = Publication.query.filter_by(entered_by_id = current_user.id)
+    assigned_pubs = Publication.query.join(Version).filter_by(entered_by_id = current_user.id)
     return render_template('data_manage/compadrino_zone.html',assigned_pubs = assigned_pubs)
 
 # publication edit history
@@ -56,6 +56,7 @@ def version_form(id):
         version.checked = form.checked.data
         version.statuses = form.status.data
         version.checked_count = form.checked_count.data
+        version.user = form.entered_by.data
         db.session.commit()
         
         flash('Status has been updated, please close this window and refresh the previous page')
@@ -63,6 +64,7 @@ def version_form(id):
     form.checked.data = version.checked
     form.status.data = version.statuses
     form.checked_count.data = version.checked_count
+    form.entered_by.data= version.user
     
     return render_template('data_manage/version_form.html', form=form, version=version,protocol_dict = protocol_dict)
 
@@ -462,8 +464,6 @@ def publication_form(id,edit_or_new):
         publication.missing_data = form.missing_data.data
         publication.additional_source_string = form.additional_source_string.data
         publication.study_notes = form.study_notes.data
-        publication.checked_by_id = form.checked_by.data.id
-        publication.entered_by_id = form.entered_by.data.id
         db.session.commit()
         
         
@@ -531,8 +531,6 @@ def publication_form(id,edit_or_new):
     form.missing_data.data = publication.missing_data
     form.additional_source_string.data = publication.additional_source_string
     form.study_notes.data = publication.study_notes
-    form.checked_by.data = publication.checked_by
-    form.entered_by.data = publication.entered_by
     
     
     return render_template('data_manage/publication_form.html', form=form, publication=publication,protocol_dict = protocol_dict)

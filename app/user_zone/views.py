@@ -25,13 +25,15 @@ def edit_profile():
             user.institute_confirmed = 0
             
         user.institute = form.institute.data
+        db.session.commit()
     
         flash('Your profile has been updated.')
-        return redirect(url_for('.user', username=user.username))
+        return redirect(url_for('.area'))
     form.name.data = user.name
     form.username.data = user.username
     form.about_me.data = user.about_me
     form.institute.data = user.institute
+    
         
     return render_template('admin/user_form.html', form=form)
 

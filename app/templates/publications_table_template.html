@@ -23,7 +23,7 @@
         </thead>
         <tbody class="list">
             {% for publication in publications %}
-            {% if can_edit == True or publication.version.status_id == 3 %}
+            {% if can_edit == True or publication.version[0].status_id == 3 %}
                 <tr>
                     <td class="authors" >{{ publication.authors }}</td>
                     <td class="name"><a href="../species=all/publications={{ publication.id }}">{{ publication.pub_title }}</a></td>

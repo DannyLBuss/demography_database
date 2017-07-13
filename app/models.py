@@ -117,6 +117,9 @@ class User(UserMixin, db.Model):
     institute_confirmed = db.Column(db.Boolean, default=False)
 
     #versions = db.relationship("Version", backref="user")
+    
+    entered_by = db.relationship("Version", backref="user")
+    #checked_by = db.relationship("Version", backref="user")
     changelogger = db.relationship("ChangeLogger", backref="user")
     contacts = db.relationship("AuthorContact", backref="user")
 
@@ -2683,10 +2686,7 @@ class Publication(db.Model):
     additional_sources = db.relationship("AdditionalSource", backref="publication", passive_deletes=True)
     populations = db.relationship("Population", backref="publication", passive_deletes=True)
     
-    entered_by_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
-    checked_by_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
-    entered_by = db.relationship("User", foreign_keys=[entered_by_id])
-    checked_by = db.relationship("User", foreign_keys=[checked_by_id])
+    
 
     version = db.relationship("Version", backref="publication", passive_deletes=True)
     #version_latest = db.Column(db.String(64))
@@ -3718,6 +3718,10 @@ class Version(db.Model):
     # Utility relationships
     #version_user_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
     database_id = db.Column(db.Integer, db.ForeignKey('databases.id',ondelete='CASCADE'))
+    
+    entered_by_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
+    #checked_by_id = db.Column(db.Integer, db.ForeignKey('users.id',ondelete='CASCADE'))
+    
 
     # Demography relationships
     species_id = db.Column(db.Integer, db.ForeignKey('species.id',ondelete='CASCADE'))

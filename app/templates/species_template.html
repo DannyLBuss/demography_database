@@ -9,8 +9,7 @@
     <p><b>Publication: </b>{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}</p>
     <p><b>Missing data:</b> {% for da in publication.missing_data %} {{ da.missing_description }}, {% endfor %} </p>
     <p><b>Correspondence:</b> {% for contacts in publication.author_contacts %} {{contacts.user.name}}, {% endfor %} </p>
-    <p><b>Entered by:</b> {{publication.entered_by.name}} </p>
-    <p><b>Checked by:</b>  {{publication.checked_by.name}}</p>
+    <p><b>Entered by:</b> {{publication.version[0].user.name}} </p>
     <ul>
         <li>Publication-{{publication.id}}-{{publication.version[0].statuses}}-{{publication.version[0].checked}}</li>
         

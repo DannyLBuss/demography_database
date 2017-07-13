@@ -52,7 +52,6 @@
                     <td>{{ publication.date_digitised.strftime('%Y-%m-%d')}}</td>
                       <td><p><a href="../../species=all/publications={{ publication.id }}">{{ publication.authors }} ({{ publication.year }}). "{{ publication.pub_title }}" in <i>{{ publication.journal_name }}</i> {{ publication.volume }}, {{ publication.pages }}.  </a></p>
                         <p>Missing data: {% for da in publication.missing_data %} {{ da.missing_description }},{% endfor %}</p>
-                          <p>Checked by: {{publication.checked_by.name}}</p>
                       
                       
                       </td>

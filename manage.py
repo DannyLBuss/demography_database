@@ -129,11 +129,6 @@ def coerce_boolean(string):
         return True
     elif string in false:
         return False
-    elif string == "NA":
-        print "it's NA mate"
-    else:
-        print "you've got an error mate"
-        print string
 
 
 def return_con(obj):
@@ -223,6 +218,16 @@ def version_data(cleaned):
 @manager.command
 def submit_new(data):
     import datetime
+    
+    version =  {'checked' : True, 
+    'checked_count' : 1, 
+    'statuses' : Status.query.filter_by(status_name="Green").first()}
+    
+    if data["population_database_id"] == "XXX" or data["population_database_id"] == "X.X.X":
+        version = {'checked' : False, 
+        'checked_count' : 0, 
+        'statuses' : Status.query.filter_by(status_name="Pending").first()} 
+        
 
     # When checking for null data later, these need to be excluded, as they will always have a value
     ignore_keys = ['version_ok', 'version_latest', 'version_original']
@@ -274,10 +279,7 @@ def submit_new(data):
         else:
             missing_data = 'NDY'
 
-        possible_user = User.query.filter_by(name = data["publication_student"]).first()
-        na_user = User.query.filter_by(name = "N/A").first()
-        if possible_user == None:
-            possible_user = na_user
+        
 
         pub_dict = {'authors': data["publication_authors"],
         'year' : data["publication_year"],
@@ -287,8 +289,6 @@ def submit_new(data):
         'journal_name' : data["publication_journal_name"],
         'date_digitised' : datetime.datetime.strptime(data['publication_date_digitization'], "%d/%m/%Y").strftime("%Y-%m-%d") if data['publication_date_digitization'] else None,
         'purposes' : queryset,
-        'entered_by_id' :  possible_user.id if possible_user else None,
-        'checked_by_id' :  na_user.id if na_user else None,
         'study_notes' : data["publication_study_notes"]
         }
 
@@ -305,10 +305,19 @@ def submit_new(data):
         db.session.commit()
 
         ''' Publication Version '''
-        version = version_data(pub_cleaned)
+        #version = version_data(pub_cleaned)
         publication_version = Version(**version)
         publication_version.publication = publication
         publication.colour = gen_hex_code()
+        
+        possible_user = User.query.filter_by(name = data["publication_student"]).first()
+        na_user = User.query.filter_by(name = "N/A").first()
+        if possible_user == None:
+            possible_user = na_user
+        
+        publication_version.entered_by_id = possible_user.id if possible_user else None,
+        publication_version.checked_by_id = na_user.id if na_user else None,
+        
         db.session.add(publication_version) 
         db.session.commit()  
         publication_version.original_version_id = publication_version.id
@@ -341,7 +350,7 @@ def submit_new(data):
             db.session.commit()
 
             ''' Author Contact Version '''
-            version = version_data(ac_cleaned)
+            #version = version_data(ac_cleaned)
             author_contact_version = Version(**version)
             author_contact_version.author_contact = author_contact
             db.session.add(author_contact_version) 
@@ -370,7 +379,7 @@ def submit_new(data):
         db.session.commit()
 
         ''' Species Version '''
-        version = version_data(species_cleaned)
+        #version = version_data(species_cleaned)
         species_version = Version(**version)
         species_version.species = species
         db.session.add(species_version) 
@@ -406,7 +415,7 @@ def submit_new(data):
         db.session.commit()
 
         ''' Trait Version '''
-        version = version_data(trait_cleaned)
+        #version = version_data(trait_cleaned)
         trait_version = Version(**version)
         trait_version.trait = trait
         db.session.add(trait_version) 
@@ -443,7 +452,7 @@ def submit_new(data):
         db.session.commit()
 
         ''' Taxonomy Version '''
-        version = version_data(tax_cleaned)
+        #version = version_data(tax_cleaned)
         taxonomy_version = Version(**version)
         taxonomy_version.version_number = 1
         taxonomy_version.taxonomy = tax    
@@ -578,7 +587,7 @@ def submit_new(data):
         db.session.commit()
 
         ''' Population Version '''
-        version = version_data(pop_cleaned)
+        #version = version_data(pop_cleaned)
         population_version = Version(**version)
         population_version.version_number = 1
         population_version.population = pop    
@@ -652,7 +661,7 @@ def submit_new(data):
     db.session.commit()
 
     ''' matrix Version '''
-    version = version_data(matrix_cleaned)
+    #version = version_data(matrix_cleaned)
     matrix_version = Version(**version)
     matrix_version.version_number = 1
     matrix_version.matrix = matrix    
@@ -681,7 +690,7 @@ def submit_new(data):
         db.session.commit()
 
         ''' fixed Version '''
-        version = version_data(fixed_cleaned)
+        #version = version_data(fixed_cleaned)
         fixed_version = Version(**version)
         fixed_version.version_number = 1
         fixed_version.fixed = fixed    

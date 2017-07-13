@@ -64,6 +64,9 @@ class VersionForm(Form):
             query_factory=lambda: Status.query.all(), get_pk=lambda a: a.id,
                             get_label=lambda a:'{} ({})'.format(a.status_name, a.status_description))
     checked_count = IntegerField('How many times has this been checked?')
+    entered_by = QuerySelectField('Entered by',
+            query_factory=lambda: User.query.all(), get_pk=lambda a: a.id,
+                            get_label=lambda a:'{} - {}'.format(a.name, a.email))
     submit = SubmitField('Submit')
 
 class SpeciesForm(Form):
@@ -156,12 +159,7 @@ class PublicationForm(Form):
     
     additional_source_string = StringField('Additional Source')
     study_notes = StringField('Additional notes')
-    entered_by = QuerySelectField('Entered by',
-            query_factory=lambda: User.query.all(), get_pk=lambda a: a.id,
-                            get_label=lambda a:'{} - {}'.format(a.name, a.email))
-    checked_by = QuerySelectField('Checked by',
-            query_factory=lambda: User.query.all(), get_pk=lambda a: a.id,
-                            get_label=lambda a:'{} - {}'.format(a.name, a.email))
+    
     # author_contacts # Fkey#additional_sources # Fkey
     submit = SubmitField('Submit')
 
