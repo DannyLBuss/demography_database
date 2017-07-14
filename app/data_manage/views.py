@@ -439,7 +439,6 @@ def publication_form(id,edit_or_new):
             #publication.add_to_logger(current_user,'date_digitised',publication_old.date_digitised,form.date_digitised.data,'edit')
             publication.add_to_logger(current_user,'embargo',publication_old.embargo,form.embargo.data,'edit')
             publication.add_to_logger(current_user,'additional_source_string',publication_old.additional_source_string,form.additional_source_string.data,'edit')
-            #publication.add_to_logger(current_user,'student',publication_old.student,form.student.data,'edit')
             publication.add_to_logger(current_user,'study_notes',publication_old.study_notes,form.study_notes.data,'edit')
             # END CODE BLOCK
             
@@ -492,7 +491,6 @@ def publication_form(id,edit_or_new):
             #publication.add_to_logger(current_user,'date_digitised',publication_old.date_digitised,form.date_digitised.data,'edit')
             publication.add_to_logger(current_user,'embargo',publication_old.embargo,form.embargo.data,'edit')
             publication.add_to_logger(current_user,'additional_source_string',publication_old.additional_source_string,form.additional_source_string.data,'edit')
-            #publication.add_to_logger(current_user,'student',publication_old.student,form.student.data,'edit')
             publication.add_to_logger(current_user,'study_notes',publication_old.study_notes,form.study_notes.data,'edit')
             # END CODE BLOCK
             

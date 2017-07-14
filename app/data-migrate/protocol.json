@@ -109,6 +109,12 @@
             "field_description": "If the author has been asked for something other than the standard missing information (see contact author meta-table, a short note should be left in this field. For example, is the species clonal?.",
             "field_short_description": "Author contacted for additional information not in contact author meta-table"
         },{
+            "field_name": "Source Type",
+            "name_in_csv": "publication_source",
+            "database_model":"publication",
+            "field_description": "The type of source the data came from. A scientific paper, a book, a website, a phd manuscript etc. For more information, please see the source type metatable.",
+            "field_short_description": "The type of source the data came from, e.g. book or paper."
+        },{
             "field_name": "Date Digitized",
             "name_in_csv": "publication_date_digitization",
             "database_model":"publication",
