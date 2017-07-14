@@ -188,7 +188,7 @@ def register():
                     username=form.username.data,
                     password=form.password.data,
                     name = form.name.data,
-                    #role = form.role.data,
+                    role = form.role.data,
                     institute = form.institute.data)
 
         if account_type == 'developer':

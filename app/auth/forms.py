@@ -22,7 +22,7 @@ class RegistrationForm(Form):
                                           'Usernames must have only letters, '
                                           'numbers, dots or underscores')])
     name = StringField('Full name', validators=[Required()])
-    role = QuerySelectField('Role',query_factory=lambda: Role.query.all(), get_pk=lambda a: a.id,get_label=lambda a:a.name)
+    role = QuerySelectField('Role',query_factory=lambda: Role.query.filter_by(name='User'), get_pk=lambda a: a.id,get_label=lambda a:a.name)
     institute = QuerySelectField('Institution',query_factory=lambda: Institute.query.all(), get_pk=lambda a: a.id,get_label=lambda a:a.institution_name, validators=[Required()])
     password = PasswordField('Password', validators=[
         Required(), EqualTo('password2', message='Passwords must match.')])
