@@ -107,8 +107,8 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(64))
     location = db.Column(db.String(64))
     about_me = db.Column(db.Text())
-    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
-    last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+    member_since = db.Column(db.Date(), default=datetime.now().date())
+    last_seen = db.Column(db.Date(), default=datetime.now().date())
     avatar_hash = db.Column(db.String(32))
     api_hash = db.Column(db.Text())
     tokens = db.Column(db.Text)
@@ -245,7 +245,7 @@ class User(UserMixin, db.Model):
         return self.can(Permission.ADMINISTER)
 
     def ping(self):
-        self.last_seen = datetime.utcnow()
+        self.last_seen = datetime.now().date()
         db.session.add(self)
 
     def gravatar(self, size=100, default='identicon', rating='g'):

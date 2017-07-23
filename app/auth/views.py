@@ -53,7 +53,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
-            login_user(user, form.remember_me.data)
+            login_user(user, remember=True)
             try:
                 request_path = request.cookies['request_path']
             except KeyError:
@@ -280,7 +280,7 @@ def password_reset(token):
         if user is None:
             return redirect(url_for('main.index'))
         if user.reset_password(token, form.password.data):
-            flash('Your password has been updated.')
+            flash('Your password has been updated. Please refresh the current page.')
             return redirect(url_for('auth.login'))
         else:
             return redirect(url_for('main.index'))
