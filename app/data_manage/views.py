@@ -115,9 +115,9 @@ def species_form(id,edit_or_new):
         species.image_path2 = form.image_path2.data                     
         
         if edit_or_new == "new":
-            db.session.flush()
             db.session.add(species)
-            db.session.commit()
+            db.session.flush()
+#            db.session.commit()
             
             # COPY CODE BLOCK
             species.add_to_logger(current_user,'species_accepted',species_old.species_accepted,form.species_accepted.data,'edit')
@@ -136,6 +136,7 @@ def species_form(id,edit_or_new):
             version.statuses = Status.query.filter_by(id=4).first()
             version.species_id = species.id
             db.session.add(version)
+            db.session.flush()
             db.session.commit()
         
         species_id = str(species.id)
@@ -219,9 +220,9 @@ def taxonomy_form(id,species_id,edit_or_new):
         if edit_or_new == "new":
             taxonomy.species_id = species.id
             
-            db.session.flush()
             db.session.add(taxonomy)
-            db.session.commit()
+            db.session.flush()
+#            db.session.commit()
             # COPY CODE BLOCK
             taxonomy.add_to_logger(current_user,'authority',taxonomy_old.authority,form.authority.data,'edit')
             taxonomy.add_to_logger(current_user,'tpl_version',taxonomy_old.tpl_version,form.tpl_version.data,'edit')
@@ -245,6 +246,7 @@ def taxonomy_form(id,species_id,edit_or_new):
             version.statuses = Status.query.filter_by(id=4).first()
             version.taxonomy_id = taxonomy.id
             db.session.add(version)
+            db.session.flush()
             db.session.commit()
             
         species_id = str(species.id)
@@ -333,9 +335,9 @@ def trait_form(id,edit_or_new,species_id):
         if edit_or_new == "new":
             trait.species_id = species.id
             
-            db.session.flush()
             db.session.add(trait)
-            db.session.commit()
+            db.session.flush()
+#            db.session.commit()
             # COPY CODE BLOCK
             trait.add_to_logger(current_user,'organism_type',trait_old.organism_type,form.organism_type.data,'edit')
             trait.add_to_logger(current_user,'growth_form_raunkiaer',trait_old.growth_form_raunkiaer,form.growth_form_raunkiaer.data,'edit')
@@ -359,6 +361,7 @@ def trait_form(id,edit_or_new,species_id):
             version.statuses = Status.query.filter_by(id=4).first()
             version.trait_id = trait.id
             db.session.add(version)
+            db.session.flush()
             db.session.commit()
         
         species_id = str(species.id)
@@ -463,16 +466,15 @@ def publication_form(id,edit_or_new):
         publication.missing_data = form.missing_data.data
         publication.additional_source_string = form.additional_source_string.data
         publication.study_notes = form.study_notes.data
-        db.session.commit()
-        
+        db.session.flush()
         
         print(publication.purposes)
         
         if edit_or_new == "new":
             publication.colour = gen_hex_code()
-            db.session.flush()
             db.session.add(publication)
-            db.session.commit()
+            db.session.flush()
+#            db.session.commit()
             # COPY CODE BLOCK
             publication.add_to_logger(current_user,'source_type',publication_old.source_type,form.source_type.data,'edit')
             publication.add_to_logger(current_user,'authors',publication_old.authors,form.authors.data,'edit')
@@ -501,6 +503,7 @@ def publication_form(id,edit_or_new):
             version.statuses = Status.query.filter_by(id=4).first()
             version.publication_id = publication.id
             db.session.add(version)
+            db.session.flush()
             db.session.commit()
             
         publication_id = str(publication.id)
@@ -648,9 +651,9 @@ def population_form(id,edit_or_new,species_id,publication_id):
         
         if edit_or_new == "new":
             
-            db.session.flush()
             db.session.add(population)
-            db.session.commit()
+            db.session.flush()
+#            db.session.commit()
             
             # COPY CODE BLOCK
             population.add_to_logger(current_user,'species_author',population_old.species_author,form.species_author.data,'edit')
@@ -686,6 +689,7 @@ def population_form(id,edit_or_new,species_id,publication_id):
             version.statuses = Status.query.filter_by(id=4).first()
             version.population_id = population.id
             db.session.add(version)
+            db.session.flush()
             db.session.commit()
         
         publication_id = str(publication.id)
@@ -804,7 +808,8 @@ def matrix_form(id,edit_or_new,pop_id):
         if edit_or_new == "new":
             matrix.population_id = population.id
             db.session.add(matrix)
-            db.session.commit()
+            db.session.flush()
+#            db.session.commit()
             
             
             #make associated version object
@@ -814,14 +819,16 @@ def matrix_form(id,edit_or_new,pop_id):
             version.statuses = Status.query.filter_by(id=4).first()
             version.matrix_id = matrix.id
             db.session.add(version)
-            db.session.commit()
+            db.session.flush()
+#            db.session.commit()
             
             # make fixed object
             fixed = Fixed()
             fixed.matrix_id = matrix.id
             print fixed
             db.session.add(fixed)
-            db.session.commit()
+            db.session.flush()
+#            db.session.commit()
             
             # make a version for the fixed object...
             version = Version()
@@ -830,6 +837,7 @@ def matrix_form(id,edit_or_new,pop_id):
             version.statuses = Status.query.filter_by(id=4).first()
             version.fixed_id = fixed.id
             db.session.add(version)
+            db.session.flush()
             db.session.commit()
         
         flash('The matrix infomation has been updated.')
@@ -924,6 +932,7 @@ def fixed_form(id,edit_or_new,matrix_id):
             version.statuses = Status.query.filter_by(id=4).first()
             version.fixed_id = fixed.id
             db.session.add(version)
+            db.session.flush()
             db.session.commit()
         flash('The SPAND_EX data has been updated.')
         return redirect("../species=all/publications="+publication_id)
@@ -978,6 +987,7 @@ def contacts_form(id,edit_or_new,publication_id):
         contact.publication_id = publication_id
         
         db.session.add(contact)
+        db.session.flush()
         db.session.commit()
         flash('The contact has been updated.')
         return redirect("../species=all/publications="+publication_id)
@@ -1043,6 +1053,7 @@ def delete_object(thing_to_delete,id_obj):
             db.session.delete(tra)
         for ver in version:
             db.session.delete(ver)
+        db.session.flush()
         db.session.commit()
         flash('The species (+taxonomy and traits) has been deleted')
         return redirect(url_for('.compadrino_zone'))
@@ -1052,6 +1063,7 @@ def delete_object(thing_to_delete,id_obj):
         for ver in version:
             db.session.delete(ver)
         db.session.delete(publication)
+        db.session.flush()
         db.session.commit()
         flash('The publication has been deleted')
         return redirect(url_for('.compadrino_zone'))
@@ -1062,6 +1074,7 @@ def delete_object(thing_to_delete,id_obj):
         for ver in version:
             db.session.delete(ver)
         db.session.delete(population)
+        db.session.flush()
         db.session.commit()
         flash('The population has been deleted')
         return redirect("../species=all/publications="+publication_id)
@@ -1069,6 +1082,7 @@ def delete_object(thing_to_delete,id_obj):
     if form.validate_on_submit() and thing_to_delete == "contact" and can_delete == True:
         publication_id = str(contact.publication.id)
         db.session.delete(contact)
+        db.session.flush()
         db.session.commit()
         flash('The contact has been deleted')
         return redirect("../species=all/publications="+publication_id)
@@ -1084,6 +1098,7 @@ def delete_object(thing_to_delete,id_obj):
                 db.session.delete(vers)
             db.session.delete(fix)
         db.session.delete(matrix)
+        db.session.flush()
         db.session.commit()
         flash('The matrix has been deleted')
         return redirect("../species=all/publications="+publication_id)

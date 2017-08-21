@@ -2671,7 +2671,7 @@ class Publication(db.Model):
     journal_name = db.Column(db.Text()) #r-generated, needs more info, probably generated in method of this model
     purposes = db.relationship("Purpose",
                     secondary=publication_purposes, backref="publications", passive_deletes=True)
-    date_digitised = db.Column(db.DateTime(), default=datetime.now)
+    date_digitised = db.Column(db.DateTime(), default=datetime.now().date())
     embargo = db.Column(db.Date()) #nullable
     missing_data = db.relationship("MissingData",
                     secondary=publication_missing_data, backref="publications", passive_deletes=True)
