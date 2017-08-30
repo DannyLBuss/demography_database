@@ -108,20 +108,20 @@ def is_matrix_ergodic(matA):
 ##### a. unreleased and incomplete (amber) ######
 ###Note these won't work yet until database is related to the Population.model which it isn't atm
 ## All ##
-#Species
-def all_species_unreleased():
-    all_species_unreleased = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_species_unreleased
+# #Species
+# def all_species_unreleased():
+#     all_species_unreleased = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_species_unreleased
 
-#Populations
-def all_populations_unreleased():
-    all_populations_unreleased = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_populations_unreleased
+# #Populations
+# def all_populations_unreleased():
+#     all_populations_unreleased = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_populations_unreleased
 
-#Matrices
-def all_matrices_unreleased():
-    all_matrices_unreleased = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_matrices_unreleased
+# #Matrices
+# def all_matrices_unreleased():
+#     all_matrices_unreleased = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_matrices_unreleased
 
 ## COMPADRE ##
 #Species.join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
@@ -145,115 +145,22 @@ def all_matrices_unreleased():
 
 #Matrices
 
-##### b. unreleased and complete aka. ready for release (green) ######
-## All ##
-#Species
-def all_species_unreleased_complete():
-    all_species_unreleased_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_species_unreleased_complete
+# ##### b. unreleased and complete aka. ready for release (green) ######
+# ## All ##
+# #Species
+# def all_species_unreleased_complete():
+#     all_species_unreleased_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_species_unreleased_complete
 
-#Populations
-def all_populations_unreleased_complete():
-    all_populations_unreleased_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_populations_unreleased_complete
+# #Populations
+# def all_populations_unreleased_complete():
+#     all_populations_unreleased_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_populations_unreleased_complete
 
-#Matrices
-def all_matrices_unreleased_complete():
-    all_matrices_unreleased_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_matrices_unreleased_complete
-
-## COMPADRE ##
-#Species
-
-
-#Populations
-
-
-#Matrices
-
-## COMADRE ##
-#Species
-
-
-#Populations
-
-
-#Matrices
-
-###c. released and complete 
-
-## ALL ##
-#Species
-def all_species_released_complete():
-    all_species_released_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_species_released_complete
-
-#Populations
-def all_populations_released_complete():
-    all_populations_released_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_populations_released_complete
-
-
-#Matrices
-def all_matrices_released_complete():
-    all_matrices_released_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_matrices_released_complete    
-
-## COMPADRE ## - when new versions of COMPADRE come out, these will need new versions added to get an accurate summary
-#Species
-def all_species_released_compadre():
-#    all_species_released_2 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.2.1").count()
-#    all_species_released_3 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="4.0.1").count()
-#    all_species_released_4 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.0.0").count()
-    all_species_released_compadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_species_released_compadre
-
-#Populations
-def all_populations_released_compadre():
-
-    all_populations_released_compadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_populations_released_compadre
-
-#Matrices
-def all_matrices_released_compadre():
-#    all_matrices_released_2 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.2.1").count()
-#    all_matrices_released_3 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="4.0.1").count()
-#    all_matrices_released_4 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.0.0").count()
-    all_matrices_released_compadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_matrices_released_compadre
-## COMADRE ##
-#Species
-def all_species_released_comadre():
-#    all_species_released_5 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="2.0.1").count()
-#    all_species_released_6 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="1.0.0").count()
-    all_species_released_comadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_species_released_comadre
-
-#Populations
-def all_populations_released_comadre():
-#    all_populations_released_5 = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Database).filter(Database.database_name=="2.0.1").count()
-#    all_populations_released_6 = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Database).filter(Database.database_name=="1.0.0").count()
-    all_populations_released_comadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_populations_released_comadre
-
-#Matrices
-def all_matrices_released_comadre():
-#    all_matrices_released_5 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="2.0.1").count()
-#    all_matrices_released_6 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="1.0.0").count()
-    all_matrices_released_comadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
-    return all_matrices_released_comadre
-
-###d. released but missing stuff
-
-
-## ALL ##
-#Species
-
-
-#Populations
-
-
-#Matrices
+# #Matrices
+# def all_matrices_unreleased_complete():
+#     all_matrices_unreleased_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_matrices_unreleased_complete
 
 ## COMPADRE ##
 #Species
@@ -268,71 +175,164 @@ def all_matrices_released_comadre():
 #Species
 
 
+# #Populations
+
+
+# #Matrices
+
+# ###c. released and complete 
+
+# ## ALL ##
+# #Species
+# def all_species_released_complete():
+#     all_species_released_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_species_released_complete
+
+# #Populations
+# def all_populations_released_complete():
+#     all_populations_released_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_populations_released_complete
+
+
+# #Matrices
+# def all_matrices_released_complete():
+#     all_matrices_released_complete = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_matrices_released_complete    
+
+# ## COMPADRE ## - when new versions of COMPADRE come out, these will need new versions added to get an accurate summary
+# #Species
+# def all_species_released_compadre():
+# #    all_species_released_2 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.2.1").count()
+# #    all_species_released_3 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="4.0.1").count()
+# #    all_species_released_4 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.0.0").count()
+#     all_species_released_compadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_species_released_compadre
+
+# #Populations
+# def all_populations_released_compadre():
+
+#     all_populations_released_compadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_populations_released_compadre
+
+# #Matrices
+# def all_matrices_released_compadre():
+# #    all_matrices_released_2 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.2.1").count()
+# #    all_matrices_released_3 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="4.0.1").count()
+# #    all_matrices_released_4 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="3.0.0").count()
+#     all_matrices_released_compadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_matrices_released_compadre
+# ## COMADRE ##
+# #Species
+# def all_species_released_comadre():
+# #    all_species_released_5 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="2.0.1").count()
+# #    all_species_released_6 = Species.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="1.0.0").count()
+#     all_species_released_comadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_species_released_comadre
+
+# #Populations
+# def all_populations_released_comadre():
+# #    all_populations_released_5 = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Database).filter(Database.database_name=="2.0.1").count()
+# #    all_populations_released_6 = Population.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Database).filter(Database.database_name=="1.0.0").count()
+#     all_populations_released_comadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_populations_released_comadre
+
+# #Matrices
+# def all_matrices_released_comadre():
+# #    all_matrices_released_5 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="2.0.1").count()
+# #    all_matrices_released_6 = Matrix.query.join(Version).join(Version.statuses).filter(Status.status_name=="Green").join(Population).join(Population.database).filter(Database.database_name=="1.0.0").count()
+#     all_matrices_released_comadre = Population.query.join(Database).filter(Database.database_master_version=="X").count()
+#     return all_matrices_released_comadre
+
+# ###d. released but missing stuff
+
+
+## ALL ##
+#Species
+
+
 #Populations
 
 
-######Admin Use Only#######
-###Count function for admin areas - Total sums###
-def all_matrices():
-    all_matrices_count = Matrix.query.count()
-    return all_matrices_count
+#Matrices
 
-##All_populations
-def all_pops():
-    all_pops_count = Population.query.count()
-    return all_pops_count
+## COMPADRE ##
+#Species
 
-##All_species
-def all_species():
-    all_species = Species.query.count()
-    return all_species
 
-##All. matrices in compadre (plants only)
-def count_plants():
-     count_plants = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
-     return count_plants
+# #Populations
 
-##All. matrices in comadre (animalia only)
-def count_comadre():
-     count_comadre = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Animalia").count()
-     return count_comadre
 
-##No. matrices in compadre (plants, fungi and algae)
-def count_compadre():
-     count_fungi = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
-     count_chromista = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Chromista").count()
-     count_chromalveolata = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Chromalveolata").count()
-     count_compadre = count_plants() + count_fungi + count_chromista + count_chromalveolata
-     return count_compadre
+# #Matrices
 
-##No. populations in compadre (plants only)
-def count_plants_pop():
-    count_plants_pop = Population.query.join(Species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
-    return count_plants_pop
+# ## COMADRE ##
+# #Species
 
-##No. populations in compadre (plants, fungi and algae)
-def count_compadre_pop():
-    count_chromista_pop = Population.query.join(Species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Chromista").count()
-    count_chromalveolta_pop = Population.query.join(Species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Chromalveolata").count()
-    count_fungi_pop = Population.query.join(Species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Fungi").count()
-    count_compadre_pop = count_plants_pop() + count_chromalveolta_pop + count_chromista_pop + count_fungi_pop
-    return count_compadre_pop
 
-##No. populations in comadre (animalia only)
-def count_comadre_pop():
-    count_comadre_pop = Population.query.join(Species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Animalia").count()
-    return count_comadre_pop
+# #Populations
 
-##No. compadre species inc. fungi, algae, etc. admin
-def species_compadre_count():
-    species_chromista_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Chromista").count()
-    species_chromalveolta_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Chromalveolta").count()
-    species_fungi_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Fungi").count()
-    species_plant_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
-    species_compadre_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
-    return species_compadre_count
 
-##No. comadre species admin
-def species_comadre_count():
-    species_comadre_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Animalia").count()
-    return species_comadre_count
+# ######Admin Use Only#######
+# ###Count function for admin areas - Total sums###
+# def all_matrices():
+#     all_matrices_count = Matrix.query.count()
+#     return all_matrices_count
+
+# ##All_populations
+# def all_pops():
+#     all_pops_count = Population.query.count()
+#     return all_pops_count
+
+# ##All_species
+# def all_species():
+#     all_species = Species.query.count()
+#     return all_species
+
+# ##All. matrices in compadre (plants only)
+# def count_plants():
+#      count_plants = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
+#      return count_plants
+
+# ##All. matrices in comadre (animalia only)
+# def count_comadre():
+#      count_comadre = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Animalia").count()
+#      return count_comadre
+
+# ##No. matrices in compadre (plants, fungi and algae)
+# def count_compadre():
+#      count_fungi = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
+#      count_chromista = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Chromista").count()
+#      count_chromalveolata = Matrix.query.join(Matrix.population).join(Population.species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Chromalveolata").count()
+#      count_compadre = count_plants() + count_fungi + count_chromista + count_chromalveolata
+#      return count_compadre
+
+# ##No. populations in compadre (plants only)
+# def count_plants_pop():
+#     count_plants_pop = Population.query.join(Species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
+#     return count_plants_pop
+
+# ##No. populations in compadre (plants, fungi and algae)
+# def count_compadre_pop():
+#     count_chromista_pop = Population.query.join(Species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Chromista").count()
+#     count_chromalveolta_pop = Population.query.join(Species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Chromalveolata").count()
+#     count_fungi_pop = Population.query.join(Species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Fungi").count()
+#     count_compadre_pop = count_plants_pop() + count_chromalveolta_pop + count_chromista_pop + count_fungi_pop
+#     return count_compadre_pop
+
+# ##No. populations in comadre (animalia only)
+# def count_comadre_pop():
+#     count_comadre_pop = Population.query.join(Species).join(Species.taxonomy).filter(Taxonomy.kingdom == "Animalia").count()
+#     return count_comadre_pop
+
+# ##No. compadre species inc. fungi, algae, etc. admin
+# def species_compadre_count():
+#     species_chromista_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Chromista").count()
+#     species_chromalveolta_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Chromalveolta").count()
+#     species_fungi_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Fungi").count()
+#     species_plant_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
+#     species_compadre_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Plantae").count()
+#     return species_compadre_count
+
+# ##No. comadre species admin
+# def species_comadre_count():
+#     species_comadre_count = Species.query.join(Taxonomy).filter(Taxonomy.kingdom == "Animalia").count()
+#     return species_comadre_count

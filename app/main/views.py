@@ -17,12 +17,12 @@ from .forms import ContactForm
 from flask_mail import Mail, Message
 from flask.ext.mail import Message, Mail
 from app import mail, create_app
-from app.matrix_functions import all_species_unreleased, all_populations_unreleased,all_matrices_unreleased, \
-all_species_unreleased_complete, all_populations_unreleased_complete, all_matrices_unreleased_complete, \
-all_species_released_complete, all_populations_released_complete, all_matrices_released_complete, \
-all_species_released_compadre, all_populations_released_compadre, all_matrices_released_compadre, \
-all_species_released_comadre, all_populations_released_comadre, all_matrices_released_comadre, \
-all_matrices, all_pops, all_species, count_plants, count_comadre, count_compadre, count_plants_pop, count_compadre_pop, count_comadre_pop, species_compadre_count, species_comadre_count
+# from app.matrix_functions import all_species_unreleased, all_populations_unreleased,all_matrices_unreleased, \
+# all_species_unreleased_complete, all_populations_unreleased_complete, all_matrices_unreleased_complete, \
+# all_species_released_complete, all_populations_released_complete, all_matrices_released_complete, \
+# all_species_released_compadre, all_populations_released_compadre, all_matrices_released_compadre, \
+# all_species_released_comadre, all_populations_released_comadre, all_matrices_released_comadre, \
+# all_matrices, all_pops, all_species, count_plants, count_comadre, count_compadre, count_plants_pop, count_compadre_pop, count_comadre_pop, species_compadre_count, species_comadre_count
 from ..data_manage.forms import SpeciesForm, TaxonomyForm, TraitForm, PopulationForm, MatrixForm, PublicationForm, DeleteForm
 import random
 from .. import db
@@ -60,54 +60,54 @@ def after_request(response):
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    ##Released and Complete Stats
-    #1. Total
-    all_species_released_green = all_species_released_complete()
-    all_populations_released_green = all_populations_released_complete()
-    all_matrices_released_green = all_matrices_released_complete()
-    #2. Compadre
-    all_species_released_compadre_green = all_species_released_compadre()
-    all_populations_released_compadre_green = all_populations_released_compadre()
-    all_matrices_released_compadre_green = all_matrices_released_compadre()
-    #3. Comadre
-    all_species_released_comadre_green = all_species_released_comadre()
-    all_populations_released_comadre_green = all_populations_released_comadre()
-    all_matrices_released_comadre_green = all_matrices_released_comadre()
-    ##Released and Incomplete Stats
-    #NDY 1. total, 2. compadre, 3. comadre
+    # ##Released and Complete Stats
+    # #1. Total
+    # all_species_released_green = all_species_released_complete()
+    # all_populations_released_green = all_populations_released_complete()
+    # all_matrices_released_green = all_matrices_released_complete()
+    # #2. Compadre
+    # all_species_released_compadre_green = all_species_released_compadre()
+    # all_populations_released_compadre_green = all_populations_released_compadre()
+    # all_matrices_released_compadre_green = all_matrices_released_compadre()
+    # #3. Comadre
+    # all_species_released_comadre_green = all_species_released_comadre()
+    # all_populations_released_comadre_green = all_populations_released_comadre()
+    # all_matrices_released_comadre_green = all_matrices_released_comadre()
+    # ##Released and Incomplete Stats
+    # #NDY 1. total, 2. compadre, 3. comadre
 
-    ##Unreleased and Incomplete Stats
-    #1. Total 
-    all_species_unreleased_amber = all_species_unreleased()
-    all_populations_unreleased_amber = all_populations_unreleased()
-    all_matrices_unreleased_amber = all_matrices_unreleased()
-    #2. Compadre
-    #NDY
-    #3. Comadre
-    #NDY
-    ##Unreleased and Complete Stats
-    #1. Total
-    all_species_unreleased_green = all_species_unreleased_complete()
-    all_populations_unreleased_green = all_populations_unreleased_complete()
-    all_matrices_unreleased_green = all_matrices_unreleased_complete()
-    #2. Compadre
-    #3. Comadre
+    # ##Unreleased and Incomplete Stats
+    # #1. Total 
+    # all_species_unreleased_amber = all_species_unreleased()
+    # all_populations_unreleased_amber = all_populations_unreleased()
+    # all_matrices_unreleased_amber = all_matrices_unreleased()
+    # #2. Compadre
+    # #NDY
+    # #3. Comadre
+    # #NDY
+    # ##Unreleased and Complete Stats
+    # #1. Total
+    # all_species_unreleased_green = all_species_unreleased_complete()
+    # all_populations_unreleased_green = all_populations_unreleased_complete()
+    # all_matrices_unreleased_green = all_matrices_unreleased_complete()
+    # #2. Compadre
+    # #3. Comadre
 
-    ##Admin use only stats
-    #Matrix Stats
-    count_matrices = all_matrices()
-    comadre_count = count_comadre()
-    compadre_count = count_compadre()
-    plant_count = count_plants()
-    #Population Stats
-    count_pops = all_pops()
-    comadre_count_pop = count_comadre_pop()
-    compadre_count_pop = count_compadre_pop()
-    plant_count_pop = count_plants_pop()
-    #Species stats
-    species_count = all_species()
-    species_count_compadre = species_compadre_count()
-    species_count_comadre = species_comadre_count()
+    # ##Admin use only stats
+    # #Matrix Stats
+    # count_matrices = all_matrices()
+    # comadre_count = count_comadre()
+    # compadre_count = count_compadre()
+    # plant_count = count_plants()
+    # #Population Stats
+    # count_pops = all_pops()
+    # comadre_count_pop = count_comadre_pop()
+    # compadre_count_pop = count_compadre_pop()
+    # plant_count_pop = count_plants_pop()
+    # #Species stats
+    # species_count = all_species()
+    # species_count_compadre = species_compadre_count()
+    # species_count_comadre = species_comadre_count()
     
     species = Species.query.filter(Species.image_path != None).all()
     number = len(species)
@@ -119,16 +119,18 @@ def index():
             random_int = random.randint(0,number-1)
             s = species[random_int]
         species2.append(s)
-    return render_template('index.html',species2 = species2, all_species_released_green = all_species_released_green, all_populations_released_green = all_populations_released_green, 
-           all_matrices_released_green = all_matrices_released_green, all_species_released_compadre_green = all_species_released_compadre_green,
-           all_populations_released_compadre_green = all_populations_released_compadre_green, all_matrices_released_compadre_green = all_matrices_released_compadre_green, 
-           all_species_released_comadre_green = all_species_released_comadre_green, all_populations_released_comadre_green = all_populations_released_comadre_green, all_matrices_released_comadre_green = all_matrices_released_comadre_green, 
-           all_species_unreleased_amber = all_species_unreleased_amber, all_species_unreleased_green = all_species_unreleased_green, 
-           all_populations_unreleased_amber = all_populations_unreleased_amber, all_populations_unreleased_green = all_populations_unreleased_green, 
-           all_matrices_unreleased_amber = all_matrices_unreleased_amber, all_matrices_unreleased_green = all_matrices_unreleased_green, 
-           count_matrices = count_matrices, comadre_count = comadre_count, compadre_count = compadre_count, plant_count = plant_count, 
-           count_pops = count_pops, comadre_count_pop = comadre_count_pop, compadre_count_pop = compadre_count_pop, plant_count_pop = plant_count_pop,
-           species_count = species_count, species_count_compadre = species_count_compadre, species_count_comadre = species_count_comadre)
+    return render_template('index.html',species2 = species2)
+
+    # all_species_released_green = all_species_released_green, all_populations_released_green = all_populations_released_green, 
+    #        all_matrices_released_green = all_matrices_released_green, all_species_released_compadre_green = all_species_released_compadre_green,
+    #        all_populations_released_compadre_green = all_populations_released_compadre_green, all_matrices_released_compadre_green = all_matrices_released_compadre_green, 
+    #        all_species_released_comadre_green = all_species_released_comadre_green, all_populations_released_comadre_green = all_populations_released_comadre_green, all_matrices_released_comadre_green = all_matrices_released_comadre_green, 
+    #        all_species_unreleased_amber = all_species_unreleased_amber, all_species_unreleased_green = all_species_unreleased_green, 
+    #        all_populations_unreleased_amber = all_populations_unreleased_amber, all_populations_unreleased_green = all_populations_unreleased_green, 
+    #        all_matrices_unreleased_amber = all_matrices_unreleased_amber, all_matrices_unreleased_green = all_matrices_unreleased_green, 
+    #        count_matrices = count_matrices, comadre_count = comadre_count, compadre_count = compadre_count, plant_count = plant_count, 
+    #        count_pops = count_pops, comadre_count_pop = comadre_count_pop, compadre_count_pop = compadre_count_pop, plant_count_pop = plant_count_pop,
+    #        species_count = species_count, species_count_compadre = species_count_compadre, species_count_comadre = species_count_comadre)
 
 
 # now defunct 'display all data' page
