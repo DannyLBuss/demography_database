@@ -30,7 +30,7 @@ from ..models import Permission, Role, User, \
 def termsofuse():
     return render_template('outputs/terms_of_use.html')
 
-##Downloading models as csvs - useful for creating R objects
+##Downloading models as csvs - useful for Admins and Compadrinos to check things, for csv downloads for normal users please look at data-manage/views.py
 
 @outputs.route('/populations')
 def population_export():   
@@ -59,6 +59,8 @@ def population_export():
         # Merge all of them to one single dict, as dict
         entry = merge_dicts(vars(population), vars(species), vars(publication))
         
+        entry["date_digitised"] = str(entry["date_digitised"])
+        entry["col_check_date"] = str(entry["col_check_date"])
         #If this is the first matrix, construct the headers too
         if i == 0:
             #get all the headings from entry - the super dict
@@ -108,6 +110,7 @@ def species_export():
         # Merge all of them to one single dict, as dict
         entry = merge_dicts(vars(species), vars(taxonomy), vars(traits))
         
+        entry["col_check_date"] = str(entry["col_check_date"])
         #If this is the first matrix, construct the headers too
         if i == 0:
             #get all the headings from entry - the super dict
@@ -120,7 +123,7 @@ def species_export():
         
         w_file.write(entry[1:-1] + '\n')
                      
-    return ('success')
+    return ('species list success')
 
 @outputs.route('/publications')
 def publication_export():   
@@ -128,9 +131,6 @@ def publication_export():
     
     # First, grab all matrices, as these will be each 'row'
     all_publications = Publication.query.all()
-#    f = date_digitised
-#    date_str = f.strftime('%Y-%m-%d')
-#    all_publications.date_digitised = date_str
 
     #function to merge dictionaries to a super dictionary
     def merge_dicts(*dict_args):
@@ -149,7 +149,8 @@ def publication_export():
         
         # Merge all of them to one single dict, as dict
         entry = merge_dicts(vars(publication))
-        
+        #turn date into string
+        entry["date_digitised"] = str(entry["date_digitised"])
         #If this is the first matrix, construct the headers too
         if i == 0:
             #get all the headings from entry - the super dict

@@ -1154,8 +1154,8 @@ def meta_tables_json():
 
     return render_template('meta.html', meta=meta_tables)
 
-# CSV EXPORT, work in progress
-@data_manage.route('/export/output.csv')
+# CSV EXPORT, for general users
+@data_manage.route('/export/database.csv')
 def csv_export():   
     import csv 
     
@@ -1169,7 +1169,7 @@ def csv_export():
             result.update(dictionary)
         return result
             
-    w_file = open('app/templates/output.csv','w')
+    w_file = open('app/static/downloads/database.csv','w')
 
     #looping through rows
     for i, matrix in enumerate(all_matrices):
@@ -1183,10 +1183,178 @@ def csv_export():
         species = population.species
         traits = species.trait[0]
         taxonomy = species.taxonomy[0]
+
         
+
         # Merge all of them to one single dict, as dict
         entry = merge_dicts(vars(species), vars(taxonomy), vars(traits), vars(publication), vars(population), vars(matrix),  vars(fixed))
-        
+        #convert fields to string fields to remove unicode and prevent datetime splitting up
+        entry["date_digitised"] = str(entry["date_digitised"])
+        entry["col_check_date"] = str(entry["col_check_date"])
+        entry["class_author"] = str(entry["class_author"])
+        entry["publisher"] = str(entry["publisher"])
+        entry["volume"] = str(entry["volume"])
+        entry["pub_title"] = str(entry["pub_title"])
+        entry["authors"] = str(entry["authors"])
+        entry["authors"] = str(entry["authors"].replace(";"," "))
+        entry["authors"] = str(entry["authors"].replace(","," "))
+        entry["id"] = str(entry["id"])
+        entry["pages"] = str(entry["pages"])
+        entry["col_check_date"] = str(entry["col_check_date"])
+        entry["tax_order"] = str(entry["tax_order"])
+        entry["family"] = str(entry["family"])
+        entry["phylum"] = str(entry["phylum"])
+        entry["species_accepted"] = str(entry["species_accepted"])
+        entry["species_common"] = str(entry["species_common"])
+        entry["tax_class"] = str(entry["tax_class"])
+        entry["kingdom"] = str(entry["kingdom"])
+        entry["genus"] = str(entry["genus"])
+        entry["species_id"] = str(entry["species_id"])
+        entry["matrix_criteria_size"] = str(entry["matrix_criteria_size"])
+        entry["matrix_criteria_age"] = str(entry["matrix_criteria_age"])
+        entry["matrix_criteria_ontogeny"] = str(entry["matrix_criteria_ontogeny"])
+        entry["class_organized"] = str(entry["class_organized"])
+        entry["class_author"] = str(entry["class_organized"])
+        entry["class_number"] = str(entry["class_number"])
+        entry["matrix_criteria_ontogeny"] = str(entry["matrix_criteria_ontogeny"])
+        entry["matrix_start_season_id"] = str( entry["matrix_start_season_id"])
+        entry["study_start"] = str( entry["study_start"])
+        entry["journal_name"] = str( entry["journal_name"])
+        entry["dicot_monoc_id"] = str( entry["dicot_monoc_id"])
+        entry["matrix_dimension"] = str( entry["matrix_dimension"])
+        entry["matrix_end_season_id"] = str( entry["matrix_end_season_id"])
+        entry["angio_gymno_id"] = str( entry["angio_gymno_id"])
+        entry["continent_id"] = str( entry["continent_id"])
+
+        entry["matrix_composition_id"] = str( entry["matrix_composition_id"])
+        comp_f_r = {'1':'Individual','2':'Mean','3':'Pooled','4':'Spatial Mean','5':'Temporal Mean','6':'Spatial-Temporal Mean'}
+        repeats = comp_f_r.keys()
+        for values in entry["matrix_composition_id"]:
+            if values in repeats:
+                ind = repeats.index(values)
+                entry["matrix_composition_id"] = comp_f_r[repeats[ind]]
+        print entry["matrix_composition_id"]
+
+        entry["study_end"] = str( entry["study_end"])
+        entry["species_author"] = str( entry["species_author"])
+        entry["organism_type_id"] = str(entry["organism_type_id"])
+        entry["pages"] = str(entry["pages"])
+        entry["matrix_f_string"] = str(entry["matrix_f_string"])
+        entry["matrix_a_string"] = str(entry["matrix_a_string"])
+        entry["matrix_c_string"] = str(entry["matrix_c_string"])
+        entry["matrix_u_string"] = str(entry["matrix_u_string"])
+        entry["within_site_replication"] = str(entry["within_site_replication"])
+        entry["studied_sex_id"] = str(entry["studied_sex_id"])
+        entry["matrix_start_month"] = str(entry["matrix_start_month"])
+        entry["matrix_start_year"] = str(entry["matrix_start_year"])
+        entry["matrix_end_month"] = str(entry["matrix_end_month"])
+        entry["matrix_end_year"] = str(entry["matrix_end_year"])
+        entry["captivity_id"] = str(entry["captivity_id"])
+        entry["id"] = str(entry["id"])
+        entry["matrix_id"] = str(entry["matrix_id"])
+        entry["publication_id"] = str(entry["publication_id"])
+        entry["number_populations"] = str(entry["number_populations"])
+        entry["population_name"] = str(entry["population_name"])
+        entry["study_duration"] = str(entry["study_duration"])
+        entry["ecoregion_id"] = str(entry["ecoregion_id"])
+        entry["DOI_ISBN"] = str(entry["DOI_ISBN"])
+        entry["spand_ex_growth_type_id"] = str(entry["spand_ex_growth_type_id"])
+        #find and replace organism type ID with word strings for user ease
+        org_find_and_replace = {'1':'Tree','2':'Shrub','3':'Closed Perennial','4':'Open Perennial','5':'Monocarpic','6':'Algae','7':'NA'}
+        replace = org_find_and_replace.keys()
+        for val in entry["spand_ex_growth_type_id"]:
+            if val in replace:
+                index = replace.index(val)
+                entry["spand_ex_growth_type_id"] = org_find_and_replace[replace[index]]
+
+        #print entry["spand_ex_growth_type_id"]
+
+        entry["treatment_id"] = str(entry["treatment_id"])
+        treatment_f_r = {'1':'Unmanipulated','2':'Herbicide','3':'Grazing','4':'Shading','5':'Competition','6':'Density/Seed Predation','7':'Flooded Area'}
+        rep = treatment_f_r.keys()
+        for vals in entry["treatment_id"]:
+            if vals in rep:
+                indexs = rep.index(vals)
+                entry["treatment_id"] = treatment_f_r[rep[indexs]]
+       #print entry["treatment_id"]
+
+        del entry["non_independence"]
+        del entry["publications_protocol_id"]
+        del entry["taxonomy"]
+        del entry["invasive_status_study_id"]
+        del entry["invasive_status_elsewhere_id"]
+        del entry["image_path"]
+        del entry["_sa_instance_state"]
+        del entry["species_iucn_taxonid"]
+        del entry["species_epithet_accepted"]
+        del entry["image_path2"]
+        del entry["authority"]
+        del entry["col_check_ok"]
+        del entry["iucn_status_id"]
+        del entry["col_check_date"]
+        del entry["tpl_version"]
+        del entry["infraspecies_accepted"]
+        del entry["growth_form_raunkiaer_id"]
+        del entry["species_clonality"]
+        del entry["species_seedbank"]
+        del entry["lat_deg"]
+        del entry["species_seedbank_source"]
+        del entry["species_clonality_source"]
+        del entry["lon_deg"]
+        del entry["lat_sec"]
+        del entry["lat_min"]
+        del entry["lat_ns"]
+        del entry["lon_sec"]
+        del entry["lon_min"]
+        del entry["lon_ew"]
+        del entry["purpose_endangered_id"]
+        del entry["purpose_weed_id"]
+        del entry["species_gisd_status"]
+        del entry["trait"]
+        del entry["publication"]
+        del entry["institution"]
+        del entry["latitude"]
+        del entry["vector_class_names"]
+        del entry["study_notes"]
+        del entry["embargo"]
+        del entry["country"]
+        del entry["source_type_id"]
+        del entry["colour"]
+        del entry["additional_source_string"]
+        del entry["journal_book_conf"]
+        del entry["city"]
+        del entry["altitude"]
+        del entry["matrix_complete"]
+        del entry["observations"]
+        del entry["population"]
+        del entry["total_pop_no"]
+        del entry["matrix_irreducible"]
+        del entry["matrix_ergodic"]
+        del entry["matrix_difficulty"]
+        del entry["longitude"]
+        del entry["non_independence_author"]
+        del entry["independence_origin"]
+        del entry["fixed"]
+        del entry["uid"]
+        del entry["vector_present"]
+        del entry["vectors_proportional"]
+        del entry["vectors_includes_na"]
+        del entry["vector_str"]
+        del entry["n_intervals"]
+        del entry["matrix_primitive"]
+        del entry["population_id"]
+        del entry["matrix_lambda"]
+        del entry["census_timing_id"]
+        del entry["database_source_id"]
+        del entry["gbif_taxon_key"]
+        del entry["species"]
+        del entry["independent"]
+        del entry["small_id"]
+        del entry["private"]
+        del entry["database_id"]
+
+        #Need to work out what to do with treatment ID - input as string also? 
+
         #If this is the first matrix, construct the headers too
         if i == 0:
             #get all the headings from entry - the super dict
@@ -1196,20 +1364,171 @@ def csv_export():
             
         entry = str(entry.values())
         
-        # cleaning
+        ## cleaning - still needs to be done:
         # remove quotes from strings
-        # remove u from unicode strings
         #[<taxonomy 1l="">] to 1
-        # remove L from numbers
         # study purposes
-        # remove fields we don't want
-        # date time
-        
-        #re.sub("u'","",entry)
         
         w_file.write(entry[1:-1] + '\n')
                      
-    return render_template('output.csv')
+    return ('database.csv')
+
+@data_manage.route('/export/species.csv')
+def species_csv_export():  
+    import csv 
+    
+    # First, grab all matrices, as these will be each 'row'
+    all_species = Species.query.all()
+    
+    #function to merge dictionaries to a super dictionary
+    def merge_dicts(*dict_args):
+        result = {}
+        for dictionary in dict_args:
+            result.update(dictionary)
+        return result
+            
+    w_file = open('app/static/downloads/species.csv','w')
+
+    #looping through rows
+    for i, species in enumerate(all_species):
+        
+        # Grab all of the parent objects
+        species = species
+        taxonomy = species.taxonomy[0]
+        trait = species.trait[0]
+        
+        # Merge all of them to one single dict, as dict
+        entry = merge_dicts(vars(species), vars(taxonomy), vars(trait))
+        #convert unicode and datetime fields to string to remove random characters
+        entry["col_check_date"] = str(entry["col_check_date"])
+        entry["tax_order"] = str(entry["tax_order"])
+        entry["family"] = str(entry["family"])
+        entry["phylum"] = str(entry["phylum"])
+        entry["species_accepted"] = str(entry["species_accepted"])
+        entry["species_common"] = str(entry["species_common"])
+        entry["tax_class"] = str(entry["tax_class"])
+        entry["kingdom"] = str(entry["kingdom"])
+        entry["genus"] = str(entry["genus"])
+        entry["species_id"] = str(entry["species_id"])
+        entry["spand_ex_growth_type_id"] = str(entry["spand_ex_growth_type_id"])
+
+        #find and replace organism type ID with word strings for user ease
+        org_find_and_replace = {'1':'Tree','2':'Shrub','3':'Closed Perennial','4':'Open Perennial','5':'Monocarpic','6':'Algae','7':'NA'}
+        replace = org_find_and_replace.keys()
+        for val in entry["spand_ex_growth_type_id"]:
+            if val in replace:
+                index = replace.index(val)
+                entry["spand_ex_growth_type_id"] = org_find_and_replace[replace[index]]
+
+        print entry["spand_ex_growth_type_id"]
+        
+        #delete fields normal users don't need to see
+        del entry["gbif_taxon_key"]
+        del entry["iucn_status_id"]
+        del entry["image_path"]
+        del entry["_sa_instance_state"]
+        del entry["genus_accepted"]
+        del entry["taxonomy"]
+        del entry["species_iucn_taxonid"]
+        del entry["species_epithet_accepted"]
+        del entry["image_path2"]
+        del entry["authority"]
+        del entry["col_check_ok"]
+        del entry["id"]
+        del entry["col_check_date"]
+        del entry["tpl_version"]
+        del entry["infraspecies_accepted"]
+        del entry["growth_form_raunkiaer_id"]
+        del entry["species_clonality"]
+        del entry["species_seedbank"]
+        del entry["species_seedbank_source"]
+        del entry["species_clonality_source"]
+        del entry["reproductive_repetition_id"]
+        del entry["organism_type_id"]
+        del entry["species_gisd_status"]
+        del entry["trait"]
+        del entry["dicot_monoc_id"]
+        del entry["angio_gymno_id"]
+
+
+        #If this is the first matrix, construct the headers too
+        if i == 0:
+            #get all the headings from entry - the super dict
+            headings = [key for key in entry.keys()]
+            headings = str(headings)
+            w_file.write(headings[1:-1] + '\n')
+            
+        entry = str(entry.values())
+        
+        w_file.write(entry[1:-1] + "\n")
+                     
+    return ('species list success')
+
+@data_manage.route('/export/publications.csv')
+def publication_csv_export():  
+    import csv 
+
+# First, grab all matrices, as these will be each 'row'
+    all_publications = Publication.query.all()
+
+    #function to merge dictionaries to a super dictionary
+    def merge_dicts(*dict_args):
+        result = {}
+        for dictionary in dict_args:
+            result.update(dictionary)
+        return result
+            
+    w_file = open('app/static/downloads/publications.csv','w')
+
+    #looping through rows
+    for i, publication in enumerate(all_publications):
+        
+        # Grab all of the parent objects
+        publication = publication
+        
+        # Merge all of them to one single dict, as dict
+        entry = merge_dicts(vars(publication))
+
+        #turn fields into text strings
+        entry["date_digitised"] = str(entry["date_digitised"])
+        entry["publisher"] = str(entry["publisher"])
+        entry["volume"] = str(entry["volume"])
+        entry["pub_title"] = str(entry["pub_title"])
+        entry["authors"] = str(entry["authors"])
+        entry["id"] = str(entry["id"])
+        entry["pages"] = str(entry["pages"])
+        entry["DOI_ISBN"] = str(entry["DOI_ISBN"])
+
+        #remove ; between authors so that csv doesn't split them up
+        entry["authors"] = str(entry["authors"].replace(";"," "))
+        entry["authors"] = str(entry["authors"].replace(","," "))
+
+        #renove fields normal users don't need
+        del entry["_sa_instance_state"]
+        del entry["institution"]
+        del entry["publications_protocol_id"]
+        del entry["study_notes"]
+        del entry["embargo"]
+        del entry["country"]
+        del entry["source_type_id"]
+        del entry["colour"]
+        del entry["additional_source_string"]
+        del entry["journal_book_conf"]
+        del entry["city"]
+
+        #If this is the first matrix, construct the headers too
+        if i == 0:
+            #get all the headings from entry - the super dict
+            headings = [key for key in entry.keys()]
+            headings = str(headings)
+            w_file.write(headings[1:-1] + '\n')
+            
+        entry = str(entry.values())
+        # cleaning needed to be added here
+        
+        w_file.write(entry[1:-1] + '\n')
+                     
+    return ('publications success')
 
 @data_manage.route('/591514wdjfgw43qrt34r4w5r274rrollback')
 def rollback():  
@@ -1220,14 +1539,6 @@ def rollback():
 def rollbackerror():  
     Session.rollback()
     return ("Rollback successful")
-
-
-
-
-
-
-
-
 
 
 
