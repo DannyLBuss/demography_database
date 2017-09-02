@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, abort, flash, request,\
-    current_app, make_response, jsonify
+    current_app, make_response, jsonify, send_file
 from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import data_manage
@@ -1218,13 +1218,45 @@ def csv_export():
         entry["class_number"] = str(entry["class_number"])
         entry["matrix_criteria_ontogeny"] = str(entry["matrix_criteria_ontogeny"])
         entry["matrix_start_season_id"] = str( entry["matrix_start_season_id"])
+        season_find_and_replace = {'1':'Spring','2':'Summer','3':'Autumn','4':'Winter'}
+        season_replace = season_find_and_replace.keys()
+        for season in entry["matrix_start_season_id"]:
+            if season in season_replace:
+                s = season_replace.index(season)
+                entry["matrix_start_season_id"] = season_find_and_replace[season_replace[s]]
+
         entry["study_start"] = str( entry["study_start"])
         entry["journal_name"] = str( entry["journal_name"])
         entry["dicot_monoc_id"] = str( entry["dicot_monoc_id"])
+        dicot_find_and_replace = {'1':'Eudicot','2':'Monocot','3':'NA'}
+        dicot_replace = dicot_find_and_replace.keys()
+        for dicot in entry["dicot_monoc_id"]:
+            if dicot in dicot_replace:
+                d = dicot_replace.index(dicot)
+                entry["dicot_monoc_id"] = dicot_find_and_replace[dicot_replace[d]]
+
         entry["matrix_dimension"] = str( entry["matrix_dimension"])
         entry["matrix_end_season_id"] = str( entry["matrix_end_season_id"])
+        for seas in entry["matrix_end_season_id"]:
+            if seas in season_replace:
+                r = season_replace.index(seas)
+                entry["matrix_end_season_id"] = season_find_and_replace[season_replace[r]]
+
         entry["angio_gymno_id"] = str( entry["angio_gymno_id"])
+        ang_find_and_replace = {'1':'Angiosperm','2':'Gymnosperm','3':'NA'}
+        ang_replace = ang_find_and_replace.keys()
+        for ang in entry["angio_gymno_id"]:
+            if ang in ang_replace:
+                a = ang_replace.index(ang)
+                entry["angio_gymno_id"] = ang_find_and_replace[ang_replace[a]]
+
         entry["continent_id"] = str( entry["continent_id"])
+        cont_find_and_replace = {'1':'Africa','2':'Asia','3':'Europe','4':'N America','5':'S America','6':'Antartica','7':'Oceania'}
+        cont_replace = cont_find_and_replace.keys()
+        for cont in entry["continent_id"]:
+            if cont in cont_replace:
+                c = cont_replace.index(cont)
+                entry["continent_id"] = cont_find_and_replace[cont_replace[c]]
 
         entry["matrix_composition_id"] = str( entry["matrix_composition_id"])
         comp_f_r = {'1':'Individual','2':'Mean','3':'Pooled','4':'Spatial Mean','5':'Temporal Mean','6':'Spatial-Temporal Mean'}
@@ -1233,7 +1265,6 @@ def csv_export():
             if values in repeats:
                 ind = repeats.index(values)
                 entry["matrix_composition_id"] = comp_f_r[repeats[ind]]
-        print entry["matrix_composition_id"]
 
         entry["study_end"] = str( entry["study_end"])
         entry["species_author"] = str( entry["species_author"])
@@ -1245,11 +1276,38 @@ def csv_export():
         entry["matrix_u_string"] = str(entry["matrix_u_string"])
         entry["within_site_replication"] = str(entry["within_site_replication"])
         entry["studied_sex_id"] = str(entry["studied_sex_id"])
+        sex_find_and_replace = {'1':'M','2':'F','3':'H','4':'M/F','5':'A'}
+        sex_replace = sex_find_and_replace.keys()
+        for sex in entry["studied_sex_id"]:
+            if sex in sex_replace:
+                sx = sex_replace.index(sex)
+                entry["studied_sex_id"] = sex_find_and_replace[sex_replace[sx]]
+
         entry["matrix_start_month"] = str(entry["matrix_start_month"])
+        month_find_and_replace = {'1':'January','2':'February','3':'March','4':'April','5':'May','6':'June','7':'July','8':'August','9':'September','10':'October','11':'November','12':'December'}
+        month_replace = month_find_and_replace.keys()
+        for month in entry["matrix_start_month"]:
+            if month in month_replace:
+                i = month_replace.index(month)
+                entry["matrix_start_month"] = month_find_and_replace[month_replace[i]]
+
         entry["matrix_start_year"] = str(entry["matrix_start_year"])
+
         entry["matrix_end_month"] = str(entry["matrix_end_month"])
+        for mon in entry["matrix_end_month"]:
+            if mon in month_replace:
+                j = month_replace.index(mon)
+                entry["matrix_end_month"] = month_find_and_replace[month_replace[j]]
+
         entry["matrix_end_year"] = str(entry["matrix_end_year"])
         entry["captivity_id"] = str(entry["captivity_id"])
+        cap_find_and_replace = {'1':'W','2':'C','3':'CW'}
+        cap_replace = cap_find_and_replace.keys()
+        for cap in entry["captivity_id"]:
+            if cap in cap_replace:
+                cp = cap_replace.index(cap)
+                entry["captivity_id"] = cap_find_and_replace[cap_replace[cp]]
+
         entry["id"] = str(entry["id"])
         entry["matrix_id"] = str(entry["matrix_id"])
         entry["publication_id"] = str(entry["publication_id"])
@@ -1259,6 +1317,7 @@ def csv_export():
         entry["ecoregion_id"] = str(entry["ecoregion_id"])
         entry["DOI_ISBN"] = str(entry["DOI_ISBN"])
         entry["spand_ex_growth_type_id"] = str(entry["spand_ex_growth_type_id"])
+
         #find and replace organism type ID with word strings for user ease
         org_find_and_replace = {'1':'Tree','2':'Shrub','3':'Closed Perennial','4':'Open Perennial','5':'Monocarpic','6':'Algae','7':'NA'}
         replace = org_find_and_replace.keys()
@@ -1266,8 +1325,6 @@ def csv_export():
             if val in replace:
                 index = replace.index(val)
                 entry["spand_ex_growth_type_id"] = org_find_and_replace[replace[index]]
-
-        #print entry["spand_ex_growth_type_id"]
 
         entry["treatment_id"] = str(entry["treatment_id"])
         treatment_f_r = {'1':'Unmanipulated','2':'Herbicide','3':'Grazing','4':'Shading','5':'Competition','6':'Density/Seed Predation','7':'Flooded Area'}
@@ -1352,6 +1409,7 @@ def csv_export():
         del entry["small_id"]
         del entry["private"]
         del entry["database_id"]
+        del entry["seed_stage_error"]
 
         #Need to work out what to do with treatment ID - input as string also? 
 
@@ -1371,7 +1429,9 @@ def csv_export():
         
         w_file.write(entry[1:-1] + '\n')
                      
-    return ('database.csv')
+    flash ('Demography Database CSV created successfully')
+    # #add page with button to return to publications table or download publications                 
+    return render_template('data_manage/download_database_csv.html')
 
 @data_manage.route('/export/species.csv')
 def species_csv_export():  
@@ -1461,8 +1521,10 @@ def species_csv_export():
         entry = str(entry.values())
         
         w_file.write(entry[1:-1] + "\n")
-                     
-    return ('species list success')
+
+    flash ('species list created successfully')
+    # #add page with button to return to publications table or download publications                 
+    return render_template('data_manage/download_species.html')
 
 @data_manage.route('/export/publications.csv')
 def publication_csv_export():  
@@ -1527,8 +1589,40 @@ def publication_csv_export():
         # cleaning needed to be added here
         
         w_file.write(entry[1:-1] + '\n')
-                     
-    return ('publications success')
+        
+    flash ('publication list created successfully')
+    # #add page with button to return to publications table or download publications                 
+    return render_template('data_manage/download_pubs.html')
+
+#button for publications download
+#Need to change the directory to the server pwd when I upload to server!!
+@data_manage.route('/download-pubs/', methods=['GET', 'POST'])
+def download_pubs():
+#server
+#    file_name = '/var/www/html/demography_database/app/static/downloads/publications.csv'
+#local
+    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/downloads/publications.csv'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
+
+#button for species download
+#Need to change the directory to the server pwd when I upload to server!!
+@data_manage.route('/download-species/', methods=['GET', 'POST'])
+def download_species():
+#server
+#    file_name = '/var/www/html/demography_database/app/static/downloads/species.csv'
+#local
+    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/downloads/species.csv'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
+
+#button for all csv download
+#Need to change the directory to the server pwd when I upload to server!!
+@data_manage.route('/download-database/', methods=['GET', 'POST'])
+def download_database():
+#server
+#    file_name = '/var/www/html/demography_database/app/static/downloads/database.csv'
+#local
+    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/downloads/database.csv'
+    return send_file(file_name, as_attachment=True, mimetype='text/plain')
 
 @data_manage.route('/591514wdjfgw43qrt34r4w5r274rrollback')
 def rollback():  

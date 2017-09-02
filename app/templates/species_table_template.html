@@ -5,6 +5,7 @@
 {% block title %}Demography Database{% endblock %}
 
 {% block page_content %}
+<html>
 <h1>Search COMPADRE by Species</h1>
 <hr>
 <div id="species-search">
@@ -91,7 +92,13 @@
     <ul class="pagination"></ul>
 -->
 </div>
-
+<div>
+    <h3>
+        <bold>To download a species list please click <a href="{{ url_for('data_manage.species_csv_export') }}">here</a>
+        </bold>
+    </h3>
+</div>
+</html>
 
 <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
 <script src="{{ url_for('static', filename='list.js') }}"></script>

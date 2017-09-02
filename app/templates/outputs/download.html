@@ -11,8 +11,14 @@
     		Download demography databases 
     	</h1>
     </div>
+    <div>
+        <h3>
+            <bold>If you would prefer to export the database as csv please click <a href="{{ url_for('data_manage.csv_export') }}">here</a>
+            </bold>
+        </h3>
+    </div>
     	    {% if current_user.is_anonymous %}
-    	    <h2><col="red"> please login to access files </col>
+    	    <h2><col="red"> please login to access R files </col>
             </h2>
     	    {% endif %}
     	    {% if current_user.is_authenticated %}
