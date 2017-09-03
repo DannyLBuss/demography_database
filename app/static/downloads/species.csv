@@ -1,5 +1,5 @@
-'tax_order', 'family', 'phylum', 'species_id', 'species_accepted', 'spand_ex_growth_type_id', 'species_common', 'tax_class', 'kingdom', 'genus'
-'Pinales', 'Pinaceae', 'Pinophyta', '1', 'Abies concolor', 'Tree', 'None', 'Pinopsida', 'Plantae', 'Abies'
+'tax_order', 'family', 'phylum', 'species_id', 'species_accepted', 'spand_ex_growth_type_id', 'organism_type', 'species_common', 'tax_class', 'kingdom', 'genus'
+'Pinales', 'Pinaceae', 'Pinophyta', '1', 'Abies concolor', 'Tree', Tree, 'None', 'Pinopsida', 'Plantae', 'Abies'
 'Pinales', 'Pinaceae', 'Pinophyta', '2', 'Abies homolepis', 'None', 'None', 'Pinopsida', 'Plantae', 'Abies'
 'Pinales', 'Pinaceae', 'Pinophyta', '3', 'Abies magnifica', 'Tree', 'None', 'Pinopsida', 'Plantae', 'Abies'
 'Pinales', 'Pinaceae', 'Pinophyta', '4', 'Abies sachalinensis', 'Tree', 'None', 'Pinopsida', 'Plantae', 'Abies'

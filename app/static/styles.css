@@ -264,6 +264,15 @@ footer {
     color: #8e8e8e;
 }
 
+.info_box_border{
+    padding: 1em;
+    margin-bottom: 20px;
+    border-width:3px;   
+    border-style:dashed;
+    border-color: #a0522d;
+    color: #8e8e8e;
+}
+
 .info_box_compadrino{
     padding: 1em;
     margin-bottom: 20px;
@@ -459,6 +468,32 @@ content:"";
 display:block;
 height:60px; /* fixed header height*/
 margin:-60px 0 0; /* negative fixed header height */
+}
+
+/*rotate images by a set degree*/
+
+.rotate30 {
+    -webkit-transform: rotate(30deg);
+    -moz-transform: rotate(30deg);
+    -o-transform: rotate(30deg);
+    -ms-transform: rotate(30deg);
+    transform: rotate(30deg);
+}
+
+.rotate90 {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.rotate180 {
+  -webkit-transform:rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 
