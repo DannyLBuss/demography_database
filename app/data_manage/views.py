@@ -1599,9 +1599,9 @@ def publication_csv_export():
 @data_manage.route('/download-pubs/', methods=['GET', 'POST'])
 def download_pubs():
 #server
-#    file_name = '/var/www/html/demography_database/app/static/downloads/publications.csv'
+    file_name = '/var/www/html/demography-database/app/static/downloads/publications.csv'
 #local
-    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/downloads/publications.csv'
+#    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/downloads/publications.csv'
     return send_file(file_name, as_attachment=True, mimetype='text/plain')
 
 #button for species download
@@ -1609,9 +1609,9 @@ def download_pubs():
 @data_manage.route('/download-species/', methods=['GET', 'POST'])
 def download_species():
 #server
-#    file_name = '/var/www/html/demography_database/app/static/downloads/species.csv'
+    file_name = '/var/www/html/demography-database/app/static/downloads/species.csv'
 #local
-    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/downloads/species.csv'
+#    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/downloads/species.csv'
     return send_file(file_name, as_attachment=True, mimetype='text/plain')
 
 #button for all csv download
@@ -1619,9 +1619,9 @@ def download_species():
 @data_manage.route('/download-database/', methods=['GET', 'POST'])
 def download_database():
 #server
-#    file_name = '/var/www/html/demography_database/app/static/downloads/database.csv'
+    file_name = '/var/www/html/demography-database/app/static/downloads/database.csv'
 #local
-    file_name = '/Users/daniellebuss/Sites/demography_database/app/static/downloads/database.csv'
+    # file_name = '/Users/daniellebuss/Sites/demography_database/app/static/downloads/database.csv'
     return send_file(file_name, as_attachment=True, mimetype='text/plain')
 
 @data_manage.route('/591514wdjfgw43qrt34r4w5r274rrollback')
