@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, abort, flash, request,\
+from flask import Flask, render_template, redirect, url_for, abort, flash, session, request,\
     current_app, make_response, jsonify, send_file
 from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries

@@ -30,7 +30,7 @@ from flask.ext.migrate import Migrate, MigrateCommand
 
 from app.matrix_functions import as_array, calc_lambda, calc_surv_issue, is_matrix_irreducible, is_matrix_primitive, is_matrix_ergodic
 
-from flask import Flask
+from flask import Flask, session
 from flask.ext.alchemydumps import AlchemyDumps, AlchemyDumpsCommand
 from flask.ext.sqlalchemy import SQLAlchemy
 

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, flash, abort
+from flask import Flask, render_template, redirect, request, url_for, session, flash, abort
 from flask.ext.login import login_user, logout_user, login_required, \
     current_user, session
 from . import auth
@@ -9,6 +9,7 @@ from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm,\
     PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 from requests_oauthlib import OAuth2Session
+from ..models import Permission, Role, User
 import json
 import os
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -208,6 +209,10 @@ def register():
 @auth.route('/logout')
 @login_required
 def logout():
+    user = current_user
+    user.authenticated = False
+    db.session.add(user)
+    db.session.commit()
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('main.index'))
@@ -244,6 +249,7 @@ def change_password():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.password.data
             db.session.add(current_user)
+            db.session.commit()
             flash('Your password has been updated.')
             return redirect(url_for('main.index'))
         else:
